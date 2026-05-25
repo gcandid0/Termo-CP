@@ -1,0 +1,172 @@
+{% extends 'base.html' %}
+
+{% block title %}TERMO-CP{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Wrapper para centralizar o conteúdo na tela */
+    .processes-wrapper {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center; /* Centraliza no meio da tela */
+        padding: 40px 20px;
+        width: 100%;
+        min-height: 100%;
+    }
+
+    .processes-container {
+        max-width: 800px;
+        width: 100%;
+        background: var(--card-bg, white);
+        border-radius: 10px;
+        box-shadow: var(--shadow);
+        padding: 40px;
+        text-align: center;
+    }
+
+    .hero-icon {
+        font-size: 3em;
+        color: var(--primary-color);
+        margin-bottom: 15px;
+    }
+
+    .processes-container h2 {
+        color: var(--primary-color);
+        font-size: 2em;
+        margin-top: 0;
+        margin-bottom: 10px;
+        border-bottom: none;
+        justify-content: center;
+    }
+
+    .processes-container p {
+        margin-bottom: 30px;
+        font-size: 1.1em;
+        color: #555;
+    }
+
+    /* --- GRID DE SUBSTÂNCIAS (CARDS) --- */
+    .substance-grid {
+        display: grid;
+        /* FORÇA EXATAMENTE 4 COLUNAS DE TAMANHOS IGUAIS */
+        grid-template-columns: repeat(4, 1fr);
+        gap: 15px;
+        width: 100%;
+        animation: fadeIn 0.4s ease;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .sub-card {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 20px 10px;
+        border-radius: 8px;
+        color: white;
+        text-decoration: none;
+        font-size: 0.95em;
+        font-weight: bold;
+        text-align: center;
+        gap: 12px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        transition: var(--hover-transition);
+    }
+
+    .sub-card i {
+        font-size: 2.2em;
+    }
+
+    .sub-card:hover {
+        transform: translateY(-4px) scale(1.02);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        filter: brightness(1.1);
+        color: white;
+    }
+
+    /* --- CORES PERSONALIZADAS PARA AS SUBSTÂNCIAS --- */
+    .bg-gas { background-color: #5EBD6A; }
+    .bg-gas:hover { background-color: #4AA155; }
+
+    .bg-water { background-color: #00A8FF; }
+    .bg-water:hover { background-color: #008DCC; }
+
+    .bg-ammonia { background-color: #E24444; }
+    .bg-ammonia:hover { background-color: #C63535; }
+
+    .bg-co2 { background-color: #7B7B7B; }
+    .bg-co2:hover { background-color: #636363; }
+
+    .bg-r410a { background-color: #FF9F00; }
+    .bg-r410a:hover { background-color: #E08C00; }
+
+    .bg-r134a { background-color: #FF9F00; }
+    .bg-r134a:hover { background-color: #E08C00; }
+
+    .bg-nitrogen { background-color: #9C33B8; }
+    .bg-nitrogen:hover { background-color: #81259A; }
+
+    .bg-methane { background-color: #934B21; }
+    .bg-methane:hover { background-color: #753916; }
+
+    /* Mobile */
+    @media (max-width: 768px) {
+        .substance-grid {
+            /* Cai para 2 colunas em telas de celular */
+            grid-template-columns: repeat(2, 1fr);
+        }
+        .processes-wrapper {
+            padding: 20px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="processes-wrapper">
+    <div class="processes-container">
+        <i class="fas fa-chart-line hero-icon"></i>
+        <h2 class="lang-text" data-pt-br="Processos" data-en="Processes" data-es="Procesos">Processos</h2>
+
+        <p class="lang-text"
+           data-pt-br="Selecione uma substância para analisar o processo:"
+           data-en="Select a substance to analyze the process:"
+           data-es="Seleccione una sustancia para analizar el proceso:">
+            Selecione uma substância para analisar o processo:
+        </p>
+
+        <div class="substance-grid">
+            <a href="{% url 'processos2' %}" class="sub-card bg-gas">
+                <i class="fas fa-wind"></i> <span class="lang-text" data-pt-br="Gás Ideal" data-en="Ideal Gas" data-es="Gas Ideal">Gás Ideal</span>
+            </a>
+            <a href="{% url 'processos' %}" class="sub-card bg-water">
+                <i class="fas fa-tint"></i> <span class="lang-text" data-pt-br="Água" data-en="Water" data-es="Agua">Água</span>
+            </a>
+            <a href="{% url 'processos3' %}" class="sub-card bg-ammonia">
+                <i class="fas fa-flask"></i> <span class="lang-text" data-pt-br="Amônia" data-en="Ammonia" data-es="Amoníaco">Amônia</span>
+            </a>
+            <a href="{% url 'processos4' %}" class="sub-card bg-co2">
+                <i class="fas fa-cloud"></i> CO₂
+            </a>
+            <a href="{% url 'processos5' %}" class="sub-card bg-r410a">
+                <i class="fas fa-snowflake"></i> R-410a
+            </a>
+            <a href="{% url 'processos6' %}" class="sub-card bg-r134a">
+                <i class="fas fa-snowflake"></i> R-134a
+            </a>
+            <a href="{% url 'processos7' %}" class="sub-card bg-nitrogen">
+                <i class="fas fa-burn"></i> <span class="lang-text" data-pt-br="Nitrogênio" data-en="Nitrogen" data-es="Nitrógeno">Nitrogênio</span>
+            </a>
+            <a href="{% url 'processos8' %}" class="sub-card bg-methane">
+                <i class="fas fa-fire"></i> <span class="lang-text" data-pt-br="Metano" data-en="Methane" data-es="Metano">Metano</span>
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

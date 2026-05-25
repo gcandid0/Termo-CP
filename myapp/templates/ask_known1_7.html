@@ -1,0 +1,356 @@
+{% extends 'base.html' %}
+
+{% block title %}TERMO-CP{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Wrapper para alinhar o conteúdo no centro da main-content do base.html */
+    .form-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 40px 20px;
+        width: 100%;
+        min-height: 100%;
+    }
+
+    /* Container Compacto */
+    .container {
+        max-width: 600px;
+        width: 100%;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        padding: 30px 25px;
+        text-align: center;
+    }
+
+    h2 {
+        color: var(--primary-color, #20376B);
+        font-size: 1.5em;
+        margin-bottom: 20px;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 10px;
+    }
+
+    /* --- ESTILO COMPACTO DE SELEÇÃO (CARDS) --- */
+    .selection-grid {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        margin-bottom: 25px;
+        flex-wrap: wrap;
+    }
+
+    .selection-grid input[type="radio"] {
+        display: none;
+    }
+
+    /* O Cartão Compacto (110px) */
+    .option-card {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100px;
+        height: 100px;
+        border: 2px solid #e0e0e0;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        position: relative;
+        background-color: #fff;
+        color: #666;
+    }
+
+    .option-card i.icon-main {
+        font-size: 1.8em;
+        margin-bottom: 8px;
+        color: #999;
+        transition: color 0.3s ease;
+    }
+
+    .option-card span {
+        font-weight: bold;
+        font-size: 0.85em;
+        text-align: center;
+        line-height: 1.2;
+    }
+
+    .option-card:hover {
+        border-color: var(--secondary-color, #0D6AB0);
+        background-color: #f8fbff;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    /* ESTADO SELECIONADO */
+    .option-card:has(input:checked) {
+        border-color: var(--secondary-color, #0D6AB0);
+        background-color: #eef7fc;
+        color: var(--primary-color, #20376B);
+        box-shadow: 0 2px 8px rgba(13, 106, 176, 0.15);
+    }
+
+    .option-card:has(input:checked) i.icon-main {
+        color: var(--secondary-color, #0D6AB0);
+    }
+
+    .check-indicator {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        font-size: 0.9em;
+        color: var(--secondary-color, #0D6AB0);
+        opacity: 0;
+        transition: opacity 0.2s ease;
+    }
+
+    .option-card:has(input:checked) .check-indicator {
+        opacity: 1;
+    }
+
+    /* --- INPUT DE VALOR COMPACTO --- */
+    #value_input_field {
+        margin-top: 15px;
+        width: 100%;
+        background-color: #f9f9f9;
+        padding: 15px;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+        animation: fadeIn 0.4s ease;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(5px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    #value-label {
+        font-weight: bold;
+        color: var(--primary-color, #20376B);
+        display: block;
+        margin-bottom: 10px;
+        font-size: 1em;
+    }
+
+    input[type="number"] {
+        padding: 10px;
+        width: 100%;
+        max-width: 250px;
+        font-size: 1.1em;
+        border: 2px solid #ccc;
+        border-radius: 6px;
+        text-align: center;
+    }
+
+    input[type="number"]:focus {
+        border-color: var(--secondary-color, #0D6AB0);
+        outline: none;
+    }
+
+    /* Botões de Ação */
+    .button-container {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        margin-top: 25px;
+        width: 100%;
+    }
+
+    .btn {
+        padding: 10px 20px;
+        border-radius: 6px;
+        font-size: 1em;
+        cursor: pointer;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        border: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        min-width: 130px;
+    }
+
+    .btn-primary {
+        background-color: var(--primary-color, #20376B);
+        color: white;
+    }
+    
+    .btn-primary:hover {
+        background-color: var(--secondary-color, #0D6AB0);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+
+    .btn-secondary {
+        background-color: #6c757d;
+        color: white;
+    }
+    
+    .btn-secondary:hover {
+        background-color: #5a6268;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+
+    /* Mobile */
+    @media (max-width: 768px) {
+        .option-card { width: 45%; height: 100px; }
+        .button-container { flex-direction: column; }
+        .btn { width: 100%; }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="form-wrapper">
+    <div class="container">
+        <i class="fas fa-sliders-h" style="font-size: 2.2em; color: var(--accent-water, #00A8FF); margin-bottom: 10px;"></i>
+
+        <h2 class="lang-text" data-pt-br="Selecione a primeira propriedade" data-en="Select the first property" data-es="Seleccione la primera propiedad">
+            Selecione a primeira propriedade
+        </h2>
+
+        <form method="post">
+            {% csrf_token %}
+
+            <div class="selection-grid">
+                {% for radio in form.property_choice %}
+                <label class="option-card">
+                    {{ radio.tag }}
+                    <i class="fas fa-check-circle check-indicator"></i>
+
+                    {% if "Temperatura" in radio.choice_label %}
+                        <i class="fas fa-temperature-high icon-main"></i>
+                    {% elif "Pressão" in radio.choice_label or "Pressao" in radio.choice_label %}
+                        <i class="fas fa-tachometer-alt icon-main"></i>
+                    {% elif "Volume" in radio.choice_label %}
+                        <i class="fas fa-cube icon-main"></i>
+                    {% else %}
+                        <i class="fas fa-flask icon-main"></i>
+                    {% endif %}
+
+                    <span>{{ radio.choice_label }}</span>
+                </label>
+                {% endfor %}
+            </div>
+
+            <div id="value_input_field" style="display: none;">
+                <label id="value-label" for="value_input">
+                    <!-- O JavaScript injetará a tradução aqui -->
+                    {{ form.value_input.label }}
+                </label>
+                <input type="number" id="value_input" name="value_input" step="any" required placeholder="Digite o valor">
+            </div>
+
+            <div class="button-container">
+                <a href="{% url 'ask_known3_6' %}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left" style="margin-right: 8px;"></i>
+                    <span class="lang-text" data-pt-br="Voltar" data-en="Back" data-es="Volver">Voltar</span>
+                </a>
+
+                <button type="submit" class="btn btn-primary">
+                    <span class="lang-text" data-pt-br="Continuar" data-en="Continue" data-es="Continuar">Continuar</span>
+                    <i class="fas fa-arrow-right" style="margin-left: 8px;"></i>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function updateLabel() {
+        var selectedRadio = document.querySelector('input[name="property_choice"]:checked');
+        var inputField = document.getElementById('value_input_field');
+        
+        if (!selectedRadio) {
+            inputField.style.display = 'none';
+            return;
+        }
+
+        var selectedValue = selectedRadio.value;
+        var label = document.getElementById('value-label');
+        var numberInput = document.getElementById('value_input');
+
+        // Pega o idioma salvo no localStorage
+        let currentLang = localStorage.getItem('preferredLang') || 'pt-br';
+
+        // Dicionários para Placeholders
+        let phStr = {
+            'pt-br': 'Digite o valor',
+            'en': 'Enter the value',
+            'es': 'Introduzca el valor'
+        };
+
+        // Lógica de Label e Limites com suporte a múltiplos idiomas
+        if (selectedValue == '0') {
+            label.innerHTML = '<i class="fas fa-temperature-high"></i> ' +
+                              '<span class="lang-text" ' +
+                              'data-pt-br="Digite o valor da Temperatura (°C)" ' +
+                              'data-en="Enter the Temperature value (°C)" ' +
+                              'data-es="Introduzca el valor de la Temperatura (°C)">' +
+                              'Digite o valor da Temperatura (°C)</span>';
+            
+            numberInput.setAttribute('min', '-500');
+            numberInput.setAttribute('max', '10000');
+            
+        } else if (selectedValue == '1') {
+            label.innerHTML = '<i class="fas fa-tachometer-alt"></i> ' +
+                              '<span class="lang-text" ' +
+                              'data-pt-br="Digite o valor da Pressão (kPa)" ' +
+                              'data-en="Enter the Pressure value (kPa)" ' +
+                              'data-es="Introduzca el valor de la Presión (kPa)">' +
+                              'Digite o valor da Pressão (kPa)</span>';
+            
+            numberInput.setAttribute('min', '0');
+            numberInput.setAttribute('max', '50000');
+            
+        } else if (selectedValue == '2') {
+            label.innerHTML = '<i class="fas fa-cube"></i> ' +
+                              '<span class="lang-text" ' +
+                              'data-pt-br="Digite o valor do Volume Específico (m³/kg)" ' +
+                              'data-en="Enter the Specific Volume value (m³/kg)" ' +
+                              'data-es="Introduzca el valor del Volumen Específico (m³/kg)">' +
+                              'Digite o valor do Volume Específico (m³/kg)</span>';
+            
+            numberInput.setAttribute('min', '0');
+            numberInput.setAttribute('max', '10000');
+        }
+
+        numberInput.placeholder = phStr[currentLang];
+        inputField.style.display = 'block';
+
+        // Dispara a tradução novamente para formatar o label recém injetado (caso não esteja em pt-br)
+        if(currentLang !== 'pt-br') {
+             const elements = document.querySelectorAll('.lang-text');
+             elements.forEach(el => {
+                 const newText = el.getAttribute('data-' + currentLang);
+                 if (newText) el.textContent = newText;
+             });
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // Escuta as trocas de rádio
+        var radios = document.querySelectorAll('input[name="property_choice"]');
+        radios.forEach(function(radio) {
+            radio.addEventListener('change', updateLabel);
+        });
+
+        // Chama a função uma vez no carregamento para exibir o campo caso já venha preenchido do Django
+        updateLabel();
+
+        // Escuta cliques na opção de idioma para atualizar o placeholder dinamicamente se o input estiver aberto
+        document.addEventListener('click', function(e) {
+            if (e.target.closest('.lang-option')) {
+                setTimeout(updateLabel, 50); // Recalcula os placeholders e labels de acordo com o novo idioma
+            }
+        });
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,182 @@
+{% extends 'base.html' %}
+
+{% block title %}TERMO-CP{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Wrapper para alinhar o conteúdo no centro da main-content do base.html */
+    .form-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 40px 20px;
+        width: 100%;
+        min-height: 100%;
+    }
+
+    /* Container Compacto */
+    .container {
+        max-width: 600px;
+        width: 100%;
+        background: var(--card-bg, white);
+        border-radius: 10px;
+        box-shadow: var(--shadow);
+        padding: 40px 30px;
+        text-align: center;
+    }
+
+    h2 {
+        color: var(--primary-color);
+        font-size: 1.5em;
+        margin-bottom: 25px;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 15px;
+    }
+
+    /* --- INPUT DE VALOR --- */
+    #value_input_field {
+        margin-top: 10px;
+        width: 100%;
+        background-color: #f9f9f9;
+        padding: 25px;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+    }
+
+    label {
+        font-weight: bold;
+        color: var(--primary-color);
+        display: block;
+        margin-bottom: 15px;
+        font-size: 1.1em;
+    }
+
+    input[type="number"] {
+        padding: 12px;
+        width: 100%;
+        max-width: 250px;
+        font-size: 1.1em;
+        border: 2px solid #ccc;
+        border-radius: 6px;
+        text-align: center;
+        outline: none;
+        transition: border-color 0.3s ease;
+    }
+
+    input[type="number"]:focus {
+        border-color: var(--secondary-color);
+    }
+
+    /* Botões de Ação */
+    .button-container {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        margin-top: 30px;
+        width: 100%;
+    }
+
+    .btn {
+        padding: 10px 20px;
+        border-radius: 6px;
+        font-size: 1em;
+        cursor: pointer;
+        text-decoration: none;
+        transition: var(--hover-transition);
+        border: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        min-width: 130px;
+    }
+
+    .btn-primary { background-color: var(--primary-color); color: white; }
+    .btn-primary:hover { background-color: var(--secondary-color); transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
+
+    .btn-secondary { background-color: #6c757d; color: white; }
+    .btn-secondary:hover { background-color: #5a6268; transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
+
+    /* Mobile */
+    @media (max-width: 768px) {
+        .button-container { flex-direction: column; }
+        .btn { width: 100%; }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="form-wrapper">
+    <div class="container">
+        <i class="fas fa-thermometer-half" style="font-size: 2.5em; color: #00A8FF; margin-bottom: 15px;"></i>
+
+        <h2 class="lang-text" data-pt-br="Condições do ambiente" data-en="Environmental conditions" data-es="Condiciones del ambiente">
+            Condições do ambiente
+        </h2>
+
+        <form method="post">
+            {% csrf_token %}
+            <div style="display:none;">{{ form.property_choice }}</div>
+
+            <div id="value_input_field">
+                <label for="value_input">
+                    <i class="fas fa-temperature-low" style="margin-right: 5px;"></i>
+                    <span class="lang-text"
+                          data-pt-br="Digite o valor da Temperatura da vizinhança (°C):"
+                          data-en="Enter the ambient Temperature value (°C):"
+                          data-es="Introduzca el valor de la Temperatura del entorno (°C):">
+                        Digite o valor da Temperatura da vizinhança (°C):
+                    </span>
+                </label>
+                <!-- O placeholder será atualizado pelo JS abaixo -->
+                <input type="number" id="value_input" name="value_input" step="any" min="-500000" max="500000" required placeholder="Digite o valor">
+            </div>
+
+            <div class="button-container">
+                <button type="button" class="btn btn-secondary" onclick="history.back()">
+                    <i class="fas fa-arrow-left" style="margin-right: 8px;"></i>
+                    <span class="lang-text" data-pt-br="Voltar" data-en="Go Back" data-es="Volver">Voltar</span>
+                </button>
+
+                <button type="submit" class="btn btn-primary">
+                    <span class="lang-text" data-pt-br="Continuar" data-en="Continue" data-es="Continuar">Continuar</span>
+                    <i class="fas fa-arrow-right" style="margin-left: 8px;"></i>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function updatePlaceholder() {
+        let currentLang = localStorage.getItem('preferredLang') || 'pt-br';
+        let numberInput = document.getElementById('value_input');
+
+        let phStr = {
+            'pt-br': 'Digite o valor',
+            'en': 'Enter the value',
+            'es': 'Introduzca el valor'
+        };
+
+        if(numberInput) {
+            numberInput.placeholder = phStr[currentLang] || phStr['pt-br'];
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // Atualiza no carregamento da página
+        updatePlaceholder();
+
+        // Escuta os cliques nas bandeiras para atualizar o placeholder dinamicamente
+        document.addEventListener('click', function(e) {
+            if (e.target.closest('.lang-option')) {
+                // Pequeno delay para garantir que a língua já foi atualizada no localStorage
+                setTimeout(updatePlaceholder, 50);
+            }
+        });
+    });
+</script>
+{% endblock %}

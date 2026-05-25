@@ -1,0 +1,957 @@
+{% extends 'base2.html' %}
+
+{% block title %}TERMO-CP{% endblock %}
+
+{% block extra_head %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/hammerjs@2.0.8"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@2.0.1/dist/chartjs-plugin-zoom.min.js"></script>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* --- Identidade Visual Padrão --- */
+    :root {
+        --accent-co2: #757575;
+    }
+
+    .top-row {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        gap: 15px;
+        flex: 1;
+        min-height: 0;
+    }
+
+    /* Cartões Laterais */
+    .side-column {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        min-height: 0;
+    }
+
+    .state-card {
+        flex: 1;
+        background: var(--card-bg);
+        border-radius: 10px;
+        box-shadow: var(--shadow);
+        padding: 15px;
+        display: flex;
+        flex-direction: column;
+        border-top: 4px solid var(--primary-color);
+        overflow-y: auto;
+    }
+
+    .state-card.final-state { border-top-color: var(--secondary-color); }
+
+    .state-card h2 {
+        color: var(--primary-color);
+        font-size: 1.2em;
+        border-bottom: 2px solid #eee;
+        padding-bottom: 8px;
+        margin-top: 0;
+        margin-bottom: 10px;
+        text-align: center;
+    }
+
+    .data-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 8px 0;
+        border-bottom: 1px solid #eee;
+        font-size: 0.9em;
+    }
+
+    .data-row:last-child { border-bottom: none; }
+    .data-label { font-weight: bold; color: #555; }
+    .data-value { font-weight: bold; color: var(--primary-color); }
+
+    /* Coluna Central (Cilindro e Slider) */
+    .center-column {
+        flex: 1.5;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        min-height: 0;
+    }
+
+    .slider-mini-container {
+        text-align: center;
+        background-color: #f0f8ff;
+        padding: 5px 15px;
+        border-radius: 8px;
+        border: 1px solid #dbeafe;
+        box-shadow: var(--shadow);
+    }
+
+    .slider-mini-container h4 {
+        margin: 5px 0;
+        font-size: 0.9em;
+        color: var(--primary-color);
+    }
+
+    input[type="range"] { width: 60%; margin: 5px 0; accent-color: var(--secondary-color); }
+
+    .visualization-container {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        background: #000;
+        border-radius: 10px;
+        box-shadow: var(--shadow);
+        overflow: hidden;
+    }
+
+    .visualization-container canvas {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+    }
+
+    .scale-label {
+        position: absolute;
+        color: white;
+        font-size: 11px;
+        font-family: 'Arial', sans-serif;
+        pointer-events: none;
+        text-align: right;
+        width: 60px;
+        z-index: 10;
+    }
+
+    .legend-container {
+        position: absolute;
+        bottom: 20px;
+        right: 20px;
+        background-color: rgba(15, 15, 15, 0.85);
+        padding: 15px 20px;
+        border-radius: 12px;
+        color: white;
+        font-size: 14px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        pointer-events: none;
+        z-index: 20;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+    }
+
+    .legend-item { display: flex; align-items: center; gap: 12px; font-weight: bold; }
+    .legend-color { width: 24px; height: 16px; display: inline-block; border-radius: 2px; }
+    .legend-cilindro { background-color: transparent; border: 1px solid #888; }
+    .legend-pistao { background-color: #a2a2a2; }
+    .legend-vapor { background-color: rgba(29, 115, 188, 0.7); border: 1px solid #333; }
+    .legend-liquido { background-color: #1d73bc; }
+
+    /* Linha Inferior */
+    .bottom-row {
+        display: flex;
+        flex-direction: row;
+        background-color: #FFF9C4;
+        border-radius: 10px;
+        box-shadow: var(--shadow);
+        padding: 10px 20px;
+        align-items: center;
+        justify-content: space-between;
+        flex-shrink: 0;
+        border-left: 4px solid var(--accent-gas);
+    }
+
+    .bottom-row h3 { margin: 0; color: var(--secondary-color); font-size: 1.1em; margin-right: 20px; }
+
+    .process-results {
+        display: flex;
+        flex-direction: row;
+        gap: 25px;
+        flex: 1;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .process-item { display: flex; flex-direction: column; align-items: center; font-size: 0.9em; }
+    .process-item span { color: #666; font-size: 0.8em; }
+    .process-item strong { color: var(--primary-color); font-size: 1.1em; }
+    .process-impossible { color: red; font-weight: bold; text-align: center; padding: 5px 15px; border: 2px solid red; border-radius: 5px; background-color: rgba(255,0,0,0.05); }
+
+    .button-group { display: flex; gap: 10px; flex-wrap: wrap; justify-content: flex-end;}
+
+    .chart-controls { display: flex; justify-content: center; align-items: center; margin-bottom: 15px; gap: 15px; flex-wrap: wrap; }
+    .chart-controls select {
+        padding: 8px 12px; border-radius: 6px; border: 2px solid var(--primary-color);
+        font-family: inherit; color: var(--primary-color); font-weight: bold; outline: none; cursor: pointer;
+    }
+    .zoom-tip { font-size: 0.8em; color: #666; font-style: italic; margin-bottom: 10px; }
+
+    @media (max-width: 992px) {
+        .top-row { flex-direction: column; }
+        .side-column { gap: 15px; }
+        .center-column { min-height: 500px; }
+        .bottom-row { flex-direction: column; gap: 15px; text-align: center; }
+        .process-results { flex-wrap: wrap; justify-content: center; }
+        .bottom-row h3 { margin-right: 0; }
+        .button-group { flex-direction: column; width: 100%; }
+        .btn { width: 100%; }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="top-row">
+
+    <!-- COLUNA LATERAL ESQUERDA (ESTADO 1) -->
+    <div class="side-column">
+        <div class="state-card">
+            <h2><i class="fas fa-play-circle"></i> <span class="lang-text" data-pt-br="Estado Inicial (1)" data-en="Initial State (1)" data-es="Estado Inicial (1)">Estado Inicial (1)</span></h2>
+            
+            <div class="data-row">
+                <span class="data-label lang-text" data-pt-br="Fase:" data-en="Phase:" data-es="Fase:">Fase:</span> 
+                <span class="data-value">
+                    {% if fase == 1 %}
+                        <span class="lang-text" data-pt-br="Líquido Comprimido" data-en="Compressed Liquid" data-es="Líquido Comprimido">Líquido Comprimido</span>
+                    {% elif fase == 2 %}
+                        <span class="lang-text" data-pt-br="Vapor Superaquecido" data-en="Superheated Vapor" data-es="Vapor Sobrecalentado">Vapor Superaquecido</span>
+                    {% else %} 
+                        <span class="lang-text" data-pt-br="Região de Saturação" data-en="Saturation Region" data-es="Región de Saturación">Região de Saturação</span>
+                    {% endif %}
+                </span>
+            </div>
+            <div class="data-row"><span class="data-label lang-text" data-pt-br="Massa (m):" data-en="Mass (m):" data-es="Masa (m):">Massa (m):</span> <span class="data-value">1,0 kg</span></div>
+            <div class="data-row"><span class="data-label lang-text" data-pt-br="Temperatura (T):" data-en="Temperature (T):" data-es="Temperatura (T):">Temperatura (T):</span> <span class="data-value">{{ temperatura }} °C</span></div>
+            <div class="data-row"><span class="data-label lang-text" data-pt-br="Pressão (p):" data-en="Pressure (p):" data-es="Presión (p):">Pressão (p):</span> <span class="data-value">{{ pressao }} kPa</span></div>
+            <div class="data-row"><span class="data-label lang-text" data-pt-br="Volume específico (v):" data-en="Specific Volume (v):" data-es="Volumen específico (v):">Volume específico (v):</span> <span class="data-value">{{ volume_especifico }} m³/kg</span></div>
+            <div class="data-row"><span class="data-label lang-text" data-pt-br="Energia interna (u):" data-en="Internal Energy (u):" data-es="Energía interna (u):">Energia interna (u):</span> <span class="data-value">{{ energia_interna }} kJ/kg</span></div>
+            <div class="data-row"><span class="data-label lang-text" data-pt-br="Entalpia (h):" data-en="Enthalpy (h):" data-es="Entalpía (h):">Entalpia (h):</span> <span class="data-value">{{ entalpia_especifica }} kJ/kg</span></div>
+            <div class="data-row"><span class="data-label lang-text" data-pt-br="Entropia (s):" data-en="Entropy (s):" data-es="Entropía (s):">Entropia (s):</span> <span class="data-value">{{ entropia_especifica }} kJ/kg.K</span></div>
+            {% if fase == 3 %}
+            <div class="data-row"><span class="data-label lang-text" data-pt-br="Título (x):" data-en="Quality (x):" data-es="Calidad (x):">Título (x):</span> <span class="data-value">{{ titulo }} %</span></div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- COLUNA CENTRAL (P5.JS) -->
+    <div class="center-column">
+        <div class="slider-mini-container">
+            <h4>
+                <span class="lang-text" data-pt-br="Visualizando Cilindro:" data-en="Viewing Cylinder:" data-es="Viendo Cilindro:">Visualizando Cilindro:</span> 
+                <span id="volumeValue" style="color: var(--secondary-color);" class="lang-text" data-pt-br="Estado Inicial" data-en="Initial State" data-es="Estado Inicial">Estado Inicial</span>
+            </h4>
+            <div style="display: flex; justify-content: space-between; font-size: 0.75em; color: #666; padding: 0 10%;">
+                <span class="lang-text" data-pt-br="Inicial" data-en="Initial" data-es="Inicial">Inicial</span>
+                <span class="lang-text" data-pt-br="Final" data-en="Final" data-es="Final">Final</span>
+            </div>
+            <input type="range" id="volumeSlider" min="1" max="2" step="1" value="1">
+        </div>
+
+        <div class="visualization-container" id="canvas-wrapper">
+            <div id="scale-container"></div>
+            <div class="legend-container">
+                <div class="legend-item"><span class="legend-color legend-cilindro"></span> <span class="lang-text" data-pt-br="Cilindro" data-en="Cylinder" data-es="Cilindro">Cilindro</span></div>
+                <div class="legend-item"><span class="legend-color legend-pistao"></span> <span class="lang-text" data-pt-br="Pistão" data-en="Piston" data-es="Pistón">Pistão</span></div>
+                <div class="legend-item"><span class="legend-color legend-vapor"></span> <span class="lang-text" data-pt-br="Vapor" data-en="Vapor" data-es="Vapor">Vapor</span></div>
+                <div class="legend-item"><span class="legend-color legend-liquido"></span> <span class="lang-text" data-pt-br="Líquido" data-en="Liquid" data-es="Líquido">Líquido</span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- COLUNA LATERAL DIREITA (ESTADO 2) -->
+    <div class="side-column">
+        <div class="state-card final-state">
+            <h2><i class="fas fa-stop-circle"></i> <span class="lang-text" data-pt-br="Estado Final (2)" data-en="Final State (2)" data-es="Estado Final (2)">Estado Final (2)</span></h2>
+            
+            <div class="data-row">
+                <span class="data-label lang-text" data-pt-br="Fase:" data-en="Phase:" data-es="Fase:">Fase:</span> 
+                <span class="data-value">
+                    {% if fase2 == 1 %}
+                        <span class="lang-text" data-pt-br="Líquido Comprimido" data-en="Compressed Liquid" data-es="Líquido Comprimido">Líquido Comprimido</span>
+                    {% elif fase2 == 2 %}
+                        <span class="lang-text" data-pt-br="Vapor Superaquecido" data-en="Superheated Vapor" data-es="Vapor Sobrecalentado">Vapor Superaquecido</span>
+                    {% else %} 
+                        <span class="lang-text" data-pt-br="Região de Saturação" data-en="Saturation Region" data-es="Región de Saturación">Região de Saturação</span>
+                    {% endif %}
+                </span>
+            </div>
+            <div class="data-row"><span class="data-label lang-text" data-pt-br="Massa (m):" data-en="Mass (m):" data-es="Masa (m):">Massa (m):</span> <span class="data-value">1,0 kg</span></div>
+            <div class="data-row"><span class="data-label lang-text" data-pt-br="Temperatura (T):" data-en="Temperature (T):" data-es="Temperatura (T):">Temperatura (T):</span> <span class="data-value">{{ temperatura2 }} °C</span></div>
+            <div class="data-row"><span class="data-label lang-text" data-pt-br="Pressão (p):" data-en="Pressure (p):" data-es="Presión (p):">Pressão (p):</span> <span class="data-value">{{ pressao2 }} kPa</span></div>
+            <div class="data-row"><span class="data-label lang-text" data-pt-br="Volume específico (v):" data-en="Specific Volume (v):" data-es="Volumen específico (v):">Volume específico (v):</span> <span class="data-value">{{ volume_especifico2 }} m³/kg</span></div>
+            <div class="data-row"><span class="data-label lang-text" data-pt-br="Energia interna (u):" data-en="Internal Energy (u):" data-es="Energía interna (u):">Energia interna (u):</span> <span class="data-value">{{ energia_interna2 }} kJ/kg</span></div>
+            <div class="data-row"><span class="data-label lang-text" data-pt-br="Entalpia (h):" data-en="Enthalpy (h):" data-es="Entalpía (h):">Entalpia (h):</span> <span class="data-value">{{ entalpia_especifica2 }} kJ/kg</span></div>
+            <div class="data-row"><span class="data-label lang-text" data-pt-br="Entropia (s):" data-en="Entropy (s):" data-es="Entropía (s):">Entropia (s):</span> <span class="data-value">{{ entropia_especifica2 }} kJ/kg.K</span></div>
+            {% if fase2 == 3 %}
+            <div class="data-row"><span class="data-label lang-text" data-pt-br="Título (x):" data-en="Quality (x):" data-es="Calidad (x):">Título (x):</span> <span class="data-value">{{ titulo2 }} %</span></div>
+            {% endif %}
+        </div>
+    </div>
+
+</div>
+
+<!-- BARRA INFERIOR DE RESULTADOS -->
+<div class="bottom-row">
+    <h3><i class="fas fa-chart-line"></i> <span class="lang-text" data-pt-br="Resultados do Processo" data-en="Process Results" data-es="Resultados del Proceso">Resultados do Processo</span></h3>
+
+    <div class="process-results">
+        <div class="process-item"><span class="lang-text" data-pt-br="Temperatura da Vizinhança" data-en="Surroundings Temp" data-es="Temp. del Entorno">Temperatura da Vizinhança</span><strong>{{ TempViz }} °C</strong></div>
+        <div class="process-item"><span class="lang-text" data-pt-br="Calor (Q)" data-en="Heat (Q)" data-es="Calor (Q)">Calor (Q)</span><strong>{{ Calor }} kJ</strong></div>
+        <div class="process-item"><span>Sger</span><strong>{{ Sger }} kJ/K</strong></div>
+
+        {% if Sger != None and Sger < 0 %}
+        <div class="process-impossible">
+            <i class="fas fa-exclamation-triangle"></i> <span class="lang-text" data-pt-br="PROCESSO IMPOSSÍVEL!" data-en="IMPOSSIBLE PROCESS!" data-es="¡PROCESO IMPOSIBLE!">PROCESSO IMPOSSÍVEL!</span>
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="button-group">
+        <button id="btnCurrentDiagram" class="btn btn-info">
+            <i class="fas fa-chart-area" style="margin-right: 5px;"></i> <span class="lang-text" data-pt-br="Diagrama do Processo" data-en="Process Diagram" data-es="Diagrama del Proceso">Diagrama do Processo</span>
+        </button>
+        <button id="btnAllDiagrams" class="btn btn-info" style="display: none;">
+            <i class="fas fa-layer-group" style="margin-right: 5px;"></i> <span class="lang-text" data-pt-br="Ciclo Completo" data-en="Full Cycle" data-es="Ciclo Completo">Ciclo Completo</span>
+        </button>
+
+        <a href="{% url 'ask_known4_17' %}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left" style="margin-right: 5px;"></i> <span class="lang-text" data-pt-br="Voltar" data-en="Back" data-es="Volver">Voltar</span>
+        </a>
+        <button id="openModalBtn" class="btn btn-primary">
+            <span class="lang-text" data-pt-br="Continuar" data-en="Continue" data-es="Continuar">Continuar</span> <i class="fas fa-arrow-right" style="margin-left: 5px;"></i>
+        </button>
+    </div>
+</div>
+
+<!-- MODAL DE CONTINUAÇÃO -->
+<div id="processModal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn" id="closeProcessBtn">&times;</span>
+        <h3 style="color: var(--primary-color);" class="lang-text" data-pt-br="Continuar Processo" data-en="Continue Process" data-es="Continuar Proceso">Continuar Processo</h3>
+        <p class="lang-text" data-pt-br="Selecione o próximo passo:" data-en="Select the next step:" data-es="Seleccione el siguiente paso:">Selecione o próximo passo:</p>
+
+        {% if teste3 %}
+            <a href="{% url 'ask_known3_20' %}" class="modal-btn lang-text" data-pt-br="Aquecimento/Resfriamento à Pressão Constante" data-en="Heating/Cooling at Constant Pressure" data-es="Calentamiento/Enfriamiento a Presión Constante">Aquecimento/Resfriamento à Pressão Constante</a>
+            <a href="{% url 'ask_known3_22' %}" class="modal-btn lang-text" data-pt-br="Aquecimento/Resfriamento à Volume Constante" data-en="Heating/Cooling at Constant Volume" data-es="Calentamiento/Enfriamiento a Volumen Constante">Aquecimento/Resfriamento à Volume Constante</a>
+            <a href="{% url 'ask_known3_21' %}" class="modal-btn lang-text" data-pt-br="Compressão/Expansão Adiabática e Reversível" data-en="Reversible Adiabatic Compression/Expansion" data-es="Compresión/Expansión Adiabática Reversible">Compressão/Expansão Adiabática e Reversível</a>
+        {% else %}
+            <a href="{% url 'ask_known3_20' %}" class="modal-btn lang-text" data-pt-br="Aquecimento/Resfriamento à Pressão Constante" data-en="Heating/Cooling at Constant Pressure" data-es="Calentamiento/Enfriamiento a Presión Constante">Aquecimento/Resfriamento à Pressão Constante</a>
+            <a href="{% url 'ask_known3_22' %}" class="modal-btn lang-text" data-pt-br="Aquecimento/Resfriamento à Volume Constante" data-en="Heating/Cooling at Constant Volume" data-es="Calentamiento/Enfriamiento a Volumen Constante">Aquecimento/Resfriamento à Volume Constante</a>
+            <a href="{% url 'ask_known3_21' %}" class="modal-btn lang-text" data-pt-br="Compressão/Expansão Adiabática e Reversível" data-en="Reversible Adiabatic Compression/Expansion" data-es="Compresión/Expansión Adiabática Reversible">Compressão/Expansão Adiabática e Reversível</a>
+        {% endif %}
+    </div>
+</div>
+
+<!-- MODAL DOS DIAGRAMAS -->
+<div id="diagramModal" class="modal">
+    <div class="modal-content modal-chart">
+        <span class="close-btn" id="closeDiagramBtn">&times;</span>
+        <h3 style="color: var(--primary-color); margin-top: 0; margin-bottom: 5px;" class="lang-text" data-pt-br="Diagramas Termodinâmicos Interativos" data-en="Interactive Thermodynamic Diagrams" data-es="Diagramas Termodinámicos Interactivos">Diagramas Termodinâmicos Interativos</h3>
+        <p class="zoom-tip"><i class="fas fa-search"></i> <span class="lang-text" data-pt-br="Dica: Clique e arraste para desenhar uma área de Zoom. Use o scroll ou segure Ctrl + arraste para mover o gráfico." data-en="Tip: Click and drag to draw a Zoom area. Use scroll or hold Ctrl + drag to pan the chart." data-es="Consejo: Haga clic y arrastre para dibujar un área de Zoom. Use la rueda o mantenga Ctrl + arrastre para mover el gráfico.">Dica: Clique e arraste para desenhar uma área de Zoom. Use o scroll ou segure <b>Ctrl</b> + arraste para mover o gráfico.</span></p>
+
+        <div class="chart-controls">
+            <select id="chartTypeSelector">
+                <option value="Pv" class="lang-text" data-pt-br="Diagrama P-v (Pressão x Volume)" data-en="P-v Diagram (Pressure x Volume)" data-es="Diagrama P-v (Presión x Volumen)">Diagrama P-v (Pressão x Volume)</option>
+                <option value="Ts" class="lang-text" data-pt-br="Diagrama T-s (Temperatura x Entropia)" data-en="T-s Diagram (Temperature x Entropy)" data-es="Diagrama T-s (Temperatura x Entropía)">Diagrama T-s (Temperatura x Entropia)</option>
+                <option value="Tv" class="lang-text" data-pt-br="Diagrama T-v (Temperatura x Volume)" data-en="T-v Diagram (Temperature x Volume)" data-es="Diagrama T-v (Temperatura x Volumen)">Diagrama T-v (Temperatura x Volume)</option>
+                <option value="Ph" class="lang-text" data-pt-br="Diagrama P-h (Pressão x Entalpia)" data-en="P-h Diagram (Pressure x Enthalpy)" data-es="Diagrama P-h (Presión x Entalpía)">Diagrama P-h (Pressão x Entalpia)</option>
+                <option value="hs" class="lang-text" data-pt-br="Diagrama h-s (Mollier)" data-en="h-s Diagram (Mollier)" data-es="Diagrama h-s (Mollier)">Diagrama h-s (Mollier - Entalpia x Entropia)</option>
+            </select>
+            <button id="btnToggleFullCycle" class="btn btn-secondary" style="display: none;">
+                <i class="fas fa-layer-group"></i> <span id="toggleText" class="lang-text" data-pt-br="Ver Ciclo Completo" data-en="View Full Cycle" data-es="Ver Ciclo Completo">Ver Ciclo Completo</span>
+            </button>
+            <button id="btnResetZoom" class="btn btn-outline">
+                <i class="fas fa-expand"></i> <span class="lang-text" data-pt-br="Resetar Zoom" data-en="Reset Zoom" data-es="Restablecer Zoom">Resetar Zoom</span>
+            </button>
+        </div>
+
+        <div style="position: relative; height:450px; width:100%; background: #ffffff; border-radius:8px; border: 1px solid #ddd;">
+            <canvas id="thermoChart"></canvas>
+        </div>
+    </div>
+</div>
+
+<!-- LEITURA SEGURA DOS DADOS -->
+<script id="chart-data" type="application/json">
+    {{ pontos_grafico_json|safe }}
+</script>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // --- FUNÇÃO AUXILIAR DE TRADUÇÃO PARA JS ---
+    function t(pt, en, es) {
+        let lang = localStorage.getItem('preferredLang') || 'pt-br';
+        if (lang === 'en') return en;
+        if (lang === 'es') return es;
+        return pt;
+    }
+
+    // --- RE-RENDERIZAR GRÁFICOS AO MUDAR O IDIOMA ---
+    document.addEventListener('languageChanged', function(e) {
+        if (pontosGrafico.length > 0 && document.getElementById('diagramModal').style.display === "block") {
+            renderChart(showingAll);
+        }
+        createHtmlScale(); 
+        
+        const toggleText = document.getElementById('toggleText');
+        if (toggleText) {
+            toggleText.textContent = showingAll ? t("Ver Processo Atual", "View Current Process", "Ver Proceso Actual") : t("Ver Ciclo Completo", "View Full Cycle", "Ver Ciclo Completo");
+        }
+    });
+
+    // --- DADOS DOS MICROPROCESSOS PARA O GRÁFICO (MÉTODO SEGURO) ---
+    const rawPontos = document.getElementById('chart-data').textContent.trim();
+    let pontosGrafico = [];
+
+    try {
+        if (rawPontos && rawPontos !== "None" && rawPontos !== "") {
+            pontosGrafico = JSON.parse(rawPontos);
+        }
+    } catch(e) {
+        console.error("Erro ao ler dados do gráfico do Django:", e);
+    }
+
+    // --- LÓGICA DO CHART.JS ---
+    let thermoChartInstance = null;
+    const ctxChart = document.getElementById('thermoChart').getContext('2d');
+    const chartTypeSelector = document.getElementById('chartTypeSelector');
+    let showingAll = false;
+
+    if (pontosGrafico.length > 1) {
+        document.getElementById('btnToggleFullCycle').style.display = 'inline-flex';
+    }
+
+    document.getElementById('btnCurrentDiagram').onclick = () => {
+        if (!pontosGrafico || pontosGrafico.length === 0) {
+            alert(t("Nenhum dado termodinâmico disponível para gerar o diagrama.", "No thermodynamic data available to generate the diagram.", "No hay datos termodinámicos disponibles para generar el diagrama."));
+            return;
+        }
+        openDiagramModal(false);
+    };
+
+    const processModal = document.getElementById("processModal");
+    const diagramModal = document.getElementById("diagramModal");
+    
+    document.getElementById("openModalBtn").onclick = () => processModal.style.display = "block";
+    document.getElementById("closeProcessBtn").onclick = () => processModal.style.display = "none";
+    document.getElementById("closeDiagramBtn").onclick = () => diagramModal.style.display = "none";
+    document.getElementById('btnResetZoom').onclick = () => { if (thermoChartInstance) thermoChartInstance.resetZoom(); };
+
+    window.onclick = (e) => { 
+        if (e.target == processModal) processModal.style.display = "none"; 
+        if (e.target == diagramModal) diagramModal.style.display = "none";
+    }
+
+    document.getElementById('btnToggleFullCycle').onclick = function() {
+        showingAll = !showingAll;
+        document.getElementById('toggleText').textContent = showingAll ? t("Ver Processo Atual", "View Current Process", "Ver Proceso Actual") : t("Ver Ciclo Completo", "View Full Cycle", "Ver Ciclo Completo");
+        
+        if(showingAll) {
+            this.querySelector('i').className = 'fas fa-search';
+        } else {
+            this.querySelector('i').className = 'fas fa-layer-group';
+        }
+        renderChart(showingAll);
+    };
+
+    chartTypeSelector.addEventListener('change', () => renderChart(showingAll));
+
+    function openDiagramModal(allProcesses) {
+        showingAll = allProcesses;
+        if(pontosGrafico.length > 1) {
+            document.getElementById('toggleText').textContent = showingAll ? t("Ver Processo Atual", "View Current Process", "Ver Proceso Actual") : t("Ver Ciclo Completo", "View Full Cycle", "Ver Ciclo Completo");
+            document.querySelector('#btnToggleFullCycle i').className = showingAll ? 'fas fa-search' : 'fas fa-layer-group';
+        }
+        diagramModal.style.display = "block";
+        renderChart(showingAll);
+    }
+
+    const COLORS = ['#757575', '#4CAF50', '#9C27B0', '#03A9F4', '#FF9800', '#795548', '#E91E63', '#607D8B'];
+
+    const chartConfigs = {
+        'Pv': { 
+            xKey: 'v', yKey: 'P', xLog: true, yLog: true,
+            xLab: () => t('Volume Específico (v) [m³/kg]', 'Specific Volume (v) [m³/kg]', 'Volumen Específico (v) [m³/kg]'),
+            yLab: () => t('Pressão (P) [kPa]', 'Pressure (P) [kPa]', 'Presión (P) [kPa]')
+        },
+        'Ts': { 
+            xKey: 's', yKey: 'T', xLog: false, yLog: false,
+            xLab: () => t('Entropia (s) [kJ/kg.K]', 'Entropy (s) [kJ/kg.K]', 'Entropía (s) [kJ/kg.K]'), 
+            yLab: () => t('Temperatura (T) [°C]', 'Temperature (T) [°C]', 'Temperatura (T) [°C]')
+        },
+        'Tv': { 
+            xKey: 'v', yKey: 'T', xLog: true, yLog: false,
+            xLab: () => t('Volume Específico (v) [m³/kg]', 'Specific Volume (v) [m³/kg]', 'Volumen Específico (v) [m³/kg]'), 
+            yLab: () => t('Temperatura (T) [°C]', 'Temperature (T) [°C]', 'Temperatura (T) [°C]')
+        },
+        'Ph': { 
+            xKey: 'h', yKey: 'P', xLog: false, yLog: true,
+            xLab: () => t('Entalpia (h) [kJ/kg]', 'Enthalpy (h) [kJ/kg]', 'Entalpía (h) [kJ/kg]'), 
+            yLab: () => t('Pressão (P) [kPa]', 'Pressure (P) [kPa]', 'Presión (P) [kPa]')
+        },
+        'hs': { 
+            xKey: 's', yKey: 'h', xLog: false, yLog: false,
+            xLab: () => t('Entropia (s) [kJ/kg.K]', 'Entropy (s) [kJ/kg.K]', 'Entropía (s) [kJ/kg.K]'), 
+            yLab: () => t('Entalpia (h) [kJ/kg]', 'Enthalpy (h) [kJ/kg]', 'Entalpía (h) [kJ/kg]')
+        }
+    };
+
+    // --- DOMO DE SATURAÇÃO - DIÓXIDO DE CARBONO (CO2) ---
+    function getSaturationDome(type) {
+        const T = [-50.0, -48.0, -46.0, -44.0, -42.0, -40.0, -38.0, -36.0, -34.0, -32.0, -30.0, -28.0, -26.0, -24.0, -22.0, -20.0, -18.0, -16.0, -14.0, -12.0, -10.0, -8.0, -6.0, -4.0, -2.0, 0.0, 2.0, 4.0, 6.0, 8.0, 10.0, 12.0, 14.0, 16.0, 18.0, 20.0, 22.0, 24.0, 26.0, 28.0, 30.0, 31.0];
+        const P = [682.3, 739.5, 800.2, 864.4, 932.5, 1004.5, 1080.5, 1160.7, 1245.2, 1334.2, 1427.8, 1526.1, 1629.3, 1737.5, 1850.9, 1969.6, 2093.8, 2223.7, 2359.3, 2501.0, 2648.7, 2802.7, 2963.2, 3130.3, 3304.2, 3485.1, 3673.3, 3868.8, 4072.0, 4283.1, 4502.2, 4729.7, 4965.8, 5210.8, 5465.1, 5729.1, 6003.1, 6287.7, 6583.7, 6891.8, 7213.7, 7377.3];
+        const vf = [0.000866, 0.000872, 0.000878, 0.000883, 0.000889, 0.000896, 0.000902, 0.000909, 0.000915, 0.000922, 0.00093, 0.000937, 0.000945, 0.000953, 0.000961, 0.000969, 0.000978, 0.000987, 0.000997, 0.001007, 0.001017, 0.001028, 0.00104, 0.001052, 0.001065, 0.001078, 0.001093, 0.001108, 0.001124, 0.001142, 0.001161, 0.001182, 0.001205, 0.001231, 0.00126, 0.001293, 0.001332, 0.001379, 0.00144, 0.001526, 0.001685, 0.002139];
+        const vg = [0.05579, 0.05162, 0.04782, 0.04435, 0.04118, 0.03828, 0.03562, 0.03318, 0.03093, 0.02886, 0.02696, 0.02519, 0.02356, 0.02205, 0.02065, 0.01934, 0.01813, 0.017, 0.01595, 0.01497, 0.01405, 0.01319, 0.01238, 0.01162, 0.01091, 0.01024, 0.00961, 0.00901, 0.00845, 0.00791, 0.0074, 0.00691, 0.00645, 0.006, 0.00557, 0.00515, 0.00474, 0.00433, 0.00391, 0.00346, 0.0029, 0.00214];
+        const hf = [-19.96, -16.0, -12.02, -8.03, -4.02, 0.0, 4.04, 8.11, 12.19, 16.3, 20.43, 24.6, 28.78, 33.0, 37.26, 41.55, 45.87, 50.24, 54.65, 59.11, 63.62, 68.18, 72.81, 77.5, 82.26, 87.1, 92.02, 97.05, 102.18, 107.43, 112.83, 118.38, 124.13, 130.11, 136.36, 142.97, 150.02, 157.71, 166.36, 176.72, 191.65, 219.34];
+        const hg = [319.77, 320.38, 320.96, 321.49, 321.97, 322.42, 322.82, 323.17, 323.47, 323.72, 323.92, 324.06, 324.14, 324.15, 324.11, 323.99, 323.8, 323.53, 323.19, 322.76, 322.23, 321.61, 320.89, 320.05, 319.09, 317.99, 316.75, 315.35, 313.77, 311.99, 309.98, 307.72, 305.15, 302.22, 298.86, 294.96, 290.36, 284.8, 277.8, 268.3, 252.23, 219.34];
+        const sf = [-0.0863, -0.0688, -0.0515, -0.0342, -0.0171, 0.0, 0.017, 0.0339, 0.0507, 0.0675, 0.0842, 0.1009, 0.1175, 0.1341, 0.1506, 0.1672, 0.1837, 0.2003, 0.2169, 0.2334, 0.2501, 0.2668, 0.2835, 0.3003, 0.3173, 0.3344, 0.3516, 0.369, 0.3866, 0.4045, 0.4228, 0.4414, 0.4605, 0.4802, 0.5006, 0.5221, 0.5449, 0.5695, 0.5971, 0.6301, 0.6778, 0.768];
+        const sg = [1.4362, 1.4252, 1.4144, 1.4038, 1.3933, 1.3829, 1.3726, 1.3624, 1.3523, 1.3423, 1.3323, 1.3224, 1.3125, 1.3026, 1.2928, 1.2829, 1.273, 1.2631, 1.2531, 1.243, 1.2328, 1.2226, 1.2121, 1.2015, 1.1907, 1.1797, 1.1683, 1.1567, 1.1446, 1.1321, 1.119, 1.1053, 1.0909, 1.0754, 1.0588, 1.0406, 1.0203, 0.9972, 0.9697, 0.9342, 0.8776, 0.768];
+
+        let dome = [];
+        let critPt = {};
+        const lastIdx = P.length - 1;
+
+        if (type === 'Pv') {
+            for(let i=0; i <= lastIdx; i++) dome.push({x: vf[i], y: P[i]});
+            critPt = {x: vf[lastIdx], y: P[lastIdx]};
+            for(let i = lastIdx - 1; i >= 0; i--) dome.push({x: vg[i], y: P[i]});
+        } else if (type === 'Ts') {
+            for(let i=0; i <= lastIdx; i++) dome.push({x: sf[i], y: T[i]});
+            critPt = {x: sf[lastIdx], y: T[lastIdx]};
+            for(let i = lastIdx - 1; i >= 0; i--) dome.push({x: sg[i], y: T[i]});
+        } else if (type === 'Tv') {
+            for(let i=0; i <= lastIdx; i++) dome.push({x: vf[i], y: T[i]});
+            critPt = {x: vf[lastIdx], y: T[lastIdx]};
+            for(let i = lastIdx - 1; i >= 0; i--) dome.push({x: vg[i], y: T[i]});
+        } else if (type === 'Ph') {
+            for(let i=0; i <= lastIdx; i++) dome.push({x: hf[i], y: P[i]});
+            critPt = {x: hf[lastIdx], y: P[lastIdx]};
+            for(let i = lastIdx - 1; i >= 0; i--) dome.push({x: hg[i], y: P[i]});
+        } else if (type === 'hs') {
+            for(let i=0; i <= lastIdx; i++) dome.push({x: sf[i], y: hf[i]});
+            critPt = {x: sf[lastIdx], y: hf[lastIdx]};
+            for(let i = lastIdx - 1; i >= 0; i--) dome.push({x: sg[i], y: hg[i]});
+        }
+
+        return { points: dome, critical: critPt };
+    }
+
+    // --- RENDERIZAÇÃO MELHORADA COM LIMITES E TENSION ZERO NOS PROCESSOS ---
+    function renderChart(showAll) {
+        if (!pontosGrafico || pontosGrafico.length === 0) return;
+
+        const type = chartTypeSelector.value;
+        const conf = chartConfigs[type];
+        let datasetsToRender = [];
+
+        const satData = getSaturationDome(type);
+
+        const lDomo = t('Domo de Saturação (CO2)', 'Saturation Dome (CO2)', 'Domo de Saturación (CO2)');
+        const lPonto = t('Ponto Crítico', 'Critical Point', 'Punto Crítico');
+        const lEstados = t('Estados', 'States', 'Estados');
+        const lProcesso = t('Processo', 'Process', 'Proceso');
+
+        datasetsToRender.push({
+            label: lDomo,
+            data: satData.points,
+            borderColor: '#757575',
+            borderDash: [5, 4],
+            borderWidth: 2,
+            fill: false,
+            pointRadius: 0,
+            tension: 0.15,
+            order: 2
+        });
+
+        datasetsToRender.push({
+            label: lPonto,
+            data: [satData.critical],
+            backgroundColor: '#FF0000',
+            borderColor: '#FF0000',
+            pointStyle: 'triangle',
+            pointRadius: 6,
+            pointHoverRadius: 8,
+            showLine: false,
+            order: 2
+        });
+
+        let startIndex = showAll ? 0 : Math.max(0, pontosGrafico.length - 1);
+        let stateMarkers = [];
+
+        for (let i = startIndex; i < pontosGrafico.length; i++) {
+            let ramo = pontosGrafico[i];
+            let color = COLORS[i % COLORS.length];
+            
+            let dataPoints = ramo.map(pt => ({ 
+                x: (conf.xLog && pt[conf.xKey] <= 0) ? 0.000001 : pt[conf.xKey], 
+                y: (conf.yLog && pt[conf.yKey] <= 0) ? 0.000001 : pt[conf.yKey] 
+            }));
+
+            datasetsToRender.push({
+                label: `${lProcesso} ${i+1} → ${i+2}`,
+                data: dataPoints,
+                borderColor: color,
+                backgroundColor: color,
+                borderWidth: 4,
+                fill: false,
+                tension: 0, 
+                pointRadius: 0, 
+                pointHitRadius: 10,
+                pointHoverRadius: 6,
+                order: 1
+            });
+
+            if (i === startIndex && dataPoints.length > 0) {
+                stateMarkers.push({ val: i + 1, x: dataPoints[0].x, y: dataPoints[0].y });
+            }
+            if (dataPoints.length > 0) {
+                stateMarkers.push({ val: i + 2, x: dataPoints[dataPoints.length - 1].x, y: dataPoints[dataPoints.length - 1].y });
+            }
+        }
+
+        datasetsToRender.push({
+            label: lEstados,
+            data: stateMarkers.map(m => ({x: m.x, y: m.y})),
+            pointStyle: 'circle',
+            pointRadius: 14,
+            pointBackgroundColor: '#fff',
+            pointBorderColor: '#757575',
+            pointBorderWidth: 2,
+            showLine: false,
+            order: 0
+        });
+
+        if (thermoChartInstance) thermoChartInstance.destroy();
+
+        let lang = localStorage.getItem('preferredLang') || 'pt-br';
+        let localeStr = lang === 'en' ? 'en-US' : (lang === 'es' ? 'es-ES' : 'pt-BR');
+        const formatadorNum = new Intl.NumberFormat(localeStr, { maximumFractionDigits: 4 });
+
+        thermoChartInstance = new Chart(ctxChart, {
+            type: 'line',
+            data: { datasets: datasetsToRender },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: { mode: 'nearest', intersect: true },
+                layout: { padding: { top: 10, right: 30, bottom: 10, left: 10 } },
+                scales: {
+                    x: {
+                        type: conf.xLog ? 'logarithmic' : 'linear',
+                        position: 'bottom',
+                        title: { display: true, text: conf.xLab(), font: {weight: 'bold', size: 14}, color: '#20376B' },
+                        grid: { color: 'rgba(0,0,0,0.1)', tickColor: 'rgba(0,0,0,0.1)' },
+                        ticks: {
+                            color: '#555',
+                            font: { size: 11 },
+                            callback: function(value) { return formatadorNum.format(value); }
+                        },
+                        grace: '5%'
+                    },
+                    y: {
+                        type: conf.yLog ? 'logarithmic' : 'linear',
+                        title: { display: true, text: conf.yLab(), font: {weight: 'bold', size: 14}, color: '#20376B' },
+                        grid: { color: 'rgba(0,0,0,0.1)', tickColor: 'rgba(0,0,0,0.1)' },
+                        ticks: {
+                            color: '#555',
+                            font: { size: 11 },
+                            callback: function(value) { return formatadorNum.format(value); }
+                        },
+                        grace: '5%'
+                    }
+                },
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: { filter: (item) => item.text !== lEstados && item.text !== lDomo, font: { size: 13 } }
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(32, 55, 107, 0.95)',
+                        padding: 12,
+                        titleFont: { size: 14 },
+                        bodyFont: { size: 13 },
+                        displayColors: false,
+                        filter: function(tooltipItem) {
+                            return tooltipItem.dataset.label !== lDomo;
+                        },
+                        callbacks: {
+                            title: (items) => {
+                                const dsIdx = items[0].datasetIndex;
+                                const idx = items[0].dataIndex;
+                                if (datasetsToRender[dsIdx].label === lEstados) return `${t('Estado', 'State', 'Estado')} ${stateMarkers[idx].val}`;
+                                if (datasetsToRender[dsIdx].label === lPonto) return lPonto;
+                                if (datasetsToRender[dsIdx].label.startsWith(lProcesso)) return t('Ponto Intermediário', 'Intermediate Point', 'Punto Intermedio');
+                                return items[0].dataset.label;
+                            },
+                            label: (context) => {
+                                const xVal = formatadorNum.format(context.parsed.x);
+                                const yVal = formatadorNum.format(context.parsed.y);
+                                return ` ${conf.xKey}: ${xVal} | ${conf.yKey}: ${yVal}`;
+                            }
+                        }
+                    },
+                    zoom: {
+                        pan: { enabled: true, mode: 'xy', modifierKey: 'ctrl' },
+                        zoom: { 
+                            wheel: { enabled: true, speed: 0.05 }, 
+                            drag: { enabled: true, backgroundColor: 'rgba(32, 55, 107, 0.2)', borderColor: 'rgba(32, 55, 107, 0.8)', borderWidth: 1 },
+                            pinch: { enabled: true }, 
+                            mode: 'xy' 
+                        },
+                        limits: {
+                            x: {min: 'original', max: 'original'},
+                            y: {min: 'original', max: 'original'}
+                        }
+                    }
+                }
+            },
+            plugins: [
+                {
+                    id: 'stateLabelsPlugin',
+                    afterDatasetsDraw(chart) {
+                        const {ctx} = chart;
+                        chart.data.datasets.forEach((dataset, dsIdx) => {
+                            if (dataset.label === lEstados) {
+                                chart.getDatasetMeta(dsIdx).data.forEach((point, pIdx) => {
+                                    ctx.fillStyle = '#757575';
+                                    ctx.font = 'bold 12px Arial';
+                                    ctx.textAlign = 'center';
+                                    ctx.textBaseline = 'middle';
+                                    ctx.fillText(stateMarkers[pIdx].val, point.x, point.y);
+                                });
+                            }
+                        });
+                    }
+                },
+                {
+                    id: 'directionalArrowsPlugin',
+                    afterDatasetsDraw(chart) {
+                        const { ctx } = chart;
+                        chart.data.datasets.forEach((dataset, dsIdx) => {
+                            if (dataset.label && dataset.label.startsWith(lProcesso)) {
+                                const meta = chart.getDatasetMeta(dsIdx);
+                                if (!meta.hidden && meta.data.length > 5) {
+                                    const mid = Math.floor(meta.data.length / 2);
+                                    const p1 = meta.data[mid - 2];
+                                    const p2 = meta.data[mid + 2];
+
+                                    if (p1 && p2 && !isNaN(p1.x) && !isNaN(p2.x)) {
+                                        const angle = Math.atan2(p2.y - p1.y, p2.x - p1.x);
+                                        
+                                        ctx.save();
+                                        ctx.translate(meta.data[mid].x, meta.data[mid].y);
+                                        ctx.rotate(angle);
+                                        
+                                        ctx.beginPath();
+                                        ctx.moveTo(0, 0); 
+                                        ctx.lineTo(-14, -7);
+                                        ctx.lineTo(-10, 0);
+                                        ctx.lineTo(-14, 7);
+                                        ctx.closePath();
+                                        
+                                        ctx.fillStyle = dataset.borderColor;
+                                        ctx.fill();
+                                        
+                                        ctx.strokeStyle = '#FFFFFF';
+                                        ctx.lineWidth = 1.5;
+                                        ctx.stroke();
+                                        ctx.restore();
+                                    }
+                                }
+                            }
+                        });
+                    }
+                }
+            ]
+        });
+    }
+
+    // --- LÓGICA DE DADOS EXCLUSIVA PARA O CILINDRO 3D ---
+    const state1_3D = {
+        rawFase: parseInt("{{ fase|default:'0' }}"),
+        rawVol: parseFloat("{{ volume_especifico|default:'0' }}".replace(',', '.')),
+        rawVL: parseFloat("{{ VolumeL|default:'0' }}".replace(',', '.'))
+    };
+
+    const state2_3D = {
+        rawFase: parseInt("{{ fase2|default:'0' }}"),
+        rawVol: parseFloat("{{ volume_especifico2|default:'0' }}".replace(',', '.')),
+        rawVL: parseFloat("{{ VolumeL2|default:'0' }}".replace(',', '.'))
+    };
+
+    let currentDataFase = state1_3D.rawFase;
+    let currentDataVolume = state1_3D.rawVol;
+    let currentDataVL = state1_3D.rawVL;
+
+    const slider = document.getElementById("volumeSlider");
+    slider.addEventListener("input", () => {
+        const valText = document.getElementById('volumeValue');
+        if (slider.value === "1") {
+            valText.setAttribute('data-pt-br', 'Estado Inicial');
+            valText.setAttribute('data-en', 'Initial State');
+            valText.setAttribute('data-es', 'Estado Inicial');
+            valText.textContent = t('Estado Inicial', 'Initial State', 'Estado Inicial');
+            currentDataFase = state1_3D.rawFase;
+            currentDataVolume = state1_3D.rawVol;
+            currentDataVL = state1_3D.rawVL;
+        } else {
+            valText.setAttribute('data-pt-br', 'Estado Final');
+            valText.setAttribute('data-en', 'Final State');
+            valText.setAttribute('data-es', 'Estado Final');
+            valText.textContent = t('Estado Final', 'Final State', 'Estado Final');
+            currentDataFase = state2_3D.rawFase;
+            currentDataVolume = state2_3D.rawVol;
+            currentDataVL = state2_3D.rawVL;
+        }
+        estado = 1;
+    });
+
+    // --- LÓGICA P5.JS ---
+    let sides = 72, r1 = 100, r2 = 102, r3 = 100, r4 = 100, h2 = 300;
+    let ha1 = 100, ha4 = 100, hemboloB = 100, hemboloC = 60;
+    let targetHa1 = ha1, targetHa4 = ha4, targetH3B = hemboloB, targetH3C = hemboloC;
+    let estado = 1;
+    let canvas;
+
+    function setup() {
+        canvas = createCanvas(400, 550, WEBGL);
+        canvas.parent('canvas-wrapper');
+        noStroke();
+        setTimeout(createHtmlScale, 100);
+    }
+
+    function draw() {
+        background(0);
+        lights();
+        translate(0, 100);
+
+        ha1 = lerp(ha1, targetHa1, 0.05);
+        ha4 = lerp(ha4, targetHa4, 0.05);
+        hemboloB = lerp(hemboloB, targetH3B, 0.05);
+        hemboloC = lerp(hemboloC, targetH3C, 0.05);
+
+        // Fase Líquida CO2
+        if (ha1 < 100) {
+            fill(85, 85, 85, 255);
+            drawCap(r1, ha1); drawCap(r1, 100); drawSide(r1, ha1, 100);
+        }
+        // Fase Vapor CO2
+        if (ha4 < 100) {
+            fill(158, 158, 158, 100);
+            drawCap(r4, ha4); drawCap(r4, 100); drawSide(r4, ha4, 100);
+        }
+
+        fill(162, 162, 162);
+        drawCap(r3, hemboloB); drawCap(r3, hemboloC); drawSide(r3, hemboloC, hemboloB);
+
+        fill(255, 255, 255, 10);
+        drawCap(r2, 100); drawSide(r2, 100, -h2);
+
+        comandos();
+        drawLogScaleLines(r2, -266, 108);
+    }
+
+    function createHtmlScale() {
+        const scaleContainer = document.getElementById('scale-container');
+        scaleContainer.innerHTML = '';
+
+        const canvasRect = canvas.elt.getBoundingClientRect();
+        const wrapperRect = document.getElementById('canvas-wrapper').getBoundingClientRect();
+        const scaleX = canvasRect.width / width;
+        const scaleY = canvasRect.height / height;
+        const canvasCenterX = (canvasRect.left - wrapperRect.left) + canvasRect.width / 2;
+        const canvasCenterY = (canvasRect.top - wrapperRect.top) + canvasRect.height / 2;
+
+        let logDivisions = [0.0001, 0.001, 0.01, 0.1, 1, 10, 100, 1000];
+        
+        let lang = localStorage.getItem('preferredLang') || 'pt-br';
+        let localeStr = lang === 'en' ? 'en-US' : (lang === 'es' ? 'es-ES' : 'pt-BR');
+        const formataNum = new Intl.NumberFormat(localeStr, { maximumFractionDigits: 4 });
+
+        for (let div of logDivisions) {
+            let yInternal = logDivisionToHeight(div, -266, 108);
+            let yTranslated = yInternal + 100;
+            let yPosCSS = canvasCenterY + (yTranslated * scaleY) - 6;
+            let xPosCSS = canvasCenterX - (112 * scaleX) - 65;
+
+            let label = document.createElement('div');
+            label.className = 'scale-label';
+            label.innerText = formataNum.format(div);
+            label.style.top = yPosCSS + 'px';
+            label.style.left = xPosCSS + 'px';
+            scaleContainer.appendChild(label);
+        }
+
+        let yPosP5_1000 = logDivisionToHeight(1000, -266, 108);
+        let titleLabel = document.createElement('div');
+        titleLabel.className = 'scale-label';
+        // Label traduzida
+        titleLabel.innerText = t('Volume [m³]', 'Volume [m³]', 'Volumen [m³]');
+        titleLabel.style.top = (canvasCenterY + 100 + yPosP5_1000 - 55) + 'px';
+        titleLabel.style.left = (canvasCenterX - r2 - 85) + 'px';
+        titleLabel.style.fontWeight = 'bold';
+        titleLabel.style.width = '80px';
+        titleLabel.style.fontSize = '14px'
+        scaleContainer.appendChild(titleLabel);
+    }
+
+    function windowResized() { setTimeout(createHtmlScale, 100); }
+
+    function drawCap(radius, y) {
+        beginShape(TRIANGLE_FAN); vertex(0, y, 0);
+        for (let j = 0; j <= sides; j++) {
+            let theta = TWO_PI / sides * j;
+            vertex(cos(theta) * radius, y, sin(theta) * radius);
+        }
+        endShape(CLOSE);
+    }
+
+    function drawSide(radius, topY, bottomY) {
+        beginShape(TRIANGLE_STRIP);
+        for (let j = 0; j <= sides; j++) {
+            let theta = TWO_PI / sides * j;
+            vertex(cos(theta) * radius, topY, sin(theta) * radius);
+            vertex(cos(theta) * radius, bottomY, sin(theta) * radius);
+        }
+        endShape(CLOSE);
+    }
+
+    function drawLogScaleLines(radius, min, max) {
+        stroke(255); strokeWeight(1);
+        [0.0001, 0.001, 0.01, 0.1, 1, 10, 100, 1000].forEach(d => {
+            let y = logDivisionToHeight(d, min, max);
+            line(-radius-10, y, -radius, y);
+        });
+        noStroke();
+    }
+
+    function logDivisionToHeight(val, min, max) { return map(log(val), log(0.0001), log(1000), max, min); }
+
+    function comandos() {
+        if (estado == 1) {
+            try {
+                let opcao = currentDataFase;
+                if (opcao == 1) {
+                    targetH3B = logDivisionToHeight(currentDataVolume, -260, 100);
+                    targetH3C = targetH3B - 40;
+                    targetHa1 = targetH3B;
+                    targetHa4 = logDivisionToHeight(0.00001, -260, 100);
+                } else if (opcao == 2) {
+                    targetH3B = logDivisionToHeight(currentDataVolume, -260, 100);
+                    targetH3C = targetH3B - 40;
+                    targetHa4 = targetH3B;
+                    targetHa1 = logDivisionToHeight(0.00001, -260, 100);
+                } else if (opcao == 3) {
+                    targetH3B = logDivisionToHeight(currentDataVolume, -260, 100);
+                    targetH3C = targetH3B - 40;
+                    targetHa4 = targetH3B;
+                    targetHa1 = logDivisionToHeight(currentDataVL, -260, 100);
+                }
+                estado = 0;
+            } catch (e) { console.error(e); }
+        }
+    }
+</script>
+{% endblock %}

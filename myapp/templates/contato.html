@@ -1,0 +1,282 @@
+{% extends 'base.html' %}
+
+{% block title %}TERMO-CP{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* CONTEÚDO PRINCIPAL LADO A LADO ESPECÍFICO DE CONTATO */
+    .contact-wrapper {
+        flex: 1;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: stretch;
+        padding: 20px 40px;
+        gap: 30px;
+        width: 100%;
+        max-width: 1500px;
+        margin: 0 auto;
+        min-height: 0;
+    }
+
+    /* Containers (Cartões) */
+    .team-container, .feedback-container {
+        flex: 1;
+        background: var(--card-bg);
+        border-radius: 10px;
+        box-shadow: var(--shadow);
+        padding: 30px;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+    }
+
+    h2 {
+        color: var(--primary-color);
+        font-size: 1.6em;
+        margin-top: 0;
+        margin-bottom: 20px;
+        border-bottom: 2px solid #eee;
+        padding-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-shrink: 0;
+    }
+
+    /* --- GRID DE EQUIPE  --- */
+    .team-grid {
+        display: flex;
+        flex-direction: row;
+        gap: 15px;
+        flex: 1;
+    }
+
+    .profile-card {
+        background-color: #f8fbff;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        padding: 15px;
+        text-align: center;
+        transition: var(--hover-transition);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        flex: 1;
+    }
+
+    .profile-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        border-color: var(--secondary-color);
+        background-color: white;
+    }
+
+    .avatar {
+        width: 60px; height: 60px;
+        background-color: var(--primary-color);
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5em;
+        margin-bottom: 10px;
+        flex-shrink: 0;
+    }
+
+    .profile-name { font-size: 1.1em; color: #333; margin: 0 0 5px; font-weight: bold; }
+
+    .profile-role {
+        color: var(--secondary-color);
+        font-weight: bold;
+        font-size: 0.8em;
+        margin-bottom: 15px;
+        text-transform: uppercase;
+    }
+
+    .social-links { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; }
+
+    .social-tag {
+        background-color: #eee; color: #555; padding: 5px 10px;
+        border-radius: 20px; font-size: 0.8em; font-weight: bold;
+        display: flex; align-items: center; gap: 6px;
+        text-decoration: none; transition: var(--hover-transition);
+    }
+
+    .social-tag i { color: var(--primary-color); }
+
+    .social-tag:hover {
+        background-color: var(--primary-color);
+        color: white;
+    }
+    .social-tag:hover i { color: white; }
+
+    /* --- SEÇÃO DE FEEDBACK --- */
+    .form-header { margin-bottom: 15px; text-align: center; }
+    .form-header p { color: #666; font-size: 0.95em; margin: 0; }
+
+    .form-group { margin-bottom: 12px; text-align: left; }
+
+    label {
+        display: block; margin-bottom: 5px;
+        font-weight: bold; color: #333; font-size: 0.9em;
+    }
+
+    input[type="text"], input[type="email"], textarea {
+        width: 100%; padding: 10px;
+        border: 1px solid #ccc; border-radius: 6px;
+        font-size: 0.95em; font-family: inherit;
+        transition: border 0.3s ease; background-color: #f9f9f9;
+    }
+
+    textarea { resize: none; }
+
+    input:focus, textarea:focus {
+        border-color: var(--secondary-color);
+        outline: none; background-color: #fff;
+    }
+
+    .btn-submit {
+        width: 100%; padding: 12px;
+        background-color: var(--primary-color);
+        color: white; border: none; border-radius: 6px;
+        font-size: 1.05em; font-weight: bold; cursor: pointer;
+        transition: var(--hover-transition);
+        display: flex; align-items: center; justify-content: center; gap: 10px;
+        margin-top: 10px;
+        flex-shrink: 0;
+    }
+
+    .btn-submit:hover {
+        background-color: var(--secondary-color);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    }
+
+    /* Mobile / Telas Menores */
+    @media (max-width: 992px) {
+        .contact-wrapper { flex-direction: column; padding: 20px; }
+        .team-grid { flex-direction: column; }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="contact-wrapper">
+    <div class="team-container">
+        <h2>
+            <i class="fas fa-users"></i>
+            <span class="lang-text" data-pt-br="Equipe de Desenvolvimento" data-en="Development Team" data-es="Equipo de Desarrollo">Equipe de Desenvolvimento</span>
+        </h2>
+
+        <div class="team-grid">
+            <div class="profile-card">
+                <div class="avatar">
+                    <i class="fas fa-user-graduate"></i>
+                </div>
+                <h3 class="profile-name">Gabriel Candido</h3>
+                <div class="profile-role lang-text" data-pt-br="Discente de Engenharia Mecânica da UFR" data-en="Mechanical Engineering Student at UFR" data-es="Estudiante de Ingeniería Mecánica en la UFR">
+                    Discente de Engenharia Mecânica da UFR
+                </div>
+                <div class="social-links">
+                    <a href="mailto:gabrielcandidomds@gmail.com" class="social-tag"><i class="fas fa-envelope"></i> <span class="lang-text" data-pt-br="Email" data-en="Email" data-es="Correo">Email</span></a>
+                    <a href="https://www.linkedin.com/in/gabriel-candido-235637226/" target="_blank" class="social-tag"><i class="fab fa-linkedin-in"></i> LinkedIn</a>
+                    <a href="http://lattes.cnpq.br/6696786236047929" target="_blank" class="social-tag"><i class="fas fa-file-alt"></i> Lattes</a>
+                </div>
+            </div>
+
+            <div class="profile-card">
+                <div class="avatar">
+                    <i class="fas fa-chalkboard-teacher"></i>
+                </div>
+                <h3 class="profile-name">Prof. Dr. Fábio B. Fonseca</h3>
+                <div class="profile-role lang-text" data-pt-br="Docente do Instituto de ciências agrárias e tecnológicas da UFR" data-en="Professor at the Institute of Agricultural and Technological Sciences of UFR" data-es="Profesor del Instituto de Ciencias Agrarias y Tecnológicas de la UFR">
+                    Docente do Instituto de ciências agrárias e tecnológicas da UFR
+                </div>
+                <div class="social-links">
+                    <a href="mailto:fabio.fonseca@ufr.edu.br" class="social-tag"><i class="fas fa-university"></i> <span class="lang-text" data-pt-br="Email" data-en="Email" data-es="Correo">Email</span></a>
+                    <a href="http://lattes.cnpq.br/4673164208199862" target="_blank" class="social-tag"><i class="fas fa-file-alt"></i> Lattes</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="feedback-container">
+        <h2>
+            <i class="fas fa-paper-plane"></i>
+            <span class="lang-text" data-pt-br="Fale Conosco" data-en="Contact Us" data-es="Contáctenos">Fale Conosco</span>
+        </h2>
+
+        <div class="form-header">
+            <p class="lang-text" data-pt-br="Reporte erros, tire dúvidas ou envie sugestões diretamente para a nossa equipe." data-en="Report bugs, ask questions, or send suggestions directly to our team." data-es="Reporta errores, haz preguntas o envía sugerencias directamente a nuestro equipo.">
+                Reporte erros, tire dúvidas ou envie sugestões diretamente para a nossa equipe.
+            </p>
+        </div>
+
+        <form action="#" method="post" style="display: flex; flex-direction: column; flex: 1;">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="nome" class="lang-text" data-pt-br="Seu Nome:" data-en="Your Name:" data-es="Tu Nombre:">Seu Nome:</label>
+                <input type="text" id="nome" name="nome" required
+                       class="lang-placeholder"
+                       data-pt-br="Digite seu nome"
+                       data-en="Enter your name"
+                       data-es="Ingresa tu nombre"
+                       placeholder="Digite seu nome">
+            </div>
+
+            <div class="form-group">
+                <label for="email" class="lang-text" data-pt-br="Seu E-mail:" data-en="Your E-mail:" data-es="Tu Correo:">Seu E-mail:</label>
+                <input type="email" id="email" name="email" required
+                       class="lang-placeholder"
+                       data-pt-br="Para retornarmos o contato"
+                       data-en="So we can get back to you"
+                       data-es="Para que podamos responderte"
+                       placeholder="Para retornarmos o contato">
+            </div>
+
+            <div class="form-group" style="flex: 1; display: flex; flex-direction: column; min-height: 80px;">
+                <label for="mensagem" class="lang-text" data-pt-br="Mensagem:" data-en="Message:" data-es="Mensaje:">Mensagem:</label>
+                <textarea id="mensagem" name="mensagem" required style="flex: 1;"
+                          class="lang-placeholder"
+                          data-pt-br="Descreva o erro ou sua sugestão detalhadamente..."
+                          data-en="Describe the bug or your suggestion in detail..."
+                          data-es="Describe el error o tu sugerencia en detalle..."
+                          placeholder="Descreva o erro ou sua sugestão detalhadamente..."></textarea>
+            </div>
+
+            <button type="submit" class="btn-submit">
+                <span class="lang-text" data-pt-br="Enviar Mensagem" data-en="Send Message" data-es="Enviar Mensaje">Enviar Mensagem</span>
+                <i class="fas fa-chevron-right" style="margin-left: 5px;"></i>
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Função específica para atualizar os "placeholders" dos formulários na página de Contato
+    function updatePlaceholders() {
+        let currentLang = localStorage.getItem('preferredLang') || 'pt-br';
+        document.querySelectorAll('.lang-placeholder').forEach(el => {
+            let newText = el.getAttribute('data-' + currentLang);
+            if (newText) {
+                el.placeholder = newText;
+            }
+        });
+    }
+
+    // Executa ao carregar a página
+    document.addEventListener('DOMContentLoaded', updatePlaceholders);
+
+    // Escuta os cliques nos botões de idioma do base.html para traduzir os placeholders na hora
+    document.querySelectorAll('.lang-option').forEach(btn => {
+        btn.addEventListener('click', () => {
+            setTimeout(updatePlaceholders, 50); // Dá um tempinho mínimo para o localStorage salvar a variável
+        });
+    });
+</script>
+{% endblock %}

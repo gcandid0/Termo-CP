@@ -1,0 +1,343 @@
+{% extends 'base.html' %}
+
+{% block title %}TERMO-CP{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Alinhamento global para centralizar o conteúdo da Home */
+    .home-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        padding: 20px;
+        gap: 30px;
+        min-height: 100%;
+    }
+
+    /* Wrapper dos dois cartões gigantes */
+    .content-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: stretch;
+        gap: 30px;
+        max-width: 1200px;
+        width: 100%;
+        margin: 0 auto;
+    }
+
+    /* Seção de Destaque (Hero) */
+    .hero-section {
+        flex: 1;
+        background-color: var(--card-bg, white);
+        border-radius: 10px;
+        box-shadow: var(--shadow);
+        padding: 40px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        text-align: center;
+    }
+
+    .hero-icon {
+        font-size: 3em;
+        color: var(--secondary-color);
+        margin-bottom: 15px;
+    }
+
+    .hero-section h2 {
+        color: var(--primary-color);
+        margin-top: 0;
+        font-size: 2em;
+        margin-bottom: 20px;
+    }
+
+    .hero-section p {
+        font-size: 1.05em;
+        line-height: 1.6;
+        margin-bottom: 15px;
+    }
+
+    /* Container de Menus */
+    .container {
+        flex: 1;
+        background: var(--card-bg, white);
+        border-radius: 10px;
+        box-shadow: var(--shadow);
+        padding: 40px;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .container h3 {
+        color: var(--primary-color);
+        margin-top: 0;
+        border-bottom: 2px solid #eee;
+        padding-bottom: 15px;
+        margin-bottom: 25px;
+    }
+
+    /* --- SEÇÃO DE ESCOLHA (TABS E GRID) --- */
+    .tabs-container {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        margin-bottom: 30px;
+        width: 100%;
+    }
+
+    .tab-btn {
+        flex: 1;
+        max-width: 250px;
+        padding: 12px 20px;
+        background-color: var(--light-bg);
+        color: var(--text-color);
+        border: 2px solid transparent;
+        border-radius: 8px;
+        font-size: 1.1em;
+        font-weight: bold;
+        cursor: pointer;
+        transition: var(--hover-transition);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    .tab-btn:hover {
+        background-color: #e2e6ea;
+    }
+
+    .tab-btn.active {
+        background-color: var(--primary-color);
+        color: white;
+        box-shadow: 0 4px 8px rgba(32, 55, 107, 0.3);
+    }
+
+    /* --- GRID AJUSTADO PARA 4 COLUNAS --- */
+    .substance-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 15px;
+        width: 100%;
+        animation: fadeIn 0.4s ease;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .sub-card {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 15px 5px;
+        border-radius: 8px;
+        color: white;
+        text-decoration: none;
+        font-size: 0.95em;
+        font-weight: bold;
+        text-align: center;
+        gap: 10px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        transition: var(--hover-transition);
+    }
+
+    .sub-card i { font-size: 2em; }
+
+    .sub-card:hover {
+        transform: translateY(-4px) scale(1.02);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        filter: brightness(1.1);
+        color: white;
+    }
+
+    .hidden { display: none !important; }
+
+    /* Classes Utilitárias de Cor para as Substâncias */
+    .bg-water { background-color: #00A8FF; }
+    .bg-gas { background-color: #53B366; }
+    .bg-ammonia { background-color: #E53935; }
+    .bg-co2 { background-color: #757575; }
+    .bg-r410a { background-color: #FF9800; }
+    .bg-r134a { background-color: #FF9800; }
+    .bg-nitrogen { background-color: #9C27B0; }
+    .bg-methane { background-color: #8B4513; }
+
+    /* Seção de Recursos (Features) */
+    .features-section {
+        max-width: 1200px;
+        width: 100%;
+        margin: 0 auto;
+    }
+
+    .features-section h2 { display: none; }
+
+    .feature-list {
+        display: flex;
+        justify-content: space-between;
+        gap: 30px;
+    }
+
+    .feature-card {
+        background: var(--card-bg, white);
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: var(--shadow);
+        flex: 1;
+        display: flex;
+        align-items: center;
+        text-align: left;
+        gap: 15px;
+        transition: transform 0.3s ease;
+    }
+
+    .feature-card:hover { transform: translateY(-3px); box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); }
+
+    .feature-card i {
+        font-size: 2.5em;
+        color: var(--secondary-color);
+        margin-bottom: 0;
+        flex-shrink: 0;
+    }
+
+    .feature-card .text-block { display: flex; flex-direction: column; }
+
+    .feature-card h4 {
+        color: var(--primary-color);
+        margin: 0 0 5px 0;
+        font-size: 1.1em;
+    }
+
+    .feature-card p {
+        margin: 0;
+        font-size: 0.9em;
+        line-height: 1.4;
+        color: #666;
+    }
+
+    @media (max-width: 992px) {
+        .content-wrapper { flex-direction: column; align-items: center; }
+        .hero-section, .container { width: 100%; max-width: 800px; }
+
+        .features-section h2 {
+            display: block;
+            color: var(--secondary-color);
+            margin-bottom: 20px;
+            font-size: 1.8em;
+            border-bottom: 3px solid var(--secondary-color);
+            display: inline-block;
+            padding-bottom: 5px;
+            text-align: center;
+        }
+        .features-section { text-align: center; }
+        .feature-list { flex-direction: column; align-items: center; }
+        .feature-card { max-width: 800px; width: 100%; }
+        .tabs-container { flex-direction: column; align-items: center; }
+        .tab-btn { width: 100%; max-width: 100%; }
+        .substance-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="home-wrapper">
+    <div class="content-wrapper">
+        <div class="hero-section">
+            <i class="fas fa-microscope hero-icon"></i>
+            <h2 class="lang-text" data-pt-br="Explore a Termodinâmica" data-en="Explore Thermodynamics" data-es="Explora la Termodinámica">Explore a Termodinâmica</h2>
+            <p class="lang-text"
+               data-pt-br="A Termodinâmica estuda as trocas de energia entre um sistema e sua vizinhança, sendo fundamental para a compreensão de diversos fenômenos físicos e aplicações de engenharia."
+               data-en="Thermodynamics studies energy exchanges between a system and its surroundings, being fundamental for understanding various physical phenomena and engineering applications."
+               data-es="La termodinámica estudia los intercambios de energía entre un sistema y su entorno, siendo fundamental para comprender diversos fenómenos físicos y aplicaciones de ingeniería.">
+                A Termodinâmica estuda as trocas de energia entre um sistema e sua vizinhança, sendo fundamental para a compreensão de diversos fenômenos físicos e aplicações de engenharia.
+            </p>
+            <p style="font-style: italic; color: var(--secondary-color);" class="lang-text"
+               data-pt-br="O TERMO-CP é uma plataforma computacional desenvolvida para a simulação de estados e processos termodinâmicos, aplicada a substâncias puras e a gases ideais em sistemas fechados do tipo cilindro-pistão."
+               data-en="TERMO-CP is a computational platform developed for the simulation of thermodynamic states and processes, applied to pure substances and ideal gases in closed cylinder-piston systems."
+               data-es="TERMO-CP es una plataforma computacional desarrollada para la simulación de estados y procesos termodinámicos, aplicada a sustancias puras y gases ideales en sistemas cerrados tipo cilindro-pistón.">
+                O TERMO-CP é uma plataforma computacional desenvolvida para a simulação de estados e processos termodinâmicos, aplicada a substâncias puras e a gases ideais em sistemas fechados do tipo cilindro-pistão.
+            </p>
+        </div>
+
+        <div class="container">
+            <h3 class="lang-text" data-pt-br="O que deseja simular?" data-en="What do you want to simulate?" data-es="¿Qué deseas simular?">O que deseja simular?</h3>
+
+            <div class="tabs-container">
+                <button class="tab-btn active" onclick="switchTab('estados', this)">
+                    <i class="fas fa-cube"></i> <span class="lang-text" data-pt-br="Estados" data-en="States" data-es="Estados">Estados</span>
+                </button>
+                <button class="tab-btn" onclick="switchTab('processos', this)">
+                    <i class="fas fa-chart-line"></i> <span class="lang-text" data-pt-br="Processos" data-en="Processes" data-es="Procesos">Processos</span>
+                </button>
+            </div>
+
+            <div id="grid-estados" class="substance-grid">
+                <a href="{% url 'ask_known3_7' %}" class="sub-card bg-gas"><i class="fas fa-wind"></i> <span class="lang-text" data-pt-br="Gás Ideal" data-en="Ideal Gas" data-es="Gas Ideal">Gás Ideal</span></a>
+                <a href="{% url 'ask_known1' %}" class="sub-card bg-water"><i class="fas fa-tint"></i> <span class="lang-text" data-pt-br="Água" data-en="Water" data-es="Agua">Água</span></a>
+                <a href="{% url 'ask_known1_13' %}" class="sub-card bg-ammonia"><i class="fas fa-flask"></i> <span class="lang-text" data-pt-br="Amônia" data-en="Ammonia" data-es="Amoníaco">Amônia</span></a>
+                <a href="{% url 'ask_known1_18' %}" class="sub-card bg-co2"><i class="fas fa-cloud"></i> CO₂</a>
+                <a href="{% url 'ask_known1_23' %}" class="sub-card bg-r410a"><i class="fas fa-snowflake"></i> R-410a</a>
+                <a href="{% url 'ask_known1_28' %}" class="sub-card bg-r134a"><i class="fas fa-snowflake"></i> R-134a</a>
+                <a href="{% url 'ask_known1_33' %}" class="sub-card bg-nitrogen"><i class="fas fa-burn"></i> <span class="lang-text" data-pt-br="Nitrogênio" data-en="Nitrogen" data-es="Nitrógeno">Nitrogênio</span></a>
+                <a href="{% url 'ask_known1_38' %}" class="sub-card bg-methane"><i class="fas fa-fire"></i> <span class="lang-text" data-pt-br="Metano" data-en="Methane" data-es="Metano">Metano</span></a>
+            </div>
+
+            <div id="grid-processos" class="substance-grid hidden">
+                <a href="{% url 'processos2' %}" class="sub-card bg-gas"><i class="fas fa-wind"></i> <span class="lang-text" data-pt-br="Gás Ideal" data-en="Ideal Gas" data-es="Gas Ideal">Gás Ideal</span></a>
+                <a href="{% url 'processos' %}" class="sub-card bg-water"><i class="fas fa-tint"></i> <span class="lang-text" data-pt-br="Água" data-en="Water" data-es="Agua">Água</span></a>
+                <a href="{% url 'processos3' %}" class="sub-card bg-ammonia"><i class="fas fa-flask"></i> <span class="lang-text" data-pt-br="Amônia" data-en="Ammonia" data-es="Amoníaco">Amônia</span></a>
+                <a href="{% url 'processos4' %}" class="sub-card bg-co2"><i class="fas fa-cloud"></i> CO₂</a>
+                <a href="{% url 'processos5' %}" class="sub-card bg-r410a"><i class="fas fa-snowflake"></i> R-410a</a>
+                <a href="{% url 'processos6' %}" class="sub-card bg-r134a"><i class="fas fa-snowflake"></i> R-134a</a>
+                <a href="{% url 'processos7' %}" class="sub-card bg-nitrogen"><i class="fas fa-burn"></i> <span class="lang-text" data-pt-br="Nitrogênio" data-en="Nitrogen" data-es="Nitrógeno">Nitrogênio</span></a>
+                <a href="{% url 'processos8' %}" class="sub-card bg-methane"><i class="fas fa-fire"></i> <span class="lang-text" data-pt-br="Metano" data-en="Methane" data-es="Metano">Metano</span></a>
+            </div>
+        </div>
+    </div>
+
+    <div class="features-section">
+        <h2 class="lang-text" data-pt-br="A plataforma" data-en="The platform" data-es="La plataforma">A plataforma</h2>
+        <div class="feature-list">
+            <div class="feature-card">
+                <i class="fas fa-chart-line"></i>
+                <div class="text-block">
+                    <h4 class="lang-text" data-pt-br="Simulação de Processos" data-en="Process Simulation" data-es="Simulación de Procesos">Simulação de Processos</h4>
+                    <p class="lang-text" data-pt-br="Defina as condições iniciais e simule transformações completas." data-en="Define initial conditions and simulate complete transformations." data-es="Define las condiciones iniciales y simula transformaciones completas.">Defina as condições iniciais e simule transformações completas.</p>
+                </div>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-calculator"></i>
+                <div class="text-block">
+                    <h4 class="lang-text" data-pt-br="Cálculo de Propriedades" data-en="Property Calculation" data-es="Cálculo de Propiedades">Cálculo de Propriedades</h4>
+                    <p class="lang-text" data-pt-br="Determine variáveis termodinâmicas com propriedades conhecidas." data-en="Determine thermodynamic variables with known properties." data-es="Determina variables termodinámicas con propiedades conocidas.">Determine variáveis termodinâmicas com propriedades conhecidas.</p>
+                </div>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-user-graduate"></i>
+                <div class="text-block">
+                    <h4 class="lang-text" data-pt-br="Foco em Educação" data-en="Focus on Education" data-es="Enfoque en Educación">Foco em Educação</h4>
+                    <p class="lang-text" data-pt-br="Desenvolvido para estudantes, professores e engenheiros da área." data-en="Developed for students, teachers, and engineers in the field." data-es="Desarrollado para estudiantes, profesores e ingenieros del área.">Desenvolvido para estudantes, professores e engenheiros da área.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function switchTab(tabId, clickedButton) {
+        document.getElementById('grid-estados').classList.add('hidden');
+        document.getElementById('grid-processos').classList.add('hidden');
+        document.getElementById('grid-' + tabId).classList.remove('hidden');
+        const buttons = document.querySelectorAll('.tab-btn');
+        buttons.forEach(btn => btn.classList.remove('active'));
+        clickedButton.classList.add('active');
+    }
+</script>
+{% endblock %}

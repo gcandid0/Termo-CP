@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}TERMO-CP{% endblock %}</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.0.0/css/flag-icons.min.css" />
+    <link rel="icon" type="image/png" href="favicon.png">
+
+    <style>
+        /* Variáveis CSS para Cores Profissionais */
+        :root {
+            --primary-color: #20376B; /* Azul Escuro */
+            --secondary-color: #0D6AB0; /* Azul Médio */
+            --light-bg: #f0f2f5;
+            --text-color: #333;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --hover-transition: all 0.3s ease;
+        }
+
+        /* Base e Layout */
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--light-bg);
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+            color: var(--text-color);
+        }
+
+        /* ================= HEADER ================= */
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 15px 40px;
+            box-shadow: var(--shadow);
+            width: 100%;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            flex-shrink: 0;
+            z-index: 1000;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 1.8em;
+            margin-right: 30px;
+            flex-shrink: 0;
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+            font-size: 1em;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: var(--hover-transition);
+        }
+
+        nav a:hover, nav a.active {
+            color: white;
+            background-color: var(--secondary-color);
+        }
+
+        /* ================= SELETOR DE IDIOMAS (SLIDER ANIMADO) ================= */
+        .lang-toggle {
+            position: relative;
+            display: flex;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 30px;
+            padding: 5px;
+            margin-left: auto;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.3);
+        }
+
+        .slider-bg {
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            width: 36px;
+            height: 36px;
+            background-color: white;
+            border-radius: 50%;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+            transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            z-index: 1;
+        }
+
+        .lang-option {
+            position: relative;
+            z-index: 2;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .flag-circle {
+            width: 24px !important;
+            height: 24px !important;
+            border-radius: 50%;
+            background-size: cover !important;
+            background-position: center !important;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+            transition: transform 0.2s ease;
+        }
+
+        .lang-option:hover .flag-circle {
+            transform: scale(1.15);
+        }
+
+        /* ================= ÁREA DE CONTEÚDO ================= */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            width: 100%;
+        }
+
+        /* ================= FOOTER ================= */
+        footer {
+            width: 100%;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 12px 40px;
+            box-shadow: 0 -4px 8px rgba(0,0,0,0.1);
+            font-size: 0.9em;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .footer-left, .footer-center, .footer-right { flex: 1; }
+        .footer-left { text-align: left; }
+        .footer-center { text-align: center; }
+        .footer-right { text-align: right; }
+
+        /* ================= RESPONSIVO (Mobile) ================= */
+        @media (max-width: 992px) {
+            body {
+                height: auto;
+                overflow: auto;
+            }
+
+            header { flex-direction: column; padding: 15px 20px; gap: 15px; }
+            header h1 { margin-right: 0; margin-bottom: 5px; }
+            nav { flex-wrap: wrap; justify-content: center; }
+            nav a { margin: 5px 8px; }
+
+            .lang-toggle { margin-left: 0; margin-top: 10px; }
+
+            footer { flex-direction: column; justify-content: center; gap: 5px; padding: 15px 20px; }
+            .footer-left, .footer-center, .footer-right { text-align: center; flex: auto; }
+        }
+    </style>
+
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+    <header>
+        <h1>TERMO-CP</h1>
+        <nav>
+            <a href="/" class="{% if request.path == '/' %}active{% endif %} lang-text" data-pt-br="Início" data-en="Home" data-es="Inicio">Início</a>
+            <a href="{% url 'cilindro' %}" class="{% if request.path == '/cilindro/' %}active{% endif %} lang-text" data-pt-br="Estados" data-en="States" data-es="Estados">Estados</a>
+            <a href="{% url 'gasideal' %}" class="{% if request.path == '/gasideal/' %}active{% endif %} lang-text" data-pt-br="Processos" data-en="Processes" data-es="Procesos">Processos</a>
+            <a href="{% url 'contato' %}" class="{% if request.path == '/contato/' %}active{% endif %} lang-text" data-pt-br="Contato" data-en="Contact" data-es="Contacto">Contato</a>
+        </nav>
+
+        <div class="lang-toggle">
+            <div class="slider-bg" id="lang-slider"></div>
+
+            <div class="lang-option" onclick="changeLanguage(0, 'pt-br')" title="Português">
+                <span class="fi fi-br flag-circle"></span>
+            </div>
+            <div class="lang-option" onclick="changeLanguage(1, 'en')" title="English">
+                <span class="fi fi-us flag-circle"></span>
+            </div>
+            <div class="lang-option" onclick="changeLanguage(2, 'es')" title="Español">
+                <span class="fi fi-es flag-circle"></span>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <footer>
+        <div class="footer-left">
+            <span class="lang-text" data-pt-br="TERMO-CP &ndash; Responsáveis: Gabriel Candido e Fábio Fonseca" data-en="TERMO-CP &ndash; Creators: Gabriel Candido and Fábio Fonseca" data-es="TERMO-CP &ndash; Responsables: Gabriel Candido y Fábio Fonseca">
+                TERMO-CP &ndash; Responsáveis: Gabriel Candido e Fábio Fonseca
+            </span>
+        </div>
+        <div class="footer-center">
+            <span class="lang-text" data-pt-br="Última atualização: 12/05/2026" data-en="Last updated: 05/12/2026" data-es="Última actualización: 12/05/2026">
+                Última atualização: 12/05/2026
+            </span>
+        </div>
+        <div class="footer-right">
+            Python 3 | Django | HTML5 | JavaScript | P5.js
+        </div>
+    </footer>
+
+    <script>
+        // Executa assim que o HTML da página (incluindo o que vem do block content) estiver carregado
+        document.addEventListener("DOMContentLoaded", function() {
+            // Busca se o usuário já escolheu um idioma antes. Se não, o padrão é 'pt-br'
+            let savedLang = localStorage.getItem('preferredLang') || 'pt-br';
+
+            // Define o índice da bolinha branca baseado no idioma salvo
+            let index = 0;
+            if (savedLang === 'en') index = 1;
+            if (savedLang === 'es') index = 2;
+
+            // Aplica a tradução e posiciona a bolinha imediatamente
+            changeLanguage(index, savedLang);
+        });
+
+        // Função chamada quando você clica numa bandeira
+        function changeLanguage(index, langCode) {
+            // 1. Move a bolinha
+            const slider = document.getElementById('lang-slider');
+            if(slider) {
+                slider.style.transform = `translateX(${index * 100}%)`;
+            }
+
+            // 2. Salva a preferência no navegador do usuário
+            localStorage.setItem('preferredLang', langCode);
+
+            // 3. Pega todos os elementos que têm a classe 'lang-text' na tela
+            const elements = document.querySelectorAll('.lang-text');
+
+            // 4. Para cada elemento, pega o texto correspondente ao idioma e substitui
+            elements.forEach(el => {
+                const newText = el.getAttribute('data-' + langCode);
+                if (newText) {
+                    el.textContent = newText;
+                }
+            });
+        }
+    </script>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

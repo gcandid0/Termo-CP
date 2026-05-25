@@ -1,0 +1,168 @@
+{% extends 'base.html' %}
+
+{% block title %}TERMO-CP{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Wrapper para centralizar o conteúdo na tela */
+    .process-options-wrapper {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center; /* Centraliza no meio da tela */
+        padding: 40px 20px;
+        width: 100%;
+        min-height: 100%;
+    }
+
+    .process-options-container {
+        max-width: 600px;
+        width: 100%;
+        background: var(--card-bg, white);
+        border-radius: 10px;
+        box-shadow: var(--shadow);
+        padding: 40px;
+        text-align: center;
+    }
+
+    .process-options-container h2 {
+        color: var(--primary-color);
+        font-size: 2em;
+        margin-bottom: 5px;
+        margin-top: 0;
+        border: none;
+        justify-content: center;
+    }
+
+    .process-options-container p {
+        font-size: 1.1em;
+        line-height: 1.6;
+        margin-bottom: 20px;
+        color: #555;
+    }
+
+    .button-container {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        margin-top: 20px;
+        align-items: center;
+        width: 100%;
+    }
+
+    .process-button {
+        display: flex;
+        align-items: center;
+        padding: 15px 15px 15px 50px; /* Espaço para o ícone na esquerda */
+        color: white;
+        text-decoration: none;
+        border-radius: 8px;
+        font-size: 1.1em;
+        transition: var(--hover-transition);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        position: relative;
+        background-color: var(--primary-color);
+        font-weight: bold;
+        justify-content: center;
+        min-height: 60px;
+        text-align: center;
+    }
+
+    .process-button:hover {
+        background-color: var(--secondary-color);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        color: white;
+    }
+
+    .process-button .icon-left {
+        position: absolute;
+        left: 20px;
+        font-size: 1.3em;
+    }
+
+    /* Mobile */
+    @media (max-width: 768px) {
+        .process-button {
+            justify-content: flex-start;
+            text-align: left;
+            padding-left: 55px;
+            font-size: 1em;
+        }
+        .process-button .icon-left {
+            left: 15px;
+        }
+        .process-options-wrapper {
+            padding: 20px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="process-options-wrapper">
+    <div class="process-options-container">
+        <i class="fas fa-tint hero-icon" style="font-size: 3em; color: #00A8FF; margin-bottom: 10px;"></i>
+
+        <h2 class="lang-text" data-pt-br="Processos" data-en="Processes" data-es="Procesos">Processos</h2>
+
+        <p class="lang-text"
+           data-pt-br="Selecione uma das opções abaixo para explorar os processos."
+           data-en="Select one of the options below to explore the processes."
+           data-es="Seleccione una de las opciones a continuación para explorar los procesos.">
+            Selecione uma das opções abaixo para explorar os processos.
+        </p>
+
+        <div class="button-container">
+            <a href="{% url 'ask_known1_3' %}" class="process-button">
+                <i class="fas fa-tachometer-alt icon-left"></i>
+                <span class="lang-text"
+                      data-pt-br="Aquecimento/Resfriamento à pressão constante"
+                      data-en="Heating/Cooling at constant pressure"
+                      data-es="Calentamiento/Enfriamiento a presión constante">
+                    Aquecimento/Resfriamento à pressão constante
+                </span>
+            </a>
+
+            <a href="{% url 'ask_known1_5' %}" class="process-button">
+                <i class="fas fa-box icon-left"></i>
+                <span class="lang-text"
+                      data-pt-br="Aquecimento/Resfriamento a volume constante"
+                      data-en="Heating/Cooling at constant volume"
+                      data-es="Calentamiento/Enfriamiento a volumen constante">
+                    Aquecimento/Resfriamento a volume constante
+                </span>
+            </a>
+
+            <a href="{% url 'ask_known1_4' %}" class="process-button">
+                <i class="fas fa-expand-arrows-alt icon-left"></i>
+                <span class="lang-text"
+                      data-pt-br="Compressão/Expansão adiabática e reversível"
+                      data-en="Reversible adiabatic Compression/Expansion"
+                      data-es="Compresión/Expansión adiabática y reversible">
+                    Compressão/Expansão adiabática e reversível
+                </span>
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Seu script original para lidar com o localStorage
+    let teste3String = localStorage.getItem('teste3');
+    let teste3Obj = JSON.parse(teste3String);
+
+    console.log("Objeto teste3 recebido:", teste3Obj);
+
+    window.onload = function() {
+        let el = document.getElementById('mostrarTeste3');
+        if (el && teste3Obj) {
+            el.textContent = JSON.stringify(teste3Obj, null, 2);
+        }
+    }
+</script>
+{% endblock %}

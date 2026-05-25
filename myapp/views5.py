@@ -1,0 +1,1133 @@
+from django.shortcuts import render, redirect
+from .forms import TempForm2, PropertyForm5, SecondPropertyForm5, ThirdPropertyForm5
+from django.core.exceptions import ValidationError
+from . import tabelas as tbs
+from . import estados as std
+import json
+
+if not hasattr(std, 'instancia_estados'):
+    std.instancia_estados = std.estados_cls()
+
+estados = std.instancia_estados
+
+def homepage_view5(request):
+    return render(request, 'Inicio.html')
+
+###############################################################################
+
+def ask_known1_view5(request):
+    estados.limpar_estados()  # limpa a lista
+
+    # ==========================================================
+    # GARANTIA DE LIMPEZA DO GRÁFICO AO INICIAR NOVO CICLO
+    # ==========================================================
+    request.session['pontos_grafico'] = []
+    if 'dados_processo' in request.session:
+        del request.session['dados_processo']
+
+    if request.method == 'POST':
+        form = PropertyForm5(request.POST)
+        if form.is_valid():
+            property_choice = form.cleaned_data['property_choice']
+            value_input = form.cleaned_data['value_input']
+            # Armazena as escolhas e valores na sessão
+            request.session['property_choice'] = property_choice
+            request.session['value_input'] = value_input
+            # Armazena as propriedades excluídas para a próxima view
+            request.session['excluded_properties'] = [int(property_choice)]
+            return redirect('ask_known2_5')
+    else:
+        form = PropertyForm5()
+
+    return render(request, 'ask_known1_5.html', {'form': form})
+
+###############################################################################
+
+def ask_known2_view5(request):
+    # Recupera as propriedades excluídas da sessão
+    excluded_properties = request.session.get('excluded_properties', [])
+
+    if request.method == 'POST':
+        form = SecondPropertyForm5(request.POST, excluded_properties=excluded_properties)
+        if form.is_valid():
+            second_property_choice = form.cleaned_data['property_choice']
+            second_value_input = form.cleaned_data['value_input']
+            # Armazena as novas escolhas e valores na sessão
+            request.session['second_property_choice'] = second_property_choice
+            request.session['second_value_input'] = second_value_input
+            # Atualiza a lista de propriedades excluídas
+            excluded_properties.append(int(second_property_choice))
+            request.session['excluded_properties'] = excluded_properties
+            return redirect('ask_known3_5')
+    else:
+        form = SecondPropertyForm5(excluded_properties=excluded_properties)
+
+    return render(request, 'ask_known2_5.html', {'form': form})
+
+###############################################################################
+
+def ask_known3_view5(request):
+    if request.method == 'POST':
+        form = TempForm2(request.POST)
+        if form.is_valid():
+            temp_value_input = form.cleaned_data['value_input']
+            # Armazena o valor da temperatura da vizinhança
+            request.session['temp_value_input'] = temp_value_input
+            return redirect('ask_known4_5')
+    else:
+        form = TempForm2()
+
+    return render(request, 'ask_known3_5.html', {'form': form})
+
+
+###############################################################################
+
+def ask_known4_view5(request):
+
+    if request.method == 'POST':
+        form = ThirdPropertyForm5(request.POST)
+        if form.is_valid():
+            third_property_choice = form.cleaned_data['property_choice']
+            third_value_input = form.cleaned_data['value_input']
+            # Armazena as novas escolhas e valores na sessão
+            request.session['third_property_choice'] = third_property_choice
+            request.session['third_value_input'] = third_value_input
+            # Atualiza a lista de propriedades excluídas
+            request.session['excluded_properties'] = [int(third_property_choice)]
+            return redirect('process_values_5')
+    else:
+        form = ThirdPropertyForm5()
+
+    return render(request, 'ask_known4_5.html', {'form': form})
+
+###############################################################################
+
+
+class agua_cls:
+    """AGUA"""
+    '''
+    Calcula e imprime o valor das propriedades de diferentes substâncias a partir do valor conhecido de duas propriedades. Valores dados pelas tabelas B.2, B.3, B.4, B.5, B.6 e B.7.
+    '''
+    classe = 'Agua'
+
+###############################################################################
+
+    def __init__(self, opt, a, b, c, d):
+        '''Construtor'''
+        self.n = opt
+        self.index1 = a
+        self.index2 = b
+        self.known1 = c
+        self.known2 = d
+        self.x = self.run()
+
+   ###############################################################################
+
+    def select_table(self, opt):
+        '''Seleciona as tabelas de propriedades de acordo com a substância'''
+        if opt == 1:
+            self.tabela = tbs.tabelas_cls().B_1_1
+            self.liq_comp = tbs.tabelas_cls().B_1_4
+            self.vap_sup = tbs.tabelas_cls().B_1_3
+        if opt == 2:
+            self.tabela = tbs.tabelas_cls().B_2_1
+            self.vap_sup = tbs.tabelas_cls().B_2_2
+        if opt == 3:
+            self.tabela = tbs.tabelas_cls().B_3_1
+            self.vap_sup = tbs.tabelas_cls().B_3_2
+        if opt == 4:
+            self.tabela = tbs.tabelas_cls().B_4_1
+            self.vap_sup = tbs.tabelas_cls().B_4_2
+        if opt == 5:
+            self.tabela = tbs.tabelas_cls().B_5_1
+            self.vap_sup = tbs.tabelas_cls().B_5_2
+        if opt == 6:
+            self.tabela = tbs.tabelas_cls().B_6_1
+            self.vap_sup = tbs.tabelas_cls().B_6_2
+            self.props[0][2] = 'K'
+        if opt == 7:
+            self.tabela = tbs.tabelas_cls().B_7_1
+            self.vap_sup = tbs.tabelas_cls().B_7_2
+            self.props[0][2] = 'K'
+
+        #Definindo os limites das tabelas para cada propriedade
+        self.boundaries[0][0] = min(self.tabela[0][2],self.vap_sup[0][3][0][2])
+        self.boundaries[0][1] = self.vap_sup[-1][3][0][-1]
+
+        self.boundaries[1][0] = min(self.tabela[1][2],self.vap_sup[0][2])
+        self.boundaries[1][1] = max(self.tabela[1][-1],self.vap_sup[-1][2])
+        if self.n == 1: self.boundaries[1][1] = self.liq_comp[-1][2]
+
+        self.boundaries[2][0] = self.tabela[2][2]
+        if self.n == 1: self.boundaries[2][0] = self.liq_comp[-1][3][1][2]
+        self.boundaries[2][1] = max(self.tabela[3][2],self.vap_sup[0][3][1][-1])
+
+        self.boundaries[3][0] = self.tabela[4][2]
+        umax = [max(self.vap_sup[i][3][2][2:]) for i in range(len(self.vap_sup))]
+        self.boundaries[3][1] = max(umax)
+
+        self.boundaries[4][0] = self.tabela[6][2]
+        hmax = [max(self.vap_sup[i][3][3][2:]) for i in range(len(self.vap_sup))]
+        self.boundaries[4][1] = max(hmax)
+
+        self.boundaries[5][0] = self.tabela[8][2]
+        self.boundaries[5][1] = self.vap_sup[0][3][4][-1]
+
+###############################################################################
+
+    def find_phase(self):
+        '''Determina a fase da substância'''
+        if self.index1 == 0:
+            self.prop1_T()
+        if self.index1 == 1:
+            self.prop1_p()
+
+###############################################################################
+
+    def prop1_T(self):
+        '''Propriedade 1 = T'''
+        if self.known1 > self.tabela[0][-1]:
+            self.phase = 2
+            if self.index2 == 6:
+                self.tag_error = 1
+        else:
+            self.sat_props(0,self.known1)
+            if self.index2 == 1:
+                if self.known2 == self.sat_list[1][2]:
+                    self.phase = 3
+                    self.tag_error = 1
+                if self.known2 > self.sat_list[1][2]:
+                    self.phase = 1
+                if self.known2 < self.sat_list[1][2]:
+                    self.phase = 2
+
+            if self.index2 > 1 and self.index2 < 6:
+                if self.known2 >= self.sat_list[((self.index2)*2)-2][2] and self.known2 <= self.sat_list[((self.index2)*2)-1][2]:
+                    self.phase = 3
+                if self.known2 < self.sat_list[((self.index2)*2)-2][2]:
+                    self.phase = 1
+                if self.known2 > self.sat_list[((self.index2)*2)-1][2]:
+                    self.phase = 2
+
+            if self.index2 == 6:
+                self.phase = 3
+
+###############################################################################
+
+    def prop1_p(self):
+        '''Propriedade 1 = p'''
+        if self.n == 1 and self.known1 > self.tabela[0][-1]:
+            if self.index2 == 0 and self.known2 < self.tabela[1][-1]:
+                self.phase = 1
+            else:
+                self.phase = 2
+                if self.index2 == 6:
+                    self.tag_error = 1
+
+        elif self.n != 1 and self.known1 > self.tabela[1][-1]:
+            if self.index2 == 0 and self.known2 < self.tabela[0][-1]:
+                self.phase = 1
+            else:
+                self.phase = 2
+                if self.index2 == 6:
+                    self.tag_error = 1
+        else:
+            if self.n == 1: self.sat_props(0,self.known1)
+            if self.n != 1: self.sat_props(1,self.known1)
+
+            ref = self.sat_list[1][2] if self.n == 1 else self.sat_list[0][2]
+
+            if self.index2 == 0:
+                if self.known2 == ref:
+                    self.phase = 3
+                    self.tag_error = 1
+                if self.known2 < ref:
+                    self.phase = 1
+                if self.known2 > ref:
+                    self.phase = 2
+
+            if self.index2 > 1 and self.index2 < 6:
+                if self.known2 >= self.sat_list[((self.index2)*2)-2][2] and self.known2 <= self.sat_list[((self.index2)*2)-1][2]:
+                    self.phase = 3
+                if self.known2 < self.sat_list[((self.index2)*2)-2][2]:
+                    self.phase = 1
+                if self.known2 > self.sat_list[((self.index2)*2)-1][2]:
+                    self.phase = 2
+
+            if self.index2 == 6:
+                self.phase = 3
+
+###############################################################################
+
+    def find_props(self):
+        '''Determina as propriedades de acordo com a fase'''
+        while True:
+            try:
+                if self.tag_error == 0:
+                    if self.phase == 1:
+                        self.props.pop(-1)
+                        if self.index1 == 1 or self.index2 == 1:
+                            self.looking_for_p_in_lc()
+                        if self.index1 != 1 and self.index2 != 1:
+                            if self.n == 1: self.looking_for_not_p_in_lc()
+                            else: return redirect ('error_type_5')
+
+                    if self.phase == 2:
+                        self.props.pop(-1)
+                        if self.index1 == 1 or self.index2 == 1:
+                            self.looking_for_p_in_vs()
+                        if self.index1 != 1 and self.index2 != 1:
+                            self.looking_for_not_p_in_vs()
+
+                    if self.phase == 3:
+                        if self.index1 == 0:
+                            self.props[1][3] = self.sat_list[1][2]
+                        if self.index1 == 1:
+                            self.props[0][3] = self.sat_list[1][2] if self.n == 1 else self.sat_list[0][2]
+
+                        if self.index2 > 1 and self.index2 < 6:
+                            yl_index = 2*(self.index2-1)
+                            yv_index = (2*(self.index2-1))+1
+                            yl = self.sat_list[yl_index][2]
+                            yv = self.sat_list[yv_index][2]
+                            self.props[6][3] = 100 * self.calc_x(self.known2,yl,yv)
+                        if self.index2 == 6:
+                            self.props[6][3] = self.known2
+
+                        titulo = self.props[6][3]/100
+                        for i in range(2,6):
+                            yl_index = 2*(i-1)
+                            yv_index = (2*(i-1))+1
+                            yl = self.sat_list[yl_index][2]
+                            yv = self.sat_list[yv_index][2]
+                            self.props[i][3] = self.calc_y(titulo,yl,yv)
+
+                    self.get_props()
+                    break
+
+                if self.tag_error == 1: break
+
+            except TypeError:
+                return redirect ('error_type_5')
+            break
+
+###############################################################################
+
+    def get_props(self):
+        result = []
+        if not (0 <= self.index1 < len(self.props) and 0 <= self.index2 < len(self.props)):
+            raise IndexError("Índices fornecidos estão fora dos limites.")
+
+        header = (
+            f'As propriedades de {self.subs[self.n - 1]} a {self.props[self.index1][3]} {self.props[self.index1][2]} '
+            f'e {self.props[self.index2][3]} {self.props[self.index2][2]} são:'
+        )
+        result.append(header)
+
+        for i in range(len(self.props)):
+            if i != self.index1 and i != self.index2:
+                if i == 2:
+                    result.append(f'{self.props[i][1]} = {round(self.props[i][3], 6):.6f} {self.props[i][2]}')
+                elif i == 5:
+                    result.append(f'{self.props[i][1]} = {round(self.props[i][3], 4):.4f} {self.props[i][2]}')
+                else:
+                    result.append(f'{self.props[i][1]} = {round(self.props[i][3], 2):.2f} {self.props[i][2]}')
+        return result
+
+###############################################################################
+
+    def run(self):
+        self.subs = ['a água', 'a amônia', 'o dióxido de carbono', 'o R-410a', 'o R-134a', 'o nitrogênio', 'o metano']
+        self.tabela = []
+        self.liq_comp = []
+        self.vap_sup = []
+        self.sat = []
+        self.sat_list = []
+        self.lgt = []
+        self.props = [['Temperatura','T','°C',0],['Pressão','p','kPa',0],['Volume específico','v','m³/kg',0],['Energia interna específica','u','kJ/kg',0],['Entalpa específica','h','kJ/kg',0],['Entropia específica','s','kJ/kg.K',0],['Título','x','%',-1]]
+        self.props[self.index1][3] = self.known1
+        self.props[self.index2][3] = self.known2
+        self.index_aux1 = 0
+        self.index_aux2 = 0
+        self.phase = 0
+        self.tag1 = -1
+        self.tag2 = -1
+        self.tag_error = 0
+        self.list_props = ['temperatura', 'pressão', 'volume específico', 'eneriga interna específica', 'entalpia específica', 'entropia específica', 'título']
+        self.str_prop = ''
+        self.boundaries = [[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,100]]
+        self.results = []
+
+        self.select_table(self.n)
+        if self.n == 1 and self.index1 == 1:
+            self.tabela = tbs.tabelas_cls().B_1_2
+        self.find_phase()
+        self.find_props()
+
+        self.results = [self.phase, self.sat_list, self.props]
+        return self.results
+
+###############################################################################
+
+    def interpolate(self, xm, x, xp, ym, yp):
+        value = (((x-xm)/(xp-xm))*(yp-ym))+ym
+        return(value)
+
+    def calc_x(self, x, xl, xv):
+        value = (x-xl)/(xv-xl)
+        return(value)
+
+    def calc_y(self, x, yl, yv):
+        value = yl+(x*(yv-yl))
+        return(value)
+
+    def find_index(self, iterator, comp1, comp2, n, anterior=0):
+        for i in range(len(iterator)):
+            if i >= n:
+                if comp1 == comp2[i]:
+                    self.tag1 = 1
+                    anterior = i
+                    break
+                elif comp1 < comp2[i]:
+                    anterior = i - 1
+                    self.tag1 = -1
+                    break
+                else: continue
+        return(anterior)
+
+    def sat_props(self,n,known):
+        tabela = self.tabela
+        self.index_aux1 = self.find_index(tabela[0], known, tabela[n], 2)
+        a = []
+        if self.tag1 == 1:
+            for i in range(len(tabela)):
+                a.append([tabela[i][0], tabela[i][1], tabela[i][self.index_aux1]])
+        if self.tag1 == -1:
+            for i in range(len(tabela)):
+                b = []
+                if i != n:
+                    value = self.interpolate(tabela[n][self.index_aux1], known, tabela[n][self.index_aux1+1], tabela[i][self.index_aux1], tabela[i][self.index_aux1+1])
+                    b.extend([tabela[i][0], tabela[i][1], value])
+                if i == n:
+                    b.extend([tabela[i][0], tabela[i][1], known])
+                a.append(b)
+        self.sat_list = a
+
+    def looking_for_p_in_lc(self):
+        if self.n == 1:
+            tabela_lc = self.liq_comp
+            self.tabela = tbs.tabelas_cls().B_1_1
+
+        p = self.known1 if self.index1 == 1 else self.known2
+        self.str_prop = self.props[self.index2][0] if self.index1 == 1 else ''
+
+        if (self.n == 1 and p < tabela_lc[0][2]) or (self.n != 1):
+            aux_index = 0 if self.index1 == 0 or self.index2 == 0 else (2*self.index2) - 2
+            tabela = self.tabela
+            self.index_aux1 = self.find_index(tabela[aux_index], self.known2 if self.index1 == 1 else self.known1, tabela[aux_index], 2)
+
+            a = []
+            if self.tag1 == 1:
+                for i in range(len(tabela)):
+                    if i % 2 == 0: a.append(tabela[i][self.index_aux1])
+
+            if self.tag1 == -1:
+                for i in range(len(tabela)):
+                    if i % 2 == 0:
+                        known_val = self.known2 if self.index1 == 1 else self.known1
+                        value = self.interpolate(tabela[aux_index][self.index_aux1], known_val, tabela[aux_index][self.index_aux1+1], tabela[i][self.index_aux1], tabela[i][self.index_aux1+1])
+                        a.append(value)
+
+            for i in range(len(a)):
+                if i != self.index2-1 and i != 0:
+                    self.props[i+1][3] = a[i]
+                elif i == 0:
+                    self.props[i][3] = a[i]
+
+        if self.n == 1 and p > tabela_lc[0][2]:
+            if p > tabela_lc[-1][2]:
+                self.tag_error == 1
+                self.str_prop = self.list_props[1]
+                raise TypeError
+
+            anterior = 0
+            for i in range(len(tabela_lc)):
+                if p == tabela_lc[i][2]:
+                    self.tag1 = 1
+                    anterior = i
+                    break
+                elif p < tabela_lc[i][2]:
+                    anterior = i - 1
+                    self.tag1 = -1
+                    break
+            self.index_aux2 = anterior
+
+            a = []
+            if self.tag1 == 1:
+                for i in range(len(tabela_lc[self.index_aux2][3])):
+                    b = []
+                    for j in range(len(tabela_lc[self.index_aux2][3][0])):
+                        if j > 1: b.append(tabela_lc[self.index_aux2][3][i][j])
+                    a.append(b)
+
+            if self.tag1 == -1:
+                for i in range(len(tabela_lc[self.index_aux2][3])):
+                    b = []
+                    for j in range(len(tabela_lc[self.index_aux2][3][0])):
+                        if j > 1 and j < len(tabela_lc[self.index_aux2][3][0]) - 1:
+                            value = self.interpolate(tabela_lc[self.index_aux2][2], p, tabela_lc[self.index_aux2+1][2], tabela_lc[self.index_aux2][3][i][j], tabela_lc[self.index_aux2+1][3][i][j])
+                            b.append(value)
+
+                    if self.index1 == 0:
+                        self.tabela = tbs.tabelas_cls().B_1_2
+                        self.sat_props(0,self.known2)
+                    b.append(self.sat_list[1][2] if i == 0 else self.sat_list[2*i][2])
+                    a.append(b)
+
+            other = 0
+            if self.index1 == 1:
+                if self.index2 != 0:
+                    self.str_prop = self.list_props[self.index2]
+                    other = self.index2 - 1
+                    if self.known2 < min(a[other]) or self.known2 > max(a[other]): raise TypeError
+                self.index_aux2 = self.find_index(a[other], self.known2, a[other], 0)
+
+                if self.tag1 == 1:
+                    for i in range(len(a)):
+                        if i != other:
+                            if i == 0: self.props[0][3] = a[i][self.index_aux2]
+                            else: self.props[i+1][3] = a[i][self.index_aux2]
+
+                if self.tag1 == -1:
+                    for i in range(len(a)):
+                        if i != other:
+                            if i == 0: self.props[0][3] = self.interpolate(a[other][self.index_aux2], self.known2, a[other][self.index_aux2+1], a[i][self.index_aux2], a[i][self.index_aux2+1])
+                            else: self.props[i+1][3] = self.interpolate(a[other][self.index_aux2], self.known2, a[other][self.index_aux2+1], a[i][self.index_aux2], a[i][self.index_aux2+1])
+
+            if self.index2 == 1:
+                self.str_prop = self.list_props[0]
+                if self.known1 < min(a[other]) or self.known1 > max(a[other]): raise TypeError
+
+                self.index_aux2 = self.find_index(a[other], self.known1, a[other], 0)
+
+                if self.tag1 == 1:
+                    for i in range(len(a)):
+                        if i > other: self.props[i+1][3] = a[i][self.index_aux2]
+
+                if self.tag1 == -1:
+                    for i in range(len(a)):
+                        if i > other: self.props[i+1][3] = self.interpolate(a[other][self.index_aux2], self.known1, a[other][self.index_aux2+1], a[i][self.index_aux2], a[i][self.index_aux2+1])
+
+    def looking_for_not_p_in_lc(self):
+        tabela_lc = self.liq_comp
+        b_anterior = []
+        b_proximo = []
+        for i in range(len(tabela_lc)):
+            self.index_aux1 = self.find_index(tabela_lc[i][3][0], self.known1, tabela_lc[i][3][0], 2)
+
+            b = []
+            c = []
+            if self.tag1 == 1:
+                b.append(tabela_lc[i][2])
+                for k in range(len(tabela_lc[i][3])): b.append(tabela_lc[i][3][k][self.index_aux1])
+                b_anterior = b
+
+            if self.tag1 == -1:
+                b.append(tabela_lc[i][2])
+                b.append(self.known1)
+                for k in range(len(tabela_lc[i][3])):
+                    if k > 0:
+                        value = self.interpolate(tabela_lc[i][3][0][self.index_aux1], self.known1, tabela_lc[i][3][0][self.index_aux1+1], tabela_lc[i][3][k][self.index_aux1], tabela_lc[i][3][k][self.index_aux1+1])
+                        b.append(value)
+                b_anterior = b
+
+            if self.known2 == b_anterior[self.index2-1]:
+                for k in range(len(b_anterior)):
+                    if k != self.index2-1:
+                        try:
+                            self.props[k+1][3] = b_anterior[k]
+                        except IndexError: pass
+                break
+
+            if i == len(tabela_lc) - 1:
+                self.str_prop = self.list_props[self.index2]
+                raise TypeError
+
+            c.append(tabela_lc[i+1][2])
+            for k in range(len(tabela_lc[i+1][3])):
+                value = self.interpolate(tabela_lc[i+1][3][0][self.index_aux1], self.known1, tabela_lc[i+1][3][0][self.index_aux1+1], tabela_lc[i+1][3][k][self.index_aux1], tabela_lc[i+1][3][k][self.index_aux1+1])
+                c.append(value)
+            b_proximo = c
+
+            p_aux = [b_anterior[0], b_proximo[0]]
+            b_anterior[0], b_proximo[0] = b_anterior[1], b_proximo[1]
+            b_anterior[1], b_proximo[1] = p_aux[0], p_aux[1]
+
+            if (self.index2 == 4 and self.known2 < b_proximo[self.index2] and i < len(tabela_lc)-1) or (self.index2 != 4 and self.known2 > b_proximo[self.index2] and i < len(tabela_lc)-1):
+                for k in range(len(b_anterior)):
+                    if k != 0 and k != self.index2:
+                        value = self.interpolate(b_anterior[self.index2], self.known2, b_proximo[self.index2], b_anterior[k], b_proximo[k])
+                        try:
+                            self.props[k][3] = value
+                        except IndexError: pass
+                break
+
+    def looking_for_p_in_vs(self):
+        tabela_vs = self.vap_sup
+        p = self.known1 if self.index1 == 1 else self.known2
+        self.str_prop = self.props[self.index2][0] if self.index1 == 1 else ''
+
+        if p > tabela_vs[-1][2] or p < tabela_vs[0][2]:
+            self.tag_error == 1
+            self.str_prop = self.list_props[1]
+            raise TypeError
+
+        anterior = 0
+        for i in range(len(tabela_vs)):
+            if p == tabela_vs[i][2]:
+                self.tag1 = 1
+                anterior = i
+                break
+            elif p < tabela_vs[i][2]:
+                anterior = i - 1
+                self.tag1 = -1
+                break
+        self.index_aux2 = anterior
+
+        a = []
+        if self.tag1 == 1:
+            for i in range(len(tabela_vs[self.index_aux2][3])):
+                b = []
+                for j in range(len(tabela_vs[self.index_aux2][3][0])):
+                    if j > 1: b.append(tabela_vs[self.index_aux2][3][i][j])
+                a.append(b)
+
+        if self.tag1 == -1:
+            marcador = 1 if tabela_vs[self.index_aux2][3][0][3] != tabela_vs[self.index_aux2+1][3][0][3] else 0
+            for i in range(len(tabela_vs[self.index_aux2][3])):
+                if marcador == 1: del tabela_vs[self.index_aux2][3][i][3]
+                b = []
+                if self.index1 == 0:
+                    if self.n == 1:
+                        self.tabela = tbs.tabelas_cls().B_1_2
+                        self.sat_props(0,self.known2)
+                    else: self.sat_props(1,self.known2)
+
+                if i == 0: b.append(self.sat_list[1][2] if self.n == 1 else self.sat_list[0][2])
+                else: b.append(self.sat_list[(2*i)+1][2])
+
+                for j in range(len(tabela_vs[self.index_aux2][3][0])):
+                    if j > 2 and j < len(tabela_vs[self.index_aux2][3][0]):
+                        value = self.interpolate(tabela_vs[self.index_aux2][2], p, tabela_vs[self.index_aux2+1][2], tabela_vs[self.index_aux2][3][i][j], tabela_vs[self.index_aux2+1][3][i][j])
+                        b.append(value)
+                a.append(b)
+
+        other = 0
+        if self.index1 == 1:
+            self.str_prop = self.list_props[self.index2]
+            if self.index2 != 0:
+                other = self.index2 - 1
+                if self.known2 < min(a[other]) or self.known2 > max(a[other]): raise TypeError
+            self.index_aux1 = self.find_index(a[other], self.known2, a[other], 0)
+
+            if self.tag1 == 1:
+                for i in range(len(a)):
+                    if i != other:
+                        if i == 0: self.props[0][3] = a[i][self.index_aux1]
+                        else: self.props[i+1][3] = a[i][self.index_aux1]
+
+            if self.tag1 == -1:
+                for i in range(len(a)):
+                    if i != other:
+                        if i == 0: self.props[0][3] = self.interpolate(a[other][self.index_aux1], self.known2, a[other][self.index_aux1+1], a[i][self.index_aux1], a[i][self.index_aux1+1])
+                        else: self.props[i+1][3] = self.interpolate(a[other][self.index_aux1], self.known2, a[other][self.index_aux1+1], a[i][self.index_aux1], a[i][self.index_aux1+1])
+
+        if self.index2 == 1:
+            self.str_prop = self.list_props[0]
+            if self.known1 < min(a[other]) or self.known1 > max(a[other]): raise TypeError
+            self.index_aux2 = self.find_index(a[other], self.known1, a[other], 0)
+
+            if self.tag1 == 1:
+                for i in range(len(a)):
+                    if i > other: self.props[i+1][3] = a[i][self.index_aux2]
+
+            if self.tag1 == -1:
+                for i in range(len(a)):
+                    if i > other: self.props[i+1][3] = self.interpolate(a[other][self.index_aux2], self.known1, a[other][self.index_aux2+1], a[i][self.index_aux2], a[i][self.index_aux2+1])
+
+    def looking_for_not_p_in_vs(self):
+        tabela_vs = self.vap_sup
+        b_anterior = []
+        b_proximo = []
+        for i in range(len(tabela_vs)):
+            self.index_aux1 = self.find_index(tabela_vs[i][3][0], self.known1, tabela_vs[i][3][0], 2)
+
+            b = []
+            c = []
+            if self.tag1 == 1:
+                b.append(tabela_vs[i][2])
+                for k in range(len(tabela_vs[i][3])): b.append(tabela_vs[i][3][k][self.index_aux1])
+                b_anterior = b
+
+            if self.tag1 == -1:
+                b.append(tabela_vs[i][2])
+                b.append(self.known1)
+                for k in range(len(tabela_vs[i][3])):
+                    if k > 0:
+                        value = self.interpolate(tabela_vs[i][3][0][self.index_aux1], self.known1, tabela_vs[i][3][0][self.index_aux1+1], tabela_vs[i][3][k][self.index_aux1], tabela_vs[i][3][k][self.index_aux1+1])
+                        b.append(value)
+                b_anterior = b
+
+            if self.known2 == b_anterior[self.index2-1]:
+                for k in range(len(b_anterior)):
+                    if k != self.index2-1:
+                        try:
+                            self.props[k+1][3] = b_anterior[k]
+                        except IndexError: pass
+                break
+
+            if i == len(tabela_vs) - 1:
+                self.str_prop = self.list_props[self.index2]
+                raise TypeError
+
+            marcador = 1 if tabela_vs[i][3][0][3] != tabela_vs[i+1][3][0][3] else 0
+            for j in range(len(tabela_vs[i][3])):
+                if marcador == 1:
+                    del tabela_vs[i][3][j][1]
+                    self.index_aux1 = self.index_aux1 - 1
+                    break
+
+            c.append(tabela_vs[i+1][2])
+            for k in range(len(tabela_vs[i+1][3])):
+                try:
+                    value = self.interpolate(
+                        tabela_vs[i+1][3][0][self.index_aux1],
+                        self.known1,
+                        tabela_vs[i+1][3][0][self.index_aux1+1],
+                        tabela_vs[i+1][3][k][self.index_aux1],
+                        tabela_vs[i+1][3][k][self.index_aux1+1]
+                    )
+                except IndexError:
+                    return redirect('error_type_5')
+                c.append(value)
+            b_proximo = c
+
+            if self.known2 > b_proximo[self.index2] and i < len(tabela_vs)-1:
+                for k in range(len(b_anterior)):
+                    if k != 1 and k != self.index2:
+                        value = self.interpolate(b_anterior[self.index2], self.known2, b_proximo[self.index2], b_anterior[k], b_proximo[k])
+                        try:
+                            self.props[k][3] = value
+                        except IndexError: pass
+                self.props[1][3] = self.props[0][3]
+                self.props[0][3] = self.known1
+                break
+
+###############################################################################
+
+def process_values_view5(request):
+    if 'property_choice' not in request.session or 'second_property_choice' not in request.session:
+        return redirect('ask_known1_5')
+
+    try:
+        third_property_choice = int(request.session.get('third_property_choice'))
+        third_value_input = float(request.session.get('third_value_input'))
+        temp_value_input = float(request.session.get('temp_value_input'))
+        request.session['lista_estados'] = json.dumps(estados.lista_estados, default=str)
+
+        if estados.lista_estados:
+            print("Usando o último estado salvo como condição inicial.")
+            ultimo_estado = estados.lista_estados[-1]
+
+            fase = ultimo_estado[0]
+            temperatura = round(ultimo_estado[2][0][3], 2)
+            pressao = round(ultimo_estado[2][1][3], 2)
+            volume_esp = round(ultimo_estado[2][2][3], 8)
+            energia_int = round(ultimo_estado[2][3][3], 2)
+            entalpia_esp = round(ultimo_estado[2][4][3], 2)
+            entropia_esp = round(ultimo_estado[2][5][3], 4)
+
+            if (energia_int == 0 and entalpia_esp == 0 and entropia_esp == 0) or volume_esp == 0:
+                return redirect('error_type_5')
+
+            if fase == 3:
+                tit = round(ultimo_estado[2][6][3], 2)
+                volume_v = ultimo_estado[1][3][2]
+                volume_l = ultimo_estado[1][2][2]
+                VolumeL = round((1 - (tit / 100)) * volume_l, 8)
+                VolumeV = (tit / 100) * volume_v
+            else:
+                tit = None
+                VolumeL = None
+                VolumeV = None
+                volume_v = None
+                volume_l = None
+
+            try:
+                volume_v = ultimo_estado[1][3][2]
+            except IndexError:
+                volume_v = None
+            try:
+                volume_l = ultimo_estado[1][2][2]
+            except IndexError:
+                volume_l = None
+
+            if volume_v is None or volume_l is None:
+                return redirect('error_type_5')
+
+        else:
+            print("Sem estados salvos. Usando valores digitados.")
+            request.session['pontos_grafico'] = []
+            if hasattr(estados, 'pontos_grafico'):
+                estados.pontos_grafico.clear()
+
+            property_choice = int(request.session.get('property_choice'))
+            second_property_choice = int(request.session.get('second_property_choice'))
+            value_input = float(request.session.get('value_input'))
+            second_value_input = float(request.session.get('second_value_input'))
+
+            h = agua_cls(1, property_choice, second_property_choice, value_input, second_value_input)
+            fase = h.results[0]
+            try:
+                temperatura = round(h.results[2][0][3], 2)
+                pressao = round(h.results[2][1][3], 2)
+                volume_esp = round(h.results[2][2][3], 8)
+                energia_int = round(h.results[2][3][3], 2)
+                entalpia_esp = round(h.results[2][4][3], 2)
+                entropia_esp = round(h.results[2][5][3], 4)
+            except (IndexError, TypeError):
+                return redirect('error_type_5')
+
+            if (energia_int == 0 and entalpia_esp == 0 and entropia_esp == 0) or volume_esp == 0:
+                return redirect('error_type_5')
+
+            if fase == 3:
+                tit = round(h.results[2][6][3], 2)
+                volume_v = h.results[1][3][2]
+                volume_l = h.results[1][2][2]
+                VolumeL = round((1 - (tit / 100)) * volume_l, 8)
+                VolumeV = (tit / 100) * volume_v
+            else:
+                tit = None
+                VolumeL = None
+                VolumeV = None
+                volume_v = None
+                volume_l = None
+
+            try:
+                volume_v = h.results[1][3][2]
+            except IndexError:
+                volume_v = None
+            try:
+                volume_l = h.results[1][2][2]
+            except IndexError:
+                volume_l = None
+
+            if volume_v is None or volume_l is None:
+                return redirect('error_type_5')
+
+            estados.lista_estados.append(h.results)
+
+        # Novo estado guiado pela View 5: Processo Isovolumétrico (Fixa Volume)
+        h = agua_cls(1, third_property_choice, 2, third_value_input, volume_esp)
+
+        fase2 = h.results[0]
+        try:
+            pressao2 = round(h.results[2][1][3], 2)
+            temperatura2 = round(h.results[2][0][3], 2)
+            volume_esp2 = round(h.results[2][2][3], 8)
+            energia_int2 = round(h.results[2][3][3], 2)
+            entalpia_esp2 = round(h.results[2][4][3], 2)
+            entropia_esp2 = round(h.results[2][5][3], 4)
+        except (IndexError, TypeError):
+            return redirect('error_type_5')
+
+        if (energia_int2 == 0 and entalpia_esp2 == 0 and entropia_esp2 == 0) or volume_esp2 == 0:
+            return redirect('error_type_5')
+
+        if fase2 == 3:
+            tit2 = round(h.results[2][6][3], 2)
+            volume_v2 = h.results[1][3][2]
+            volume_l2 = h.results[1][2][2]
+            VolumeL2 = round((1 - (tit2 / 100)) * volume_l2, 8)
+            VolumeV2 = (tit2 / 100) * volume_v2
+        else:
+            tit2 = None
+            VolumeL2 = None
+            VolumeV2 = None
+            volume_v2 = None
+            volume_l2 = None
+
+        try:
+            volume_v2 = h.results[1][3][2]
+        except IndexError:
+            volume_v2 = None
+        try:
+            volume_l2 = h.results[1][2][2]
+        except IndexError:
+            volume_l2 = None
+
+        if volume_v2 is None or volume_l2 is None:
+            return redirect('error_type_5')
+
+        escolha = third_property_choice
+        temp_viz = temp_value_input
+        calor = round((energia_int2 - energia_int), 6)
+        entropia_ger = round((entropia_esp2 - entropia_esp) - (calor / (temp_viz + 273.15)), 6)
+
+        estados.lista_estados.append(h.results)
+        teste = estados.lista_estados
+
+        # ==========================================================
+        # GERAÇÃO DE MICROPROCESSOS: ZOOM ADAPTATIVO + DOMO SUAVIZADO
+        # ==========================================================
+
+        pontos_grafico = request.session.get('pontos_grafico', [])
+
+        val_fixo = volume_esp
+        val_inicial = temperatura
+        val_final = temperatura2
+
+        num_passos_base = 150
+        refino_domo = 25
+
+        estado_inicial = {
+            'T': round(temperatura, 4),
+            'P': round(pressao, 4),
+            'v': round(volume_esp, 8),
+            's': round(entropia_esp, 4),
+            'h': round(entalpia_esp, 4)
+        }
+
+        estado_final = {
+            'T': round(temperatura2, 4),
+            'P': round(pressao2, 4),
+            'v': round(volume_esp2, 8),
+            's': round(entropia_esp2, 4),
+            'h': round(entalpia_esp2, 4)
+        }
+
+        pontos_micro = []
+
+        if val_final != val_inicial:
+
+            # ==========================================================
+            # MALHA ADAPTATIVA
+            # Alta resolução somente perto do domo
+            # ==========================================================
+
+            passo_base = (val_final - val_inicial) / num_passos_base
+
+            temperaturas_base = [
+                val_inicial + (i * passo_base)
+                for i in range(num_passos_base + 1)
+            ]
+
+            valores_iteracao = []
+
+            fase_ant = None
+            t_ant = None
+
+            for t_tmp in temperaturas_base:
+
+                try:
+
+                    teste = agua_cls(1, 0, 2, t_tmp, val_fixo)
+
+                    fase_tmp = teste.results[0]
+
+                    # ponto normal
+                    valores_iteracao.append(t_tmp)
+
+                    # ======================================================
+                    # SE CRUZOU O DOMO → INSERE SUBDIVISÕES
+                    # ======================================================
+
+                    if (
+                        fase_ant is not None
+                        and fase_tmp != fase_ant
+                        and t_ant is not None
+                    ):
+
+                        sub_passo = (t_tmp - t_ant) / refino_domo
+
+                        for j in range(1, refino_domo):
+
+                            valores_iteracao.append(
+                                t_ant + (j * sub_passo)
+                            )
+
+                    fase_ant = fase_tmp
+                    t_ant = t_tmp
+
+                except Exception:
+                    continue
+
+            # ordena corretamente
+            valores_iteracao = sorted(valores_iteracao)
+
+            fase_anterior = None
+            t_anterior = None
+
+            for t_atual in valores_iteracao:
+
+                try:
+
+                    # ======================================================
+                    # CÁLCULO PRINCIPAL
+                    # ======================================================
+
+                    h_micro = agua_cls(1, 0, 2, t_atual, val_fixo)
+
+                    fase_atual = h_micro.results[0]
+
+                    p_micro = h_micro.results[2][1][3]
+                    h_micro_val = h_micro.results[2][4][3]
+                    s_micro_val = h_micro.results[2][5][3]
+
+                    # ======================================================
+                    # FILTRO DE SEGURANÇA
+                    # ======================================================
+
+                    if p_micro <= 0:
+                        continue
+
+                    if h_micro_val == 0 and s_micro_val == 0:
+                        continue
+
+                    # ======================================================
+                    # DETECÇÃO DA FRONTEIRA DO DOMO
+                    # ======================================================
+
+                    if (
+                        fase_anterior is not None
+                        and fase_atual != fase_anterior
+                        and t_anterior is not None
+                    ):
+
+                        t_a = t_anterior
+                        t_b = t_atual
+
+                        # Refinamento binário da fronteira
+                        for _ in range(12):
+
+                            t_mid = (t_a + t_b) / 2
+
+                            try:
+
+                                h_mid = agua_cls(1, 0, 2, t_mid, val_fixo)
+
+                                fase_mid = h_mid.results[0]
+
+                                p_mid = h_mid.results[2][1][3]
+                                h_mid_val = h_mid.results[2][4][3]
+                                s_mid_val = h_mid.results[2][5][3]
+
+                                if p_mid > 0:
+
+                                    pontos_micro.append({
+                                        'T': round(t_mid, 4),
+                                        'P': round(p_mid, 4),
+                                        'v': round(val_fixo, 8),
+                                        's': round(s_mid_val, 4),
+                                        'h': round(h_mid_val, 4)
+                                    })
+
+                                    # aproxima da fronteira
+                                    if fase_mid == fase_anterior:
+                                        t_a = t_mid
+                                    else:
+                                        t_b = t_mid
+
+                            except Exception:
+                                break
+
+                    # ======================================================
+                    # REGIÃO NORMAL (FORA DO DOMO)
+                    # ======================================================
+
+                    else:
+
+                        pontos_micro.append({
+                            'T': round(t_atual, 4),
+                            'P': round(p_micro, 4),
+                            'v': round(val_fixo, 8),
+                            's': round(s_micro_val, 4),
+                            'h': round(h_micro_val, 4)
+                        })
+
+                    # ======================================================
+                    # ATUALIZA REFERÊNCIAS
+                    # ======================================================
+
+                    fase_anterior = fase_atual
+                    t_anterior = t_atual
+
+                except Exception:
+                    continue
+
+        # ==========================================================
+        # ORDENAÇÃO CRONOLÓGICA
+        # ==========================================================
+
+        is_cooling = val_inicial > val_final
+
+        pontos_micro = sorted(
+            pontos_micro,
+            key=lambda k: k['T'],
+            reverse=is_cooling
+        )
+
+        # ==========================================================
+        # CONEXÃO FINAL
+        # ==========================================================
+
+        ramo_atual = [estado_inicial] + pontos_micro + [estado_final]
+
+        pontos_grafico.append(ramo_atual)
+
+        request.session['pontos_grafico'] = pontos_grafico
+
+        # ==========================================================
+
+        return render(request, 'results_5.html', {
+            'fase': fase, 'temperatura': round(temperatura,2), 'pressao': pressao,
+            'volume_especifico': volume_esp, 'energia_interna': energia_int, 'entalpia_especifica': entalpia_esp,
+            'entropia_especifica': entropia_esp, 'titulo': tit, 'volume_v': volume_v, 'volume_l': volume_l,
+            'VolumeV': VolumeV, 'VolumeL': VolumeL,
+            'fase2': fase2, 'temperatura2': round(temperatura2,2), 'pressao2': pressao2,
+            'volume_especifico2': volume_esp2, 'energia_interna2': energia_int2, 'entalpia_especifica2': entalpia_esp2,
+            'entropia_especifica2': entropia_esp2, 'titulo2': tit2, 'volume_v2': volume_v2, 'volume_l2': volume_l2,
+            'VolumeV2': VolumeV2, 'VolumeL2': VolumeL2,
+            'teste': teste, 'teste3': teste,
+            'TempViz': temp_viz, 'Escolha': escolha, 'Calor': calor, 'Sger': entropia_ger,
+            'pontos_grafico_json': json.dumps(pontos_grafico)
+        })
+
+    except ValidationError as e:
+        return render(request, 'error_type5.html', {'message': str(e)})
+
+###############################################################################
+
+
+
+class BoundariesException(Exception):
+    pass
+
+
+###############################################################################
+
+
+class TituloException(Exception):
+    pass
+
+
+###############################################################################
+
+def error_value_view5(request):
+    # Renderiza a página de erro de valor
+        return render(request, 'error_type5.html')
+
+def error_type_view5(request):
+    # Renderiza a página de erro de tipo
+        return render(request, 'error_type5.html')

@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}TERMO-CP - Resultados{% endblock %}</title>
+
+    <!-- Ícones e Bandeiras -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.0.0/css/flag-icons.min.css" />
+    <link rel="icon" type="image/png" href="favicon.png">
+
+    <!-- Espaço para bibliotecas extras nas páginas filhas (ex: Chart.js, p5.js) -->
+    {% block extra_head %}{% endblock %}
+
+    <style>
+        /* --- Identidade Visual e Variáveis Globais --- */
+        :root {
+            --primary-color: #20376B;
+            --secondary-color: #0D6AB0;
+            --accent-water: #00A8FF;
+            --accent-gas: #FF8C00;
+            --light-bg: #f0f2f5;
+            --card-bg: white;
+            --text-color: #333;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --hover-transition: all 0.3s ease;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0; padding: 0;
+            background-color: var(--light-bg);
+            display: flex; flex-direction: column;
+            height: 100vh; color: var(--text-color);
+            overflow: hidden; /* Mantém o layout fixo e a rolagem apenas no conteúdo */
+        }
+
+        /* ================= HEADER & SELETOR DE IDIOMAS ================= */
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 10px 40px;
+            box-shadow: var(--shadow);
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            z-index: 1000;
+            flex-shrink: 0;
+        }
+
+        header h1 { margin: 0; font-size: 1.5em; margin-right: 30px; flex-shrink: 0; }
+
+        nav { display: flex; align-items: center; }
+
+        nav a {
+            color: white; text-decoration: none;
+            margin-left: 20px; font-size: 0.9em;
+            padding: 5px 10px; border-radius: 4px;
+            transition: var(--hover-transition);
+        }
+        nav a:hover, nav a.active { background-color: var(--secondary-color); }
+
+        /* Estilos do Botão de Idioma */
+        .lang-toggle {
+            position: relative;
+            display: flex;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 30px;
+            padding: 5px;
+            margin-left: auto;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.3);
+        }
+
+        .slider-bg {
+            position: absolute;
+            top: 5px; left: 5px;
+            width: 32px; height: 32px;
+            background-color: white;
+            border-radius: 50%;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+            transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            z-index: 1;
+        }
+
+        .lang-option {
+            position: relative;
+            z-index: 2;
+            width: 32px; height: 32px;
+            display: flex; justify-content: center; align-items: center;
+            cursor: pointer;
+        }
+
+        .flag-circle {
+            width: 20px !important;
+            height: 20px !important;
+            border-radius: 50%;
+            background-size: cover !important;
+            background-position: center !important;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+            transition: transform 0.2s ease;
+        }
+
+        .lang-option:hover .flag-circle { transform: scale(1.15); }
+
+        /* ================= LAYOUT BASE PARA RESULTADOS ================= */
+        .main-content {
+            flex: 1; display: flex; flex-direction: column;
+            padding: 15px; gap: 15px;
+            max-width: 1600px; margin: 0 auto; width: 100%; min-height: 0;
+            overflow-y: auto; /* Permite rolar apenas o conteúdo central */
+        }
+
+        /* Estilos Globais de UI (Botões, Cards, Modais) disponíveis para todas as filhas */
+        .btn {
+            padding: 8px 15px; border-radius: 6px; font-size: 0.9em;
+            cursor: pointer; text-decoration: none; transition: var(--hover-transition);
+            border: none; display: inline-flex; align-items: center; font-weight: bold; justify-content: center;
+        }
+        .btn-secondary { background-color: #6c757d; color: white; }
+        .btn-secondary:hover { background-color: #5a6268; }
+        .btn-info { background-color: #17a2b8; color: white; }
+        .btn-info:hover { background-color: #138496; }
+        .btn-primary { background-color: var(--secondary-color); color: white; }
+        .btn-primary:hover { background-color: var(--primary-color); }
+        .btn-outline { background-color: transparent; border: 2px solid var(--primary-color); color: var(--primary-color); }
+        .btn-outline:hover { background-color: var(--primary-color); color: white; }
+
+        .modal {
+            display: none; position: fixed; z-index: 2000; left: 0; top: 0;
+            width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background-color: #fff; margin: 3% auto; padding: 30px;
+            border-radius: 10px; width: 95%; max-width: 400px; /* Esse é o padrão pequeno */
+            box-shadow: 0 5px 25px rgba(0,0,0,0.3); text-align: center;
+            position: relative; max-height: 90vh; overflow-y: auto;
+        }
+
+        /* --- ADICIONE ESTA PARTE AQUI --- */
+        .modal-content.modal-chart {
+            max-width: 1000px; /* Largura bem maior para os gráficos */
+            width: 90%;
+            padding: 20px 40px; /* Um pouco mais de respiro lateral */
+        }
+        /* -------------------------------- */
+
+        /* --- Estilo dos Botões do Modal --- */
+        .modal-btn {
+            display: block;
+            padding: 12px;
+            margin: 10px 0;
+            background-color: var(--primary-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background 0.3s ease;
+            font-weight: bold;
+        }
+
+        .modal-btn:hover {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+
+        .close-btn {
+            color: #aaa; position: absolute; top: 10px; right: 20px;
+            font-size: 28px; font-weight: bold; cursor: pointer; z-index: 100;
+        }
+        .close-btn:hover { color: #000; }
+
+        /* Responsividade Global */
+        @media (max-width: 768px) {
+            header { flex-direction: column; padding: 10px 20px; position: static; gap: 10px; }
+            header h1 { margin-right: 0; margin-bottom: 5px; }
+            nav { flex-wrap: wrap; justify-content: center; }
+            .lang-toggle { margin-left: 0; }
+            .main-content { padding-top: 20px; padding-bottom: 20px; }
+            body { height: auto; overflow: auto; }
+        }
+    </style>
+
+    <!-- Espaço para CSS específico da página filha -->
+    {% block extra_css %}{% endblock %}
+
+</head>
+<body>
+    <!-- CABEÇALHO PADRÃO -->
+    <header>
+        <h1>TERMO-CP</h1>
+        <nav>
+            <a href="/" class="{% if request.path == '/' %}active{% endif %} lang-text" data-pt-br="Início" data-en="Home" data-es="Inicio">Início</a>
+            <a href="{% url 'cilindro' %}" class="{% if request.path == '/cilindro/' %}active{% endif %} lang-text" data-pt-br="Estados" data-en="States" data-es="Estados">Estados</a>
+            <a href="{% url 'gasideal' %}" class="{% if request.path == '/gasideal/' %}active{% endif %} lang-text" data-pt-br="Processos" data-en="Processes" data-es="Procesos">Processos</a>
+            <a href="{% url 'contato' %}" class="{% if request.path == '/contato/' %}active{% endif %} lang-text" data-pt-br="Contato" data-en="Contact" data-es="Contacto">Contato</a>
+        </nav>
+
+        <div class="lang-toggle">
+            <div class="slider-bg" id="lang-slider"></div>
+            <div class="lang-option" onclick="changeLanguage(0, 'pt-br')" title="Português">
+                <span class="fi fi-br flag-circle"></span>
+            </div>
+            <div class="lang-option" onclick="changeLanguage(1, 'en')" title="English">
+                <span class="fi fi-us flag-circle"></span>
+            </div>
+            <div class="lang-option" onclick="changeLanguage(2, 'es')" title="Español">
+                <span class="fi fi-es flag-circle"></span>
+            </div>
+        </div>
+    </header>
+
+    <!-- CONTEÚDO PRINCIPAL (Injetado pela página filha) -->
+    <main class="main-content">
+        {% block content %}
+        <!-- O conteúdo dos resultados (cards, gráficos, barras inferiores) vai entrar aqui -->
+        {% endblock %}
+    </main>
+
+    <!-- SCRIPT GLOBAL DA TROCA DE IDIOMA -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Busca o idioma salvo ou define português como padrão
+            let savedLang = localStorage.getItem('preferredLang') || 'pt-br';
+
+            let index = 0;
+            if (savedLang === 'en') index = 1;
+            if (savedLang === 'es') index = 2;
+
+            // Aplica o idioma no carregamento da página
+            changeLanguage(index, savedLang);
+        });
+
+        function changeLanguage(index, langCode) {
+            // 1. Move a bolinha animada
+            const slider = document.getElementById('lang-slider');
+            if(slider) {
+                slider.style.transform = `translateX(${index * 100}%)`;
+            }
+
+            // 2. Salva a preferência
+            localStorage.setItem('preferredLang', langCode);
+
+            // 3. Traduz os elementos com a classe 'lang-text'
+            const elements = document.querySelectorAll('.lang-text');
+            elements.forEach(el => {
+                const newText = el.getAttribute('data-' + langCode);
+                if (newText) {
+                    el.textContent = newText;
+                }
+            });
+
+            // 4. Dispara um evento global caso algum script filho precise reagir à mudança de idioma
+            const langChangeEvent = new CustomEvent('languageChanged', { detail: { language: langCode } });
+            document.dispatchEvent(langChangeEvent);
+        }
+    </script>
+
+    <!-- Espaço para JavaScript específico da página filha -->
+    {% block extra_js %}{% endblock %}
+
+</body>
+</html>

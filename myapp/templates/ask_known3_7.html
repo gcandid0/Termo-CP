@@ -1,0 +1,186 @@
+{% extends 'base.html' %}
+
+{% block title %}TERMO-CP{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* --- Identidade Visual da Página de Seleção --- */
+    :root {
+        --accent-water: #00A8FF;
+        --card-bg: white;
+    }
+
+    /* Container rebatizado para evitar conflitos com a classe do base.html */
+    .selection-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 40px 20px;
+        width: 100%;
+        flex: 1;
+        min-height: calc(100vh - 150px);
+    }
+
+    /* Cartão Central (Compacto) */
+    .form-container {
+        max-width: 600px;
+        width: 100%;
+        background: var(--card-bg);
+        border-radius: 10px;
+        box-shadow: var(--shadow);
+        padding: 40px 30px;
+        text-align: center;
+    }
+
+    .form-container h2 {
+        color: var(--primary-color);
+        font-size: 1.5em;
+        margin-bottom: 25px;
+        border-bottom: 2px solid #eee;
+        padding-bottom: 15px;
+    }
+
+    /* --- INPUT DE VALOR --- */
+    #value_input_field {
+        margin-top: 10px;
+        width: 100%;
+        background-color: #f9f9f9;
+        padding: 25px;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+    }
+
+    label {
+        font-weight: bold;
+        color: var(--primary-color);
+        display: block;
+        margin-bottom: 15px;
+        font-size: 1.1em;
+    }
+
+    input[type="number"] {
+        padding: 12px;
+        width: 100%;
+        max-width: 250px;
+        font-size: 1.1em;
+        border: 2px solid #ccc;
+        border-radius: 6px;
+        text-align: center;
+        outline: none;
+        transition: border-color 0.3s ease;
+    }
+
+    input[type="number"]:focus {
+        border-color: var(--secondary-color);
+    }
+
+    /* Botões de Ação */
+    .button-container {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        margin-top: 30px;
+        width: 100%;
+    }
+
+    .btn {
+        padding: 12px 20px;
+        border-radius: 6px;
+        font-size: 1em;
+        cursor: pointer;
+        text-decoration: none;
+        transition: var(--hover-transition);
+        border: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        min-width: 130px;
+        flex: 1;
+    }
+
+    .btn-primary { background-color: var(--primary-color); color: white; }
+    .btn-primary:hover { background-color: var(--secondary-color); transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
+
+    .btn-secondary { background-color: #6c757d; color: white; }
+    .btn-secondary:hover { background-color: #5a6268; transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
+
+    /* Responsividade */
+    @media (max-width: 768px) {
+        .form-container { padding: 30px 20px; }
+        .button-container { flex-direction: column; }
+        .btn { width: 100%; }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="selection-wrapper">
+    <div class="form-container">
+        <i class="fas fa-cube" style="font-size: 2.5em; color: var(--accent-water); margin-bottom: 15px;"></i>
+
+        <h2>
+            <span class="lang-text" data-pt-br="Digite o valor da constante R" data-en="Enter the value of constant R" data-es="Ingrese el valor de la constante R">Digite o valor da constante R</span>
+        </h2>
+
+        <form method="post">
+            {% csrf_token %}
+            <div style="display:none;">{{ form.property_choice }}</div>
+
+            <div id="value_input_field">
+                <label for="R_value_input">
+                    <i class="fas fa-ruler-combined" style="margin-right: 5px;"></i>
+                    <span class="lang-text" data-pt-br="Digite o valor de R (kJ/kg.K):" data-en="Enter the value of R (kJ/kg.K):" data-es="Ingrese el valor de R (kJ/kg.K):">Digite o valor de R (kJ/kg.K):</span>
+                </label>
+                
+                <!-- O Placeholder é manipulado via JS para suportar as linguas dinâmicas -->
+                <input type="number" id="R_value_input" name="R_value_input" step="any" min="-500" max="500000" required placeholder="Digite o valor">
+            </div>
+
+            <div class="button-container">
+                <a href="/" class="btn btn-secondary">
+                    <i class="fas fa-home" style="margin-right: 8px;"></i> 
+                    <span class="lang-text" data-pt-br="Tela Inicial" data-en="Home" data-es="Inicio">Tela Inicial</span>
+                </a>
+
+                <button type="submit" class="btn btn-primary">
+                    <span class="lang-text" data-pt-br="Continuar" data-en="Continue" data-es="Continuar">Continuar</span> 
+                    <i class="fas fa-arrow-right" style="margin-left: 8px;"></i>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Função para traduzir o placeholder do input (já que o atributo data- não afeta o placeholder diretamente pelo nosso script no base.html)
+    function updateInputPlaceholder() {
+        let currentLang = localStorage.getItem('preferredLang') || 'pt-br';
+        let inputEl = document.getElementById('R_value_input');
+        
+        if (inputEl) {
+            if (currentLang === 'en') {
+                inputEl.placeholder = "Enter the value";
+            } else if (currentLang === 'es') {
+                inputEl.placeholder = "Ingrese el valor";
+            } else {
+                inputEl.placeholder = "Digite o valor";
+            }
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+        updateInputPlaceholder();
+
+        // Escuta cliques nos botões de mudança de idioma do Header para atualizar o placeholder na hora
+        document.addEventListener('click', function(e) {
+            if (e.target.closest('.lang-option')) {
+                setTimeout(updateInputPlaceholder, 50); // Delay leve para garantir que o localStorage salvou o novo idioma
+            }
+        });
+    });
+</script>
+{% endblock %}
