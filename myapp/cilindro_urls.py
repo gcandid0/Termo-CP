@@ -1,19 +1,19 @@
 from django.urls import path
 
-from .views import (
+from .views_agua_estado import (
     homepage_view, ask_known1_view, ask_known2_view, process_values_view,
     error_value_view, error_type_view7, cilindro_view, processos_view,
     sobre_view
 )
-from .views3 import (
+from .views_agua_pcte import (
     homepage_view3, ask_known1_view3, ask_known2_view3, process_values_view3,
     error_value_view3, error_type_view3, ask_known3_view3, ask_known4_view3
 )
-from .views4 import (
+from .views_agua_scte import (
     homepage_view4, ask_known3_view4, ask_known1_view4, ask_known2_view4,
     process_values_view4, error_value_view4, error_type_view4
 )
-from .views5 import (
+from .views_agua_vcte import (
     homepage_view5, ask_known1_view5, ask_known2_view5, process_values_view5,
     error_value_view5, error_type_view5, ask_known3_view5, ask_known4_view5
 )

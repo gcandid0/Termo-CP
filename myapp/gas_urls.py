@@ -1,34 +1,34 @@
 from django.urls import path
-from .views6 import (
+from .views_gas_prop import (
     ask_known1_view6, ask_known2_view6, ask_known3_view6,
     process_values_view6, homepage_view, processosgasideal_view
 )
-from .views7 import (
+from .views_gas_cilindro import (
     ask_known1_view7, ask_known2_view7, ask_known3_view7,
     process_values_view7, error_type_view7
 )
-from .views8 import (
+from .views_gas_pcte import (
     ask_known1_view8, ask_known2_view8, ask_known3_view8, ask_known4_view8,
     ask_known5_view8, ask_known6_view8,
     process_values_view8, error_type_view8
 )
-from .views9 import (
+from .views_gas_vcte import (
     ask_known1_view9, ask_known2_view9, ask_known3_view9, ask_known4_view9,
     ask_known5_view9, ask_known6_view9,
     process_values_view9, error_type_view9
 )
-from .views10 import (
+from .views_gas_tcte import (
     ask_known1_view10, ask_known2_view10, ask_known3_view10, ask_known4_view10,
     ask_known5_view10, ask_known6_view10,
     process_values_view10, error_type_view10
 )
-from .views11 import (
+from .views_gas_poli import (
     ask_known1_view11, ask_known2_view11, ask_known3_view11, ask_known4_view11,
     ask_known5_view11, ask_known6_view11, ask_known7_view11,
     process_values_view11, error_type_view11
 )
 
-from .views12 import (
+from .views_gas_scte import (
     ask_known1_view12, ask_known2_view12, ask_known3_view12, ask_known4_view12,
     ask_known5_view12, process_values_view12, error_type_view12
 )

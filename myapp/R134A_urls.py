@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views28 import (
+from .views_r134a_estado import (
     ask_known1_view28,
     ask_known2_view28,
     process_values_view28,
@@ -8,7 +8,7 @@ from .views28 import (
     processos_view28,
 )
 
-from .views29 import (
+from .views_r134a_prop import (
     ask_known1_view29,
     ask_known2_view29,
     process_values_view29,
@@ -16,7 +16,7 @@ from .views29 import (
     error_type_view7
 )
 
-from .views30 import (
+from .views_r134a_pcte import (
     ask_known1_view30,
     ask_known2_view30,
     ask_known3_view30,
@@ -25,7 +25,7 @@ from .views30 import (
     error_value_view30,
 )
 
-from .views31 import (
+from .views_r134a_scte import (
     ask_known1_view31,
     ask_known2_view31,
     ask_known3_view31,
@@ -33,7 +33,7 @@ from .views31 import (
     error_value_view31,
 )
 
-from .views32 import (
+from .views_r134a_vcte import (
     ask_known1_view32,
     ask_known2_view32,
     ask_known3_view32,

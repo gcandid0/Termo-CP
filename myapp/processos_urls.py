@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views6 import (
+from .views_gas_prop import (
     gasideal_view)
 
 urlpatterns = [

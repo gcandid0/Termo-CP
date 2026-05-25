@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views13 import (
+from .views_amonia_estado import (
     ask_known1_view13,
     ask_known2_view13,
     process_values_view13,
@@ -8,7 +8,7 @@ from .views13 import (
     processos_view13,
 )
 
-from .views14 import (
+from .views_amonia_prop import (
     ask_known1_view14,
     ask_known2_view14,
     process_values_view14,
@@ -16,7 +16,7 @@ from .views14 import (
     error_type_view7
 )
 
-from .views15 import (
+from .views_amonia_pcte import (
     ask_known1_view15,
     ask_known2_view15,
     ask_known3_view15,
@@ -25,7 +25,7 @@ from .views15 import (
     error_value_view15,
 )
 
-from .views16 import (
+from .views_amonia_scte import (
     ask_known1_view16,
     ask_known2_view16,
     ask_known3_view16,
@@ -33,7 +33,7 @@ from .views16 import (
     error_value_view16,
 )
 
-from .views17 import (
+from .views_amonia_vcte import (
     ask_known1_view17,
     ask_known2_view17,
     ask_known3_view17,

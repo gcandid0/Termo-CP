@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views33 import (
+from .views_nitrogenio_estado import (
     ask_known1_view33,
     ask_known2_view33,
     process_values_view33,
@@ -8,7 +8,7 @@ from .views33 import (
     processos_view33,
 )
 
-from .views34 import (
+from .views_nitrogenio_prop import (
     ask_known1_view34,
     ask_known2_view34,
     process_values_view34,
@@ -16,7 +16,7 @@ from .views34 import (
     error_type_view7
 )
 
-from .views35 import (
+from .views_nitrogenio_pcte import (
     ask_known1_view35,
     ask_known2_view35,
     ask_known3_view35,
@@ -25,7 +25,7 @@ from .views35 import (
     error_value_view35,
 )
 
-from .views36 import (
+from .views_nitrogenio_scte import (
     ask_known1_view36,
     ask_known2_view36,
     ask_known3_view36,
@@ -33,7 +33,7 @@ from .views36 import (
     error_value_view36,
 )
 
-from .views37 import (
+from .views_nitrogenio_vcte import (
     ask_known1_view37,
     ask_known2_view37,
     ask_known3_view37,
