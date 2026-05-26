@@ -86,7 +86,7 @@
         width: 100%;
     }
 
-    /* --- Estilos da Legenda do Cilindro --- */
+    /* --- Estilos da Legenda do estado --- */
     .legend-container {
         position: absolute;
         bottom: 20px;
@@ -108,7 +108,7 @@
     .legend-item { display: flex; align-items: center; gap: 10px; font-weight: bold; }
     .legend-color { width: 20px; height: 14px; display: inline-block; border-radius: 2px; }
 
-    .legend-cilindro { background-color: transparent; border: 1px solid #888; }
+    .legend-estado { background-color: transparent; border: 1px solid #888; }
     .legend-pistao { background-color: #a2a2a2; }
     
     /* Cores restritas à legenda desta página (Verde) */
@@ -234,8 +234,8 @@
 
         <div class="legend-container">
             <div class="legend-item">
-                <span class="legend-color legend-cilindro"></span> 
-                <span class="lang-text" data-pt-br="Cilindro" data-en="Cylinder" data-es="Cilindro">Cilindro</span>
+                <span class="legend-color legend-estado"></span> 
+                <span class="lang-text" data-pt-br="estado" data-en="Cylinder" data-es="estado">estado</span>
             </div>
             <div class="legend-item">
                 <span class="legend-color legend-pistao"></span> 
@@ -287,7 +287,7 @@
         background(0);
         lights();
         
-        // Ajusta a translação pra manter o cilindro centralizado dinamicamente
+        // Ajusta a translação pra manter o estado centralizado dinamicamente
         translate(0, height * 0.15); 
 
         ha4 = lerp(ha4, targetHa4, 0.1);
@@ -304,7 +304,7 @@
         fill(162, 162, 162);
         drawCap(r3, hemboloB); drawCap(r3, hemboloC); drawSide(r3, hemboloC, hemboloB);
 
-        // Desenho do Cilindro Externo (Translúcido)
+        // Desenho do estado Externo (Translúcido)
         fill(255, 255, 255, 10);
         drawCap(r2, 100); drawSide(r2, 100, -h2);
 
