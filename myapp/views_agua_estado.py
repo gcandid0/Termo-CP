@@ -6,8 +6,8 @@ from . import tabelas_termoprop as tbs
 def homepage_view(request):
     return render(request, 'Inicio.html')
 
-def cilindro_view(request):
-    return render(request, 'cilindro.html')
+def estado_view(request):
+    return render(request, 'estado.html')
 
 def sobre_view(request):
     return render(request, 'sobre.html')
@@ -980,7 +980,7 @@ def process_values_view(request):
         })
 
     except ValidationError:
-        return render(request, 'error_type7.html')
+        return render(request, 'erro_generico.html')
     except Exception:
         # Captura qualquer outro erro inesperado
         return redirect('error_type7')
@@ -1005,10 +1005,10 @@ class TituloException(Exception):
 
 def error_value_view(request):
     # Renderiza a página de erro de valor
-        # ALTERADO AQUI PARA error_type7.html
-        return render(request, 'error_type7.html')
+        # ALTERADO AQUI PARA erro_generico.html
+        return render(request, 'erro_generico.html')
 
 def error_type_view7(request):
     # Renderiza a página de erro de tipo
-    # RENOMEADO E ALTERADO AQUI PARA error_type7.html
-        return render(request, 'error_type7.html')
+    # RENOMEADO E ALTERADO AQUI PARA erro_generico.html
+        return render(request, 'erro_generico.html')

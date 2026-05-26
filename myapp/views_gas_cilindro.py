@@ -121,8 +121,8 @@ def process_values_view7(request):
         })
 
     except ValidationError as e:
-        return render(request, 'error_type.html', {'message': str(e)})
+        return render(request, 'erro_generico.html', {'message': str(e)})
 
 def error_type_view7(request):
         # Renderiza a página de erro de tipo
-        return render(request, 'error_type7.html')
+        return render(request, 'erro_generico.html')

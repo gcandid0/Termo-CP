@@ -64,8 +64,45 @@ def ask_known2_view12(request):
     if request.method == 'POST':
         form = ConstantesPoli12_2(request.POST, excluded_properties=excluded_properties)
         if form.is_valid():
-            request.session['const_prop_2'] = str(form.cleaned_data['property_choice'])
-            request.session['const_val_2'] = float(form.cleaned_data['value_input'])
+            second_prop = int(form.cleaned_data['property_choice'])
+            second_val = float(form.cleaned_data['value_input'])
+
+            # Validação de Constantes
+            const1 = int(request.session.get('const_prop_1'))
+            val1 = float(request.session.get('const_val_1'))
+            const_values = {const1: val1, second_prop: second_val}
+
+            Cv0 = const_values.get(11)
+            Cp0 = const_values.get(12)
+            R = const_values.get(13)
+            K = const_values.get(14)
+
+            # Lógica de determinação cruzada
+            if Cp0 is not None and Cv0 is not None:
+                R = Cp0 - Cv0
+                K = Cp0 / Cv0 if Cv0 else None
+            elif Cp0 is not None and R is not None:
+                Cv0 = Cp0 - R
+                K = Cp0 / Cv0 if Cv0 else None
+            elif Cv0 is not None and R is not None:
+                Cp0 = Cv0 + R
+                K = Cp0 / Cv0 if Cv0 else None
+            elif R is not None and K is not None:
+                if K != 1:
+                    Cv0 = R / (K - 1)
+                    Cp0 = K * Cv0
+
+            error_messages = []
+            if R is not None and R <= 0: error_messages.append("R deve ser positivo.")
+            if K is not None and K <= 1: error_messages.append("K deve ser maior que 1.")
+
+            if error_messages:
+                context = {"Cv0": Cv0, "Cp0": Cp0, "R": R, "K": K, "error_messages": error_messages}
+                return render(request, "error_constants.html", context)
+
+            # Salvando as escolhas validadas na sessão
+            request.session['const_prop_2'] = str(second_prop)
+            request.session['const_val_2'] = second_val
             return redirect('ask_known3_12')
     else:
         form = ConstantesPoli12_2(excluded_properties=excluded_properties)
@@ -359,4 +396,4 @@ def process_values_view12(request):
 
 
 def error_type_view12(request):
-    return render(request, 'error_type7.html')
+    return render(request, 'erro_generico.html')

@@ -5,8 +5,8 @@ from django.core.exceptions import ValidationError
 def homepage_view(request):
     return render(request, 'Inicio.html')
 
-def gasideal_view(request):
-    return render(request, 'gasideal.html')
+def processo_view(request):
+    return render(request, 'processo.html')
 
 def processosgasideal_view(request):
     return render(request, 'processos2.html')
@@ -128,4 +128,4 @@ def process_values_view6(request):
         })
 
     except ValidationError as e:
-        return render(request, 'error_type.html', {'message': str(e)})
+        return render(request, 'erro_generico.html', {'message': str(e)})

@@ -3,9 +3,9 @@ from django.urls import include, path
 from django.views.generic import RedirectView
 
 urlpatterns = [
-    path('', include('myapp.cilindro_urls')),  # Inclui as URLs do aplicativo myapp
+    path('', include('myapp.agua_urls')),  # Inclui as URLs do aplicativo myapp
     path('admin/', admin.site.urls),
-    path('agua/', include('myapp.cilindro_urls')),  # Inclui as URLs específicas para "cilindro/"
+    path('agua/', include('myapp.agua_urls')),  # Inclui as URLs específicas para "agua/"
     path('gas/', include('myapp.gas_urls')),
     path('amonia/', include('myapp.amonia_urls')),
     path('co2/', include('myapp.co2_urls')),
@@ -20,5 +20,5 @@ urlpatterns = [
 
 # Redirecionamentos para as páginas iniciais
 urlpatterns += [
-    path('', RedirectView.as_view(url='/cilindro/')),  # Redireciona a página inicial para "cilindro/"
+    path('', RedirectView.as_view(url='/agua/')),  # Redireciona a página inicial para "agua/"
 ]

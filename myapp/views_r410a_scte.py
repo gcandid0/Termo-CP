@@ -1104,7 +1104,7 @@ def process_values_view26(request):
         })
 
     except (ValidationError, TypeError, BoundariesException, TituloException) as e:
-        return render(request, 'error_type7.html', {'message': str(e)})
+        return render(request, 'erro_generico.html', {'message': str(e)})
     except Exception:
         return redirect('error_type_26')
 
@@ -1122,8 +1122,8 @@ class TituloException(Exception):
 
 def error_value_view26(request):
     # Renderiza a página de erro de valor
-    return render(request, 'error_type7.html')
+    return render(request, 'erro_generico.html')
 
 def error_type_view26(request):
     # Renderiza a página de erro de tipo
-    return render(request, 'error_type7.html')
+    return render(request, 'erro_generico.html')

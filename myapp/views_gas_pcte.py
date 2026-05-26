@@ -102,7 +102,7 @@ def ask_known2_view8(request):
 
             if error_messages:
                 context = {"Cv0": Cv0, "Cp0": Cp0, "R": R, "K": K, "error_messages": error_messages}
-                return render(request, "error_constants8.html", context)
+                return render(request, "error_constants.html", context)
 
             request.session['second_property_choice'] = second_property_choice
             request.session['second_value_input'] = second_value_input
@@ -375,4 +375,4 @@ def process_values_view8(request):
         return redirect('error_type8')
 
 def error_type_view8(request):
-    return render(request, 'error_type7.html')
+    return render(request, 'erro_generico.html')

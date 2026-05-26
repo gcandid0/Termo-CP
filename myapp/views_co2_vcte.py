@@ -1111,8 +1111,8 @@ class TituloException(Exception):
 
 def error_value_view22(request):
     # Renderiza a página de erro de valor
-    return render(request, 'error_type7.html')
+    return render(request, 'erro_generico.html')
 
 def error_type_view22(request):
     # Renderiza a página de erro de tipo
-    return render(request, 'error_type7.html')
+    return render(request, 'erro_generico.html')

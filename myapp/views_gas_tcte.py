@@ -70,8 +70,45 @@ def ask_known2_view10(request):
     if request.method == 'POST':
         form = ConstantesTCte10_2(request.POST, excluded_properties=excluded)
         if form.is_valid():
-            request.session['second_property_choice'] = int(form.cleaned_data['property_choice'])
-            request.session['second_value_input'] = float(form.cleaned_data['value_input'])
+            second_property_choice = int(form.cleaned_data['property_choice'])
+            second_value_input = float(form.cleaned_data['value_input'])
+
+            # Validação de Constantes
+            const1 = int(request.session.get('property_choice'))
+            val1 = float(request.session.get('value_input'))
+            const_values = {const1: val1, second_property_choice: second_value_input}
+
+            Cv0 = const_values.get(11)
+            Cp0 = const_values.get(12)
+            R = const_values.get(13)
+            K = const_values.get(14)
+
+            # Lógica de determinação cruzada
+            if Cp0 is not None and Cv0 is not None:
+                R = Cp0 - Cv0
+                K = Cp0 / Cv0 if Cv0 else None
+            elif Cp0 is not None and R is not None:
+                Cv0 = Cp0 - R
+                K = Cp0 / Cv0 if Cv0 else None
+            elif Cv0 is not None and R is not None:
+                Cp0 = Cv0 + R
+                K = Cp0 / Cv0 if Cv0 else None
+            elif R is not None and K is not None:
+                if K != 1:
+                    Cv0 = R / (K - 1)
+                    Cp0 = K * Cv0
+
+            error_messages = []
+            if R is not None and R <= 0: error_messages.append("R deve ser positivo.")
+            if K is not None and K <= 1: error_messages.append("K deve ser maior que 1.")
+
+            if error_messages:
+                context = {"Cv0": Cv0, "Cp0": Cp0, "R": R, "K": K, "error_messages": error_messages}
+                return render(request, "error_constants.html", context)
+
+            # Salvando as escolhas validadas na sessão
+            request.session['second_property_choice'] = second_property_choice
+            request.session['second_value_input'] = second_value_input
             return redirect('ask_known3_10')
     else:
         form = ConstantesTCte10_2(excluded_properties=excluded)
@@ -343,4 +380,4 @@ def process_values_view10(request):
 # PÁGINA DE ERRO
 ###############################################################################
 def error_type_view10(request):
-    return render(request, 'error_type7.html')
+    return render(request, 'erro_generico.html')

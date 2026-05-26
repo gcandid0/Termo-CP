@@ -194,8 +194,8 @@
         <h1>TERMO-CP</h1>
         <nav>
             <a href="/" class="{% if request.path == '/' %}active{% endif %} lang-text" data-pt-br="Início" data-en="Home" data-es="Inicio">Início</a>
-            <a href="{% url 'cilindro' %}" class="{% if request.path == '/cilindro/' %}active{% endif %} lang-text" data-pt-br="Estados" data-en="States" data-es="Estados">Estados</a>
-            <a href="{% url 'gasideal' %}" class="{% if request.path == '/gasideal/' %}active{% endif %} lang-text" data-pt-br="Processos" data-en="Processes" data-es="Procesos">Processos</a>
+            <a href="{% url 'estado' %}" class="{% if request.path == '/estado/' %}active{% endif %} lang-text" data-pt-br="Estados" data-en="States" data-es="Estados">Estados</a>
+            <a href="{% url 'processo' %}" class="{% if request.path == '/processo/' %}active{% endif %} lang-text" data-pt-br="Processos" data-en="Processes" data-es="Procesos">Processos</a>
             <a href="{% url 'contato' %}" class="{% if request.path == '/contato/' %}active{% endif %} lang-text" data-pt-br="Contato" data-en="Contact" data-es="Contacto">Contato</a>
         </nav>
 

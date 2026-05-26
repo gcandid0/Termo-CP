@@ -293,13 +293,13 @@
             // Lógica de Label e Limites
             if (selectedValue == '0') {
                 label.innerHTML = '<i class="fas fa-temperature-high"></i> Digite o valor da Temperatura (°C)';
-                numberInput.setAttribute('min', '-50');
-                numberInput.setAttribute('max', '1300');
+                numberInput.setAttribute('min', '-70');
+                numberInput.setAttribute('max', '180');
                 numberInput.placeholder = "Digite o valor";
             } else if (selectedValue == '1') {
                 label.innerHTML = '<i class="fas fa-tachometer-alt"></i> Digite o valor da Pressão (kPa)';
-                numberInput.setAttribute('min', '0.6113');
-                numberInput.setAttribute('max', '50000');
+                numberInput.setAttribute('min', '8.3');
+                numberInput.setAttribute('max', '10000');
                 numberInput.placeholder = "Digite o valor";
             }
 

@@ -1,0 +1,206 @@
+{% extends 'base.html' %}
+
+{% block title %}TERMO-CP{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Estilos específicos para a página de erro, utilizando as variáveis do base.html */
+    .error-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        padding: 40px 20px;
+    }
+
+    .error-container {
+        max-width: 600px;
+        width: 100%;
+        background: white;
+        border-radius: 10px;
+        box-shadow: var(--shadow, 0 4px 12px rgba(0, 0, 0, 0.1));
+        padding: 40px 30px;
+        text-align: center;
+        border-top: 5px solid #dc3545;
+    }
+
+    .error-container h2 {
+        color: var(--primary-color);
+        margin-top: 0;
+        margin-bottom: 20px;
+        font-size: 1.8em;
+    }
+
+    .error-message {
+        color: #555;
+        font-size: 1.1em;
+        margin-bottom: 25px;
+        line-height: 1.5;
+        text-align: left;
+    }
+
+    .error-message ul {
+        margin-top: 10px;
+        padding-left: 20px;
+        color: #666;
+    }
+
+    .error-message li {
+        margin-bottom: 8px;
+    }
+
+
+    .values-box h3 {
+        margin: 0 0 10px 0;
+        font-size: 1em;
+        color: #dc3545;
+        border-bottom: 1px solid #ffc9c9;
+        padding-bottom: 5px;
+    }
+
+    .values-box ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+
+    .values-box li {
+        font-size: 0.95em;
+        color: #333;
+    }
+
+    /* Botões */
+    .buttons {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+    }
+
+    .btn {
+        padding: 12px 25px;
+        border-radius: 6px;
+        font-size: 1em;
+        text-decoration: none;
+        font-weight: bold;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        transition: var(--hover-transition);
+        flex: 1;
+        max-width: 200px;
+        border: none;
+        cursor: pointer;
+    }
+
+    .btn-retry {
+        background-color: var(--secondary-color);
+        color: white;
+    }
+    
+    .btn-retry:hover {
+        background-color: var(--primary-color);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+
+    .btn-home {
+        background-color: #6c757d;
+        color: white;
+    }
+    
+    .btn-home:hover {
+        background-color: #5a6268;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+
+    /* Responsividade */
+    @media (max-width: 768px) {
+        .buttons { flex-direction: column; align-items: center; }
+        .btn { width: 100%; max-width: none; }
+        .values-box ul { grid-template-columns: 1fr; }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="error-wrapper">
+    <div class="error-container">
+        <i class="fas fa-exclamation-triangle" style="font-size: 3.2em; color: #dc3545; margin-bottom: 15px;"></i>
+
+        <h2>
+            <span class="lang-text" 
+                  data-pt-br="Erro nas Constantes" 
+                  data-en="Constants Error" 
+                  data-es="Error en las Constantes">
+                Erro nas Constantes
+            </span>
+        </h2>
+
+        <div class="error-message">
+            <p class="lang-text" 
+               data-pt-br="Os valores informados não são fisicamente coerentes para o cálculo do gás ideal. Verifique as seguintes condições:" 
+               data-en="The provided values are not physically coherent for the ideal gas calculation. Check the following conditions:" 
+               data-es="Los valores proporcionados no son físicamente coherentes para el cálculo del gas ideal. Verifique las siguientes condiciones:">
+                Os valores informados não são fisicamente coerentes para o cálculo do gás ideal. Verifique as seguintes condições:
+            </p>
+            <ul>
+                <li>
+                    <strong>Cp<sub>0</sub> > Cv<sub>0</sub></strong>: 
+                    <span class="lang-text" 
+                          data-pt-br="O calor específico à pressão constante deve ser superior ao calor específico a volume constante." 
+                          data-en="The specific heat at constant pressure must be greater than the specific heat at constant volume." 
+                          data-es="El calor específico a presión constante debe ser mayor que el calor específico a volumen constante.">
+                        O calor específico à pressão constante deve ser superior ao calor específico a volume constante.
+                    </span>
+                </li>
+                <li>
+                    <strong>R > 0</strong>: 
+                    <span class="lang-text" 
+                          data-pt-br="A constante particular do gás deve ser um valor positivo." 
+                          data-en="The specific gas constant must be a positive value." 
+                          data-es="La constante particular del gas debe ser un valor positivo.">
+                        A constante particular do gás deve ser um valor positivo.
+                    </span>
+                </li>
+                <li>
+                    <strong>k > 1</strong>: 
+                    <span class="lang-text" 
+                          data-pt-br="A razão de calores específicos (k = Cp/Cv) deve ser maior que a unidade." 
+                          data-en="The specific heat ratio (k = Cp/Cv) must be greater than one." 
+                          data-es="La relación de calores específicos (k = Cp/Cv) debe ser mayor que la unidad.">
+                        A razão de calores específicos (k = Cp/Cv) deve ser maior que a unidade.
+                    </span>
+                </li>
+            </ul>
+        </div>
+
+    
+
+        <div class="buttons">
+            <a href="/" class="btn btn-home">
+                <i class="fas fa-home" style="margin-right: 8px;"></i> 
+                <span class="lang-text" 
+                      data-pt-br="Início" 
+                      data-en="Home" 
+                      data-es="Inicio">
+                    Início
+                </span>
+            </a>
+            
+            <button type="button" class="btn btn-retry" onclick="history.back()">
+                <i class="fas fa-redo" style="margin-right: 8px;"></i> 
+                <span class="lang-text" 
+                      data-pt-br="Tentar Novamente" 
+                      data-en="Try Again" 
+                      data-es="Intentar de Nuevo">
+                    Tentar Novamente
+                </span>
+            </button>
+        </div>
+    </div>
+</div>
+{% endblock %}

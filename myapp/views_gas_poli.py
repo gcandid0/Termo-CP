@@ -82,7 +82,7 @@ def ask_known2_view11(request):
             if Cp0 is not None and Cv0 is not None and Cp0 <= Cv0: error_messages.append("Cp deve ser maior que Cv.")
             if error_messages:
                 context = {"mensagem_erro": "Erro nas Constantes: " + ", ".join(error_messages)}
-                return render(request, "error_constants10.html", context)
+                return render(request, "error_constants.html", context)
 
             request.session['const_prop_2'] = str(second_property_choice)
             request.session['const_val_2'] = float(second_value_input)
@@ -458,4 +458,4 @@ def process_values_view11(request):
         return redirect('error_type11')
 
 def error_type_view11(request):
-    return render(request, 'error_type7.html')
+    return render(request, 'erro_generico.html')

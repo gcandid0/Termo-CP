@@ -1,8 +1,8 @@
 from django.urls import path
 
 from .views_agua_estado import (
-    cilindro_view)
+    estado_view)
 
 urlpatterns = [
-        path('estados/', cilindro_view, name='cilindro'),
+        path('estados/', estado_view, name='estado'),
 ]

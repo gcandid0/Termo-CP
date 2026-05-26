@@ -291,13 +291,20 @@ Created on Tue Apr 14 18:20:09 2026
 
             // Mapeamento expandido para todas as propriedades possíveis
             var info = {
-                '0': { nome: 'Temperatura', unidade: '°C', artigo: 'da', icon: 'fas fa-temperature-high', min: -500, max: 10000 },
-                '1': { nome: 'Pressão', unidade: 'kPa', artigo: 'da', icon: 'fas fa-tachometer-alt', min: 0, max: 50000 },
-                '2': { nome: 'Volume Específico', unidade: 'm³/kg', artigo: 'do', icon: 'fas fa-cube', min: 0, max: 10000 },
-                '3': { nome: 'Energia Interna', unidade: 'kJ/kg', artigo: 'da', icon: 'fas fa-bolt', min: 0, max: 10000 },
-                '4': { nome: 'Entalpia', unidade: 'kJ/kg', artigo: 'da', icon: 'fas fa-fire', min: 0, max: 10000 },
-                '5': { nome: 'Entropia', unidade: 'kJ/kg·K', artigo: 'da', icon: 'fas fa-random', min: 0, max: 100 },
-                '6': { nome: 'Título', unidade: '%', artigo: 'do', icon: 'fas fa-percentage', min: 0, max: 100 }
+                '0': { icon: 'fas fa-temperature-high', min: -64.34, max: 360.0, 
+                    pt: 'Digite o valor da Temperatura (°C)', en: 'Enter the Temperature value (°C)', es: 'Introduzca el valor de la Temperatura (°C)'},
+                '1': { icon: 'fas fa-tachometer-alt', min: 50, max: 4901.2, 
+                    pt: 'Digite o valor da Pressão (kPa)', en: 'Enter the Pressure value (kPa)', es: 'Introduzca el valor de la Presión (kPa)'},
+                '2': { icon: 'fas fa-cube', min: 0.000727, max: 1.17462, 
+                    pt: 'Digite o valor do Volume Específico (m³/kg)', en: 'Enter the Specific Volume value (m³/kg)', es: 'Introduzca el valor del Volumen Específico (m³/kg)'},
+                '3': { icon: 'fas fa-bolt', min: -27.5, max: 589.07, 
+                    pt: 'Digite o valor da Energia Interna (kJ/kg)', en: 'Enter the Internal Energy value (kJ/kg)', es: 'Introduzca el valor de la Energía Interna (kJ/kg)'},
+                '4': { icon: 'fas fa-fire', min: -27.45, max: 660.45, 
+                    pt: 'Digite o valor da Entalpia (kJ/kg)', en: 'Enter the Enthalpy value (kJ/kg)', es: 'Introduzca el valor de la Entalpía (kJ/kg)'},
+                '5': { icon: 'fas fa-random', min: -0.1227, max: 1.9969, 
+                    pt: 'Digite o valor da Entropia (kJ/kg·K)', en: 'Enter the Entropy value (kJ/kg·K)', es: 'Introduzca el valor de la Entropía (kJ/kg·K)'},
+                '6': { icon: 'fas fa-percentage', min: 0, max: 100, 
+                    pt: 'Digite o valor do Título (%)', en: 'Enter the Quality value (%)', es: 'Introduzca el valor del Título (%)'}
             };
 
             var prop = info[selectedValue];

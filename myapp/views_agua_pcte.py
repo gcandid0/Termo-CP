@@ -1271,7 +1271,7 @@ def process_values_view3(request):
         })
 
     except ValidationError as e:
-        return render(request, 'error_type3.html', {'message': str(e)})
+        return render(request, 'erro_generico.html', {'message': str(e)})
 
 
 
@@ -1291,8 +1291,8 @@ class TituloException(Exception):
 
 def error_value_view3(request):
     # Renderiza a página de erro de valor
-        return render(request, 'error_type3.html')
+        return render(request, 'erro_generico.html')
 
 def error_type_view3(request):
     # Renderiza a página de erro de tipo
-        return render(request, 'error_type3.html')
+        return render(request, 'erro_generico.html')

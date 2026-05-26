@@ -292,15 +292,28 @@
 
             // Lógica de Label e Limites
             if (selectedValue == '0') {
-                label.innerHTML = '<i class="fas fa-temperature-high"></i> Digite o valor da Temperatura (°C)';
-                numberInput.setAttribute('min', '-50');
-                numberInput.setAttribute('max', '1300');
-                numberInput.placeholder = "Digite o valor";
+                label.innerHTML = '<i class="fas fa-temperature-high"></i> ' +
+                                '<span class="lang-text" ' +
+                                'data-pt-br="Digite o valor da Temperatura (°C)" ' +
+                                'data-en="Enter the Temperature value (°C)" ' +
+                                'data-es="Introduzca el valor de la Temperatura (°C)">' +
+                                'Digite o valor da Temperatura (°C)</span>';
+                
+                numberInput.setAttribute('min', '-64.34');
+                numberInput.setAttribute('max', '360');
+                numberInput.placeholder = phStr[currentLang];
+
             } else if (selectedValue == '1') {
-                label.innerHTML = '<i class="fas fa-tachometer-alt"></i> Digite o valor da Pressão (kPa)';
-                numberInput.setAttribute('min', '0.6113');
-                numberInput.setAttribute('max', '50000');
-                numberInput.placeholder = "Digite o valor";
+                label.innerHTML = '<i class="fas fa-tachometer-alt"></i> ' +
+                                '<span class="lang-text" ' +
+                                'data-pt-br="Digite o valor da Pressão (kPa)" ' +
+                                'data-en="Enter the Pressure value (kPa)" ' +
+                                'data-es="Introduzca el valor de la Presión (kPa)">' +
+                                'Digite o valor da Pressão (kPa)</span>';
+                
+                numberInput.setAttribute('min', '50');
+                numberInput.setAttribute('max', '4901.2');
+                numberInput.placeholder = phStr[currentLang];
             }
 
             inputField.style.display = 'block';

@@ -1,0 +1,153 @@
+{% extends 'base.html' %}
+
+{% block title %}TERMO-CP - Erro{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Estilos específicos para a página de erro, mantendo as variáveis do base.html */
+    .error-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        padding: 40px 20px;
+    }
+
+    .error-container {
+        max-width: 550px;
+        width: 100%;
+        background: white;
+        border-radius: 10px;
+        box-shadow: var(--shadow, 0 4px 12px rgba(0, 0, 0, 0.1));
+        padding: 40px 30px;
+        text-align: center;
+        border-top: 5px solid #dc3545; /* Linha de erro vermelha */
+    }
+
+    .error-container h2 {
+        color: var(--primary-color);
+        font-size: 1.6em;
+        margin-bottom: 15px;
+        margin-top: 0;
+    }
+
+    .message-box {
+        margin-bottom: 30px;
+        color: #555;
+        font-size: 1.1em;
+        line-height: 1.5;
+    }
+
+    /* Botões de Ação */
+    .button-container {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        width: 100%;
+    }
+
+    .btn {
+        padding: 12px 25px;
+        border-radius: 6px;
+        font-size: 1em;
+        cursor: pointer;
+        text-decoration: none;
+        transition: var(--hover-transition);
+        border: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        min-width: 160px;
+    }
+
+    /* Botão de Voltar (Azul) */
+    .btn-retry {
+        background-color: var(--secondary-color);
+        color: white;
+    }
+    
+    .btn-retry:hover {
+        background-color: var(--primary-color);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+
+    /* Botão Home (Cinza) */
+    .btn-home {
+        background-color: #6c757d;
+        color: white;
+    }
+    
+    .btn-home:hover {
+        background-color: #5a6268;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+
+    /* Responsividade específica do erro */
+    @media (max-width: 768px) {
+        .button-container { flex-direction: column; }
+        .btn { width: 100%; }
+        .error-wrapper { padding: 20px 10px; }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="error-wrapper">
+    <div class="error-container">
+        <i class="fas fa-exclamation-circle" style="font-size: 3.5em; color: #dc3545; margin-bottom: 20px;"></i>
+
+        <h2>
+            <span class="lang-text" 
+                  data-pt-br="Ops! Algo deu errado." 
+                  data-en="Oops! Something went wrong." 
+                  data-es="¡Ups! Algo salió mal.">
+                Ops! Algo deu errado.
+            </span>
+        </h2>
+
+        <div class="message-box">
+            {% if error_message %}
+                <p>{{ error_message }}</p>
+            {% else %}
+                <p class="lang-text" 
+                   data-pt-br="Não foi possível processar sua solicitação com os dados informados." 
+                   data-en="We couldn't process your request with the provided data." 
+                   data-es="No pudimos procesar su solicitud con los datos proporcionados.">
+                    Não foi possível processar sua solicitação com os dados informados.
+                </p>
+                <p style="font-size: 0.9em; margin-top: 10px;" class="lang-text" 
+                   data-pt-br="Verifique se os valores estão dentro dos limites aceitáveis e tente novamente." 
+                   data-en="Please check if the values are within acceptable limits and try again." 
+                   data-es="Verifique si los valores están dentro de los límites aceptables e inténtelo de nuevo.">
+                    Verifique se os valores estão dentro dos limites aceitáveis e tente novamente.
+                </p>
+            {% endif %}
+        </div>
+
+        <div class="button-container">
+            <button type="button" class="btn btn-retry" onclick="history.back()">
+                <i class="fas fa-redo" style="margin-right: 8px;"></i> 
+                <span class="lang-text" 
+                      data-pt-br="Tentar Novamente" 
+                      data-en="Try Again" 
+                      data-es="Intentar de Nuevo">
+                    Tentar Novamente
+                </span>
+            </button>
+
+            <a href="/" class="btn btn-home">
+                <i class="fas fa-home" style="margin-right: 8px;"></i> 
+                <span class="lang-text" 
+                      data-pt-br="Início" 
+                      data-en="Home" 
+                      data-es="Inicio">
+                    Início
+                </span>
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
