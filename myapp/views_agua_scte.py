@@ -1170,98 +1170,146 @@ def process_values_view4(request):
             teste3 = estados.lista_estados
 
         # ==========================================================
-        # GERAÇÃO DE MICROPROCESSOS PARA O DIAGRAMA (VIEW 4)
+        # GERAÇÃO DE MICROPROCESSOS: MATEMÁTICA PARAMÉTRICA (SOLUÇÃO DEFINITIVA)
         # ==========================================================
+        
         pontos_grafico = request.session.get('pontos_grafico', [])
 
-        if third_property_choice == 7:
-            # O código atual trata Trabalho como Isobárico (P=const, varia h)
-            prop_var_idx = 4
-            val_inicial = entalpia_esp
-            val_final = energia_int3
-            prop_fixa_idx = 1
-            val_fixo = pressao
-        else:
-            # Processo Isentrópico genuíno (s=const, varia P)
-            prop_fixa_idx = 5
-            val_fixo = entropia_esp
-            prop_var_idx = 1
-            val_inicial = pressao
-            val_final = pressao2
+        estado_inicial = {
+            'T': round(temperatura, 4), 'P': round(pressao, 4), 'v': round(volume_esp, 8),
+            's': round(entropia_esp, 4), 'h': round(entalpia_esp, 4), 'fase': fase
+        }
 
-        num_passos = 150
-        valores_iteracao = []
+        estado_final = {
+            'T': round(temperatura2, 4), 'P': round(pressao2, 4), 'v': round(volume_esp2, 8),
+            's': round(entropia_esp2, 4), 'h': round(entalpia_esp2, 4), 'fase': fase2
+        }
 
-        if prop_var_idx in [1, 2] and val_inicial > 0 and val_final > 0:
-            # Escala Log para Pressão e Volume
-            import math
-            log_ini = math.log10(val_inicial)
-            log_fin = math.log10(val_final)
-            passo_log = (log_fin - log_ini) / num_passos
-            valores_iteracao = [10 ** (log_ini + (i * passo_log)) for i in range(1, num_passos)]
-        else:
-            passo = (val_final - val_inicial) / num_passos if val_final != val_inicial else 0
-            valores_iteracao = [val_inicial + (i * passo) for i in range(1, num_passos)]
+        # Identifica o tipo de processo pela escolha da view
+        is_isobaric = (third_property_choice == 7)
+        cruzou_domo = (fase != fase2)
+        pt_fronteira = None
 
-        # Removemos duplicatas e garantimos o sentido vetorial da transformação
-        valores_iteracao = sorted(list(set(valores_iteracao)), reverse=(val_inicial > val_final))
+        if cruzou_domo:
+            # 1. Busca Binária de Alta Precisão para cravar o Vértice exato no Domo
+            if is_isobaric:
+                val_a = entalpia_esp
+                val_b = entalpia_esp2
+                fixo_val = pressao
+            else:
+                val_a = pressao
+                val_b = pressao2
+                fixo_val = entropia_esp
 
-        ramo_atual = []
-
-        # 1. Garante a exatidão do Estado Inicial
-        ramo_atual.append({
-            'T': round(temperatura, 2),
-            'P': round(pressao, 2),
-            'v': round(volume_esp, 6),
-            's': round(entropia_esp, 4),
-            'h': round(entalpia_esp, 2)
-        })
-
-        if val_final != val_inicial:
-            for val_atual in valores_iteracao:
-                # O 'find_phase' da agua_cls exige T(0) ou P(1) como index1.
-                # Esse roteamento dinâmico nunca deixa a classe quebrar.
-                if prop_fixa_idx in [0, 1]:
-                    idx1, idx2 = prop_fixa_idx, prop_var_idx
-                    val1, val2 = val_fixo, val_atual
-                elif prop_var_idx in [0, 1]:
-                    idx1, idx2 = prop_var_idx, prop_fixa_idx
-                    val1, val2 = val_atual, val_fixo
-                else:
-                    idx1, idx2 = prop_fixa_idx, prop_var_idx
-                    val1, val2 = val_fixo, val_atual
-
+            for _ in range(30):
+                val_mid = (val_a + val_b) / 2.0
                 try:
-                    h_micro = agua_cls(1, idx1, idx2, val1, val2)
-                    v_micro = h_micro.results[2][2][3]
+                    if is_isobaric:
+                        h_mid = agua_cls(1, 1, 4, fixo_val, val_mid)
+                    else:
+                        h_mid = agua_cls(1, 1, 5, val_mid, fixo_val)
+                        
+                    if h_mid.results[0] == fase:
+                        val_a = val_mid
+                    else:
+                        val_b = val_mid
+                except Exception:
+                    # Em caso de erro numérico na tabela, afasta do erro
+                    val_b = val_mid 
+            
+            # O lado da mistura (fase 3) é matematicamente blindado contra erros
+            val_front = val_a if fase == 3 else val_b
+            
+            try:
+                if is_isobaric:
+                    h_front_calc = agua_cls(1, 1, 4, fixo_val, val_front)
+                else:
+                    h_front_calc = agua_cls(1, 1, 5, val_front, fixo_val)
+                    
+                pt_fronteira = {
+                    'T': round(h_front_calc.results[2][0][3], 4),
+                    'P': round(h_front_calc.results[2][1][3], 4),
+                    'v': round(h_front_calc.results[2][2][3], 8),
+                    's': round(h_front_calc.results[2][5][3], 4),
+                    'h': round(h_front_calc.results[2][4][3], 4),
+                    'fase': 'fronteira'
+                }
+            except Exception:
+                pass
 
-                    if v_micro != 0:
-                        # TRAVA DE PRECISÃO VISUAL:
-                        # Substitui os ruídos da interpolação linear do backend pelo valor fixo absoluto
-                        t_plot = round(h_micro.results[2][0][3], 2)
-                        p_plot = val_fixo if prop_fixa_idx == 1 else round(h_micro.results[2][1][3], 2)
-                        v_plot = val_fixo if prop_fixa_idx == 2 else round(v_micro, 6)
-                        u_plot = val_fixo if prop_fixa_idx == 3 else round(h_micro.results[2][3][3], 2)
-                        h_plot = val_fixo if prop_fixa_idx == 4 else round(h_micro.results[2][4][3], 2)
-                        s_plot = val_fixo if prop_fixa_idx == 5 else round(h_micro.results[2][5][3], 4)
+        # 2. Motor de Geração Paramétrica (Isola a anomalia da Tabela)
+        def gerar_segmento(pt_A, pt_B, num_pontos, usar_tabela):
+            segmento = []
+            if not pt_A or not pt_B: return segmento
+            
+            # Aplica escala logarítmica apenas na pressão para o processo isentrópico
+            usar_log_P = (not is_isobaric) and (pt_A['P'] > 0 and pt_B['P'] > 0)
+            if usar_log_P:
+                import math
+                log_P_A = math.log10(pt_A['P'])
+                log_P_B = math.log10(pt_B['P'])
+            
+            for i in range(num_pontos + 1):
+                f = i / float(num_pontos)
+                
+                t_i = pt_A['T'] + f * (pt_B['T'] - pt_A['T'])
+                h_i = pt_A['h'] + f * (pt_B['h'] - pt_A['h'])
+                s_i = pt_A['s'] + f * (pt_B['s'] - pt_A['s'])
+                v_i = pt_A['v'] + f * (pt_B['v'] - pt_A['v'])
+                
+                if usar_log_P:
+                    p_i = 10 ** (log_P_A + f * (log_P_B - log_P_A))
+                else:
+                    p_i = pt_A['P'] + f * (pt_B['P'] - pt_A['P'])
 
-                        ramo_atual.append({
-                            'T': t_plot, 'P': p_plot, 'v': v_plot, 's': s_plot, 'h': h_plot
-                        })
-                except (IndexError, TypeError, BoundariesException):
-                    continue
+                # A tabela só é consultada onde a matemática é confiável
+                if usar_tabela:
+                    try:
+                        if is_isobaric:
+                            h_m = agua_cls(1, 1, 4, pt_A['P'], h_i)
+                        else:
+                            h_m = agua_cls(1, 1, 5, p_i, pt_A['s'])
+                            
+                        if h_m.results[0] == 3:  # Restrito à Mistura Exata
+                            t_i = h_m.results[2][0][3]
+                            p_i = h_m.results[2][1][3]
+                            v_i = h_m.results[2][2][3]
+                            h_i = h_m.results[2][4][3]
+                            s_i = h_m.results[2][5][3]
+                    except Exception:
+                        pass
+                
+                segmento.append({
+                    'T': round(t_i, 4), 'P': round(p_i, 4), 'v': round(v_i, 8),
+                    's': round(s_i, 4), 'h': round(h_i, 4)
+                })
+            return segmento
 
-        # 2. Garante a exatidão do Estado Final cravado
-        ramo_atual.append({
-            'T': round(temperatura2, 2),
-            'P': round(pressao2, 2),
-            'v': round(volume_esp2, 6),
-            's': round(entropia_esp2, 4),
-            'h': round(entalpia_esp2, 2)
-        })
+        # 3. Construção dos Ramos
+        pontos_finais = []
+        
+        if pt_fronteira:
+            seg1_tabela = (fase == 3)
+            seg2_tabela = (fase2 == 3)
+            
+            trecho1 = gerar_segmento(estado_inicial, pt_fronteira, 75, seg1_tabela)
+            trecho2 = gerar_segmento(pt_fronteira, estado_final, 75, seg2_tabela)
+            
+            if trecho1: trecho1.pop()  # Evita duplicar o ponto do vértice
+            pontos_finais = trecho1 + trecho2
+        else:
+            # Processo que não cruza o domo de saturação
+            seg_tabela = (fase == 3)
+            pontos_finais = gerar_segmento(estado_inicial, estado_final, 150, seg_tabela)
 
+        # ==========================================================
+        # CONEXÃO FINAL
+        # ==========================================================
+
+        ramo_atual = pontos_finais
         pontos_grafico.append(ramo_atual)
         request.session['pontos_grafico'] = pontos_grafico
+        
         # ==========================================================
 
         return render(request, 'agua/results-agua-scte-4.html', {

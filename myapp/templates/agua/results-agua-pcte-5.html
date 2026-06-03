@@ -402,6 +402,18 @@
             <div class="step-description lang-text" data-pt-br="Como o processo ocorre a pressão constante, o trabalho de fronteira é representado pela área retangular sob a curva no diagrama P-v." data-en="Since the process occurs at constant pressure, the boundary work is represented by the rectangular area under the curve in the P-v diagram." data-es="Como el proceso ocurre a presión constante, el trabajo de frontera está representado por el área rectangular bajo la curva en el diagrama P-v.">
                 Como o processo ocorre a pressão constante, o trabalho de fronteira é representado pela área retangular sob a curva no diagrama P-v.
             </div>
+
+            <div style="background: #fff4e6; border-left: 4px solid #e67e22; padding: 15px; margin-bottom: 20px; border-radius: 8px; font-family: 'Courier New', Courier, monospace; font-size: 0.95em; line-height: 1.6; color: #333;">
+                <div style="font-family: Arial, sans-serif; font-weight: bold; margin-bottom: 10px; color: #d35400; font-size: 1.05em;">
+                    <i class="fas fa-lightbulb"></i> <span class="lang-text" data-pt-br="Dedução Teórica (Trabalho de Fronteira):" data-en="Theoretical Deduction (Boundary Work):" data-es="Deducción Teórica (Trabajo de Frontera):">Dedução Teórica (Trabalho de Fronteira):</span>
+                </div>
+                1. <span class="lang-text" data-pt-br="Definição geral:" data-en="General definition:" data-es="Definición general:">Definição geral:</span> W = &int; P dV<br>
+                2. <span class="lang-text" data-pt-br="P é constante (isobárico), sai da integral:" data-en="P is constant (isobaric), comes out of the integral:" data-es="P es constante (isobárico), sale de la integral:">P é constante (isobárico), sai da integral:</span> W = P &int; dV<br>
+                3. <span class="lang-text" data-pt-br="Integrando:" data-en="Integrating:" data-es="Integrando:">Integrando:</span> W = P &middot; (V<sub>2</sub> - V<sub>1</sub>)<br>
+                <div style="margin-top: 8px; padding-top: 8px; border-top: 1px dashed #e67e22; font-weight: bold; color: #d35400; font-size: 1.1em;">
+                    &there4; w = P &middot; (v<sub>2</sub> - v<sub>1</sub>) <span style="font-size: 0.85em; font-weight: normal;" class="lang-text" data-pt-br="(base mássica)" data-en="(mass basis)" data-es="(base másica)">(base mássica)</span>
+                </div>
+            </div>
             <div class="formula-box">
                 W = P <span class="math-op">&times;</span> (v<sub>2</sub> <span class="math-op">-</span> v<sub>1</sub>)
             </div>
@@ -423,6 +435,30 @@
             <div class="step-description lang-text" data-pt-br="Como o calor transferido (Q) foi inserido como dado de entrada no processo isobárico, utilizamos a 1ª Lei da Termodinâmica para isolar e calcular a entalpia final (h₂). Com a pressão (p₂) constante e o valor de h₂, o estado termodinâmico 2 é completamente fixado pelo simulador, permitindo extrair as demais propriedades das tabelas." data-en="Since the transferred heat (Q) was given as an input for the isobaric process, we use the 1st Law of Thermodynamics to solve for the final enthalpy (h₂). With constant pressure (p₂) and h₂, the final state is fixed and all other properties are extracted." data-es="Dado que el calor transferido (Q) se introdujo como entrada en el proceso isobárico, usamos la 1ª Ley de la Termodinámica para aislar y encontrar la entalpía final (h₂). Con la presión (p₂) constante y h₂, se fija el Estado 2 y se extraen las demás propiedades.">
                 Como o calor transferido (Q) foi inserido como dado de entrada no processo isobárico, utilizamos a 1ª Lei da Termodinâmica para isolar e calcular a entalpia final (h₂). Com a pressão (p₂) constante e o valor de h₂, o estado termodinâmico 2 é completamente fixado pelo simulador, permitindo extrair as demais propriedades das tabelas.
             </div>
+            {% else %}
+            <div class="step-header">
+                <i class="fas fa-fire"></i> <span class="lang-text" data-pt-br="Primeira Lei e Calor Trocado (Q)" data-en="First Law and Heat Transfer (Q)" data-es="Primera Ley y Calor Intercambiado (Q)">Primeira Lei e Calor Trocado (Q)</span>
+            </div>
+            <div class="step-description lang-text" data-pt-br="Pela 1ª Lei da Termodinâmica aplicada a um sistema fechado submetido a um processo isobárico quase-estático, o calor transferido é igual à variação de entalpia." data-en="By the 1st Law of Thermodynamics applied to a closed system undergoing a quasi-equilibrium isobaric process, heat transfer equals the enthalpy change." data-es="Por la 1ª Ley de la Termodinámica aplicada a un sistema cerrado sometido a un proceso isobárico cuasi-estático, el calor transferido es igual a la variación de entalpía.">
+                Pela 1ª Lei da Termodinâmica aplicada a um sistema fechado submetido a um processo isobárico quase-estático, o calor transferido é igual à variação de entalpia.
+            </div>
+            {% endif %}
+
+            <div style="background: #fdf2f0; border-left: 4px solid #e74c3c; padding: 15px; margin-bottom: 20px; border-radius: 8px; font-family: 'Courier New', Courier, monospace; font-size: 0.95em; line-height: 1.6; color: #333;">
+                <div style="font-family: Arial, sans-serif; font-weight: bold; margin-bottom: 10px; color: #c0392b; font-size: 1.05em;">
+                    <i class="fas fa-lightbulb"></i> <span class="lang-text" data-pt-br="Dedução Teórica (Calor Isobárico):" data-en="Theoretical Deduction (Isobaric Heat):" data-es="Deducción Teórica (Calor Isobárico):">Dedução Teórica (Calor Isobárico):</span>
+                </div>
+                1. <span class="lang-text" data-pt-br="Balanço de energia:" data-en="Energy balance:" data-es="Balance de energía:">Balanço de energia:</span> Q - W = &Delta;U<br>
+                2. <span class="lang-text" data-pt-br="Trabalho (P const.):" data-en="Work (const. P):" data-es="Trabajo (P const.):">Trabalho (P const.):</span> W = P &middot; (V<sub>2</sub> - V<sub>1</sub>)<br>
+                3. <span class="lang-text" data-pt-br="Substituindo:" data-en="Substituting:" data-es="Sustituyendo:">Substituindo:</span> Q = (U<sub>2</sub> - U<sub>1</sub>) + P &middot; (V<sub>2</sub> - V<sub>1</sub>)<br>
+                4. <span class="lang-text" data-pt-br="Reagrupando:" data-en="Rearranging:" data-es="Reagrupando:">Reagrupando:</span> Q = (U<sub>2</sub> + P &middot; V<sub>2</sub>) - (U<sub>1</sub> + P &middot; V<sub>1</sub>)<br>
+                5. <span class="lang-text" data-pt-br="Como Entalpia H = U + PV:" data-en="Since Enthalpy H = U + PV:" data-es="Como Entalpía H = U + PV:">Como Entalpia H = U + PV:</span> Q = H<sub>2</sub> - H<sub>1</sub> = &Delta;H<br>
+                <div style="margin-top: 8px; padding-top: 8px; border-top: 1px dashed #e74c3c; font-weight: bold; color: #c0392b; font-size: 1.1em;">
+                    &there4; q = h<sub>2</sub> - h<sub>1</sub> <span style="font-size: 0.85em; font-weight: normal;" class="lang-text" data-pt-br="(base mássica)" data-en="(mass basis)" data-es="(base másica)">(base mássica)</span>
+                </div>
+            </div>
+
+            {% if Escolha == 8 %}
             <div class="formula-box">
                 h<sub>2</sub> = h<sub>1</sub> <span class="math-op">+</span> Q
             </div>
@@ -432,14 +468,7 @@
             <div class="step-result">
                 h<sub>2</sub> = <span class="format-num">{{ entalpia_especifica2 }}</span> kJ/kg
             </div>
-
             {% else %}
-            <div class="step-header">
-                <i class="fas fa-fire"></i> <span class="lang-text" data-pt-br="Primeira Lei e Calor Trocado (Q)" data-en="First Law and Heat Transfer (Q)" data-es="Primera Ley y Calor Intercambiado (Q)">Primeira Lei e Calor Trocado (Q)</span>
-            </div>
-            <div class="step-description lang-text" data-pt-br="Pela 1ª Lei da Termodinâmica aplicada a um sistema fechado submetido a um processo isobárico quase-estático, o calor transferido é igual à variação de entalpia." data-en="By the 1st Law of Thermodynamics applied to a closed system undergoing a quasi-equilibrium isobaric process, heat transfer equals the enthalpy change." data-es="Por la 1ª Ley de la Termodinámica aplicada a un sistema cerrado sometido a un proceso isobárico cuasi-estático, el calor transferido es igual a la variación de entalpía.">
-                Pela 1ª Lei da Termodinâmica aplicada a um sistema fechado submetido a um processo isobárico quase-estático, o calor transferido é igual à variação de entalpia.
-            </div>
             <div class="formula-box">
                 Q = &Delta;h = h<sub>2</sub> <span class="math-op">-</span> h<sub>1</sub>
             </div>
@@ -450,7 +479,6 @@
                 Q = <span class="format-num">{{ Calor }}</span> kJ/kg
             </div>
             {% endif %}
-
         </div>
 
         <div class="math-step step-4" style="margin-bottom: 0;">
@@ -460,6 +488,18 @@
             </div>
             <div class="step-description lang-text" data-pt-br="O balanço de entropia determina se o processo é fisicamente possível. Calculamos a variação de entropia do sistema menos a entropia transferida com o calor para a vizinhança." data-en="The entropy balance determines if the process is physically possible. We calculate the system's entropy change minus the entropy transferred with heat to the surroundings." data-es="El balance de entropía determina si el proceso es físicamente posible. Calculamos el cambio de entropía del sistema menos la entropía transferida con calor al entorno.">
                 O balanço de entropia determina se o processo é fisicamente possível. Calculamos a variação de entropia do sistema menos a entropia transferida com o calor para a vizinhança.
+            </div>
+
+            <div style="background: #e8f5e9; border-left: 4px solid #2ecc71; padding: 15px; margin-bottom: 20px; border-radius: 8px; font-family: 'Courier New', Courier, monospace; font-size: 0.95em; line-height: 1.6; color: #333;">
+                <div style="font-family: Arial, sans-serif; font-weight: bold; margin-bottom: 10px; color: #27ae60; font-size: 1.05em;">
+                    <i class="fas fa-lightbulb"></i> <span class="lang-text" data-pt-br="Dedução Teórica (Balanço de Entropia):" data-en="Theoretical Deduction (Entropy Balance):" data-es="Deducción Teórica (Balance de Entropía):">Dedução Teórica (Balanço de Entropia):</span>
+                </div>
+                1. <span class="lang-text" data-pt-br="Balanço geral (Sist. Fechado):" data-en="General balance (Closed Sys.):" data-es="Balance general (Sist. Cerrado):">Balanço geral (Sist. Fechado):</span> S<sub>in</sub> - S<sub>out</sub> + S<sub>ger</sub> = &Delta;S<sub>sist</sub><br>
+                2. <span class="lang-text" data-pt-br="Transf. de entropia por calor:" data-en="Entropy transfer by heat:" data-es="Transf. de entropía por calor:">Transf. de entropia por calor:</span> (Q / T<sub>viz</sub>) + S<sub>ger</sub> = (S<sub>2</sub> - S<sub>1</sub>)<br>
+                3. <span class="lang-text" data-pt-br="Isolando a entropia gerada:" data-en="Solving for generated entropy:" data-es="Despejando la entropía generada:">Isolando a entropia gerada:</span> S<sub>ger</sub> = (S<sub>2</sub> - S<sub>1</sub>) - (Q / T<sub>viz</sub>)<br>
+                <div style="margin-top: 8px; padding-top: 8px; border-top: 1px dashed #2ecc71; font-weight: bold; color: #27ae60; font-size: 1.1em;">
+                    &there4; s<sub>ger</sub> = (s<sub>2</sub> - s<sub>1</sub>) - (q / T<sub>viz_K</sub>) <span style="font-size: 0.85em; font-weight: normal;" class="lang-text" data-pt-br="(base mássica)" data-en="(mass basis)" data-es="(base másica)">(base mássica)</span>
+                </div>
             </div>
             <div class="formula-box">
                 S<sub>ger</sub> = (s<sub>2</sub> <span class="math-op">-</span> s<sub>1</sub>) <span class="math-op">-</span> [ Q <span class="math-op">/</span> (T<sub>viz</sub> <span class="math-op">+</span> 273.15) ]

@@ -879,215 +879,120 @@ def process_values_view5(request):
         teste = estados.lista_estados
 
         # ==========================================================
-        # GERAÇÃO DE MICROPROCESSOS: ZOOM ADAPTATIVO + DOMO SUAVIZADO
+        # GERAÇÃO DE MICROPROCESSOS: MATEMÁTICA PARAMÉTRICA (SOLUÇÃO DEFINITIVA)
         # ==========================================================
 
         pontos_grafico = request.session.get('pontos_grafico', [])
 
         val_fixo = volume_esp
-        val_inicial = temperatura
-        val_final = temperatura2
-
-        num_passos_base = 150
-        refino_domo = 25
-
+        
         estado_inicial = {
-            'T': round(temperatura, 4),
-            'P': round(pressao, 4),
-            'v': round(volume_esp, 8),
-            's': round(entropia_esp, 4),
-            'h': round(entalpia_esp, 4)
+            'T': round(temperatura, 4), 'P': round(pressao, 4), 'v': round(volume_esp, 8),
+            's': round(entropia_esp, 4), 'h': round(entalpia_esp, 4), 'fase': fase
         }
 
         estado_final = {
-            'T': round(temperatura2, 4),
-            'P': round(pressao2, 4),
-            'v': round(volume_esp2, 8),
-            's': round(entropia_esp2, 4),
-            'h': round(entalpia_esp2, 4)
+            'T': round(temperatura2, 4), 'P': round(pressao2, 4), 'v': round(volume_esp2, 8),
+            's': round(entropia_esp2, 4), 'h': round(entalpia_esp2, 4), 'fase': fase2
         }
 
-        pontos_micro = []
+        pt_fronteira = None
+        cruzou_domo = (fase != fase2)
 
-        if val_final != val_inicial:
-
-            # ==========================================================
-            # MALHA ADAPTATIVA
-            # Alta resolução somente perto do domo
-            # ==========================================================
-
-            passo_base = (val_final - val_inicial) / num_passos_base
-
-            temperaturas_base = [
-                val_inicial + (i * passo_base)
-                for i in range(num_passos_base + 1)
-            ]
-
-            valores_iteracao = []
-
-            fase_ant = None
-            t_ant = None
-
-            for t_tmp in temperaturas_base:
-
+        if cruzou_domo:
+            # 1. Busca Binária de Alta Precisão para cravar o Vértice no Domo
+            t_a = temperatura
+            t_b = temperatura2
+            for _ in range(30):
+                t_mid = (t_a + t_b) / 2.0
                 try:
-
-                    teste = agua_cls(1, 0, 2, t_tmp, val_fixo)
-
-                    fase_tmp = teste.results[0]
-
-                    # ponto normal
-                    valores_iteracao.append(t_tmp)
-
-                    # ======================================================
-                    # SE CRUZOU O DOMO → INSERE SUBDIVISÕES
-                    # ======================================================
-
-                    if (
-                        fase_ant is not None
-                        and fase_tmp != fase_ant
-                        and t_ant is not None
-                    ):
-
-                        sub_passo = (t_tmp - t_ant) / refino_domo
-
-                        for j in range(1, refino_domo):
-
-                            valores_iteracao.append(
-                                t_ant + (j * sub_passo)
-                            )
-
-                    fase_ant = fase_tmp
-                    t_ant = t_tmp
-
-                except Exception:
-                    continue
-
-            # ordena corretamente
-            valores_iteracao = sorted(valores_iteracao)
-
-            fase_anterior = None
-            t_anterior = None
-
-            for t_atual in valores_iteracao:
-
-                try:
-
-                    # ======================================================
-                    # CÁLCULO PRINCIPAL
-                    # ======================================================
-
-                    h_micro = agua_cls(1, 0, 2, t_atual, val_fixo)
-
-                    fase_atual = h_micro.results[0]
-
-                    p_micro = h_micro.results[2][1][3]
-                    h_micro_val = h_micro.results[2][4][3]
-                    s_micro_val = h_micro.results[2][5][3]
-
-                    # ======================================================
-                    # FILTRO DE SEGURANÇA
-                    # ======================================================
-
-                    if p_micro <= 0:
-                        continue
-
-                    if h_micro_val == 0 and s_micro_val == 0:
-                        continue
-
-                    # ======================================================
-                    # DETECÇÃO DA FRONTEIRA DO DOMO
-                    # ======================================================
-
-                    if (
-                        fase_anterior is not None
-                        and fase_atual != fase_anterior
-                        and t_anterior is not None
-                    ):
-
-                        t_a = t_anterior
-                        t_b = t_atual
-
-                        # Refinamento binário da fronteira
-                        for _ in range(12):
-
-                            t_mid = (t_a + t_b) / 2
-
-                            try:
-
-                                h_mid = agua_cls(1, 0, 2, t_mid, val_fixo)
-
-                                fase_mid = h_mid.results[0]
-
-                                p_mid = h_mid.results[2][1][3]
-                                h_mid_val = h_mid.results[2][4][3]
-                                s_mid_val = h_mid.results[2][5][3]
-
-                                if p_mid > 0:
-
-                                    pontos_micro.append({
-                                        'T': round(t_mid, 4),
-                                        'P': round(p_mid, 4),
-                                        'v': round(val_fixo, 8),
-                                        's': round(s_mid_val, 4),
-                                        'h': round(h_mid_val, 4)
-                                    })
-
-                                    # aproxima da fronteira
-                                    if fase_mid == fase_anterior:
-                                        t_a = t_mid
-                                    else:
-                                        t_b = t_mid
-
-                            except Exception:
-                                break
-
-                    # ======================================================
-                    # REGIÃO NORMAL (FORA DO DOMO)
-                    # ======================================================
-
+                    h_mid = agua_cls(1, 0, 2, t_mid, val_fixo)
+                    if h_mid.results[0] == fase:
+                        t_a = t_mid
                     else:
-
-                        pontos_micro.append({
-                            'T': round(t_atual, 4),
-                            'P': round(p_micro, 4),
-                            'v': round(val_fixo, 8),
-                            's': round(s_micro_val, 4),
-                            'h': round(h_micro_val, 4)
-                        })
-
-                    # ======================================================
-                    # ATUALIZA REFERÊNCIAS
-                    # ======================================================
-
-                    fase_anterior = fase_atual
-                    t_anterior = t_atual
-
+                        t_b = t_mid
                 except Exception:
-                    continue
+                    # Em caso de erro numérico na tabela, afasta do erro
+                    t_b = t_mid 
+            
+            # O lado da mistura (fase 3) é matematicamente blindado contra erros
+            t_front = t_a if fase == 3 else t_b
+            
+            try:
+                h_front_calc = agua_cls(1, 0, 2, t_front, val_fixo)
+                pt_fronteira = {
+                    'T': round(t_front, 4),
+                    'P': round(h_front_calc.results[2][1][3], 4),
+                    'v': val_fixo,
+                    's': round(h_front_calc.results[2][5][3], 4),
+                    'h': round(h_front_calc.results[2][4][3], 4),
+                    'fase': 'fronteira'
+                }
+            except Exception:
+                pass
 
-        # ==========================================================
-        # ORDENAÇÃO CRONOLÓGICA
-        # ==========================================================
+        # 2. Motor de Geração Paramétrica (MATA O DEGRAU)
+        # Este motor isola a quebra da tabela. Se estivermos no superaquecido,
+        # ele gera uma reta suave e perfeita no espaço 4D (T, P, h, s).
+        def gerar_segmento(pt_A, pt_B, num_pontos, usar_tabela):
+            segmento = []
+            if not pt_A or not pt_B: return segmento
+            
+            for i in range(num_pontos + 1):
+                f = i / float(num_pontos)
+                
+                # Base Paramétrica (Garante alinhamento milimétrico sem degraus)
+                t_i = pt_A['T'] + f * (pt_B['T'] - pt_A['T'])
+                p_i = pt_A['P'] + f * (pt_B['P'] - pt_A['P'])
+                h_i = pt_A['h'] + f * (pt_B['h'] - pt_A['h'])
+                s_i = pt_A['s'] + f * (pt_B['s'] - pt_A['s'])
+                
+                # Aplica Tabela APENAS nas Zonas Seguras (Mistura / Fase 3)
+                if usar_tabela:
+                    try:
+                        h_m = agua_cls(1, 0, 2, t_i, val_fixo)
+                        if h_m.results[0] == 3:  # Só sobreescreve se for mistura real
+                            p_i = h_m.results[2][1][3]
+                            h_i = h_m.results[2][4][3]
+                            s_i = h_m.results[2][5][3]
+                    except Exception:
+                        pass
+                
+                segmento.append({
+                    'T': round(t_i, 4),
+                    'P': round(p_i, 4),
+                    'v': round(val_fixo, 8),
+                    's': round(s_i, 4),
+                    'h': round(h_i, 4)
+                })
+            return segmento
 
-        is_cooling = val_inicial > val_final
-
-        pontos_micro = sorted(
-            pontos_micro,
-            key=lambda k: k['T'],
-            reverse=is_cooling
-        )
+        # 3. Construção dos Ramos
+        pontos_finais = []
+        
+        if pt_fronteira:
+            # Identifica qual trecho é seguro para usar a tabela curva (Fase 3)
+            seg1_tabela = (fase == 3)
+            seg2_tabela = (fase2 == 3)
+            
+            trecho1 = gerar_segmento(estado_inicial, pt_fronteira, 75, seg1_tabela)
+            trecho2 = gerar_segmento(pt_fronteira, estado_final, 75, seg2_tabela)
+            
+            if trecho1: trecho1.pop()  # Evita duplicar o vértice
+            pontos_finais = trecho1 + trecho2
+        else:
+            # Não cruzou o domo, faz direto
+            seg_tabela = (fase == 3)
+            pontos_finais = gerar_segmento(estado_inicial, estado_final, 150, seg_tabela)
 
         # ==========================================================
         # CONEXÃO FINAL
         # ==========================================================
 
-        ramo_atual = [estado_inicial] + pontos_micro + [estado_final]
-
+        ramo_atual = pontos_finais
         pontos_grafico.append(ramo_atual)
-
         request.session['pontos_grafico'] = pontos_grafico
-
+        
         # ==========================================================
 
         return render(request, 'agua/results-agua-vcte-5.html', {
