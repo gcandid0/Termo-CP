@@ -272,7 +272,7 @@
         <div class="data-row"><span class="data-label lang-text" data-pt-br="Massa (m):" data-en="Mass (m):" data-es="Masa (m):">Massa (m):</span> <span class="data-value"><span class="format-num">1,0</span> kg</span></div>
         <div class="data-row"><span class="data-label lang-text" data-pt-br="Temperatura (T):" data-en="Temperature (T):" data-es="Temperatura (T):">Temperatura (T):</span> <span class="data-value"><span class="format-num">{{ temperatura }}</span> °C</span></div>
         <div class="data-row"><span class="data-label lang-text" data-pt-br="Pressão (p):" data-en="Pressure (p):" data-es="Presión (p):">Pressão (p):</span> <span class="data-value"><span class="format-num">{{ pressao }}</span> kPa</span></div>
-        <div class="data-row"><span class="data-label lang-text" data-pt-br="Volume específico (v):" data-en="Specific volume (v):" data-es="Volumen específico (v):">Volume específico (v):</span> <span class="data-value"><span class="format-num">{{ volume_especifico }}</span> m³/kg</span></div>
+        <div class="data-row"><span class="data-label lang-text" data-pt-br="Volume específico (v):" data-en="Specific volume (v):" data-es="Volumen específico (v):">Volume específico (v):</span> <span class="data-value"><span class="format-num">{{ volume_especifico|floatformat:6  }}</span> m³/kg</span></div>
         <div class="data-row"><span class="data-label lang-text" data-pt-br="Energia Interna (u):" data-en="Internal Energy (u):" data-es="Energía Interna (u):">Energia Interna (u):</span> <span class="data-value"><span class="format-num">{{ energia_interna }}</span> kJ/kg</span></div>
         <div class="data-row"><span class="data-label lang-text" data-pt-br="Entalpia (h):" data-en="Enthalpy (h):" data-es="Entalpía (h):">Entalpia (h):</span> <span class="data-value"><span class="format-num">{{ entalpia_especifica }}</span> kJ/kg</span></div>
         <div class="data-row"><span class="data-label lang-text" data-pt-br="Entropia (s):" data-en="Entropy (s):" data-es="Entropía (s):">Entropia (s):</span> <span class="data-value"><span class="format-num">{{ entropia_especifica }}</span> kJ/kg.K</span></div>
@@ -324,7 +324,7 @@
         <div class="data-row"><span class="data-label lang-text" data-pt-br="Massa (m):" data-en="Mass (m):" data-es="Masa (m):">Massa (m):</span> <span class="data-value"><span class="format-num">1,0</span> kg</span></div>
         <div class="data-row"><span class="data-label lang-text" data-pt-br="Temperatura (T):" data-en="Temperature (T):" data-es="Temperatura (T):">Temperatura (T):</span> <span class="data-value"><span class="format-num">{{ temperatura2 }}</span> °C</span></div>
         <div class="data-row"><span class="data-label lang-text" data-pt-br="Pressão (p):" data-en="Pressure (p):" data-es="Presión (p):">Pressão (p):</span> <span class="data-value"><span class="format-num">{{ pressao2 }}</span> kPa</span></div>
-        <div class="data-row"><span class="data-label lang-text" data-pt-br="Volume específico (v):" data-en="Specific volume (v):" data-es="Volumen específico (v):">Volume específico (v):</span> <span class="data-value"><span class="format-num">{{ volume_especifico2 }}</span> m³/kg</span></div>
+        <div class="data-row"><span class="data-label lang-text" data-pt-br="Volume específico (v):" data-en="Specific volume (v):" data-es="Volumen específico (v):">Volume específico (v):</span> <span class="data-value"><span class="format-num">{{ volume_especifico2|floatformat:6  }}</span> m³/kg</span></div>
         <div class="data-row"><span class="data-label lang-text" data-pt-br="Energia Interna (u):" data-en="Internal Energy (u):" data-es="Energía Interna (u):">Energia Interna (u):</span> <span class="data-value"><span class="format-num">{{ energia_interna2 }}</span> kJ/kg</span></div>
         <div class="data-row"><span class="data-label lang-text" data-pt-br="Entalpia (h):" data-en="Enthalpy (h):" data-es="Entalpía (h):">Entalpia (h):</span> <span class="data-value"><span class="format-num">{{ entalpia_especifica2 }}</span> kJ/kg</span></div>
         <div class="data-row"><span class="data-label lang-text" data-pt-br="Entropia (s):" data-en="Entropy (s):" data-es="Entropía (s):">Entropia (s):</span> <span class="data-value"><span class="format-num">{{ entropia_especifica2 }}</span> kJ/kg.K</span></div>
@@ -386,13 +386,13 @@
             <div class="state-boxes">
                 <div class="state-box">
                     <strong><i class="fas fa-play" style="font-size: 0.8em; color: #3498db;"></i> <span class="lang-text" data-pt-br="ESTADO 1" data-en="STATE 1" data-es="ESTADO 1">ESTADO 1</span></strong>
-                    v<sub>1</sub> = <span class="format-num">{{ volume_especifico }}</span> m³/kg<br>
+                    v<sub>1</sub> = <span class="format-num">{{ volume_especifico|floatformat:6 }}</span> m³/kg<br>
                     u<sub>1</sub> = <span class="format-num">{{ energia_interna }}</span> kJ/kg<br>
                     s<sub>1</sub> = <span class="format-num">{{ entropia_especifica }}</span> kJ/kg.K
                 </div>
                 <div class="state-box">
                     <strong><i class="fas fa-stop" style="font-size: 0.8em; color: #e74c3c;"></i> <span class="lang-text" data-pt-br="ESTADO 2" data-en="STATE 2" data-es="ESTADO 2">ESTADO 2</span></strong>
-                    v<sub>2</sub> = <span class="format-num">{{ volume_especifico2 }}</span> m³/kg<br>
+                    v<sub>2</sub> = <span class="format-num">{{ volume_especifico2|floatformat:6 }}</span> m³/kg<br>
                     u<sub>2</sub> = <span class="format-num">{{ energia_interna2 }}</span> kJ/kg<br>
                     s<sub>2</sub> = <span class="format-num">{{ entropia_especifica2 }}</span> kJ/kg.K
                 </div>
@@ -412,8 +412,9 @@
                 <div style="font-family: Arial, sans-serif; font-weight: bold; margin-bottom: 10px; color: #8e44ad; font-size: 1.05em;">
                     <i class="fas fa-lightbulb"></i> <span class="lang-text" data-pt-br="Dedução Teórica (Isentrópica):" data-en="Theoretical Deduction (Isentropic):" data-es="Deducción Teórica (Isentrópica):">Dedução Teórica (Isentrópica):</span>
                 </div>
-                1. <span class="lang-text" data-pt-br="Balanço de Entropia:" data-en="Entropy Balance:" data-es="Balance de Entropía:">Balanço de Entropia:</span> &Delta;s = (q / T) + s<sub>ger</sub><br>
-                2. <span class="lang-text" data-pt-br="Se Adiabático (q = 0) e Reversível (s_ger = 0):" data-en="If Adiabatic (q = 0) and Reversible (s_ger = 0):" data-es="Si es Adiabático (q = 0) y Reversible (s_ger = 0):">Se Adiabático (q = 0) e Reversível (s_ger = 0):</span> &Delta;s = 0 + 0<br>
+                1. <span class="lang-text" data-pt-br="Balanço de Entropia Total:" data-en="Total Entropy Balance:" data-es="Balance de Entropía Total:">Balanço de Entropia Total:</span> &Delta;S = (Q / T<sub>viz</sub>) + S<sub>ger</sub><br>
+                2. <span class="lang-text" data-pt-br="Se Adiabático" data-en="If Adiabatic" data-es="Si es Adiabático">Se Adiabático</span> (Q = 0) <span class="lang-text" data-pt-br="e Reversível" data-en="and Reversible" data-es="y Reversible">e Reversível</span> (S<sub>ger</sub> = 0): &Delta;S = 0 + 0 = 0<br>
+                3. <span class="lang-text" data-pt-br="Como" data-en="Since" data-es="Como">Como</span> &Delta;S = m &middot; (s<sub>2</sub> - s<sub>1</sub>): m &middot; (s<sub>2</sub> - s<sub>1</sub>) = 0<br>
                 <div style="margin-top: 8px; padding-top: 8px; border-top: 1px dashed #9b59b6; font-weight: bold; color: #8e44ad; font-size: 1.1em;">
                     &there4; s<sub>2</sub> = s<sub>1</sub> <span style="font-size: 0.85em; font-weight: normal;" class="lang-text" data-pt-br="(Processo Isentrópico)" data-en="(Isentropic Process)" data-es="(Proceso Isentrópico)">(Processo Isentrópico)</span>
                 </div>
@@ -422,7 +423,7 @@
                 s<sub>2</sub> = s<sub>1</sub> = <span class="format-num">{{ entropia_especifica }}</span> kJ/kg.K
             </div>
             <div class="step-result">
-                Q = 0 kJ/kg | S<sub>ger</sub> = 0 kJ/kg.K
+                Q = 0 kJ | S<sub>ger</sub> = 0 kJ/K
             </div>
         </div>
 
@@ -431,30 +432,31 @@
             <div class="step-header">
                 <i class="fas fa-cogs"></i> <span class="lang-text" data-pt-br="Cálculo do Trabalho via Primeira Lei (W)" data-en="Work Calculation via First Law (W)" data-es="Cálculo del Trabajo vía Primera Ley (W)">Cálculo do Trabalho via Primeira Lei (W)</span>
             </div>
-            <div class="step-description lang-text" data-pt-br="Em um sistema fechado (cilindro-pistão) sem troca de calor, todo o trabalho realizado equivale à variação negativa da energia interna do sistema." data-en="In a closed system (cylinder-piston) with no heat transfer, all work done equals the negative change in the system's internal energy." data-es="En un sistema cerrado (cilindro-pistón) sin intercambio de calor, todo el trabajo realizado equivale a la variación negativa de la energía interna del sistema.">
-                Em um sistema fechado (cilindro-pistão) sem troca de calor, todo o trabalho realizado equivale à variação negativa da energia interna do sistema.
+            <div class="step-description lang-text" data-pt-br="Em um sistema fechado (cilindro-pistão) sem troca de calor, todo o trabalho realizado equivale à variação negativa da energia interna do sistema, multiplicada pela massa." data-en="In a closed system (cylinder-piston) with no heat transfer, all work done equals the negative change in the system's internal energy multiplied by mass." data-es="En un sistema cerrado (cilindro-pistón) sin intercambio de calor, todo el trabajo realizado equivale a la variación negativa de la energía interna del sistema multiplicada por la masa.">
+                Em um sistema fechado (cilindro-pistão) sem troca de calor, todo o trabalho realizado equivale à variação negativa da energia interna do sistema, considerando a massa total.
             </div>
 
             <div style="background: #fff4e6; border-left: 4px solid #e67e22; padding: 15px; margin-bottom: 20px; border-radius: 8px; font-family: 'Courier New', Courier, monospace; font-size: 0.95em; line-height: 1.6; color: #333;">
                 <div style="font-family: Arial, sans-serif; font-weight: bold; margin-bottom: 10px; color: #d35400; font-size: 1.05em;">
-                    <i class="fas fa-lightbulb"></i> <span class="lang-text" data-pt-br="Dedução Teórica (Trabalho):" data-en="Theoretical Deduction (Work):" data-es="Deducción Teórica (Trabajo):">Dedução Teórica (Trabalho):</span>
+                    <i class="fas fa-lightbulb"></i> <span class="lang-text" data-pt-br="Dedução Teórica (Trabalho Total):" data-en="Theoretical Deduction (Total Work):" data-es="Deducción Teórica (Trabajo Total):">Dedução Teórica (Trabalho Total):</span>
                 </div>
                 1. <span class="lang-text" data-pt-br="1ª Lei Sist. Fechado:" data-en="1st Law Closed Sys.:" data-es="1ª Ley Sist. Cerrado:">1ª Lei Sist. Fechado:</span> Q - W = &Delta;U<br>
                 2. <span class="lang-text" data-pt-br="Sendo Adiabático (Q = 0):" data-en="Being Adiabatic (Q = 0):" data-es="Siendo Adiabático (Q = 0):">Sendo Adiabático (Q = 0):</span> -W = (U<sub>2</sub> - U<sub>1</sub>)<br>
                 3. <span class="lang-text" data-pt-br="Invertendo o sinal:" data-en="Reversing the sign:" data-es="Invirtiendo el signo:">Invertendo o sinal:</span> W = (U<sub>1</sub> - U<sub>2</sub>)<br>
+                4. <span class="lang-text" data-pt-br="Introduzindo a massa (U = m &middot; u):" data-en="Introducing mass (U = m &middot; u):" data-es="Introduciendo la masa (U = m &middot; u):">Introduzindo a massa (U = m &middot; u):</span> W = m &middot; (u<sub>1</sub> - u<sub>2</sub>)<br>
                 <div style="margin-top: 8px; padding-top: 8px; border-top: 1px dashed #e67e22; font-weight: bold; color: #d35400; font-size: 1.1em;">
-                    &there4; w = u<sub>1</sub> - u<sub>2</sub> <span style="font-size: 0.85em; font-weight: normal;" class="lang-text" data-pt-br="(base mássica)" data-en="(mass basis)" data-es="(base másica)">(base mássica)</span>
+                    &there4; W = m &middot; (u<sub>1</sub> - u<sub>2</sub>)
                 </div>
             </div>
 
             <div class="formula-box">
-                w = u<sub>1</sub> <span class="math-op">-</span> u<sub>2</sub>
+                W = m <span class="math-op">&times;</span> (u<sub>1</sub> <span class="math-op">-</span> u<sub>2</sub>)
             </div>
             <div class="step-calc">
-                w = <span class="val-badge format-num">{{ energia_interna }}</span> - <span class="val-badge format-num">{{ energia_interna2 }}</span>
+                W = <span class="val-badge format-num">1</span> &times; ( <span class="val-badge format-num">{{ energia_interna }}</span> - <span class="val-badge format-num">{{ energia_interna2 }}</span> )
             </div>
             <div class="step-result">
-                W = <span class="format-num">{{ Trabalho }}</span> kJ/kg
+                W = <span class="format-num">{{ Trabalho }}</span> kJ
             </div>
         </div>
     </div>
@@ -493,10 +495,12 @@
                 <option value="hs" class="lang-text" data-pt-br="Diagrama h-s (Mollier)" data-en="h-s Diagram (Mollier)" data-es="Diagrama h-s (Mollier)">Diagrama h-s (Mollier - Entalpia x Entropia)</option>
             </select>
             <button id="btnToggleFullCycle" class="btn btn-secondary" style="display: none;">
-                <i class="fas fa-layer-group"></i> <span id="toggleText" class="lang-text" data-pt-br="Ver Ciclo Completo" data-en="View Full Cycle" data-es="Ver Ciclo Completo">Ver Ciclo Completo</span>
+                <i class="fas fa-layer-group" style="margin-right: 6px;"></i> 
+                <span id="toggleText" class="lang-text" data-pt-br="Ver todos processos" data-en="View All Processes" data-es="Ver todos los procesos">Ver todos processos</span>
             </button>
             <button id="btnResetZoom" class="btn btn-outline">
-                <i class="fas fa-expand"></i> <span class="lang-text" data-pt-br="Resetar Zoom" data-en="Reset Zoom" data-es="Restablecer Zoom">Resetar Zoom</span>
+                <i class="fas fa-expand" style="margin-right: 6px;"></i> 
+                <span class="lang-text" data-pt-br="Resetar Zoom" data-en="Reset Zoom" data-es="Restablecer Zoom">Resetar Zoom</span>
             </button>
         </div>
 
@@ -553,7 +557,7 @@
         
         const toggleText = document.getElementById('toggleText');
         if (toggleText) {
-            toggleText.textContent = showingAll ? t("Ver Processo Atual", "View Current Process", "Ver Proceso Actual") : t("Ver Ciclo Completo", "View Full Cycle", "Ver Ciclo Completo");
+            toggleText.textContent = showingAll ? t("Ver Processo Atual", "View Current Process", "Ver Proceso Actual") : t("Ver todos processos", "View All Processes", "Ver todos los procesos");
         }
 
         const valText = document.getElementById('volumeValue');
@@ -599,7 +603,7 @@
 
     document.getElementById('btnToggleFullCycle').onclick = function() {
         showingAll = !showingAll;
-        document.getElementById('toggleText').textContent = showingAll ? t("Ver Processo Atual", "View Current Process", "Ver Proceso Actual") : t("Ver Ciclo Completo", "View Full Cycle", "Ver Ciclo Completo");
+        document.getElementById('toggleText').textContent = showingAll ? t("Ver Processo Atual", "View Current Process", "Ver Proceso Actual") : t("Ver todos processos", "View All Processes", "Ver todos los procesos");
         
         if(showingAll) {
             this.querySelector('i').className = 'fas fa-search';
@@ -614,7 +618,7 @@
     function openDiagramModal(allProcesses) {
         showingAll = allProcesses;
         if(pontosGrafico.length > 1) {
-            document.getElementById('toggleText').textContent = showingAll ? t("Ver Processo Atual", "View Current Process", "Ver Proceso Actual") : t("Ver Ciclo Completo", "View Full Cycle", "Ver Ciclo Completo");
+            document.getElementById('toggleText').textContent = showingAll ? t("Ver Processo Atual", "View Current Process", "Ver Proceso Actual") : t("Ver todos processos", "View All Processes", "Ver todos los procesos");
             document.querySelector('#btnToggleFullCycle i').className = showingAll ? 'fas fa-search' : 'fas fa-layer-group';
         }
         document.getElementById('diagramModal').style.display = "block";
@@ -749,7 +753,7 @@
                 borderWidth: 4,
                 fill: false,
                 pointStyle: 'line',
-                tension: 0.2, 
+                tension: 0, 
                 pointRadius: 0, 
                 pointHitRadius: 10,
                 pointHoverRadius: 6,
@@ -854,6 +858,10 @@
                             wheel: { enabled: true },
                             pinch: { enabled: true },
                             mode: 'xy',
+                        },
+                        limits: {
+                            x: { min: 'original', max: 'original' },
+                            y: { min: 'original', max: 'original' }
                         }
                     }
                 }
@@ -883,29 +891,29 @@
                         chart.data.datasets.forEach((dataset, dsIdx) => {
                             if (dataset.label && dataset.label.startsWith(lProcesso)) {
                                 const meta = chart.getDatasetMeta(dsIdx);
-                                if (!meta.hidden && meta.data.length > 5) {
+                                if (!meta.hidden && meta.data.length > 2) {
                                     const mid = Math.floor(meta.data.length / 2);
-                                    const p1 = meta.data[mid - 2];
-                                    const p2 = meta.data[mid + 2];
+                                    const p1 = meta.data[mid - 1];
+                                    const p2 = meta.data[mid];
 
                                     if (p1 && p2) {
                                         const angle = Math.atan2(p2.y - p1.y, p2.x - p1.x);
                                         
                                         ctx.save();
-                                        ctx.translate(meta.data[mid].x, meta.data[mid].y);
+                                        ctx.translate(p2.x, p2.y);
                                         ctx.rotate(angle);
                                         
                                         ctx.beginPath();
                                         ctx.moveTo(0, 0);
-                                        ctx.lineTo(-12, -6);
-                                        ctx.lineTo(-12, 6);
+                                        ctx.lineTo(-8, -4);
+                                        ctx.lineTo(-8, 4);
                                         ctx.closePath();
                                         
                                         ctx.fillStyle = dataset.borderColor;
                                         ctx.fill();
                                         
                                         ctx.strokeStyle = '#FFFFFF';
-                                        ctx.lineWidth = 1.5;
+                                        ctx.lineWidth = 1;
                                         ctx.stroke();
                                         ctx.restore();
                                     }

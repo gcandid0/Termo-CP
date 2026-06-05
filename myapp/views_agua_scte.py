@@ -1170,28 +1170,29 @@ def process_values_view4(request):
             teste3 = estados.lista_estados
 
         # ==========================================================
-        # GERAÇÃO DE MICROPROCESSOS: MATEMÁTICA PARAMÉTRICA (SOLUÇÃO DEFINITIVA)
+        # GERAÇÃO DE MICROPROCESSOS: MATEMÁTICA PARAMÉTRICA (SOLUÇÃO ROBUSTA)
         # ==========================================================
         
+        import math
+
         pontos_grafico = request.session.get('pontos_grafico', [])
 
         estado_inicial = {
-            'T': round(temperatura, 4), 'P': round(pressao, 4), 'v': round(volume_esp, 8),
-            's': round(entropia_esp, 4), 'h': round(entalpia_esp, 4), 'fase': fase
+            'T': round(temperatura, 6), 'P': round(pressao, 6), 'v': round(volume_esp, 10),
+            's': round(entropia_esp, 6), 'h': round(entalpia_esp, 6), 'fase': fase
         }
 
         estado_final = {
-            'T': round(temperatura2, 4), 'P': round(pressao2, 4), 'v': round(volume_esp2, 8),
-            's': round(entropia_esp2, 4), 'h': round(entalpia_esp2, 4), 'fase': fase2
+            'T': round(temperatura2, 6), 'P': round(pressao2, 6), 'v': round(volume_esp2, 10),
+            's': round(entropia_esp2, 6), 'h': round(entalpia_esp2, 6), 'fase': fase2
         }
 
-        # Identifica o tipo de processo pela escolha da view
         is_isobaric = (third_property_choice == 7)
         cruzou_domo = (fase != fase2)
         pt_fronteira = None
 
         if cruzou_domo:
-            # 1. Busca Binária de Alta Precisão para cravar o Vértice exato no Domo
+            # 1. Busca Binária de Alta Precisão (Acha exatamente o vértice no domo)
             if is_isobaric:
                 val_a = entalpia_esp
                 val_b = entalpia_esp2
@@ -1201,7 +1202,7 @@ def process_values_view4(request):
                 val_b = pressao2
                 fixo_val = entropia_esp
 
-            for _ in range(30):
+            for _ in range(60):
                 val_mid = (val_a + val_b) / 2.0
                 try:
                     if is_isobaric:
@@ -1214,10 +1215,8 @@ def process_values_view4(request):
                     else:
                         val_b = val_mid
                 except Exception:
-                    # Em caso de erro numérico na tabela, afasta do erro
                     val_b = val_mid 
             
-            # O lado da mistura (fase 3) é matematicamente blindado contra erros
             val_front = val_a if fase == 3 else val_b
             
             try:
@@ -1227,61 +1226,63 @@ def process_values_view4(request):
                     h_front_calc = agua_cls(1, 1, 5, val_front, fixo_val)
                     
                 pt_fronteira = {
-                    'T': round(h_front_calc.results[2][0][3], 4),
-                    'P': round(h_front_calc.results[2][1][3], 4),
-                    'v': round(h_front_calc.results[2][2][3], 8),
-                    's': round(h_front_calc.results[2][5][3], 4),
-                    'h': round(h_front_calc.results[2][4][3], 4),
+                    'T': round(h_front_calc.results[2][0][3], 6),
+                    'P': round(h_front_calc.results[2][1][3], 6),
+                    'v': round(h_front_calc.results[2][2][3], 10),
+                    's': round(h_front_calc.results[2][5][3], 6),
+                    'h': round(h_front_calc.results[2][4][3], 6),
                     'fase': 'fronteira'
                 }
             except Exception:
                 pass
 
-        # 2. Motor de Geração Paramétrica (Isola a anomalia da Tabela)
-        def gerar_segmento(pt_A, pt_B, num_pontos, usar_tabela):
+        # 2. Motor de Geração Paramétrica (Livre das falhas numéricas da tabela)
+        def gerar_segmento(pt_A, pt_B, num_pontos):
             segmento = []
             if not pt_A or not pt_B: return segmento
             
-            # Aplica escala logarítmica apenas na pressão para o processo isentrópico
-            usar_log_P = (not is_isobaric) and (pt_A['P'] > 0 and pt_B['P'] > 0)
-            if usar_log_P:
-                import math
+            # O SEGREDO VISUAL: Em termodinâmica, P e v se comportam exponencialmente.
+            # Interpolando em escala logarítmica, criamos a curva Pv^k = C perfeita 
+            # sem correr o risco de o sistema falhar e mandar o ponto pro (0,0).
+            
+            use_log_P = pt_A['P'] > 0 and pt_B['P'] > 0
+            use_log_v = pt_A['v'] > 0 and pt_B['v'] > 0
+
+            if use_log_P:
                 log_P_A = math.log10(pt_A['P'])
                 log_P_B = math.log10(pt_B['P'])
+            if use_log_v:
+                log_v_A = math.log10(pt_A['v'])
+                log_v_B = math.log10(pt_B['v'])
             
             for i in range(num_pontos + 1):
                 f = i / float(num_pontos)
                 
+                # Interpolação linear padrão para T, s, h
                 t_i = pt_A['T'] + f * (pt_B['T'] - pt_A['T'])
-                h_i = pt_A['h'] + f * (pt_B['h'] - pt_A['h'])
                 s_i = pt_A['s'] + f * (pt_B['s'] - pt_A['s'])
-                v_i = pt_A['v'] + f * (pt_B['v'] - pt_A['v'])
+                h_i = pt_A['h'] + f * (pt_B['h'] - pt_A['h'])
                 
-                if usar_log_P:
+                # Interpolação logarítmica para P e v (Gera a curvatura exata na tela)
+                if use_log_P:
                     p_i = 10 ** (log_P_A + f * (log_P_B - log_P_A))
                 else:
                     p_i = pt_A['P'] + f * (pt_B['P'] - pt_A['P'])
 
-                # A tabela só é consultada onde a matemática é confiável
-                if usar_tabela:
-                    try:
-                        if is_isobaric:
-                            h_m = agua_cls(1, 1, 4, pt_A['P'], h_i)
-                        else:
-                            h_m = agua_cls(1, 1, 5, p_i, pt_A['s'])
-                            
-                        if h_m.results[0] == 3:  # Restrito à Mistura Exata
-                            t_i = h_m.results[2][0][3]
-                            p_i = h_m.results[2][1][3]
-                            v_i = h_m.results[2][2][3]
-                            h_i = h_m.results[2][4][3]
-                            s_i = h_m.results[2][5][3]
-                    except Exception:
-                        pass
+                if use_log_v:
+                    v_i = 10 ** (log_v_A + f * (log_v_B - log_v_A))
+                else:
+                    v_i = pt_A['v'] + f * (pt_B['v'] - pt_A['v'])
+
+                # Travas de segurança: Garante que os valores constantes fiquem perfeitamente retos
+                if is_isobaric: 
+                    p_i = pt_A['P'] # Processo isobárico cravado
+                else:
+                    s_i = pt_A['s'] # Processo isentrópico cravado
                 
                 segmento.append({
-                    'T': round(t_i, 4), 'P': round(p_i, 4), 'v': round(v_i, 8),
-                    's': round(s_i, 4), 'h': round(h_i, 4)
+                    'T': round(t_i, 6), 'P': round(p_i, 6), 'v': round(v_i, 10),
+                    's': round(s_i, 6), 'h': round(h_i, 6)
                 })
             return segmento
 
@@ -1289,23 +1290,18 @@ def process_values_view4(request):
         pontos_finais = []
         
         if pt_fronteira:
-            seg1_tabela = (fase == 3)
-            seg2_tabela = (fase2 == 3)
+            trecho1 = gerar_segmento(estado_inicial, pt_fronteira, 150)
+            trecho2 = gerar_segmento(pt_fronteira, estado_final, 150)
             
-            trecho1 = gerar_segmento(estado_inicial, pt_fronteira, 75, seg1_tabela)
-            trecho2 = gerar_segmento(pt_fronteira, estado_final, 75, seg2_tabela)
-            
-            if trecho1: trecho1.pop()  # Evita duplicar o ponto do vértice
+            if trecho1: trecho1.pop()  # Evita duplicar o ponto do vértice de junção
             pontos_finais = trecho1 + trecho2
         else:
-            # Processo que não cruza o domo de saturação
-            seg_tabela = (fase == 3)
-            pontos_finais = gerar_segmento(estado_inicial, estado_final, 150, seg_tabela)
+            pontos_finais = gerar_segmento(estado_inicial, estado_final, 300)
 
         # ==========================================================
         # CONEXÃO FINAL
         # ==========================================================
-
+        
         ramo_atual = pontos_finais
         pontos_grafico.append(ramo_atual)
         request.session['pontos_grafico'] = pontos_grafico

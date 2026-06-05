@@ -290,7 +290,7 @@
         <div class="data-row"><span class="data-label lang-text" data-pt-br="Massa (m):" data-en="Mass (m):" data-es="Masa (m):">Massa (m):</span> <span class="data-value"><span class="format-num">1,0</span> kg</span></div>
         <div class="data-row"><span class="data-label lang-text" data-pt-br="Temperatura (T):" data-en="Temperature (T):" data-es="Temperatura (T):">Temperatura (T):</span> <span class="data-value"><span class="format-num">{{ temperatura }}</span> °C</span></div>
         <div class="data-row"><span class="data-label lang-text" data-pt-br="Pressão (p):" data-en="Pressure (p):" data-es="Presión (p):">Pressão (p):</span> <span class="data-value"><span class="format-num">{{ pressao }}</span> kPa</span></div>
-        <div class="data-row"><span class="data-label lang-text" data-pt-br="Volume específico (v):" data-en="Specific volume (v):" data-es="Volumen específico (v):">Volume específico (v):</span> <span class="data-value"><span class="format-num">{{ volume_especifico }}</span> m³/kg</span></div>
+        <div class="data-row"><span class="data-label lang-text" data-pt-br="Volume específico (v):" data-en="Specific volume (v):" data-es="Volumen específico (v):">Volume específico (v):</span> <span class="data-value"><span class="format-num">{{ volume_especifico|floatformat:6 }}</span> m³/kg</span></div>
         <div class="data-row"><span class="data-label lang-text" data-pt-br="Energia Interna (u):" data-en="Internal Energy (u):" data-es="Energía Interna (u):">Energia Interna (u):</span> <span class="data-value"><span class="format-num">{{ energia_interna }}</span> kJ/kg</span></div>
         <div class="data-row"><span class="data-label lang-text" data-pt-br="Entalpia (h):" data-en="Enthalpy (h):" data-es="Entalpía (h):">Entalpia (h):</span> <span class="data-value"><span class="format-num">{{ entalpia_especifica }}</span> kJ/kg</span></div>
         <div class="data-row"><span class="data-label lang-text" data-pt-br="Entropia (s):" data-en="Entropy (s):" data-es="Entropía (s):">Entropia (s):</span> <span class="data-value"><span class="format-num">{{ entropia_especifica }}</span> kJ/kg.K</span></div>
@@ -342,7 +342,7 @@
         <div class="data-row"><span class="data-label lang-text" data-pt-br="Massa (m):" data-en="Mass (m):" data-es="Masa (m):">Massa (m):</span> <span class="data-value"><span class="format-num">1,0</span> kg</span></div>
         <div class="data-row"><span class="data-label lang-text" data-pt-br="Temperatura (T):" data-en="Temperature (T):" data-es="Temperatura (T):">Temperatura (T):</span> <span class="data-value"><span class="format-num">{{ temperatura2 }}</span> °C</span></div>
         <div class="data-row"><span class="data-label lang-text" data-pt-br="Pressão (p):" data-en="Pressure (p):" data-es="Presión (p):">Pressão (p):</span> <span class="data-value"><span class="format-num">{{ pressao2 }}</span> kPa</span></div>
-        <div class="data-row"><span class="data-label lang-text" data-pt-br="Volume específico (v):" data-en="Specific volume (v):" data-es="Volumen específico (v):">Volume específico (v):</span> <span class="data-value"><span class="format-num">{{ volume_especifico2 }}</span> m³/kg</span></div>
+        <div class="data-row"><span class="data-label lang-text" data-pt-br="Volume específico (v):" data-en="Specific volume (v):" data-es="Volumen específico (v):">Volume específico (v):</span> <span class="data-value"><span class="format-num">{{ volume_especifico2|floatformat:6 }}</span> m³/kg</span></div>
         <div class="data-row"><span class="data-label lang-text" data-pt-br="Energia Interna (u):" data-en="Internal Energy (u):" data-es="Energía Interna (u):">Energia Interna (u):</span> <span class="data-value"><span class="format-num">{{ energia_interna2 }}</span> kJ/kg</span></div>
         <div class="data-row"><span class="data-label lang-text" data-pt-br="Entalpia (h):" data-en="Enthalpy (h):" data-es="Entalpía (h):">Entalpia (h):</span> <span class="data-value"><span class="format-num">{{ entalpia_especifica2 }}</span> kJ/kg</span></div>
         <div class="data-row"><span class="data-label lang-text" data-pt-br="Entropia (s):" data-en="Entropy (s):" data-es="Entropía (s):">Entropia (s):</span> <span class="data-value"><span class="format-num">{{ entropia_especifica2 }}</span> kJ/kg.K</span></div>
@@ -406,13 +406,13 @@
             <div class="state-boxes">
                 <div class="state-box">
                     <strong><i class="fas fa-play" style="font-size: 0.8em; color: #3498db;"></i> <span class="lang-text" data-pt-br="ESTADO 1" data-en="STATE 1" data-es="ESTADO 1">ESTADO 1</span></strong>
-                    v<sub>1</sub> = <span class="format-num">{{ volume_especifico }}</span> m³/kg<br>
+                    v<sub>1</sub> = <span class="format-num">{{ volume_especifico|floatformat:6 }}</span> m³/kg<br>
                     u<sub>1</sub> = <span class="format-num">{{ energia_interna }}</span> kJ/kg<br>
                     s<sub>1</sub> = <span class="format-num">{{ entropia_especifica }}</span> kJ/kg.K
                 </div>
                 <div class="state-box">
                     <strong><i class="fas fa-stop" style="font-size: 0.8em; color: #e74c3c;"></i> <span class="lang-text" data-pt-br="ESTADO 2" data-en="STATE 2" data-es="ESTADO 2">ESTADO 2</span></strong>
-                    v<sub>2</sub> = <span class="format-num">{{ volume_especifico2 }}</span> m³/kg<br>
+                    v<sub>2</sub> = <span class="format-num">{{ volume_especifico2|floatformat:6 }}</span> m³/kg<br>
                     u<sub>2</sub> = <span class="format-num">{{ energia_interna2 }}</span> kJ/kg<br>
                     s<sub>2</sub> = <span class="format-num">{{ entropia_especifica2 }}</span> kJ/kg.K
                 </div>
@@ -424,32 +424,33 @@
             <div class="step-header">
                 <i class="fas fa-compress-alt"></i> <span class="lang-text" data-pt-br="Trabalho de Fronteira (W)" data-en="Boundary Work (W)" data-es="Trabajo de Frontera (W)">Trabalho de Fronteira (W)</span>
             </div>
-            <div class="step-description lang-text" data-pt-br="Como os limites do sistema não se movem (pistão travado), o volume é constante. Logo, não há variação de volume e o trabalho de fronteira é nulo." data-en="Since the system boundaries do not move (locked piston), the volume is constant. Therefore, there is no change in volume and the boundary work is zero." data-es="Como los límites del sistema no se mueven (pistón bloqueado), el volumen es constante. Por lo tanto, no hay variación de volumen y el trabajo de frontera es nulo.">
-                Como os limites do sistema não se movem (pistão travado), o volume é constante. Logo, não há variação de volume e o trabalho de fronteira é nulo.
+            <div class="step-description lang-text" data-pt-br="Como os limites do sistema não se movem (pistão travado) e a massa é constante, o volume total do sistema não sofre alteração. Logo, o trabalho de fronteira realizado é nulo." data-en="Since the system boundaries do not move (locked piston) and the mass is constant, the total volume remains unchanged. Therefore, the boundary work is zero." data-es="Como los límites del sistema no se mueven (pistón bloqueado) y la masa es constante, el volumen total del sistema no sufre alteración. Por lo tanto, el trabajo de frontera es nulo.">
+                Como os limites do sistema não se movem (pistão travado) e a massa é constante, o volume total do sistema não sofre alteração. Logo, o trabalho de fronteira realizado é nulo.
             </div>
 
             <div style="background: #f5eef8; border-left: 4px solid #9b59b6; padding: 15px; margin-bottom: 20px; border-radius: 8px; font-family: 'Courier New', Courier, monospace; font-size: 0.95em; line-height: 1.6; color: #333;">
                 <div style="font-family: Arial, sans-serif; font-weight: bold; margin-bottom: 10px; color: #8e44ad; font-size: 1.05em;">
                     <i class="fas fa-lightbulb"></i> <span class="lang-text" data-pt-br="Dedução Teórica (Volume Constante):" data-en="Theoretical Deduction (Constant Volume):" data-es="Deducción Teórica (Volumen Constante):">Dedução Teórica (Volume Constante):</span>
                 </div>
-                1. <span class="lang-text" data-pt-br="Definição de Trabalho:" data-en="Work Definition:" data-es="Definición de Trabajo:">Definição de Trabalho:</span> W = &int; P dV<br>
-                2. <span class="lang-text" data-pt-br="Se v₁ = v₂, então dV = 0:" data-en="If v₁ = v₂, then dV = 0:" data-es="Si v₁ = v₂, entonces dV = 0:">Se v₁ = v₂, então dV = 0:</span> W = &int; P &middot; 0<br>
+                1. <span class="lang-text" data-pt-br="Definição de Trabalho Total:" data-en="Total Work Definition:" data-es="Definición de Trabajo Total:">Definição de Trabalho Total:</span> W = &int; P dV<br>
+                2. <span class="lang-text" data-pt-br="Sendo V = m &middot; v, e ambos constantes, V₁ = V₂:" data-en="Since V = m &middot; v, and both are constant, V₁ = V₂:" data-es="Siendo V = m &middot; v, y ambos constantes, V₁ = V₂:">Sendo V = m &middot; v, e ambos constantes, V<sub>1</sub> = V<sub>2</sub></span><br>
+                3. <span class="lang-text" data-pt-br="Como não há variação (dV = 0):" data-en="Since there is no variation (dV = 0):" data-es="Como no hay variación (dV = 0):">Como não há variação (dV = 0):</span> W = &int; P &middot; 0<br>
                 <div style="margin-top: 8px; padding-top: 8px; border-top: 1px dashed #9b59b6; font-weight: bold; color: #8e44ad; font-size: 1.1em;">
-                    &there4; w = 0 <span style="font-size: 0.85em; font-weight: normal;" class="lang-text" data-pt-br="(Processo Isocórico)" data-en="(Isochoric Process)" data-es="(Proceso Isocórico)">(Processo Isocórico)</span>
+                    &there4; W = 0 <span style="font-size: 0.85em; font-weight: normal;" class="lang-text" data-pt-br="(Processo Isocórico)" data-en="(Isochoric Process)" data-es="(Proceso Isocórico)">(Processo Isocórico)</span>
                 </div>
             </div>
             <div class="step-result" style="color: #8e44ad; border-color: #9b59b6; background: #f5eef8;">
-                W = 0 kJ/kg
+                W = 0 kJ
             </div>
-        </div>
+        </div>  
 
         <div class="math-step step-3">
             <div class="step-number">3</div>
             <div class="step-header">
                 <i class="fas fa-fire"></i> <span class="lang-text" data-pt-br="Primeira Lei e Calor Trocado (Q)" data-en="First Law and Heat Transfer (Q)" data-es="Primera Ley y Calor Intercambiado (Q)">Primeira Lei e Calor Trocado (Q)</span>
             </div>
-            <div class="step-description lang-text" data-pt-br="Pela 1ª Lei da Termodinâmica para um sistema fechado rígido, todo o calor transferido para o sistema resulta diretamente na variação da energia interna." data-en="By the 1st Law of Thermodynamics for a rigid closed system, all heat transferred to the system directly results in the change of internal energy." data-es="Por la 1ª Ley de la Termodinámica para un sistema cerrado rígido, todo el calor transferido al sistema resulta directamente en la variación de la energía interna.">
-                Pela 1ª Lei da Termodinâmica para um sistema fechado rígido, todo o calor transferido para o sistema resulta diretamente na variação da energia interna.
+            <div class="step-description lang-text" data-pt-br="Pela 1ª Lei da Termodinâmica para um sistema fechado rígido, todo o calor transferido para o sistema resulta diretamente na variação da energia interna total (considerando a massa do sistema)." data-en="By the 1st Law of Thermodynamics for a rigid closed system, all heat transferred to the system directly results in the change of total internal energy (considering mass)." data-es="Por la 1ª Ley de la Termodinámica para un sistema cerrado rígido, todo el calor transferido al sistema resulta directamente en la variación de la energía interna total (considerando la masa).">
+                Pela 1ª Lei da Termodinâmica para um sistema fechado rígido, todo o calor transferido para o sistema resulta diretamente na variação da energia interna total (considerando a massa do sistema).
             </div>
 
             <div style="background: #fff4e6; border-left: 4px solid #e67e22; padding: 15px; margin-bottom: 20px; border-radius: 8px; font-family: 'Courier New', Courier, monospace; font-size: 0.95em; line-height: 1.6; color: #333;">
@@ -457,20 +458,21 @@
                     <i class="fas fa-lightbulb"></i> <span class="lang-text" data-pt-br="Dedução Teórica (Primeira Lei):" data-en="Theoretical Deduction (First Law):" data-es="Deducción Teórica (Primera Ley):">Dedução Teórica (Primeira Lei):</span>
                 </div>
                 1. <span class="lang-text" data-pt-br="1ª Lei Sist. Fechado:" data-en="1st Law Closed Sys.:" data-es="1ª Ley Sist. Cerrado:">1ª Lei Sist. Fechado:</span> Q - W = &Delta;U<br>
-                2. <span class="lang-text" data-pt-br="Como W = 0:" data-en="Since W = 0:" data-es="Como W = 0:">Como W = 0:</span> Q - 0 = (U<sub>2</sub> - U<sub>1</sub>)<br>
+                2. <span class="lang-text" data-pt-br="Como W = 0:" data-en="Since W = 0:" data-es="Como W = 0:">Como W = 0:</span> Q = (U<sub>2</sub> - U<sub>1</sub>)<br>
+                3. <span class="lang-text" data-pt-br="Introduzindo a massa (U = m &middot; u):" data-en="Introducing mass (U = m &middot; u):" data-es="Introduciendo la masa (U = m &middot; u):">Introduzindo a massa (U = m &middot; u):</span> Q = m &middot; (u<sub>2</sub> - u<sub>1</sub>)<br>
                 <div style="margin-top: 8px; padding-top: 8px; border-top: 1px dashed #e67e22; font-weight: bold; color: #d35400; font-size: 1.1em;">
-                    &there4; q = u<sub>2</sub> - u<sub>1</sub> <span style="font-size: 0.85em; font-weight: normal;" class="lang-text" data-pt-br="(base mássica)" data-en="(mass basis)" data-es="(base másica)">(base mássica)</span>
+                    &there4; Q = m &middot; (u<sub>2</sub> - u<sub>1</sub>)
                 </div>
             </div>
 
             <div class="formula-box">
-                q = u<sub>2</sub> <span class="math-op">-</span> u<sub>1</sub>
+                Q = m <span class="math-op">&times;</span> (u<sub>2</sub> <span class="math-op">-</span> u<sub>1</sub>)
             </div>
             <div class="step-calc">
-                q = <span class="val-badge format-num">{{ energia_interna2 }}</span> - <span class="val-badge format-num">{{ energia_interna }}</span>
+                Q = <span class="val-badge format-num">1</span> &times; ( <span class="val-badge format-num">{{ energia_interna2 }}</span> - <span class="val-badge format-num">{{ energia_interna }}</span> )
             </div>
             <div class="step-result" style="color: #d35400; border-color: #e67e22; background: #fff4e6;">
-                Q = <span class="format-num">{{ Calor }}</span> kJ/kg
+                Q = <span class="format-num">{{ Calor }}</span> kJ
             </div>
         </div>
 
@@ -479,29 +481,31 @@
             <div class="step-header">
                 <i class="fas fa-balance-scale"></i> <span class="lang-text" data-pt-br="Segunda Lei e Entropia Gerada (Sger)" data-en="Second Law and Entropy Generated (Sger)" data-es="Segunda Ley y Entropía Generada (Sger)">Segunda Lei e Entropia Gerada (Sger)</span>
             </div>
-            <div class="step-description lang-text" data-pt-br="O balanço de entropia determina se o processo é fisicamente possível. Calculamos a variação de entropia do sistema menos a entropia transferida com o calor para a vizinhança." data-en="The entropy balance determines if the process is physically possible. We calculate the system's entropy change minus the entropy transferred with heat to the surroundings." data-es="El balance de entropía determina si el proceso es físicamente posible. Calculamos el cambio de entropía del sistema menos la entropía transferida con calor al entorno.">
-                O balanço de entropia determina se o processo é fisicamente possível. Calculamos a variação de entropia do sistema menos a entropia transferida com o calor para a vizinhança.
+            <div class="step-description lang-text" data-pt-br="O balanço de entropia determina se o processo é fisicamente possível. Calculamos a variação de entropia do sistema (levando a massa em consideração) menos a entropia transferida com o calor para a vizinhança." data-en="The entropy balance determines if the process is physically possible. We calculate the system's entropy change (considering mass) minus the entropy transferred with heat to the surroundings." data-es="El balance de entropía determina si el proceso es físicamente posible. Calculamos el cambio de entropía del sistema (considerando la masa) menos la entropía transferida con calor al entorno.">
+                O balanço de entropia determina se o processo é fisicamente possível. Calculamos a variação de entropia do sistema (levando a massa em consideração) menos a entropia transferida com o calor para a vizinhança.
             </div>
 
             <div style="background: #e8f5e9; border-left: 4px solid #2ecc71; padding: 15px; margin-bottom: 20px; border-radius: 8px; font-family: 'Courier New', Courier, monospace; font-size: 0.95em; line-height: 1.6; color: #333;">
                 <div style="font-family: Arial, sans-serif; font-weight: bold; margin-bottom: 10px; color: #27ae60; font-size: 1.05em;">
                     <i class="fas fa-lightbulb"></i> <span class="lang-text" data-pt-br="Dedução Teórica (Balanço de Entropia):" data-en="Theoretical Deduction (Entropy Balance):" data-es="Deducción Teórica (Balance de Entropía):">Dedução Teórica (Balanço de Entropia):</span>
                 </div>
-                1. <span class="lang-text" data-pt-br="Balanço geral:" data-en="General balance:" data-es="Balance general:">Balanço geral:</span> S<sub>in</sub> - S<sub>out</sub> + S<sub>ger</sub> = &Delta;S<sub>sist</sub><br>
-                2. <span class="lang-text" data-pt-br="Transferência por calor:" data-en="Transfer by heat:" data-es="Transferencia por calor:">Transferência por calor:</span> (Q / T<sub>viz</sub>) + S<sub>ger</sub> = (S<sub>2</sub> - S<sub>1</sub>)<br>
+                1. <span class="lang-text" data-pt-br="Balanço geral (Sist. Fechado):" data-en="General balance (Closed Sys.):" data-es="Balance general (Sist. Cerrado):">Balanço geral (Sist. Fechado):</span> S<sub>in</sub> - S<sub>out</sub> + S<sub>ger</sub> = &Delta;S<sub>sist</sub><br>
+                2. <span class="lang-text" data-pt-br="Transf. de entropia por calor e Entropia total (S = m &middot; s):" data-en="Entropy transfer by heat and Total Entropy (S = m &middot; s):" data-es="Transf. de entropía por calor y Entropía total (S = m &middot; s):">Transf. de entropia por calor e Entropia total (S = m &middot; s):</span><br>
+                   &nbsp;&nbsp;&nbsp;&nbsp;(Q / T<sub>viz</sub>) + S<sub>ger</sub> = m &middot; (s<sub>2</sub> - s<sub>1</sub>)<br>
+                3. <span class="lang-text" data-pt-br="Isolando a entropia gerada:" data-en="Solving for generated entropy:" data-es="Despejando la entropía generada:">Isolando a entropia gerada:</span><br>
                 <div style="margin-top: 8px; padding-top: 8px; border-top: 1px dashed #2ecc71; font-weight: bold; color: #27ae60; font-size: 1.1em;">
-                    &there4; s<sub>ger</sub> = (s<sub>2</sub> - s<sub>1</sub>) - (q / T<sub>viz_K</sub>) <span style="font-size: 0.85em; font-weight: normal;" class="lang-text" data-pt-br="(base mássica)" data-en="(mass basis)" data-es="(base másica)">(base mássica)</span>
+                    &there4; S<sub>ger</sub> = m &middot; (s<sub>2</sub> - s<sub>1</sub>) - (Q / T<sub>viz_K</sub>)
                 </div>
             </div>
             <div class="formula-box">
-                S<sub>ger</sub> = (s<sub>2</sub> <span class="math-op">-</span> s<sub>1</sub>) <span class="math-op">-</span> [ Q <span class="math-op">/</span> (T<sub>viz</sub> <span class="math-op">+</span> 273.15) ]
+                S<sub>ger</sub> = m <span class="math-op">&times;</span> (s<sub>2</sub> <span class="math-op">-</span> s<sub>1</sub>) <span class="math-op">-</span> [ Q <span class="math-op">/</span> (T<sub>viz</sub> <span class="math-op">+</span> <span class="format-num">273.15</span>) ]
             </div>
             <div class="step-calc">
-                S<sub>ger</sub> = (<span class="val-badge format-num">{{ entropia_especifica2 }}</span> - <span class="val-badge format-num">{{ entropia_especifica }}</span>) - [ <span class="val-badge format-num">{{ Calor }}</span> / (<span class="val-badge format-num">{{ TempViz }}</span> + 273.15) ]
+                S<sub>ger</sub> = <span class="val-badge format-num">1</span> &times; (<span class="val-badge format-num">{{ entropia_especifica2 }}</span> - <span class="val-badge format-num">{{ entropia_especifica }}</span>) - [ <span class="val-badge format-num">{{ Calor }}</span> / (<span class="val-badge format-num">{{ TempViz }}</span> + <span class="format-num">273.15</span>) ]
             </div>
             <div class="step-result" style="background: {% if Sger < 0 %}#ffebee{% else %}#e8f5e9{% endif %}; border-color: {% if Sger < 0 %}#ef9a9a{% else %}#a5d6a7{% endif %}; color: {% if Sger < 0 %}#c62828{% else %}#2e7d32{% endif %};">
                 <i class="fas {% if Sger < 0 %}fa-times-circle{% else %}fa-check-circle{% endif %}"></i>
-                S<sub>ger</sub> = <span class="format-num">{{ Sger }}</span> kJ/kg.K
+                S<sub>ger</sub> = <span class="format-num">{{ Sger }}</span> kJ/K
                 <br><small style="font-weight: normal; margin-top: 5px; display: inline-block;">
                 <span class="lang-text"
                     data-pt-br="{% if Sger < 0 %}PROCESSO IMPOSSÍVEL (Sger < 0 viola a 2ª Lei){% else %}PROCESSO POSSÍVEL (Sger &ge; 0 satisfaz a 2ª Lei){% endif %}"
@@ -547,10 +551,12 @@
                 <option value="hs" class="lang-text" data-pt-br="Diagrama h-s (Mollier)" data-en="h-s Diagram (Mollier)" data-es="Diagrama h-s (Mollier)">Diagrama h-s (Mollier - Entalpia x Entropia)</option>
             </select>
             <button id="btnToggleFullCycle" class="btn btn-secondary" style="display: none;">
-                <i class="fas fa-layer-group"></i> <span id="toggleText" class="lang-text" data-pt-br="Ver Ciclo Completo" data-en="View Full Cycle" data-es="Ver Ciclo Completo">Ver Ciclo Completo</span>
+                <i class="fas fa-layer-group" style="margin-right: 6px;"></i> 
+                <span id="toggleText" class="lang-text" data-pt-br="Ver todos processos" data-en="View All Processes" data-es="Ver todos los procesos">Ver todos processos</span>
             </button>
             <button id="btnResetZoom" class="btn btn-outline">
-                <i class="fas fa-expand"></i> <span class="lang-text" data-pt-br="Resetar Zoom" data-en="Reset Zoom" data-es="Restablecer Zoom">Resetar Zoom</span>
+                <i class="fas fa-expand" style="margin-right: 6px;"></i> 
+                <span class="lang-text" data-pt-br="Resetar Zoom" data-en="Reset Zoom" data-es="Restablecer Zoom">Resetar Zoom</span>
             </button>
         </div>
 
@@ -608,7 +614,8 @@
         // Atualiza textos dinâmicos de botões
         const toggleText = document.getElementById('toggleText');
         if (toggleText) {
-            toggleText.textContent = showingAll ? t("Ver Processo Atual", "View Current Process", "Ver Proceso Actual") : t("Ver Ciclo Completo", "View Full Cycle", "Ver Ciclo Completo");
+            toggleText.textContent = showingAll ? t("Ver Processo Atual", "View Current Process", "Ver Proceso Actual") : t("Ver todos processos", "View All Processes", "Ver todos los procesos");
+            toggleText.textContent = showingAll ? t("Ver Processo Atual", "View Current Process", "Ver Proceso Actual") : t("Ver todos processos", "View All Processes", "Ver todos los procesos");
         }
 
         const valText = document.getElementById('volumeValue');
@@ -654,7 +661,7 @@
 
     document.getElementById('btnToggleFullCycle').onclick = function() {
         showingAll = !showingAll;
-        document.getElementById('toggleText').textContent = showingAll ? t("Ver Processo Atual", "View Current Process", "Ver Proceso Actual") : t("Ver Ciclo Completo", "View Full Cycle", "Ver Ciclo Completo");
+        document.getElementById('toggleText').textContent = showingAll ? t("Ver Processo Atual", "View Current Process", "Ver Proceso Actual") : t("Ver todos processos", "View All Processes", "Ver todos los procesos");
         
         if(showingAll) {
             this.querySelector('i').className = 'fas fa-search';
@@ -669,7 +676,7 @@
     function openDiagramModal(allProcesses) {
         showingAll = allProcesses;
         if(pontosGrafico.length > 1) {
-            document.getElementById('toggleText').textContent = showingAll ? t("Ver Processo Atual", "View Current Process", "Ver Proceso Actual") : t("Ver Ciclo Completo", "View Full Cycle", "Ver Ciclo Completo");
+            document.getElementById('toggleText').textContent = showingAll ? t("Ver Processo Atual", "View Current Process", "Ver Proceso Actual") : t("Ver todos processos", "View All Processes", "Ver todos los procesos");
             document.querySelector('#btnToggleFullCycle i').className = showingAll ? 'fas fa-search' : 'fas fa-layer-group';
         }
         document.getElementById('diagramModal').style.display = "block";
@@ -911,6 +918,10 @@
                             wheel: { enabled: true },
                             pinch: { enabled: true },
                             mode: 'xy',
+                        },
+                        limits: {
+                            x: { min: 'original', max: 'original' },
+                            y: { min: 'original', max: 'original' }
                         }
                     }
                 }
@@ -940,29 +951,29 @@
                         chart.data.datasets.forEach((dataset, dsIdx) => {
                             if (dataset.label && dataset.label.startsWith(lProcesso)) {
                                 const meta = chart.getDatasetMeta(dsIdx);
-                                if (!meta.hidden && meta.data.length > 5) {
+                                if (!meta.hidden && meta.data.length > 2) {
                                     const mid = Math.floor(meta.data.length / 2);
-                                    const p1 = meta.data[mid - 2];
-                                    const p2 = meta.data[mid + 2];
+                                    const p1 = meta.data[mid - 1];
+                                    const p2 = meta.data[mid];
 
                                     if (p1 && p2) {
                                         const angle = Math.atan2(p2.y - p1.y, p2.x - p1.x);
                                         
                                         ctx.save();
-                                        ctx.translate(meta.data[mid].x, meta.data[mid].y);
+                                        ctx.translate(p2.x, p2.y);
                                         ctx.rotate(angle);
                                         
                                         ctx.beginPath();
                                         ctx.moveTo(0, 0);
-                                        ctx.lineTo(-12, -6);
-                                        ctx.lineTo(-12, 6);
+                                        ctx.lineTo(-8, -4);
+                                        ctx.lineTo(-8, 4);
                                         ctx.closePath();
                                         
                                         ctx.fillStyle = dataset.borderColor;
                                         ctx.fill();
                                         
                                         ctx.strokeStyle = '#FFFFFF';
-                                        ctx.lineWidth = 1.5;
+                                        ctx.lineWidth = 1;
                                         ctx.stroke();
                                         ctx.restore();
                                     }

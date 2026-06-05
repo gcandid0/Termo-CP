@@ -879,31 +879,35 @@ def process_values_view5(request):
         teste = estados.lista_estados
 
         # ==========================================================
-        # GERAÇÃO DE MICROPROCESSOS: MATEMÁTICA PARAMÉTRICA (SOLUÇÃO DEFINITIVA)
+        # GERAÇÃO DE MICROPROCESSOS: MATEMÁTICA PARAMÉTRICA (SOLUÇÃO ROBUSTA)
         # ==========================================================
+
+        import math
 
         pontos_grafico = request.session.get('pontos_grafico', [])
 
         val_fixo = volume_esp
         
         estado_inicial = {
-            'T': round(temperatura, 4), 'P': round(pressao, 4), 'v': round(volume_esp, 8),
-            's': round(entropia_esp, 4), 'h': round(entalpia_esp, 4), 'fase': fase
+            'T': round(temperatura, 6), 'P': round(pressao, 6), 'v': round(val_fixo, 10),
+            's': round(entropia_esp, 6), 'h': round(entalpia_esp, 6), 'fase': fase
         }
 
         estado_final = {
-            'T': round(temperatura2, 4), 'P': round(pressao2, 4), 'v': round(volume_esp2, 8),
-            's': round(entropia_esp2, 4), 'h': round(entalpia_esp2, 4), 'fase': fase2
+            'T': round(temperatura2, 6), 'P': round(pressao2, 6), 'v': round(val_fixo, 10),
+            's': round(entropia_esp2, 6), 'h': round(entalpia_esp2, 6), 'fase': fase2
         }
 
         pt_fronteira = None
         cruzou_domo = (fase != fase2)
 
         if cruzou_domo:
-            # 1. Busca Binária de Alta Precisão para cravar o Vértice no Domo
+            # 1. Busca Binária de Alta Precisão (Acha exatamente o vértice no domo)
             t_a = temperatura
             t_b = temperatura2
-            for _ in range(30):
+            
+            # AUMENTO DE PRECISÃO: 60 iterações para cravar o ponto na 6ª casa decimal
+            for _ in range(60):
                 t_mid = (t_a + t_b) / 2.0
                 try:
                     h_mid = agua_cls(1, 0, 2, t_mid, val_fixo)
@@ -921,69 +925,66 @@ def process_values_view5(request):
             try:
                 h_front_calc = agua_cls(1, 0, 2, t_front, val_fixo)
                 pt_fronteira = {
-                    'T': round(t_front, 4),
-                    'P': round(h_front_calc.results[2][1][3], 4),
-                    'v': val_fixo,
-                    's': round(h_front_calc.results[2][5][3], 4),
-                    'h': round(h_front_calc.results[2][4][3], 4),
+                    'T': round(t_front, 6),
+                    'P': round(h_front_calc.results[2][1][3], 6),
+                    'v': round(val_fixo, 10),
+                    's': round(h_front_calc.results[2][5][3], 6),
+                    'h': round(h_front_calc.results[2][4][3], 6),
                     'fase': 'fronteira'
                 }
             except Exception:
                 pass
 
-        # 2. Motor de Geração Paramétrica (MATA O DEGRAU)
-        # Este motor isola a quebra da tabela. Se estivermos no superaquecido,
-        # ele gera uma reta suave e perfeita no espaço 4D (T, P, h, s).
-        def gerar_segmento(pt_A, pt_B, num_pontos, usar_tabela):
+        # 2. Motor de Geração Paramétrica (Livre das falhas numéricas da tabela)
+        def gerar_segmento(pt_A, pt_B, num_pontos):
             segmento = []
             if not pt_A or not pt_B: return segmento
+            
+            # Aplica escala logarítmica para a Pressão (suaviza as curvas nos diagramas T-s e P-h)
+            use_log_P = pt_A['P'] > 0 and pt_B['P'] > 0
+
+            if use_log_P:
+                log_P_A = math.log10(pt_A['P'])
+                log_P_B = math.log10(pt_B['P'])
             
             for i in range(num_pontos + 1):
                 f = i / float(num_pontos)
                 
-                # Base Paramétrica (Garante alinhamento milimétrico sem degraus)
+                # Interpolação linear para T, s, h
                 t_i = pt_A['T'] + f * (pt_B['T'] - pt_A['T'])
-                p_i = pt_A['P'] + f * (pt_B['P'] - pt_A['P'])
-                h_i = pt_A['h'] + f * (pt_B['h'] - pt_A['h'])
                 s_i = pt_A['s'] + f * (pt_B['s'] - pt_A['s'])
+                h_i = pt_A['h'] + f * (pt_B['h'] - pt_A['h'])
                 
-                # Aplica Tabela APENAS nas Zonas Seguras (Mistura / Fase 3)
-                if usar_tabela:
-                    try:
-                        h_m = agua_cls(1, 0, 2, t_i, val_fixo)
-                        if h_m.results[0] == 3:  # Só sobreescreve se for mistura real
-                            p_i = h_m.results[2][1][3]
-                            h_i = h_m.results[2][4][3]
-                            s_i = h_m.results[2][5][3]
-                    except Exception:
-                        pass
+                # Interpolação logarítmica para P
+                if use_log_P:
+                    p_i = 10 ** (log_P_A + f * (log_P_B - log_P_A))
+                else:
+                    p_i = pt_A['P'] + f * (pt_B['P'] - pt_A['P'])
+
+                # Para processo isovolumétrico, o volume é 100% cravado
+                v_i = val_fixo
                 
                 segmento.append({
-                    'T': round(t_i, 4),
-                    'P': round(p_i, 4),
-                    'v': round(val_fixo, 8),
-                    's': round(s_i, 4),
-                    'h': round(h_i, 4)
+                    'T': round(t_i, 6), 
+                    'P': round(p_i, 6), 
+                    'v': round(v_i, 10),
+                    's': round(s_i, 6), 
+                    'h': round(h_i, 6)
                 })
             return segmento
 
-        # 3. Construção dos Ramos
+        # 3. Construção dos Ramos (Densidade dobrada para evitar "degraus")
         pontos_finais = []
         
         if pt_fronteira:
-            # Identifica qual trecho é seguro para usar a tabela curva (Fase 3)
-            seg1_tabela = (fase == 3)
-            seg2_tabela = (fase2 == 3)
-            
-            trecho1 = gerar_segmento(estado_inicial, pt_fronteira, 75, seg1_tabela)
-            trecho2 = gerar_segmento(pt_fronteira, estado_final, 75, seg2_tabela)
+            trecho1 = gerar_segmento(estado_inicial, pt_fronteira, 150)
+            trecho2 = gerar_segmento(pt_fronteira, estado_final, 150)
             
             if trecho1: trecho1.pop()  # Evita duplicar o vértice
             pontos_finais = trecho1 + trecho2
         else:
-            # Não cruzou o domo, faz direto
-            seg_tabela = (fase == 3)
-            pontos_finais = gerar_segmento(estado_inicial, estado_final, 150, seg_tabela)
+            # Processo que não cruza o domo de saturação
+            pontos_finais = gerar_segmento(estado_inicial, estado_final, 300)
 
         # ==========================================================
         # CONEXÃO FINAL
