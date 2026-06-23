@@ -824,6 +824,11 @@ def process_values_view30(request):
             fase = ultimo_estado[0]
             temperatura = round(ultimo_estado[2][0][3], 2)
             pressao = round(ultimo_estado[2][1][3], 2)
+            
+            # VALIDAÇÃO DE PRESSÃO NEGATIVA - ESTADO 1 (Salvo)
+            if pressao < 0:
+                raise ValidationError("Erro: A pressão inicial não pode ser negativa.")
+
             volume_esp = round(ultimo_estado[2][2][3], 8)
             energia_int = round(ultimo_estado[2][3][3], 2)
             entalpia_esp = round(ultimo_estado[2][4][3], 2)
@@ -836,7 +841,7 @@ def process_values_view30(request):
             if fase == 3:
                 tit = round(ultimo_estado[2][6][3], 2)
                 volume_v = ultimo_estado[1][3][2]
-                volume_l = ultimo_estado[1][2][2] # CORRIGIDO AQUI PARA O ÍNDICE PADRÃO
+                volume_l = ultimo_estado[1][2][2]
                 VolumeL = round((1 - (tit / 100)) * volume_l, 8)
                 VolumeV = (tit / 100) * volume_v
             else:
@@ -851,11 +856,10 @@ def process_values_view30(request):
             except IndexError:
                 volume_v = None
             try:
-                volume_l = ultimo_estado[1][2][2] # CORRIGIDO AQUI
+                volume_l = ultimo_estado[1][2][2]
             except IndexError:
                 volume_l = None
-
-            if fase == 3 and (volume_v is None or volume_l is None):
+            if volume_v is None or volume_l is None:
                 return redirect('error_type_30')
 
         else:
@@ -865,7 +869,6 @@ def process_values_view30(request):
             value_input = float(request.session.get('value_input'))
             second_value_input = float(request.session.get('second_value_input'))
 
-
             h = subs_cls(5, property_choice, second_property_choice, value_input, second_value_input)
 
             fase = h.results[0]
@@ -873,6 +876,11 @@ def process_values_view30(request):
             try:
                 temperatura = round(h.results[2][0][3], 2)
                 pressao = round(h.results[2][1][3], 2)
+                
+                # VALIDAÇÃO DE PRESSÃO NEGATIVA - ESTADO 1 (Digitado)
+                if pressao < 0:
+                    raise ValidationError("Erro: A pressão calculada ou inserida não pode ser negativa.")
+
                 volume_esp = round(h.results[2][2][3], 8)
                 energia_int = round(h.results[2][3][3], 2)
                 entalpia_esp = round(h.results[2][4][3], 2)
@@ -883,12 +891,11 @@ def process_values_view30(request):
             # === VALIDAÇÃO DE INTEGRIDADE ===
             if (energia_int == 0 and entalpia_esp == 0 and entropia_esp == 0) or volume_esp == 0:
                 return redirect('error_type_30')
-            # =======================================
 
             if fase == 3:
                 tit = round(h.results[2][6][3], 2)
                 volume_v = h.results[1][3][2]
-                volume_l = h.results[1][2][2] # CORRIGIDO AQUI
+                volume_l = h.results[1][2][2]
                 VolumeL = round((1 - (tit / 100)) * volume_l, 8)
                 VolumeV = (tit / 100) * volume_v
             else:
@@ -903,11 +910,11 @@ def process_values_view30(request):
             except IndexError:
                 volume_v = None
             try:
-                volume_l = h.results[1][2][2] # CORRIGIDO AQUI
+                # CORRIGIDO: de [3][1] para [2][2]
+                volume_l = h.results[1][2][2]
             except IndexError:
                 volume_l = None
-
-            if fase == 3 and (volume_v is None or volume_l is None):
+            if volume_v is None or volume_l is None:
                 return redirect('error_type_30')
 
             estados.lista_estados.append(h.results)
@@ -916,10 +923,8 @@ def process_values_view30(request):
         if third_property_choice == 8:
             calor = third_value_input
             entalpia_esp3 = round((calor + entalpia_esp), 6)
-
             h = subs_cls(5, 1, 4, pressao, entalpia_esp3)
         else:
-
             h = subs_cls(5, 1, third_property_choice, pressao, third_value_input)
 
         fase2 = h.results[0]
@@ -927,6 +932,11 @@ def process_values_view30(request):
         # Validação do segundo estado
         try:
             pressao2 = round(h.results[2][1][3], 2)
+            
+            # VALIDAÇÃO DE PRESSÃO NEGATIVA - ESTADO 2
+            if pressao2 < 0:
+                raise ValidationError("Erro: A pressão resultante do segundo estado não pode ser negativa.")
+
             temperatura2 = round(h.results[2][0][3], 2)
             volume_esp2 = round(h.results[2][2][3], 8)
             energia_int2 = round(h.results[2][3][3], 2)
@@ -941,7 +951,7 @@ def process_values_view30(request):
         if fase2 == 3:
             tit2 = round(h.results[2][6][3], 2)
             volume_v2 = h.results[1][3][2]
-            volume_l2 = h.results[1][2][2] # CORRIGIDO AQUI
+            volume_l2 = h.results[1][2][2]
             VolumeL2 = round((1 - (tit2 / 100)) * volume_l2, 8)
             VolumeV2 = (tit2 / 100) * volume_v2
         else:
@@ -956,11 +966,13 @@ def process_values_view30(request):
         except IndexError:
             volume_v2 = None
         try:
-            volume_l2 = h.results[1][2][2] # CORRIGIDO AQUI
+            # CORRIGIDO: de [3][1] para [2][2]
+            volume_l2 = h.results[1][2][2]
         except IndexError:
             volume_l2 = None
 
-        if fase2 == 3 and (volume_v2 is None or volume_l2 is None):
+        # Corrigido: Estava 'volume_l' no código original, mudei para 'volume_l2'
+        if volume_v2 is None or volume_l2 is None:
             return redirect('error_type_30')
 
         escolha = third_property_choice
@@ -973,6 +985,100 @@ def process_values_view30(request):
             calor = round((entalpia_esp2 - entalpia_esp), 6)
             entropia_ger = round((entropia_esp2 - entropia_esp) - (calor / (temp_viz + 273.15)), 6)
             trabalho = round((volume_esp2 - volume_esp) * pressao, 6)
+
+        import math # Certifique-se de que isso esteja no topo do seu arquivo views.py
+
+        # ==========================================================
+        # GERAÇÃO DE MICROPROCESSOS PARA O DIAGRAMA (ALTA PRECISÃO)
+        # ==========================================================
+        pontos_grafico = request.session.get('pontos_grafico', [])
+
+        # O SEGREDO: Iterar SEMPRE pela Entalpia (h) para desenhar o caminho isobárico,
+        # pois ela nunca quebra (ao contrário do Título) ao cruzar as fases.
+        val_inicial = entalpia_esp
+        val_final = entalpia_esp2
+
+        # 1. CAPTURA DOS PONTOS CRÍTICOS (Fronteiras do Domo via Entalpia)
+        pontos_criticos = []
+        try:
+            h_sat_l = subs_cls(5, 1, 6, pressao, 0)
+            h_sat_v = subs_cls(5, 1, 6, pressao, 100)
+
+            val_sat_l = h_sat_l.results[2][4][3] # Entalpia de x=0
+            val_sat_v = h_sat_v.results[2][4][3] # Entalpia de x=100
+
+            limite_inf = min(val_inicial, val_final)
+            limite_sup = max(val_inicial, val_final)
+
+            if limite_inf < val_sat_l < limite_sup:
+                pontos_criticos.append(val_sat_l)
+            if limite_inf < val_sat_v < limite_sup:
+                pontos_criticos.append(val_sat_v)
+        except Exception:
+            pass
+
+        # 2. GERAÇÃO DA MALHA DE PONTOS (Linear para Entalpia)
+        num_passos = 150
+        passo = (val_final - val_inicial) / num_passos if val_final != val_inicial else 0
+        valores_iteracao = [val_inicial + (i * passo) for i in range(1, num_passos)]
+
+        valores_iteracao.extend(pontos_criticos)
+        valores_iteracao = sorted(list(set(valores_iteracao)), reverse=(val_inicial > val_final))
+
+        ramo_atual = []
+
+        # Estado Inicial
+        ramo_atual.append({
+            'T': round(temperatura, 2),
+            'P': round(pressao, 2),
+            'v': round(volume_esp, 6),
+            's': round(entropia_esp, 4),
+            'h': round(entalpia_esp, 2),
+            'fase': fase, # Adicionando a fase para o 3D
+            'vl': round(volume_l, 8) if volume_l else round(volume_esp, 8)
+        })
+
+        # Processamento da curva: Forçamos o índice 4 (Entalpia)
+        for val_atual in valores_iteracao:
+            try:
+                h_micro = subs_cls(5, 1, 4, pressao, val_atual)
+                v_micro = h_micro.results[2][2][3]
+
+                if v_micro != 0:
+                    fase_micro = h_micro.results[0]
+                    # Captura o volume de líquido se estiver saturado
+                    try:
+                        vl_micro = h_micro.results[1][2][2] if fase_micro == 3 else v_micro
+                    except IndexError:
+                        vl_micro = v_micro
+
+                    ramo_atual.append({
+                        'T': round(h_micro.results[2][0][3], 2),
+                        'P': round(h_micro.results[2][1][3], 2),
+                        'v': round(v_micro, 6),
+                        's': round(h_micro.results[2][5][3], 4),
+                        'h': round(h_micro.results[2][4][3], 2),
+                        'fase': fase_micro, # Adicionando fase
+                        'vl': round(vl_micro, 8)
+                    })
+            except (IndexError, TypeError, BoundariesException):
+                continue
+
+        # Estado Final
+        ramo_atual.append({
+            'T': round(temperatura2, 2),
+            'P': round(pressao2, 2),
+            'v': round(volume_esp2, 6),
+            's': round(entropia_esp2, 4),
+            'h': round(entalpia_esp2, 2),
+            'fase': fase2, # Adicionando fase
+            'vl': round(volume_l2, 8) if volume_l2 else round(volume_esp2, 8)
+        })
+
+        pontos_grafico.append(ramo_atual)
+        request.session['pontos_grafico'] = pontos_grafico
+        # ==========================================================
+        # ==========================================================
 
         estados.lista_estados.append(h.results)
         teste3 = estados.lista_estados
@@ -1009,15 +1115,24 @@ def process_values_view30(request):
             'Calor': calor,
             'Sger': entropia_ger,
             'Trabalho': trabalho,
-            'teste3': teste3
+            'teste3': teste3,
+            'pontos_grafico_json': json.dumps(pontos_grafico) # Envia os pontos iterativos para o Javascript desenhar
         })
 
-    except (ValidationError, TypeError, BoundariesException, TituloException) as e:
+    except ValidationError as e:
         return render(request, 'erro_generico.html', {'message': str(e)})
-    except Exception:
-        return redirect('error_type_30')
+    
+    except BoundariesException:
+        # Capturando os limites da tabela de forma dinâmica
+        return render(request, 'erro_generico.html', {'message': 'Os valores fornecidos (ou calculados) estão fora dos limites das tabelas termodinâmicas'})
 
+    except TypeError as e:
+        # Captura erros como "Valores fora do limite da tabela." gerados dentro da subs_cls
+        return render(request, 'erro_generico.html', {'message': str(e)})
 
+    except IndexError:
+        # Proteção adicional caso estoure índice nas interpolações da tabela
+        return render(request, 'erro_generico.html', {'message': 'Ocorreu um erro ao acessar as tabelas termodinâmicas (valores fora do alcance esperado).'})
 ###############################################################################
 
 class BoundariesException(Exception):

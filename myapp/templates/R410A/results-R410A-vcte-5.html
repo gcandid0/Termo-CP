@@ -1,9 +1,8 @@
 {% extends 'base2.html' %}
 
-{% block title %}TERMO-CP | R-410A{% endblock %}
+{% block title %}TERMO-CP{% endblock %}
 
 {% block extra_head %}
-    <!-- Bibliotecas Necessárias -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/hammerjs@2.0.8"></script>
@@ -12,221 +11,244 @@
 
 {% block extra_css %}
 <style>
-    /* --- Identidade Visual Padrão --- */
-    :root {
-        --accent-r410a: #FFC107; /* Amarelo/Âmbar específico desta página */
-    }
-
-    .top-row {
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        gap: 15px;
-        flex: 1;
-        min-height: 0;
-    }
-
-    /* Cartões Laterais */
-    .side-column {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        gap: 15px;
-        min-height: 0;
-    }
+    /* --- Layout Principal --- */
+    .top-row { display: flex; flex-direction: row; justify-content: space-between; gap: 15px; flex: 1; min-height: 0; }
 
     .state-card {
-        flex: 1;
-        background: var(--card-bg);
-        border-radius: 10px;
-        box-shadow: var(--shadow);
-        padding: 15px;
-        display: flex;
-        flex-direction: column;
+        flex: 1; background: var(--card-bg);
+        border-radius: 10px; box-shadow: var(--shadow);
+        padding: 15px; display: flex; flex-direction: column;
         border-top: 4px solid var(--primary-color);
         overflow-y: auto;
     }
-
-    .state-card.final-state {
-        border-top-color: var(--secondary-color);
-    }
+    .state-card.final-state { border-top-color: var(--secondary-color); }
 
     .state-card h2 {
-        color: var(--primary-color);
-        font-size: 1.2em;
-        border-bottom: 2px solid #eee;
-        padding-bottom: 8px;
-        margin-top: 0;
-        margin-bottom: 10px;
-        text-align: center;
+        color: var(--primary-color); font-size: 1.2em;
+        border-bottom: 2px solid #eee; padding-bottom: 8px;
+        margin-top: 0; margin-bottom: 10px; text-align: center;
     }
 
     .data-row {
-        display: flex;
-        justify-content: space-between;
-        padding: 8px 0;
-        border-bottom: 1px solid #eee;
-        font-size: 0.9em;
+        display: flex; justify-content: space-between;
+        padding: 8px 0; border-bottom: 1px solid #eee; font-size: 0.9em;
     }
-
     .data-row:last-child { border-bottom: none; }
     .data-label { font-weight: bold; color: #555; }
     .data-value { font-weight: bold; color: var(--primary-color); }
 
-    /* Coluna Central (Cilindro e Slider) */
-    .center-column {
-        flex: 1.5;
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        min-height: 0;
-    }
+    .center-column { flex: 1.5; display: flex; flex-direction: column; gap: 10px; min-height: 0; }
 
+    /* --- SLIDER STYLES MELHORADOS --- */
     .slider-mini-container {
-        text-align: center;
-        background-color: #f0f8ff;
-        padding: 5px 15px;
-        border-radius: 8px;
-        border: 1px solid #dbeafe;
-        box-shadow: var(--shadow);
+        text-align: center; background-color: #f0f8ff;
+        padding: 10px 15px; border-radius: 8px;
+        border: 1px solid #dbeafe; box-shadow: var(--shadow);
     }
-
-    .slider-mini-container h4 {
-        margin: 5px 0;
-        font-size: 0.9em;
-        color: var(--primary-color);
-    }
+    .slider-mini-container h4 { margin: 0 0 10px 0; font-size: 0.95em; color: var(--primary-color); }
 
     input[type="range"] {
-        width: 60%;
-        margin: 5px 0;
-        accent-color: var(--secondary-color);
+        -webkit-appearance: none;
+        width: 80%;
+        background: transparent;
+        margin: 10px 0;
     }
+    input[type="range"]:focus { outline: none; }
+    input[type="range"]::-webkit-slider-runnable-track {
+        width: 100%; height: 8px; cursor: pointer;
+        background: #cfd8dc; border-radius: 4px;
+        box-shadow: inset 0 1px 3px rgba(0,0,0,0.2);
+    }
+    input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        height: 22px; width: 22px; border-radius: 50%;
+        background: var(--secondary-color, #e67e22);
+        cursor: pointer; margin-top: -7px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.4);
+        transition: transform 0.1s;
+    }
+    input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.15); }
 
     .visualization-container {
-        flex: 1;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        position: relative;
-        background: #000;
-        border-radius: 10px;
-        box-shadow: var(--shadow);
-        overflow: hidden;
+        flex: 1; background: #000; border-radius: 10px;
+        position: relative; display: flex; justify-content: center; align-items: center;
+        overflow: hidden; box-shadow: var(--shadow);
     }
-
-    /* Mantém a proporção do canvas perfeitamente */
-    .visualization-container canvas {
-        max-width: 100%;
-        max-height: 100%;
-        object-fit: contain;
-    }
+    .visualization-container canvas { max-width: 100%; max-height: 100%; object-fit: contain; }
 
     .scale-label {
-        position: absolute;
-        color: white;
-        font-size: 11px;
-        font-family: 'Arial', sans-serif;
-        pointer-events: none;
-        text-align: right;
-        width: 60px;
-        z-index: 10;
+        position: absolute; color: white; font-size: 11px;
+        font-family: 'Arial', sans-serif; pointer-events: none;
+        text-align: right; width: 60px; z-index: 10;
     }
 
-    /* --- Estilos da Legenda do Cilindro --- */
     .legend-container {
-        position: absolute;
-        bottom: 20px;
-        right: 20px;
-        background-color: rgba(15, 15, 15, 0.85); /* Fundo escuro translúcido */
-        padding: 15px 20px;
-        border-radius: 12px;
-        color: white;
-        font-family: 'Arial', sans-serif;
-        font-size: 14px;
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-        pointer-events: none;
-        z-index: 20;
+        position: absolute; bottom: 20px; right: 20px;
+        background-color: rgba(15, 15, 15, 0.85);
+        padding: 15px 20px; border-radius: 12px; color: white;
+        font-size: 14px; display: flex; flex-direction: column;
+        gap: 12px; pointer-events: none; z-index: 20;
         box-shadow: 0 4px 10px rgba(0,0,0,0.5);
     }
 
-    .legend-item {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        font-weight: bold;
-    }
-
-    .legend-color {
-        width: 24px;
-        height: 16px;
-        display: inline-block;
-        border-radius: 2px;
-    }
-
+    .legend-item { display: flex; align-items: center; gap: 12px; font-weight: bold; }
+    .legend-color { width: 24px; height: 16px; display: inline-block; border-radius: 2px; }
     .legend-cilindro { background-color: transparent; border: 1px solid #888; }
     .legend-pistao { background-color: #a2a2a2; }
     .legend-vapor { background-color: rgba(255, 152, 0, 0.7); border: 1px solid #333; }
     .legend-liquido { background-color: #FF9800; }
 
-    /* Linha Inferior (Resultados do Processo) - Cor Alterada */
+    /* --- Barra de Resultados --- */
     .bottom-row {
-        display: flex;
-        flex-direction: row;
-        background-color: #FFF9C4;
-        border-radius: 10px;
-        box-shadow: var(--shadow);
-        padding: 10px 20px;
-        align-items: center;
-        justify-content: space-between;
-        flex-shrink: 0;
-        border-left: 4px solid var(--accent-r410a);
+        background-color: #FFF9C4; border-radius: 10px;
+        padding: 10px 20px; display: flex; align-items: center;
+        justify-content: space-between; border-left: 4px solid var(--accent-gas);
+        box-shadow: var(--shadow); flex-shrink: 0;
     }
 
-    .bottom-row h3 {
-        margin: 0;
-        color: var(--secondary-color);
-        font-size: 1.1em;
-        margin-right: 20px;
-    }
+    .bottom-row h3 { margin: 0; color: var(--secondary-color); font-size: 1.1em; margin-right: 20px; }
 
-    .process-results {
-        display: flex;
-        flex-direction: row;
-        gap: 25px;
-        flex: 1;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .process-item {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        font-size: 0.9em;
-    }
-
-    .process-item span { color: #666; font-size: 0.8em; }
+    .process-results { display: flex; flex-direction: row; gap: 25px; flex: 1; justify-content: center; align-items: center; }
+    .process-item { display: flex; flex-direction: column; align-items: center; font-size: 0.9em; }
+    .process-item > span:first-child { color: #666; font-size: 0.8em; }
     .process-item strong { color: var(--primary-color); font-size: 1.1em; }
+    .process-item strong .format-num { color: inherit; font-size: inherit; font-weight: inherit; }
 
-    .process-impossible {
-        color: red;
-        font-weight: bold;
-        text-align: center;
-        padding: 5px 15px;
-        border: 2px solid red;
-        border-radius: 5px;
-        background-color: rgba(255,0,0,0.05);
+    .process-impossible { color: red; font-weight: bold; text-align: center; padding: 5px 15px; border: 2px solid red; border-radius: 5px; }
+
+    .button-group { display: flex; gap: 10px; flex-wrap: wrap; justify-content: flex-end;}
+
+    /* --- ESTILOS DO MEMORIAL DE CÁLCULO DIDÁTICO --- */
+    .math-step {
+        background: #ffffff;
+        border-radius: 12px;
+        padding: 25px 20px 20px 30px;
+        margin-bottom: 25px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        border-left: 5px solid;
+        position: relative;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .math-step:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0,0,0,0.1);
     }
 
-    /* Botões */
-    .button-group {
+    .step-number {
+        position: absolute;
+        top: -12px;
+        left: -18px;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        color: white;
         display: flex;
-        gap: 10px;
-        flex-wrap: wrap;
-        justify-content: flex-end;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        font-size: 1.2em;
+        box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+    }
+
+    .step-1 { border-color: #3498db; } .step-1 .step-number { background: #3498db; }
+    .step-2 { border-color: #9b59b6; } .step-2 .step-number { background: #9b59b6; }
+    .step-3 { border-color: #e67e22; } .step-3 .step-number { background: #e67e22; }
+    .step-4 { border-color: #2ecc71; } .step-4 .step-number { background: #2ecc71; }
+
+    .step-header {
+        font-size: 1.2em;
+        font-weight: bold;
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .step-1 .step-header { color: #3498db; }
+    .step-2 .step-header { color: #9b59b6; }
+    .step-3 .step-header { color: #e67e22; }
+    .step-4 .step-header { color: #2ecc71; }
+
+    .step-description {
+        font-size: 0.95em;
+        color: #555;
+        margin-bottom: 15px;
+        line-height: 1.5;
+        background: #f8f9fa;
+        padding: 10px 15px;
+        border-radius: 8px;
+        border-left: 3px solid #ccc;
+    }
+
+    .formula-box {
+        background: #fdfefe;
+        color: #2c3e50;
+        padding: 12px 25px;
+        border-radius: 8px;
+        font-size: 1.3em;
+        text-align: center;
+        margin: 10px auto 15px auto;
+        letter-spacing: 1px;
+        font-weight: bold;
+        width: fit-content;
+        border: 2px solid #ebedef;
+        font-family: 'Courier New', Courier, monospace;
+    }
+    .formula-box span.math-op { color: #7f8c8d; padding: 0 5px; }
+
+    .step-calc {
+        text-align: center;
+        color: #555;
+        margin-bottom: 15px;
+        font-size: 1.1em;
+        line-height: 1.8;
+    }
+
+    .val-badge {
+        background: #f1f2f6;
+        padding: 3px 8px;
+        border-radius: 6px;
+        font-weight: bold;
+        color: #2f3542;
+        border: 1px solid #dfe4ea;
+        font-size: 1em;
+    }
+
+    .step-result {
+        text-align: center; font-size: 1.25em; font-weight: bold;
+        padding: 12px; border-radius: 8px; border: 2px dashed; margin-top: 15px;
+    }
+    .step-2 .step-result { color: #8e44ad; border-color: #9b59b6; background: #f5eef8; }
+    .step-3 .step-result { color: #d35400; border-color: #e67e22; background: #fff4e6; }
+
+    .state-boxes { display: flex; gap: 15px; justify-content: center; }
+    .state-box {
+        flex: 1; background: #fdfefe; border: 1px solid #dee2e6; border-radius: 8px;
+        padding: 15px; text-align: center; color: #333; font-size: 1.05em; line-height: 1.6;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+    }
+    .state-box strong { display: block; margin-bottom: 8px; color: #2c3e50; border-bottom: 1px solid #eee; padding-bottom: 5px; }
+
+    /* --- CORREÇÕES DOS MODAIS --- */
+    .modal-content.modal-chart {
+        max-width: 1000px;
+        width: 90%;
+        padding: 20px 40px;
+    }
+
+    .modal-btn {
+        display: block; 
+        padding: 12px; 
+        margin: 10px 0;
+        background-color: var(--primary-color); 
+        color: white;
+        text-decoration: none; 
+        border-radius: 5px; 
+        transition: background 0.3s ease;
+        font-weight: bold;
+    }
+    .modal-btn:hover { 
+        background-color: var(--secondary-color); 
+        color: white; 
     }
 
     .chart-controls { display: flex; justify-content: center; align-items: center; margin-bottom: 15px; gap: 15px; flex-wrap: wrap; }
@@ -234,67 +256,61 @@
         padding: 8px 12px; border-radius: 6px; border: 2px solid var(--primary-color);
         font-family: inherit; color: var(--primary-color); font-weight: bold; outline: none; cursor: pointer;
     }
+
     .zoom-tip { font-size: 0.8em; color: #666; font-style: italic; margin-bottom: 10px; }
 
-    /* Mobile */
-    @media (max-width: 992px) {
-        .top-row { flex-direction: column; }
-        .side-column { gap: 15px; }
-        .center-column { min-height: 500px; }
-        .bottom-row { flex-direction: column; gap: 15px; text-align: center; }
-        .process-results { flex-wrap: wrap; justify-content: center; }
-        .bottom-row h3 { margin-right: 0; }
-        .button-group { flex-direction: column; width: 100%; }
+    @media (max-width: 768px) {
+        .button-group { flex-direction: column; }
         .btn { width: 100%; }
+        .bottom-row { flex-direction: column; gap: 15px; text-align: center; }
+        .process-results { flex-wrap: wrap; gap: 15px; }
+        .bottom-row h3 { margin-right: 0; }
+        .modal-content.modal-chart { padding: 15px; width: 95%; }
     }
 </style>
 {% endblock %}
 
 {% block content %}
 <div class="top-row">
-
-    <!-- COLUNA LATERAL ESQUERDA (ESTADO 1) -->
-    <div class="side-column">
-        <div class="state-card">
-            <h2><i class="fas fa-play-circle"></i> <span class="lang-text" data-pt-br="Estado Inicial (1)" data-en="Initial State (1)" data-es="Estado Inicial (1)">Estado Inicial (1)</span></h2>
-            
-            <div class="data-row">
-                <span class="data-label lang-text" data-pt-br="Fase:" data-en="Phase:" data-es="Fase:">Fase:</span> 
-                <span class="data-value">
-                    {% if fase == 1 %}
-                        <span class="lang-text" data-pt-br="Líquido Comprimido" data-en="Compressed Liquid" data-es="Líquido Comprimido">Líquido Comprimido</span>
-                    {% elif fase == 2 %}
-                        <span class="lang-text" data-pt-br="Vapor Superaquecido" data-en="Superheated Vapor" data-es="Vapor Sobrecalentado">Vapor Superaquecido</span>
-                    {% else %} 
-                        <span class="lang-text" data-pt-br="Região de Saturação" data-en="Saturation Region" data-es="Región de Saturación">Região de Saturação</span>
-                    {% endif %}
-                </span>
-            </div>
-            <div class="data-row"><span class="data-label lang-text" data-pt-br="Massa (m):" data-en="Mass (m):" data-es="Masa (m):">Massa (m):</span> <span class="data-value">1,0 kg</span></div>
-            <div class="data-row"><span class="data-label lang-text" data-pt-br="Temperatura (T):" data-en="Temperature (T):" data-es="Temperatura (T):">Temperatura (T):</span> <span class="data-value">{{ temperatura }} °C</span></div>
-            <div class="data-row"><span class="data-label lang-text" data-pt-br="Pressão (p):" data-en="Pressure (p):" data-es="Presión (p):">Pressão (p):</span> <span class="data-value">{{ pressao }} kPa</span></div>
-            <div class="data-row"><span class="data-label lang-text" data-pt-br="Volume específico (v):" data-en="Specific Volume (v):" data-es="Volumen específico (v):">Volume específico (v):</span> <span class="data-value">{{ volume_especifico }} m³/kg</span></div>
-            <div class="data-row"><span class="data-label lang-text" data-pt-br="Energia interna (u):" data-en="Internal Energy (u):" data-es="Energía interna (u):">Energia interna (u):</span> <span class="data-value">{{ energia_interna }} kJ/kg</span></div>
-            <div class="data-row"><span class="data-label lang-text" data-pt-br="Entalpia (h):" data-en="Enthalpy (h):" data-es="Entalpía (h):">Entalpia (h):</span> <span class="data-value">{{ entalpia_especifica }} kJ/kg</span></div>
-            <div class="data-row"><span class="data-label lang-text" data-pt-br="Entropia (s):" data-en="Entropy (s):" data-es="Entropía (s):">Entropia (s):</span> <span class="data-value">{{ entropia_especifica }} kJ/kg.K</span></div>
-            {% if fase == 3 %}
-            <div class="data-row"><span class="data-label lang-text" data-pt-br="Título (x):" data-en="Quality (x):" data-es="Calidad (x):">Título (x):</span> <span class="data-value">{{ titulo }} %</span></div>
-            {% endif %}
+    <div class="state-card">
+        <h2><i class="fas fa-play-circle"></i> <span class="lang-text" data-pt-br="Estado Inicial (1)" data-en="Initial State (1)" data-es="Estado Inicial (1)">Estado Inicial (1)</span></h2>
+        
+        <div class="data-row">
+            <span class="data-label lang-text" data-pt-br="Fase:" data-en="Phase:" data-es="Fase:">Fase:</span> 
+            <span class="data-value">
+                {% if fase == 1 %}
+                    <span class="lang-text" data-pt-br="Líquido Comprimido" data-en="Compressed Liquid" data-es="Líquido Comprimido">Líquido Comprimido</span>
+                {% elif fase == 2 %}
+                    <span class="lang-text" data-pt-br="Vapor Superaquecido" data-en="Superheated Vapor" data-es="Vapor Sobrecalentado">Vapor Superaquecido</span>
+                {% else %} 
+                    <span class="lang-text" data-pt-br="Região de Saturação" data-en="Saturation Region" data-es="Región de Saturación">Região de Saturação</span>
+                {% endif %}
+            </span>
         </div>
+        <div class="data-row"><span class="data-label lang-text" data-pt-br="Massa (m):" data-en="Mass (m):" data-es="Masa (m):">Massa (m):</span> <span class="data-value"><span class="format-num">1,0</span> kg</span></div>
+        <div class="data-row"><span class="data-label lang-text" data-pt-br="Temperatura (T):" data-en="Temperature (T):" data-es="Temperatura (T):">Temperatura (T):</span> <span class="data-value"><span class="format-num">{{ temperatura }}</span> °C</span></div>
+        <div class="data-row"><span class="data-label lang-text" data-pt-br="Pressão (p):" data-en="Pressure (p):" data-es="Presión (p):">Pressão (p):</span> <span class="data-value"><span class="format-num">{{ pressao }}</span> kPa</span></div>
+        <div class="data-row"><span class="data-label lang-text" data-pt-br="Volume específico (v):" data-en="Specific volume (v):" data-es="Volumen específico (v):">Volume específico (v):</span> <span class="data-value"><span class="format-num">{{ volume_especifico|floatformat:6 }}</span> m³/kg</span></div>
+        <div class="data-row"><span class="data-label lang-text" data-pt-br="Energia Interna (u):" data-en="Internal Energy (u):" data-es="Energía Interna (u):">Energia Interna (u):</span> <span class="data-value"><span class="format-num">{{ energia_interna }}</span> kJ/kg</span></div>
+        <div class="data-row"><span class="data-label lang-text" data-pt-br="Entalpia (h):" data-en="Enthalpy (h):" data-es="Entalpía (h):">Entalpia (h):</span> <span class="data-value"><span class="format-num">{{ entalpia_especifica }}</span> kJ/kg</span></div>
+        <div class="data-row"><span class="data-label lang-text" data-pt-br="Entropia (s):" data-en="Entropy (s):" data-es="Entropía (s):">Entropia (s):</span> <span class="data-value"><span class="format-num">{{ entropia_especifica }}</span> kJ/kg.K</span></div>
+        {% if fase == 3 %}
+        <div class="data-row"><span class="data-label lang-text" data-pt-br="Título (x):" data-en="Quality (x):" data-es="Calidad (x):">Título (x):</span> <span class="data-value"><span class="format-num">{{ titulo }}</span> %</span></div>
+        {% endif %}
     </div>
 
-    <!-- COLUNA CENTRAL (P5.JS) -->
     <div class="center-column">
         <div class="slider-mini-container">
             <h4>
+                <i class="fas fa-eye"></i>
                 <span class="lang-text" data-pt-br="Visualizando Cilindro:" data-en="Viewing Cylinder:" data-es="Viendo Cilindro:">Visualizando Cilindro:</span> 
                 <span id="volumeValue" style="color: var(--secondary-color);" class="lang-text" data-pt-br="Estado Inicial" data-en="Initial State" data-es="Estado Inicial">Estado Inicial</span>
             </h4>
-            <div style="display: flex; justify-content: space-between; font-size: 0.75em; color: #666; padding: 0 10%;">
-                <span class="lang-text" data-pt-br="Inicial" data-en="Initial" data-es="Inicial">Inicial</span>
-                <span class="lang-text" data-pt-br="Final" data-en="Final" data-es="Final">Final</span>
-            </div>
             <input type="range" id="volumeSlider" min="1" max="2" step="1" value="1">
+            <div style="display: flex; justify-content: space-between; font-size: 0.75em; color: #666; padding: 0 10%; font-weight: bold;">
+                <span class="lang-text" data-pt-br="ESTADO 1" data-en="STATE 1" data-es="ESTADO 1">ESTADO 1</span>
+                <span class="lang-text" data-pt-br="ESTADO 2" data-en="STATE 2" data-es="ESTADO 2">ESTADO 2</span>
+            </div>
         </div>
 
         <div class="visualization-container" id="canvas-wrapper">
@@ -308,72 +324,200 @@
         </div>
     </div>
 
-    <!-- COLUNA LATERAL DIREITA (ESTADO 2) -->
-    <div class="side-column">
-        <div class="state-card final-state">
-            <h2><i class="fas fa-stop-circle"></i> <span class="lang-text" data-pt-br="Estado Final (2)" data-en="Final State (2)" data-es="Estado Final (2)">Estado Final (2)</span></h2>
-            
-            <div class="data-row">
-                <span class="data-label lang-text" data-pt-br="Fase:" data-en="Phase:" data-es="Fase:">Fase:</span> 
-                <span class="data-value">
-                    {% if fase2 == 1 %}
-                        <span class="lang-text" data-pt-br="Líquido Comprimido" data-en="Compressed Liquid" data-es="Líquido Comprimido">Líquido Comprimido</span>
-                    {% elif fase2 == 2 %}
-                        <span class="lang-text" data-pt-br="Vapor Superaquecido" data-en="Superheated Vapor" data-es="Vapor Sobrecalentado">Vapor Superaquecido</span>
-                    {% else %} 
-                        <span class="lang-text" data-pt-br="Região de Saturação" data-en="Saturation Region" data-es="Región de Saturación">Região de Saturação</span>
-                    {% endif %}
-                </span>
-            </div>
-            <div class="data-row"><span class="data-label lang-text" data-pt-br="Massa (m):" data-en="Mass (m):" data-es="Masa (m):">Massa (m):</span> <span class="data-value">1,0 kg</span></div>
-            <div class="data-row"><span class="data-label lang-text" data-pt-br="Temperatura (T):" data-en="Temperature (T):" data-es="Temperatura (T):">Temperatura (T):</span> <span class="data-value">{{ temperatura2 }} °C</span></div>
-            <div class="data-row"><span class="data-label lang-text" data-pt-br="Pressão (p):" data-en="Pressure (p):" data-es="Presión (p):">Pressão (p):</span> <span class="data-value">{{ pressao2 }} kPa</span></div>
-            <div class="data-row"><span class="data-label lang-text" data-pt-br="Volume específico (v):" data-en="Specific Volume (v):" data-es="Volumen específico (v):">Volume específico (v):</span> <span class="data-value">{{ volume_especifico2 }} m³/kg</span></div>
-            <div class="data-row"><span class="data-label lang-text" data-pt-br="Energia interna (u):" data-en="Internal Energy (u):" data-es="Energía interna (u):">Energia interna (u):</span> <span class="data-value">{{ energia_interna2 }} kJ/kg</span></div>
-            <div class="data-row"><span class="data-label lang-text" data-pt-br="Entalpia (h):" data-en="Enthalpy (h):" data-es="Entalpía (h):">Entalpia (h):</span> <span class="data-value">{{ entalpia_especifica2 }} kJ/kg</span></div>
-            <div class="data-row"><span class="data-label lang-text" data-pt-br="Entropia (s):" data-en="Entropy (s):" data-es="Entropía (s):">Entropia (s):</span> <span class="data-value">{{ entropia_especifica2 }} kJ/kg.K</span></div>
-            {% if fase2 == 3 %}
-            <div class="data-row"><span class="data-label lang-text" data-pt-br="Título (x):" data-en="Quality (x):" data-es="Calidad (x):">Título (x):</span> <span class="data-value">{{ titulo2 }} %</span></div>
-            {% endif %}
+    <div class="state-card final-state">
+        <h2><i class="fas fa-stop-circle"></i> <span class="lang-text" data-pt-br="Estado Final (2)" data-en="Final State (2)" data-es="Estado Final (2)">Estado Final (2)</span></h2>
+        
+        <div class="data-row">
+            <span class="data-label lang-text" data-pt-br="Fase:" data-en="Phase:" data-es="Fase:">Fase:</span> 
+            <span class="data-value">
+                {% if fase2 == 1 %}
+                    <span class="lang-text" data-pt-br="Líquido Comprimido" data-en="Compressed Liquid" data-es="Líquido Comprimido">Líquido Comprimido</span>
+                {% elif fase2 == 2 %}
+                    <span class="lang-text" data-pt-br="Vapor Superaquecido" data-en="Superheated Vapor" data-es="Vapor Sobrecalentado">Vapor Superaquecido</span>
+                {% else %} 
+                    <span class="lang-text" data-pt-br="Região de Saturação" data-en="Saturation Region" data-es="Región de Saturación">Região de Saturação</span>
+                {% endif %}
+            </span>
         </div>
+        <div class="data-row"><span class="data-label lang-text" data-pt-br="Massa (m):" data-en="Mass (m):" data-es="Masa (m):">Massa (m):</span> <span class="data-value"><span class="format-num">1,0</span> kg</span></div>
+        <div class="data-row"><span class="data-label lang-text" data-pt-br="Temperatura (T):" data-en="Temperature (T):" data-es="Temperatura (T):">Temperatura (T):</span> <span class="data-value"><span class="format-num">{{ temperatura2 }}</span> °C</span></div>
+        <div class="data-row"><span class="data-label lang-text" data-pt-br="Pressão (p):" data-en="Pressure (p):" data-es="Presión (p):">Pressão (p):</span> <span class="data-value"><span class="format-num">{{ pressao2 }}</span> kPa</span></div>
+        <div class="data-row"><span class="data-label lang-text" data-pt-br="Volume específico (v):" data-en="Specific volume (v):" data-es="Volumen específico (v):">Volume específico (v):</span> <span class="data-value"><span class="format-num">{{ volume_especifico2|floatformat:6 }}</span> m³/kg</span></div>
+        <div class="data-row"><span class="data-label lang-text" data-pt-br="Energia Interna (u):" data-en="Internal Energy (u):" data-es="Energía Interna (u):">Energia Interna (u):</span> <span class="data-value"><span class="format-num">{{ energia_interna2 }}</span> kJ/kg</span></div>
+        <div class="data-row"><span class="data-label lang-text" data-pt-br="Entalpia (h):" data-en="Enthalpy (h):" data-es="Entalpía (h):">Entalpia (h):</span> <span class="data-value"><span class="format-num">{{ entalpia_especifica2 }}</span> kJ/kg</span></div>
+        <div class="data-row"><span class="data-label lang-text" data-pt-br="Entropia (s):" data-en="Entropy (s):" data-es="Entropía (s):">Entropia (s):</span> <span class="data-value"><span class="format-num">{{ entropia_especifica2 }}</span> kJ/kg.K</span></div>
+        {% if fase2 == 3 %}
+        <div class="data-row"><span class="data-label lang-text" data-pt-br="Título (x):" data-en="Quality (x):" data-es="Calidad (x):">Título (x):</span> <span class="data-value"><span class="format-num">{{ titulo2 }}</span> %</span></div>
+        {% endif %}
     </div>
-
 </div>
 
-<!-- BARRA INFERIOR DE RESULTADOS -->
 <div class="bottom-row">
     <h3><i class="fas fa-chart-line"></i> <span class="lang-text" data-pt-br="Resultados do Processo" data-en="Process Results" data-es="Resultados del Proceso">Resultados do Processo</span></h3>
 
     <div class="process-results">
-        <div class="process-item"><span class="lang-text" data-pt-br="Temperatura da Vizinhança" data-en="Surroundings Temp" data-es="Temp. del Entorno">Temperatura da Vizinhança</span><strong>{{ TempViz }} °C</strong></div>
-        <div class="process-item"><span class="lang-text" data-pt-br="Calor (Q)" data-en="Heat (Q)" data-es="Calor (Q)">Calor (Q)</span><strong>{{ Calor }} kJ</strong></div>
-        <div class="process-item"><span>Sger</span><strong>{{ Sger }} kJ/K</strong></div>
+        <div class="process-item"><span class="lang-text" data-pt-br="Temperatura da Vizinhança" data-en="Surroundings Temp" data-es="Temp. del Entorno">Temperatura da Vizinhança</span><strong><span class="format-num">{{ TempViz }}</span> °C</strong></div>
+        <div class="process-item"><span class="lang-text" data-pt-br="Calor (Q)" data-en="Heat (Q)" data-es="Calor (Q)">Calor (Q)</span><strong><span class="format-num">{{ Calor }}</span> kJ</strong></div>
+        <div class="process-item"><span>Sger</span><strong><span class="format-num">{{ Sger }}</span> kJ/K</strong></div>
 
-        {% if Sger != None and Sger < 0 %}
-        <div class="process-impossible">
-            <i class="fas fa-exclamation-triangle"></i> <span class="lang-text" data-pt-br="PROCESSO IMPOSSÍVEL!" data-en="IMPOSSIBLE PROCESS!" data-es="¡PROCESO IMPOSIBLE!">PROCESSO IMPOSSÍVEL!</span>
-        </div>
+        {% if Sger < 0 %}
+        <div class="process-impossible lang-text" data-pt-br="PROCESSO IMPOSSÍVEL!" data-en="IMPOSSIBLE PROCESS!" data-es="¡PROCESO IMPOSIBLE!">PROCESSO IMPOSSÍVEL!</div>
         {% endif %}
     </div>
 
     <div class="button-group">
+        <button id="btnDidactic" class="btn btn-info" style="background: linear-gradient(135deg, #4CAF50 0%, #2E7D32 100%); border: none; color: white; box-shadow: 0 4px 15px rgba(76,175,80,0.3);">
+            <i class="fas fa-graduation-cap" style="margin-right: 5px;"></i>
+            <span class="lang-text" data-pt-br="Memorial de Cálculo" data-en="Calculation Memorial" data-es="Memoria de Cálculo">Memorial de Cálculo</span>
+        </button>
+
         <button id="btnCurrentDiagram" class="btn btn-info">
             <i class="fas fa-chart-area" style="margin-right: 5px;"></i> <span class="lang-text" data-pt-br="Diagrama do Processo" data-en="Process Diagram" data-es="Diagrama del Proceso">Diagrama do Processo</span>
         </button>
-        <button id="btnAllDiagrams" class="btn btn-info" style="display: none;">
-            <i class="fas fa-layer-group" style="margin-right: 5px;"></i> <span class="lang-text" data-pt-br="Ciclo Completo" data-en="Full Cycle" data-es="Ciclo Completo">Ciclo Completo</span>
-        </button>
 
-        <a href="{% url 'ask_known4_27' %}" class="btn btn-secondary">
+        <a href="{% url 'ask_known4_5' %}" class="btn btn-secondary">
             <i class="fas fa-arrow-left" style="margin-right: 5px;"></i> <span class="lang-text" data-pt-br="Voltar" data-en="Back" data-es="Volver">Voltar</span>
         </a>
-        <button id="openModalBtn" class="btn btn-primary">
+        <button id="openProcessBtn" class="btn btn-primary">
             <span class="lang-text" data-pt-br="Continuar" data-en="Continue" data-es="Continuar">Continuar</span> <i class="fas fa-arrow-right" style="margin-left: 5px;"></i>
         </button>
     </div>
 </div>
 
-<!-- MODAL DE CONTINUAÇÃO -->
+<div id="didacticModal" class="modal">
+    <div class="modal-content" style="text-align: left; max-width: 900px; border-radius: 15px; border: none; background: #f4f6f9; padding: 25px;">
+        <span class="close-btn" id="closeDidacticBtn" style="font-size: 30px; color: white; right: 20px; top: 15px;">&times;</span>
+
+        <div style="background: var(--primary-color); color: white; padding: 20px; margin: -25px -25px 25px -25px; border-radius: 15px 15px 0 0; text-align: center;">
+            <h2 style="margin: 0; font-size: 1.6em; text-transform: uppercase; letter-spacing: 1px;">
+                <i class="fas fa-book-open" style="margin-right: 10px;"></i>
+                <span class="lang-text" data-pt-br="Memorial de Cálculo Passo-a-Passo" data-en="Step-by-Step Calculation Memorial" data-es="Memoria de Cálculo Paso a Paso">Memorial de Cálculo Passo-a-Passo</span>
+            </h2>
+        </div>
+
+        <div class="math-step step-1">
+            <div class="step-number">1</div>
+            <div class="step-header">
+                <i class="fas fa-search-location"></i> <span class="lang-text" data-pt-br="Levantamento de Propriedades" data-en="Properties Gathering" data-es="Recopilación de Propiedades">Levantamento de Propriedades</span>
+            </div>
+            <div class="step-description lang-text" data-pt-br="No processo isocórico (volume constante), a primeira etapa foca na definição do estado inicial e final, garantindo que o volume específico permaneça inalterado." data-en="In an isochoric (constant volume) process, the first step focuses on defining the initial and final states, ensuring the specific volume remains unchanged." data-es="En el proceso isocórico (volumen constante), el primer paso se centra en definir el estado inicial y final, asegurando que el volumen específico permanezca inalterado.">
+                No processo isocórico (volume constante), a primeira etapa foca na definição do estado inicial e final, garantindo que o volume específico permaneça inalterado.
+            </div>
+            <div class="state-boxes">
+                <div class="state-box">
+                    <strong><i class="fas fa-play" style="font-size: 0.8em; color: #3498db;"></i> <span class="lang-text" data-pt-br="ESTADO 1" data-en="STATE 1" data-es="ESTADO 1">ESTADO 1</span></strong>
+                    v<sub>1</sub> = <span class="format-num">{{ volume_especifico|floatformat:6 }}</span> m³/kg<br>
+                    u<sub>1</sub> = <span class="format-num">{{ energia_interna }}</span> kJ/kg<br>
+                    s<sub>1</sub> = <span class="format-num">{{ entropia_especifica }}</span> kJ/kg.K
+                </div>
+                <div class="state-box">
+                    <strong><i class="fas fa-stop" style="font-size: 0.8em; color: #e74c3c;"></i> <span class="lang-text" data-pt-br="ESTADO 2" data-en="STATE 2" data-es="ESTADO 2">ESTADO 2</span></strong>
+                    v<sub>2</sub> = <span class="format-num">{{ volume_especifico2|floatformat:6 }}</span> m³/kg<br>
+                    u<sub>2</sub> = <span class="format-num">{{ energia_interna2 }}</span> kJ/kg<br>
+                    s<sub>2</sub> = <span class="format-num">{{ entropia_especifica2 }}</span> kJ/kg.K
+                </div>
+            </div>
+        </div>
+
+        <div class="math-step step-2">
+            <div class="step-number">2</div>
+            <div class="step-header">
+                <i class="fas fa-compress-alt"></i> <span class="lang-text" data-pt-br="Trabalho de Fronteira (W)" data-en="Boundary Work (W)" data-es="Trabajo de Frontera (W)">Trabalho de Fronteira (W)</span>
+            </div>
+            <div class="step-description lang-text" data-pt-br="Como os limites do sistema não se movem (pistão travado) e a massa é constante, o volume total do sistema não sofre alteração. Logo, o trabalho de fronteira realizado é nulo." data-en="Since the system boundaries do not move (locked piston) and the mass is constant, the total volume remains unchanged. Therefore, the boundary work is zero." data-es="Como los límites del sistema no se mueven (pistón bloqueado) y la masa es constante, el volumen total del sistema no sufre alteración. Por lo tanto, el trabajo de frontera es nulo.">
+                Como os limites do sistema não se movem (pistão travado) e a massa é constante, o volume total do sistema não sofre alteração. Logo, o trabalho de fronteira realizado é nulo.
+            </div>
+
+            <div style="background: #f5eef8; border-left: 4px solid #9b59b6; padding: 15px; margin-bottom: 20px; border-radius: 8px; font-family: 'Courier New', Courier, monospace; font-size: 0.95em; line-height: 1.6; color: #333;">
+                <div style="font-family: Arial, sans-serif; font-weight: bold; margin-bottom: 10px; color: #8e44ad; font-size: 1.05em;">
+                    <i class="fas fa-lightbulb"></i> <span class="lang-text" data-pt-br="Dedução Teórica (Volume Constante):" data-en="Theoretical Deduction (Constant Volume):" data-es="Deducción Teórica (Volumen Constante):">Dedução Teórica (Volume Constante):</span>
+                </div>
+                1. <span class="lang-text" data-pt-br="Definição de Trabalho Total:" data-en="Total Work Definition:" data-es="Definición de Trabajo Total:">Definição de Trabalho Total:</span> W = &int; P dV<br>
+                2. <span class="lang-text" data-pt-br="Sendo V = m &middot; v, e ambos constantes, V₁ = V₂:" data-en="Since V = m &middot; v, and both are constant, V₁ = V₂:" data-es="Siendo V = m &middot; v, y ambos constantes, V₁ = V₂:">Sendo V = m &middot; v, e ambos constantes, V<sub>1</sub> = V<sub>2</sub></span><br>
+                3. <span class="lang-text" data-pt-br="Como não há variação (dV = 0):" data-en="Since there is no variation (dV = 0):" data-es="Como no hay variación (dV = 0):">Como não há variação (dV = 0):</span> W = &int; P &middot; 0<br>
+                <div style="margin-top: 8px; padding-top: 8px; border-top: 1px dashed #9b59b6; font-weight: bold; color: #8e44ad; font-size: 1.1em;">
+                    &there4; W = 0 <span style="font-size: 0.85em; font-weight: normal;" class="lang-text" data-pt-br="(Processo Isocórico)" data-en="(Isochoric Process)" data-es="(Proceso Isocórico)">(Processo Isocórico)</span>
+                </div>
+            </div>
+            <div class="step-result" style="color: #8e44ad; border-color: #9b59b6; background: #f5eef8;">
+                W = 0 kJ
+            </div>
+        </div>  
+
+        <div class="math-step step-3">
+            <div class="step-number">3</div>
+            <div class="step-header">
+                <i class="fas fa-fire"></i> <span class="lang-text" data-pt-br="Primeira Lei e Calor Trocado (Q)" data-en="First Law and Heat Transfer (Q)" data-es="Primera Ley y Calor Intercambiado (Q)">Primeira Lei e Calor Trocado (Q)</span>
+            </div>
+            <div class="step-description lang-text" data-pt-br="Pela 1ª Lei da Termodinâmica para um sistema fechado rígido, todo o calor transferido para o sistema resulta diretamente na variação da energia interna total (considerando a massa do sistema)." data-en="By the 1st Law of Thermodynamics for a rigid closed system, all heat transferred to the system directly results in the change of total internal energy (considering mass)." data-es="Por la 1ª Ley de la Termodinámica para un sistema cerrado rígido, todo el calor transferido al sistema resulta directamente en la variación de la energía interna total (considerando la masa).">
+                Pela 1ª Lei da Termodinâmica para um sistema fechado rígido, todo o calor transferido para o sistema resulta diretamente na variação da energia interna total (considerando a massa do sistema).
+            </div>
+
+            <div style="background: #fff4e6; border-left: 4px solid #e67e22; padding: 15px; margin-bottom: 20px; border-radius: 8px; font-family: 'Courier New', Courier, monospace; font-size: 0.95em; line-height: 1.6; color: #333;">
+                <div style="font-family: Arial, sans-serif; font-weight: bold; margin-bottom: 10px; color: #d35400; font-size: 1.05em;">
+                    <i class="fas fa-lightbulb"></i> <span class="lang-text" data-pt-br="Dedução Teórica (Primeira Lei):" data-en="Theoretical Deduction (First Law):" data-es="Deducción Teórica (Primera Ley):">Dedução Teórica (Primeira Lei):</span>
+                </div>
+                1. <span class="lang-text" data-pt-br="1ª Lei Sist. Fechado:" data-en="1st Law Closed Sys.:" data-es="1ª Ley Sist. Cerrado:">1ª Lei Sist. Fechado:</span> Q - W = &Delta;U<br>
+                2. <span class="lang-text" data-pt-br="Como W = 0:" data-en="Since W = 0:" data-es="Como W = 0:">Como W = 0:</span> Q = (U<sub>2</sub> - U<sub>1</sub>)<br>
+                3. <span class="lang-text" data-pt-br="Introduzindo a massa (U = m &middot; u):" data-en="Introducing mass (U = m &middot; u):" data-es="Introduciendo la masa (U = m &middot; u):">Introduzindo a massa (U = m &middot; u):</span> Q = m &middot; (u<sub>2</sub> - u<sub>1</sub>)<br>
+                <div style="margin-top: 8px; padding-top: 8px; border-top: 1px dashed #e67e22; font-weight: bold; color: #d35400; font-size: 1.1em;">
+                    &there4; Q = m &middot; (u<sub>2</sub> - u<sub>1</sub>)
+                </div>
+            </div>
+
+            <div class="formula-box">
+                Q = m <span class="math-op">&times;</span> (u<sub>2</sub> <span class="math-op">-</span> u<sub>1</sub>)
+            </div>
+            <div class="step-calc">
+                Q = <span class="val-badge format-num">1</span> &times; ( <span class="val-badge format-num">{{ energia_interna2 }}</span> - <span class="val-badge format-num">{{ energia_interna }}</span> )
+            </div>
+            <div class="step-result" style="color: #d35400; border-color: #e67e22; background: #fff4e6;">
+                Q = <span class="format-num">{{ Calor }}</span> kJ
+            </div>
+        </div>
+
+        <div class="math-step step-4" style="margin-bottom: 0;">
+            <div class="step-number">4</div>
+            <div class="step-header">
+                <i class="fas fa-balance-scale"></i> <span class="lang-text" data-pt-br="Segunda Lei e Entropia Gerada (Sger)" data-en="Second Law and Entropy Generated (Sger)" data-es="Segunda Ley y Entropía Generada (Sger)">Segunda Lei e Entropia Gerada (Sger)</span>
+            </div>
+            <div class="step-description lang-text" data-pt-br="O balanço de entropia determina se o processo é fisicamente possível. Calculamos a variação de entropia do sistema (levando a massa em consideração) menos a entropia transferida com o calor para a vizinhança." data-en="The entropy balance determines if the process is physically possible. We calculate the system's entropy change (considering mass) minus the entropy transferred with heat to the surroundings." data-es="El balance de entropía determina si el proceso es físicamente posible. Calculamos el cambio de entropía del sistema (considerando la masa) menos la entropía transferida con calor al entorno.">
+                O balanço de entropia determina se o processo é fisicamente possível. Calculamos a variação de entropia do sistema (levando a massa em consideração) menos a entropia transferida com o calor para a vizinhança.
+            </div>
+
+            <div style="background: #e8f5e9; border-left: 4px solid #2ecc71; padding: 15px; margin-bottom: 20px; border-radius: 8px; font-family: 'Courier New', Courier, monospace; font-size: 0.95em; line-height: 1.6; color: #333;">
+                <div style="font-family: Arial, sans-serif; font-weight: bold; margin-bottom: 10px; color: #27ae60; font-size: 1.05em;">
+                    <i class="fas fa-lightbulb"></i> <span class="lang-text" data-pt-br="Dedução Teórica (Balanço de Entropia):" data-en="Theoretical Deduction (Entropy Balance):" data-es="Deducción Teórica (Balance de Entropía):">Dedução Teórica (Balanço de Entropia):</span>
+                </div>
+                1. <span class="lang-text" data-pt-br="Balanço geral (Sist. Fechado):" data-en="General balance (Closed Sys.):" data-es="Balance general (Sist. Cerrado):">Balanço geral (Sist. Fechado):</span> S<sub>in</sub> - S<sub>out</sub> + S<sub>ger</sub> = &Delta;S<sub>sist</sub><br>
+                2. <span class="lang-text" data-pt-br="Transf. de entropia por calor e Entropia total (S = m &middot; s):" data-en="Entropy transfer by heat and Total Entropy (S = m &middot; s):" data-es="Transf. de entropía por calor y Entropía total (S = m &middot; s):">Transf. de entropia por calor e Entropia total (S = m &middot; s):</span><br>
+                   &nbsp;&nbsp;&nbsp;&nbsp;(Q / T<sub>viz</sub>) + S<sub>ger</sub> = m &middot; (s<sub>2</sub> - s<sub>1</sub>)<br>
+                3. <span class="lang-text" data-pt-br="Isolando a entropia gerada:" data-en="Solving for generated entropy:" data-es="Despejando la entropía generada:">Isolando a entropia gerada:</span><br>
+                <div style="margin-top: 8px; padding-top: 8px; border-top: 1px dashed #2ecc71; font-weight: bold; color: #27ae60; font-size: 1.1em;">
+                    &there4; S<sub>ger</sub> = m &middot; (s<sub>2</sub> - s<sub>1</sub>) - (Q / T<sub>viz_K</sub>)
+                </div>
+            </div>
+            <div class="formula-box">
+                S<sub>ger</sub> = m <span class="math-op">&times;</span> (s<sub>2</sub> <span class="math-op">-</span> s<sub>1</sub>) <span class="math-op">-</span> [ Q <span class="math-op">/</span> (T<sub>viz</sub> <span class="math-op">+</span> <span class="format-num">273.15</span>) ]
+            </div>
+            <div class="step-calc">
+                S<sub>ger</sub> = <span class="val-badge format-num">1</span> &times; (<span class="val-badge format-num">{{ entropia_especifica2 }}</span> - <span class="val-badge format-num">{{ entropia_especifica }}</span>) - [ <span class="val-badge format-num">{{ Calor }}</span> / (<span class="val-badge format-num">{{ TempViz }}</span> + <span class="format-num">273.15</span>) ]
+            </div>
+            <div class="step-result" style="background: {% if Sger < 0 %}#ffebee{% else %}#e8f5e9{% endif %}; border-color: {% if Sger < 0 %}#ef9a9a{% else %}#a5d6a7{% endif %}; color: {% if Sger < 0 %}#c62828{% else %}#2e7d32{% endif %};">
+                <i class="fas {% if Sger < 0 %}fa-times-circle{% else %}fa-check-circle{% endif %}"></i>
+                S<sub>ger</sub> = <span class="format-num">{{ Sger }}</span> kJ/K
+                <br><small style="font-weight: normal; margin-top: 5px; display: inline-block;">
+                <span class="lang-text"
+                    data-pt-br="{% if Sger < 0 %}PROCESSO IMPOSSÍVEL (Sger < 0 viola a 2ª Lei){% else %}PROCESSO POSSÍVEL (Sger &ge; 0 satisfaz a 2ª Lei){% endif %}"
+                    data-en="{% if Sger < 0 %}IMPOSSIBLE PROCESS (Sger < 0 violates 2nd Law){% else %}POSSIBLE PROCESS (Sger &ge; 0 satisfies 2nd Law){% endif %}"
+                    data-es="{% if Sger < 0 %}PROCESO IMPOSIBLE (Sger < 0 viola la 2ª Ley){% else %}PROCESO POSIBLE (Sger &ge; 0 satisface la 2ª Ley){% endif %}">
+                    {% if Sger < 0 %}PROCESSO IMPOSSÍVEL (Sger < 0 viola a 2ª Lei){% else %}PROCESSO POSSÍVEL (Sger &ge; 0 satisfaz a 2ª Lei){% endif %}
+                </span></small>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div id="processModal" class="modal">
     <div class="modal-content">
         <span class="close-btn" id="closeProcessBtn">&times;</span>
@@ -392,12 +536,11 @@
     </div>
 </div>
 
-<!-- MODAL DOS DIAGRAMAS -->
 <div id="diagramModal" class="modal">
     <div class="modal-content modal-chart">
         <span class="close-btn" id="closeDiagramBtn">&times;</span>
         <h3 style="color: var(--primary-color); margin-top: 0; margin-bottom: 5px;" class="lang-text" data-pt-br="Diagramas Termodinâmicos Interativos" data-en="Interactive Thermodynamic Diagrams" data-es="Diagramas Termodinámicos Interactivos">Diagramas Termodinâmicos Interativos</h3>
-        <p class="zoom-tip"><i class="fas fa-search"></i> <span class="lang-text" data-pt-br="Dica: Clique e arraste para desenhar uma área de Zoom. Use o scroll ou segure Ctrl + arraste para mover o gráfico." data-en="Tip: Click and drag to draw a Zoom area. Use scroll or hold Ctrl + drag to pan the chart." data-es="Consejo: Haga clic y arrastre para dibujar un área de Zoom. Use la rueda o mantenga Ctrl + arrastre para mover el gráfico.">Dica: Clique e arraste para desenhar uma área de Zoom. Use o scroll ou segure <b>Ctrl</b> + arraste para mover o gráfico.</span></p>
+        <p class="zoom-tip"><i class="fas fa-search"></i> <span class="lang-text" data-pt-br="Dica: Use o scroll do mouse para dar Zoom e clique para arrastar o gráfico." data-en="Tip: Use mouse scroll to Zoom and click to drag the chart." data-es="Consejo: Use la rueda del ratón para hacer Zoom y haga clic para arrastrar el gráfico.">Dica: Use o scroll do mouse para dar Zoom e clique para arrastar o gráfico.</span></p>
 
         <div class="chart-controls">
             <select id="chartTypeSelector">
@@ -408,10 +551,12 @@
                 <option value="hs" class="lang-text" data-pt-br="Diagrama h-s (Mollier)" data-en="h-s Diagram (Mollier)" data-es="Diagrama h-s (Mollier)">Diagrama h-s (Mollier - Entalpia x Entropia)</option>
             </select>
             <button id="btnToggleFullCycle" class="btn btn-secondary" style="display: none;">
-                <i class="fas fa-layer-group"></i> <span id="toggleText" class="lang-text" data-pt-br="Ver Ciclo Completo" data-en="View Full Cycle" data-es="Ver Ciclo Completo">Ver Ciclo Completo</span>
+                <i class="fas fa-layer-group" style="margin-right: 6px;"></i> 
+                <span id="toggleText" class="lang-text" data-pt-br="Ver todos processos" data-en="View All Processes" data-es="Ver todos los procesos">Ver todos processos</span>
             </button>
             <button id="btnResetZoom" class="btn btn-outline">
-                <i class="fas fa-expand"></i> <span class="lang-text" data-pt-br="Resetar Zoom" data-en="Reset Zoom" data-es="Restablecer Zoom">Resetar Zoom</span>
+                <i class="fas fa-expand" style="margin-right: 6px;"></i> 
+                <span class="lang-text" data-pt-br="Resetar Zoom" data-en="Reset Zoom" data-es="Restablecer Zoom">Resetar Zoom</span>
             </button>
         </div>
 
@@ -420,15 +565,37 @@
         </div>
     </div>
 </div>
-
-<!-- LEITURA SEGURA DOS DADOS (Evita erro de aspas do Django no JSON) -->
-<script id="chart-data" type="application/json">
-    {{ pontos_grafico_json|safe }}
-</script>
 {% endblock %}
 
 {% block extra_js %}
+<script id="chart-data" type="application/json">
+    {{ pontos_grafico_json|safe }}
+</script>
+
 <script>
+    // --- FUNÇÃO PARA FORMATAR DECIMAIS (PONTO/VÍRGULA) ---
+    function updateNumberFormatting() {
+        let lang = localStorage.getItem('preferredLang') || 'pt-br';
+        let isEnglish = (lang === 'en');
+
+        document.querySelectorAll('.format-num').forEach(el => {
+            if (!el.hasAttribute('data-raw')) {
+                el.setAttribute('data-raw', el.innerText.trim());
+            }
+
+            let rawValue = el.getAttribute('data-raw');
+            let normalizedValue = rawValue.replace(',', '.');
+
+            if (isEnglish) {
+                el.innerText = normalizedValue;
+            } else {
+                el.innerText = normalizedValue.replace('.', ',');
+            }
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', updateNumberFormatting);
+
     // --- FUNÇÃO AUXILIAR DE TRADUÇÃO PARA JS ---
     function t(pt, en, es) {
         let lang = localStorage.getItem('preferredLang') || 'pt-br';
@@ -442,12 +609,21 @@
         if (pontosGrafico.length > 0 && document.getElementById('diagramModal').style.display === "block") {
             renderChart(showingAll);
         }
-        createHtmlScale(); 
+        createHtmlScale(); // Atualiza as tags do p5.js
         
+        // Atualiza textos dinâmicos de botões
         const toggleText = document.getElementById('toggleText');
         if (toggleText) {
-            toggleText.textContent = showingAll ? t("Ver Processo Atual", "View Current Process", "Ver Proceso Actual") : t("Ver Ciclo Completo", "View Full Cycle", "Ver Ciclo Completo");
+            toggleText.textContent = showingAll ? t("Ver Processo Atual", "View Current Process", "Ver Proceso Actual") : t("Ver todos processos", "View All Processes", "Ver todos los procesos");
+            toggleText.textContent = showingAll ? t("Ver Processo Atual", "View Current Process", "Ver Proceso Actual") : t("Ver todos processos", "View All Processes", "Ver todos los procesos");
         }
+
+        const valText = document.getElementById('volumeValue');
+        if (valText) {
+            valText.textContent = t(valText.getAttribute('data-pt-br'), valText.getAttribute('data-en'), valText.getAttribute('data-es'));
+        }
+
+        updateNumberFormatting();
     });
 
     // --- DADOS DOS MICROPROCESSOS PARA O GRÁFICO (MÉTODO SEGURO) ---
@@ -480,22 +656,12 @@
         openDiagramModal(false);
     };
 
-    const processModal = document.getElementById("processModal");
-    const diagramModal = document.getElementById("diagramModal");
-    
-    document.getElementById("openModalBtn").onclick = () => processModal.style.display = "block";
-    document.getElementById("closeProcessBtn").onclick = () => processModal.style.display = "none";
-    document.getElementById("closeDiagramBtn").onclick = () => diagramModal.style.display = "none";
+    document.getElementById('closeDiagramBtn').onclick = () => document.getElementById('diagramModal').style.display = "none";
     document.getElementById('btnResetZoom').onclick = () => { if (thermoChartInstance) thermoChartInstance.resetZoom(); };
-
-    window.onclick = (e) => { 
-        if (e.target == processModal) processModal.style.display = "none"; 
-        if (e.target == diagramModal) diagramModal.style.display = "none";
-    }
 
     document.getElementById('btnToggleFullCycle').onclick = function() {
         showingAll = !showingAll;
-        document.getElementById('toggleText').textContent = showingAll ? t("Ver Processo Atual", "View Current Process", "Ver Proceso Actual") : t("Ver Ciclo Completo", "View Full Cycle", "Ver Ciclo Completo");
+        document.getElementById('toggleText').textContent = showingAll ? t("Ver Processo Atual", "View Current Process", "Ver Proceso Actual") : t("Ver todos processos", "View All Processes", "Ver todos los procesos");
         
         if(showingAll) {
             this.querySelector('i').className = 'fas fa-search';
@@ -510,14 +676,14 @@
     function openDiagramModal(allProcesses) {
         showingAll = allProcesses;
         if(pontosGrafico.length > 1) {
-            document.getElementById('toggleText').textContent = showingAll ? t("Ver Processo Atual", "View Current Process", "Ver Proceso Actual") : t("Ver Ciclo Completo", "View Full Cycle", "Ver Ciclo Completo");
+            document.getElementById('toggleText').textContent = showingAll ? t("Ver Processo Atual", "View Current Process", "Ver Proceso Actual") : t("Ver todos processos", "View All Processes", "Ver todos los procesos");
             document.querySelector('#btnToggleFullCycle i').className = showingAll ? 'fas fa-search' : 'fas fa-layer-group';
         }
-        diagramModal.style.display = "block";
+        document.getElementById('diagramModal').style.display = "block";
         renderChart(showingAll);
     }
 
-    const COLORS = ['#FFC107', '#4CAF50', '#9C27B0', '#03A9F4', '#FF9800', '#795548', '#E91E63', '#607D8B'];
+    const COLORS = ['#FF3D00', '#4CAF50', '#9C27B0', '#03A9F4', '#FF9800', '#795548', '#E91E63', '#607D8B'];
 
     const chartConfigs = {
         'Pv': { 
@@ -547,7 +713,6 @@
         }
     };
 
-    // --- DOMO DE SATURAÇÃO - R-410A ---
     function getSaturationDome(type) {
         const T = [-60.0, -55.0, -51.4, -50.0, -45.0, -40.0, -35.0, -30.0, -25.0, -20.0, -15.0, -10.0, -5.0, 0.0, 5.0, 10.0, 15.0, 20.0, 25.0, 30.0, 35.0, 40.0, 45.0, 50.0, 55.0, 60.0, 65.0, 70.0, 71.3];
         const P = [64.1, 84.0, 101.3, 108.7, 138.8, 175.0, 218.4, 269.6, 329.7, 399.6, 480.4, 573.1, 678.9, 798.7, 933.9, 1085.7, 1255.4, 1444.2, 1653.6, 1885.1, 2140.2, 2420.7, 2728.3, 3065.2, 3433.7, 3836.9, 4278.3, 4763.1, 4901.2];
@@ -587,7 +752,6 @@
         return { points: dome, critical: critPt };
     }
 
-    // --- RENDERIZAÇÃO MELHORADA COM LIMITES E TENSION ZERO NOS PROCESSOS ---
     function renderChart(showAll) {
         if (!pontosGrafico || pontosGrafico.length === 0) return;
 
@@ -597,7 +761,7 @@
 
         const satData = getSaturationDome(type);
 
-        const lDomo = t('Domo de Saturação (R-410A)', 'Saturation Dome (R-410A)', 'Domo de Saturación (R-410A)');
+        const lDomo = t('Domo de Saturação', 'Saturation Dome', 'Domo de Saturación');
         const lPonto = t('Ponto Crítico', 'Critical Point', 'Punto Crítico');
         const lEstados = t('Estados', 'States', 'Estados');
         const lProcesso = t('Processo', 'Process', 'Proceso');
@@ -609,7 +773,7 @@
             borderDash: [5, 4],
             borderWidth: 2,
             fill: false,
-            spanGaps: true, 
+            pointStyle: 'line', // <--- Força as linhas normais na legenda
             pointRadius: 0,
             tension: 0,
             order: 2
@@ -618,8 +782,8 @@
         datasetsToRender.push({
             label: lPonto,
             data: [satData.critical],
-            backgroundColor: '#FF0000',
-            borderColor: '#FF0000',
+            backgroundColor: '#888888', // <--- Cor atualizada para combinar com o Domo
+            borderColor: '#888888',     // <--- Cor atualizada para combinar com o Domo
             pointStyle: 'triangle',
             pointRadius: 6,
             pointHoverRadius: 8,
@@ -645,9 +809,12 @@
                 borderColor: color,
                 backgroundColor: color,
                 borderWidth: 4,
+                borderJoinStyle: 'round', // <--- DEIXA A QUINA NO DOMO SUAVE
+                borderCapStyle: 'round',  // <--- ARREDONDA AS PONTAS DA LINHA
                 fill: false,
-                tension: 0, 
-                pointRadius: 0, 
+                pointStyle: 'line', 
+                tension: 0,
+                pointRadius: 0,
                 pointHitRadius: 10,
                 pointHoverRadius: 6,
                 order: 1
@@ -667,7 +834,7 @@
             pointStyle: 'circle',
             pointRadius: 14,
             pointBackgroundColor: '#fff',
-            pointBorderColor: '#FFC107', // <-- COR DO R-410A NOS ESTADOS DO GRÁFICO
+            pointBorderColor: '#20376B',
             pointBorderWidth: 2,
             showLine: false,
             order: 0
@@ -715,7 +882,11 @@
                 plugins: {
                     legend: {
                         position: 'top',
-                        labels: { filter: (item) => item.text !== lEstados && item.text !== lDomo, font: { size: 13 } }
+                        labels: { 
+                            usePointStyle: true,
+                            filter: (item) => item.text !== lEstados, 
+                            font: { size: 13 } 
+                        }
                     },
                     tooltip: {
                         backgroundColor: 'rgba(32, 55, 107, 0.95)',
@@ -731,7 +902,6 @@
                                 const dsIdx = items[0].datasetIndex;
                                 const idx = items[0].dataIndex;
                                 if (datasetsToRender[dsIdx].label === lEstados) return `${t('Estado', 'State', 'Estado')} ${stateMarkers[idx].val}`;
-                                if (datasetsToRender[dsIdx].label === lPonto) return lPonto;
                                 if (datasetsToRender[dsIdx].label.startsWith(lProcesso)) return t('Ponto Intermediário', 'Intermediate Point', 'Punto Intermedio');
                                 return items[0].dataset.label;
                             },
@@ -743,30 +913,15 @@
                         }
                     },
                     zoom: {
-                        pan: {
-                            enabled: true,
-                            mode: 'xy',
-                            modifierKey: 'ctrl', 
-                        },
+                        pan: { enabled: true, mode: 'xy' },
                         zoom: {
-                            wheel: {
-                                enabled: true,
-                                speed: 0.05
-                            },
-                            drag: {
-                                enabled: true,
-                                backgroundColor: 'rgba(32, 55, 107, 0.2)', 
-                                borderColor: 'rgba(32, 55, 107, 0.8)',
-                                borderWidth: 1
-                            },
-                            pinch: {
-                                enabled: true
-                            },
+                            wheel: { enabled: true },
+                            pinch: { enabled: true },
                             mode: 'xy',
                         },
                         limits: {
-                            x: {min: 'original', max: 'original'},
-                            y: {min: 'original', max: 'original'}
+                            x: { min: 'original', max: 'original' },
+                            y: { min: 'original', max: 'original' }
                         }
                     }
                 }
@@ -779,7 +934,7 @@
                         chart.data.datasets.forEach((dataset, dsIdx) => {
                             if (dataset.label === lEstados) {
                                 chart.getDatasetMeta(dsIdx).data.forEach((point, pIdx) => {
-                                    ctx.fillStyle = '#FFC107'; // <-- COR DO R-410A PARA O TEXTO
+                                    ctx.fillStyle = '#20376B';
                                     ctx.font = 'bold 12px Arial';
                                     ctx.textAlign = 'center';
                                     ctx.textBaseline = 'middle';
@@ -796,30 +951,29 @@
                         chart.data.datasets.forEach((dataset, dsIdx) => {
                             if (dataset.label && dataset.label.startsWith(lProcesso)) {
                                 const meta = chart.getDatasetMeta(dsIdx);
-                                if (!meta.hidden && meta.data.length > 5) {
+                                if (!meta.hidden && meta.data.length > 2) {
                                     const mid = Math.floor(meta.data.length / 2);
-                                    const p1 = meta.data[mid - 2];
-                                    const p2 = meta.data[mid + 2];
+                                    const p1 = meta.data[mid - 1];
+                                    const p2 = meta.data[mid];
 
-                                    if (p1 && p2 && !isNaN(p1.x) && !isNaN(p2.x)) {
+                                    if (p1 && p2) {
                                         const angle = Math.atan2(p2.y - p1.y, p2.x - p1.x);
                                         
                                         ctx.save();
-                                        ctx.translate(meta.data[mid].x, meta.data[mid].y);
+                                        ctx.translate(p2.x, p2.y);
                                         ctx.rotate(angle);
                                         
                                         ctx.beginPath();
-                                        ctx.moveTo(0, 0); 
-                                        ctx.lineTo(-14, -7);
-                                        ctx.lineTo(-10, 0);
-                                        ctx.lineTo(-14, 7);
+                                        ctx.moveTo(0, 0);
+                                        ctx.lineTo(-8, -4);
+                                        ctx.lineTo(-8, 4);
                                         ctx.closePath();
                                         
                                         ctx.fillStyle = dataset.borderColor;
                                         ctx.fill();
                                         
                                         ctx.strokeStyle = '#FFFFFF';
-                                        ctx.lineWidth = 1.5;
+                                        ctx.lineWidth = 1;
                                         ctx.stroke();
                                         ctx.restore();
                                     }
@@ -832,17 +986,17 @@
         });
     }
 
-    // --- LÓGICA DE DADOS EXCLUSIVA PARA O CILINDRO 3D ---
+    // --- LÓGICA DE DADOS EXCLUSIVA PARA O CILINDRO 3D E SLIDER INTERPOLADO ---
     const state1_3D = {
-        rawFase: parseInt("{{ fase|default:'0' }}"),
-        rawVol: parseFloat("{{ volume_especifico|default:'0' }}".replace(',', '.')),
-        rawVL: parseFloat("{{ VolumeL|default:'0' }}".replace(',', '.'))
+        rawFase: parseInt("{{ fase|default:'0' }}") || 1,
+        rawVol: parseFloat("{{ volume_especifico|default:'0' }}".replace(',', '.')) || 0.001,
+        rawVL: parseFloat("{{ VolumeL|default:'0' }}".replace(',', '.')) || 0.001
     };
 
     const state2_3D = {
-        rawFase: parseInt("{{ fase2|default:'0' }}"),
-        rawVol: parseFloat("{{ volume_especifico2|default:'0' }}".replace(',', '.')),
-        rawVL: parseFloat("{{ VolumeL2|default:'0' }}".replace(',', '.'))
+        rawFase: parseInt("{{ fase2|default:'0' }}") || 2,
+        rawVol: parseFloat("{{ volume_especifico2|default:'0' }}".replace(',', '.')) || 0.1,
+        rawVL: parseFloat("{{ VolumeL2|default:'0' }}".replace(',', '.')) || 0.001
     };
 
     let currentDataFase = state1_3D.rawFase;
@@ -850,27 +1004,115 @@
     let currentDataVL = state1_3D.rawVL;
 
     const slider = document.getElementById("volumeSlider");
+
+    // Pega os pontos do micro-processamento mais recente (último ramo do gráfico)
+    let currentProcess = pontosGrafico.length > 0 ? pontosGrafico[pontosGrafico.length - 1] : [];
+
+    // Ajusta os limites do slider
+    if (currentProcess.length > 0) {
+        slider.min = 0;
+        slider.max = currentProcess.length - 1;
+        slider.value = 0;
+    } else {
+        slider.min = 1;
+        slider.max = 2;
+        slider.value = 1;
+    }
+
     slider.addEventListener("input", () => {
         const valText = document.getElementById('volumeValue');
-        if (slider.value === "1") {
-            valText.setAttribute('data-pt-br', 'Estado Inicial');
-            valText.setAttribute('data-en', 'Initial State');
-            valText.setAttribute('data-es', 'Estado Inicial');
-            valText.textContent = t('Estado Inicial', 'Initial State', 'Estado Inicial');
-            currentDataFase = state1_3D.rawFase;
-            currentDataVolume = state1_3D.rawVol;
-            currentDataVL = state1_3D.rawVL;
+        const idx = parseInt(slider.value);
+
+        if (currentProcess.length > 0) {
+            const point = currentProcess[idx];
+
+            if (idx === 0) {
+                valText.setAttribute('data-pt-br', 'Estado Inicial');
+                valText.setAttribute('data-en', 'Initial State');
+                valText.setAttribute('data-es', 'Estado Inicial');
+            } else if (idx === currentProcess.length - 1) {
+                valText.setAttribute('data-pt-br', 'Estado Final');
+                valText.setAttribute('data-en', 'Final State');
+                valText.setAttribute('data-es', 'Estado Final');
+            } else {
+                let v_formatado_en = point.v.toFixed(4);
+                let v_formatado_pt_es = v_formatado_en.replace('.', ',');
+
+                valText.setAttribute('data-pt-br', `Passo Intermediário (v = ${v_formatado_pt_es} m³/kg)`);
+                valText.setAttribute('data-en', `Intermediate Step (v = ${v_formatado_en} m³/kg)`);
+                valText.setAttribute('data-es', `Paso Intermedio (v = ${v_formatado_pt_es} m³/kg)`);
+            }
+
+            // Atualiza o volume total
+            currentDataVolume = point.v;
+
+            // Resolve a Fase e Interpola
+            if (point.fase !== undefined) {
+                currentDataFase = point.fase;
+            } else {
+                let progress = idx / (currentProcess.length - 1);
+                currentDataFase = progress < 0.5 ? state1_3D.rawFase : state2_3D.rawFase;
+            }
+
+            // Resolve o Volume de Líquido (vl)
+            if (point.vl !== undefined) {
+                currentDataVL = point.vl;
+            } else {
+                let progress = idx / (currentProcess.length - 1);
+                currentDataVL = state1_3D.rawVL + progress * (state2_3D.rawVL - state1_3D.rawVL);
+                if (currentDataVL > point.v) {
+                    currentDataVL = point.v;
+                }
+            }
+
         } else {
-            valText.setAttribute('data-pt-br', 'Estado Final');
-            valText.setAttribute('data-en', 'Final State');
-            valText.setAttribute('data-es', 'Estado Final');
-            valText.textContent = t('Estado Final', 'Final State', 'Estado Final');
-            currentDataFase = state2_3D.rawFase;
-            currentDataVolume = state2_3D.rawVol;
-            currentDataVL = state2_3D.rawVL;
+            if (slider.value === "1") {
+                valText.setAttribute('data-pt-br', 'Estado Inicial');
+                valText.setAttribute('data-en', 'Initial State');
+                valText.setAttribute('data-es', 'Estado Inicial');
+                
+                currentDataFase = state1_3D.rawFase;
+                currentDataVolume = state1_3D.rawVol;
+                currentDataVL = state1_3D.rawVL;
+            } else {
+                valText.setAttribute('data-pt-br', 'Estado Final');
+                valText.setAttribute('data-en', 'Final State');
+                valText.setAttribute('data-es', 'Estado Final');
+                
+                currentDataFase = state2_3D.rawFase;
+                currentDataVolume = state2_3D.rawVol;
+                currentDataVL = state2_3D.rawVL;
+            }
         }
+
+        valText.textContent = t(valText.getAttribute('data-pt-br'), valText.getAttribute('data-en'), valText.getAttribute('data-es'));
         estado = 1;
     });
+
+    // --- LÓGICA DOS MODAIS (CÁLCULO E CONTINUAÇÃO) ---
+    const btnDidactic = document.getElementById("btnDidactic");
+    const closeDidacticBtn = document.getElementById("closeDidacticBtn");
+    const didacticModal = document.getElementById("didacticModal");
+    const processModal = document.getElementById("processModal");
+    const openProcessBtn = document.getElementById("openProcessBtn");
+    const closeProcessBtn = document.getElementById("closeProcessBtn");
+
+    openProcessBtn.onclick = () => processModal.style.display = "block";
+    closeProcessBtn.onclick = () => processModal.style.display = "none";
+
+    btnDidactic.onclick = function() {
+        didacticModal.style.display = "block";
+    }
+
+    closeDidacticBtn.onclick = function() {
+        didacticModal.style.display = "none";
+    }
+
+    window.onclick = (e) => {
+        if (e.target == processModal) processModal.style.display = "none";
+        if (e.target == document.getElementById('diagramModal')) document.getElementById('diagramModal').style.display = "none";
+        if (e.target == didacticModal) didacticModal.style.display = "none";
+    }
 
     // --- LÓGICA P5.JS ---
     let sides = 72, r1 = 100, r2 = 102, r3 = 100, r4 = 100, h2 = 300;
@@ -896,12 +1138,10 @@
         hemboloB = lerp(hemboloB, targetH3B, 0.05);
         hemboloC = lerp(hemboloC, targetH3C, 0.05);
 
-        // Fase Líquida R-410A (Cor Laranja)
         if (ha1 < 100) {
             fill(255, 152, 0, 255);
             drawCap(r1, ha1); drawCap(r1, 100); drawSide(r1, ha1, 100);
         }
-        // Fase Vapor R-410A (Cor Laranja Translúcida)
         if (ha4 < 100) {
             fill(255, 152, 0, 100);
             drawCap(r4, ha4); drawCap(r4, 100); drawSide(r4, ha4, 100);
@@ -951,7 +1191,6 @@
         let yPosP5_1000 = logDivisionToHeight(1000, -266, 108);
         let titleLabel = document.createElement('div');
         titleLabel.className = 'scale-label';
-        // Label traduzida
         titleLabel.innerText = t('Volume [m³]', 'Volume [m³]', 'Volumen [m³]');
         titleLabel.style.top = (canvasCenterY + 100 + yPosP5_1000 - 55) + 'px';
         titleLabel.style.left = (canvasCenterX - r2 - 85) + 'px';
@@ -1018,4 +1257,4 @@
         }
     }
 </script>
-{% endblock %}
+{% endblock %}  

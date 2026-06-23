@@ -1,373 +1,339 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TERMO-CP</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="icon" type="image/png" href="favicon.png">
+{% extends 'base.html' %}
 
-    <style>
-        /* Variáveis CSS */
-        :root {
-            --primary-color: #20376B;
-            --secondary-color: #0D6AB0;
-            --accent-water: #00A8FF;
-            --light-bg: #f0f2f5;
-            --card-bg: white;
-            --text-color: #333;
-            --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            --hover-transition: all 0.3s ease;
-        }
+{% block title %}TERMO-CP{% endblock %}
 
-        * { box-sizing: border-box; }
+{% block extra_css %}
+<style>
+    /* Wrapper para alinhar o conteúdo no centro da main-content do base.html */
+    .form-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 40px 20px;
+        width: 100%;
+        min-height: 100%;
+    }
 
-        body {
-            font-family: 'Arial', sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: var(--light-bg);
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-            color: var(--text-color);
-        }
+    /* Container Compacto */
+    .container {
+        max-width: 600px;
+        width: 100%;
+        background: white;
+        border-radius: 10px;
+        box-shadow: var(--shadow);
+        padding: 30px 25px;
+        text-align: center;
+    }
 
-        /* HEADER */
-        header {
-            background-color: var(--primary-color);
-            color: white;
-            padding: 15px 40px;
-            box-shadow: var(--shadow);
-            width: 100%;
-            display: flex;
-            justify-content: flex-start;
-            align-items: center;
-            position: fixed;
-            top: 0;
-            left: 0;
-            z-index: 1000;
-        }
+    h2 {
+        color: var(--primary-color);
+        font-size: 1.5em;
+        margin-bottom: 20px;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 10px;
+    }
 
-        header h1 {
-            margin: 0;
-            font-size: 1.8em;
-            margin-right: 30px;
-            flex-shrink: 0;
-        }
+    /* --- ESTILO COMPACTO DE SELEÇÃO (CARDS) --- */
+    .selection-grid {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        margin-bottom: 25px;
+        flex-wrap: wrap;
+    }
 
-        nav { display: flex; align-items: center; }
+    .selection-grid input[type="radio"] {
+        display: none;
+    }
 
-        nav a {
-            color: white;
-            text-decoration: none;
-            margin-left: 20px;
-            font-size: 1em;
-            padding: 5px 10px;
-            border-radius: 4px;
-            transition: var(--hover-transition);
-        }
+    /* O Cartão Compacto (110px) */
+    .option-card {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100px;
+        height: 100px;
+        border: 2px solid #e0e0e0;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        position: relative;
+        background-color: #fff;
+        color: #666;
+    }
 
-        nav a:hover, nav a.active {
-            color: white;
-            background-color: var(--secondary-color);
-        }
+    .option-card i.icon-main {
+        font-size: 1.8em;
+        margin-bottom: 8px;
+        color: #999;
+        transition: color 0.3s ease;
+    }
 
-        /* CONTEÚDO PRINCIPAL */
-        .main-content {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 80px 20px 40px; /* Padding reduzido (Compacto) */
-            width: 100%;
-            justify-content: center;
-        }
+    .option-card span {
+        font-weight: bold;
+        font-size: 0.85em;
+        text-align: center;
+        line-height: 1.2;
+    }
 
-        /* Container Compacto */
-        .container {
-            max-width: 600px;
-            width: 100%;
-            background: var(--card-bg);
-            border-radius: 10px;
-            box-shadow: var(--shadow);
-            padding: 30px 25px; /* Padding interno reduzido */
-            text-align: center;
-        }
+    .option-card:hover {
+        border-color: var(--secondary-color);
+        background-color: #f8fbff;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
 
-        h2 {
-            color: var(--primary-color);
-            font-size: 1.5em; /* Fonte reduzida */
-            margin-bottom: 20px;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 10px;
-        }
+    /* ESTADO SELECIONADO */
+    .option-card:has(input:checked) {
+        border-color: var(--secondary-color);
+        background-color: #eef7fc;
+        color: var(--primary-color);
+        box-shadow: 0 2px 8px rgba(13, 106, 176, 0.15);
+    }
 
-        /* --- ESTILO COMPACTO DE SELEÇÃO (CARDS) --- */
+    .option-card:has(input:checked) i.icon-main {
+        color: var(--secondary-color);
+    }
 
-        .selection-grid {
-            display: flex;
-            justify-content: center;
-            gap: 15px; /* Espaçamento menor */
-            margin-bottom: 25px;
-            flex-wrap: wrap;
-        }
+    .check-indicator {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        font-size: 0.9em;
+        color: var(--secondary-color);
+        opacity: 0;
+        transition: opacity 0.2s ease;
+    }
 
-        .selection-grid input[type="radio"] {
-            display: none;
-        }
+    .option-card:has(input:checked) .check-indicator {
+        opacity: 1;
+    }
 
-        /* O Cartão Compacto (110px) */
-        .option-card {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            width: 100px;
-            height: 100px;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            position: relative;
-            background-color: #fff;
-            color: #666;
-        }
+    /* --- INPUT DE VALOR COMPACTO --- */
+    #value_input_field {
+        margin-top: 15px;
+        width: 100%;
+        background-color: #f9f9f9;
+        padding: 15px;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+        animation: fadeIn 0.4s ease;
+    }
 
-        /* Ícone Compacto */
-        .option-card i {
-            font-size: 1.8em;
-            margin-bottom: 8px;
-            color: #999;
-            transition: color 0.3s ease;
-        }
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(5px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
 
-        /* Texto Compacto */
-        .option-card span {
-            font-weight: bold;
-            font-size: 0.85em;
-            text-align: center;
-            line-height: 1.2;
-        }
+    #value-label {
+        font-weight: bold;
+        color: var(--primary-color);
+        display: block;
+        margin-bottom: 10px;
+        font-size: 1em;
+    }
 
-        .option-card:hover {
-            border-color: var(--secondary-color);
-            background-color: #f8fbff;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
+    input[type="number"] {
+        padding: 10px;
+        width: 100%;
+        max-width: 250px;
+        font-size: 1.1em;
+        border: 2px solid #ccc;
+        border-radius: 6px;
+        text-align: center;
+    }
 
-        /* ESTADO SELECIONADO */
-        .option-card:has(input:checked) {
-            border-color: var(--secondary-color);
-            background-color: #eef7fc;
-            color: var(--primary-color);
-            box-shadow: 0 2px 8px rgba(13, 106, 176, 0.15);
-        }
+    input[type="number"]:focus {
+        border-color: var(--secondary-color);
+        outline: none;
+    }
 
-        .option-card:has(input:checked) i {
-            color: var(--secondary-color);
-        }
+    /* Botões de Ação */
+    .button-container {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        margin-top: 25px;
+        width: 100%;
+    }
 
-        .check-indicator {
-            position: absolute;
-            top: 5px;
-            right: 5px;
-            font-size: 0.9em;
-            color: var(--secondary-color);
-            opacity: 0;
-            transition: opacity 0.2s ease;
-        }
+    .btn {
+        padding: 10px 20px;
+        border-radius: 6px;
+        font-size: 1em;
+        cursor: pointer;
+        text-decoration: none;
+        transition: var(--hover-transition);
+        border: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        min-width: 130px;
+    }
 
-        .option-card:has(input:checked) .check-indicator {
-            opacity: 1;
-        }
+    .btn-primary {
+        background-color: var(--primary-color);
+        color: white;
+    }
+    
+    .btn-primary:hover {
+        background-color: var(--secondary-color);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
 
-        /* --- INPUT DE VALOR COMPACTO --- */
-        #value_input_field {
-            margin-top: 15px;
-            width: 100%;
-            background-color: #f9f9f9;
-            padding: 15px;
-            border-radius: 8px;
-            border: 1px solid #ddd;
-            animation: fadeIn 0.4s ease;
-        }
+    .btn-secondary {
+        background-color: #6c757d;
+        color: white;
+    }
+    
+    .btn-secondary:hover {
+        background-color: #5a6268;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(5px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+    /* Mobile */
+    @media (max-width: 768px) {
+        .option-card { width: 45%; height: 100px; }
+        .button-container { flex-direction: column; }
+        .btn { width: 100%; }
+    }
+</style>
+{% endblock %}
 
-        #value-label {
-            font-weight: bold;
-            color: var(--primary-color);
-            display: block;
-            margin-bottom: 10px;
-            font-size: 1em;
-        }
+{% block content %}
+<div class="form-wrapper">
+    <div class="container">
+        <i class="fas fa-sliders-h" style="font-size: 2.2em; color: #00A8FF; margin-bottom: 10px;"></i>
 
-        input[type="number"] {
-            padding: 10px;
-            width: 100%;
-            max-width: 250px;
-            font-size: 1.1em;
-            border: 2px solid #ccc;
-            border-radius: 6px;
-            text-align: center;
-        }
+        <h2 class="lang-text" data-pt-br="Selecione a primeira propriedade" data-en="Select the first property" data-es="Seleccione la primera propiedad">
+            Selecione a primeira propriedade
+        </h2>
 
-        input[type="number"]:focus {
-            border-color: var(--secondary-color);
-            outline: none;
-        }
+        <form method="post">
+            {% csrf_token %}
 
-        /* Botões de Ação */
-        .button-container {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-top: 25px;
-            width: 100%;
-        }
+            <div class="selection-grid">
+                {% for radio in form.property_choice %}
+                <label class="option-card">
+                    {{ radio.tag }}
+                    <i class="fas fa-check-circle check-indicator"></i>
 
-        .btn {
-            padding: 10px 20px;
-            border-radius: 6px;
-            font-size: 1em;
-            cursor: pointer;
-            text-decoration: none;
-            transition: var(--hover-transition);
-            border: none;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            min-width: 130px;
-        }
+                    {% if "Temperatura" in radio.choice_label %}
+                        <i class="fas fa-temperature-high icon-main"></i>
+                    {% elif "Pressão" in radio.choice_label or "Pressao" in radio.choice_label %}
+                        <i class="fas fa-tachometer-alt icon-main"></i>
+                    {% else %}
+                        <i class="fas fa-cube icon-main"></i>
+                    {% endif %}
 
-        .btn-primary {
-            background-color: var(--primary-color);
-            color: white;
-        }
-        .btn-primary:hover {
-            background-color: var(--secondary-color);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-        }
+                    <!-- Nota: Se as propriedades vierem do Django form, considere traduzir elas no models/forms ou via if statements -->
+                    <span>{{ radio.choice_label }}</span>
+                </label>
+                {% endfor %}
+            </div>
 
-        .btn-secondary {
-            background-color: #6c757d;
-            color: white;
-        }
-        .btn-secondary:hover {
-            background-color: #5a6268;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-        }
+            <div id="value_input_field" style="display: none;">
+                <label id="value-label" for="value_input">
+                    <!-- O JavaScript injetará a tradução aqui -->
+                    {{ form.value_input.label }}
+                </label>
+                <input type="number" id="value_input" name="value_input" step="any" required placeholder="Digite o valor">
+            </div>
 
-        /* Mobile */
-        @media (max-width: 768px) {
-            header { flex-direction: column; padding: 10px 20px; position: static; }
-            header h1 { margin-right: 0; margin-bottom: 10px; }
-            nav { flex-wrap: wrap; justify-content: center; }
-            nav a { margin: 5px 8px; }
-            .main-content { padding-top: 20px; padding-bottom: 40px; }
-            .option-card { width: 45%; height: 100px; }
-            .button-container { flex-direction: column; }
-            .btn { width: 100%; }
-        }
-    </style>
+            <div class="button-container">
+                <a href="/" class="btn btn-secondary">
+                    <i class="fas fa-home" style="margin-right: 8px;"></i>
+                    <span class="lang-text" data-pt-br="Início" data-en="Home" data-es="Inicio">Início</span>
+                </a>
 
-    <script>
-        function updateLabel() {
-            var selectedRadio = document.querySelector('input[name="property_choice"]:checked');
-            if (!selectedRadio) return;
-
-            var selectedValue = selectedRadio.value;
-            var label = document.getElementById('value-label');
-            var inputField = document.getElementById('value_input_field');
-            var numberInput = document.getElementById('value_input');
-
-            // Lógica de Label e Limites
-            if (selectedValue == '0') {
-                label.innerHTML = '<i class="fas fa-temperature-high"></i> Digite o valor da Temperatura (K)';
-                numberInput.setAttribute('min', '-50');
-                numberInput.setAttribute('max', '1300');
-                numberInput.placeholder = "Digite o valor";
-            } else if (selectedValue == '1') {
-                label.innerHTML = '<i class="fas fa-tachometer-alt"></i> Digite o valor da Pressão (kPa)';
-                numberInput.setAttribute('min', '0.6113');
-                numberInput.setAttribute('max', '50000');
-                numberInput.placeholder = "Digite o valor";
-            }
-
-            inputField.style.display = 'block';
-        }
-
-        document.addEventListener('DOMContentLoaded', function() {
-            var radios = document.querySelectorAll('input[name="property_choice"]');
-            radios.forEach(function(radio) {
-                radio.addEventListener('change', updateLabel);
-            });
-        });
-    </script>
-</head>
-<body>
-    <header>
-        <h1>TERMO-CP</h1>
-        <nav>
-            <a href="/">Início</a>
-            <a href="{% url 'cilindro' %}">Estados</a>
-            <a href="{% url 'gasideal' %}">Processos</a>
-            <a href="{% url 'contato' %}">Contato</a>
-        </nav>
-    </header>
-
-    <div class="main-content">
-        <div class="container">
-            <i class="fas fa-sliders-h" style="font-size: 2.2em; color: var(--accent-water); margin-bottom: 10px;"></i>
-
-            <h2>Selecione a primeira propriedade no estado inicial</h2>
-
-            <form method="post">
-                {% csrf_token %}
-
-                <div class="selection-grid">
-                    {% for radio in form.property_choice %}
-                    <label class="option-card">
-                        {{ radio.tag }}
-                        <i class="fas fa-check-circle check-indicator"></i>
-
-                        {% if "Temperatura" in radio.choice_label %}
-                            <i class="fas fa-temperature-high"></i>
-                        {% elif "Pressão" in radio.choice_label or "Pressao" in radio.choice_label %}
-                            <i class="fas fa-tachometer-alt"></i>
-                        {% else %}
-                            <i class="fas fa-cube"></i>
-                        {% endif %}
-
-                        <span>{{ radio.choice_label }}</span>
-                    </label>
-                    {% endfor %}
-                </div>
-
-                <div id="value_input_field" style="display: none;">
-                    <label id="value-label" for="value_input">{{ form.value_input.label }}</label>
-                    <input type="number" id="value_input" name="value_input" step="any" required placeholder="Digite o valor">
-                </div>
-
-                <div class="button-container">
-                    <a href="/" class="btn btn-secondary">
-                        <i class="fas fa-home" style="margin-right: 8px;"></i> Início
-                    </a>
-
-                    <button type="submit" class="btn btn-primary">
-                        Continuar <i class="fas fa-arrow-right" style="margin-left: 8px;"></i>
-                    </button>
-                </div>
-            </form>
-        </div>
+                <button type="submit" class="btn btn-primary">
+                    <span class="lang-text" data-pt-br="Continuar" data-en="Continue" data-es="Continuar">Continuar</span>
+                    <i class="fas fa-arrow-right" style="margin-left: 8px;"></i>
+                </button>
+            </div>
+        </form>
     </div>
-</body>
-</html>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function updateLabel() {
+        var selectedRadio = document.querySelector('input[name="property_choice"]:checked');
+        if (!selectedRadio) return;
+
+        var selectedValue = selectedRadio.value;
+        var label = document.getElementById('value-label');
+        var inputField = document.getElementById('value_input_field');
+        var numberInput = document.getElementById('value_input');
+
+        // Pega o idioma salvo no localStorage
+        let currentLang = localStorage.getItem('preferredLang') || 'pt-br';
+
+        // Dicionários para Placeholders
+        let phStr = {
+            'pt-br': 'Digite o valor',
+            'en': 'Enter the value',
+            'es': 'Introduzca el valor'
+        };
+
+        // Lógica de Label e Limites, injetando as classes .lang-text para funcionar com o seu base.html
+        if (selectedValue == '0') {
+            label.innerHTML = '<i class="fas fa-temperature-high"></i> ' +
+                              '<span class="lang-text" ' +
+                              'data-pt-br="Digite o valor da Temperatura (K)" ' +
+                              'data-en="Enter the Temperature value (K)" ' +
+                              'data-es="Introduzca el valor de la Temperatura (K)">' +
+                              'Digite o valor da Temperatura (K)</span>';
+            
+            numberInput.setAttribute('min', '63.1');
+            numberInput.setAttribute('max', '1000');
+            numberInput.placeholder = phStr[currentLang];
+
+        } else if (selectedValue == '1') {
+            label.innerHTML = '<i class="fas fa-tachometer-alt"></i> ' +
+                              '<span class="lang-text" ' +
+                              'data-pt-br="Digite o valor da Pressão (kPa)" ' +
+                              'data-en="Enter the Pressure value (kPa)" ' +
+                              'data-es="Introduzca el valor de la Presión (kPa)">' +
+                              'Digite o valor da Pressão (kPa)</span>';
+            
+            numberInput.setAttribute('min', '12.5');
+            numberInput.setAttribute('max', '10000');
+            numberInput.placeholder = phStr[currentLang];
+        }
+
+        inputField.style.display = 'block';
+
+        // Dispara a tradução novamente para formatar o label que acabou de ser injetado (caso não esteja em pt-br)
+        if(currentLang !== 'pt-br') {
+             // Reutiliza os nós do lang-text e traduz sem mover o slider (pq ja está no lugar)
+             const elements = document.querySelectorAll('.lang-text');
+             elements.forEach(el => {
+                 const newText = el.getAttribute('data-' + currentLang);
+                 if (newText) el.textContent = newText;
+             });
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // Escuta as trocas de rádio
+        var radios = document.querySelectorAll('input[name="property_choice"]');
+        radios.forEach(function(radio) {
+            radio.addEventListener('change', updateLabel);
+        });
+
+        // Escuta cliques na opção de idioma para atualizar o placeholder dinamicamente se o input estiver aberto
+        document.addEventListener('click', function(e) {
+            if (e.target.closest('.lang-option')) {
+                setTimeout(updateLabel, 50); // Recalcula os placeholders e labels de acordo com o novo idioma
+            }
+        });
+    });
+</script>
+{% endblock %}

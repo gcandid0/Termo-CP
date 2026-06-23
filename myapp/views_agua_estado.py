@@ -979,12 +979,20 @@ def process_values_view(request):
             'VolumeL': round(VolumeL, 6) if VolumeL is not None else None
         })
 
-    except ValidationError:
-        return render(request, 'erro_generico.html')
-    except Exception:
-        # Captura qualquer outro erro inesperado
-        return redirect('error_type7')
+    except ValidationError as e:
+        return render(request, 'erro_generico.html', {'message': str(e)})
+    
+    except BoundariesException:
+        # Capturando os limites da tabela de forma dinâmica
+        return render(request, 'erro_generico.html', {'message': 'Os valores fornecidos (ou calculados) estão fora dos limites das tabelas termodinâmicas'})
 
+    except TypeError as e:
+        # Captura erros como "Valores fora do limite da tabela." gerados dentro da subs_cls
+        return render(request, 'erro_generico.html', {'message': str(e)})
+
+    except IndexError:
+        # Proteção adicional caso estoure índice nas interpolações da tabela
+        return render(request, 'erro_generico.html', {'message': 'Ocorreu um erro ao acessar as tabelas termodinâmicas (valores fora do alcance esperado).'})
 
 
 ###############################################################################

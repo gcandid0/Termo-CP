@@ -989,6 +989,11 @@ def process_values_view3(request):
             fase = ultimo_estado[0]
             temperatura = round(ultimo_estado[2][0][3], 2)
             pressao = round(ultimo_estado[2][1][3], 2)
+            
+            # VALIDAÇÃO DE PRESSÃO NEGATIVA - ESTADO 1 (Salvo)
+            if pressao < 0:
+                raise ValidationError("Erro: A pressão inicial não pode ser negativa.")
+
             volume_esp = round(ultimo_estado[2][2][3], 8)
             energia_int = round(ultimo_estado[2][3][3], 2)
             entalpia_esp = round(ultimo_estado[2][4][3], 2)
@@ -1036,6 +1041,11 @@ def process_values_view3(request):
             try:
                 temperatura = round(h.results[2][0][3], 2)
                 pressao = round(h.results[2][1][3], 2)
+                
+                # VALIDAÇÃO DE PRESSÃO NEGATIVA - ESTADO 1 (Digitado)
+                if pressao < 0:
+                    raise ValidationError("Erro: A pressão calculada ou inserida não pode ser negativa.")
+
                 volume_esp = round(h.results[2][2][3], 8)
                 energia_int = round(h.results[2][3][3], 2)
                 entalpia_esp = round(h.results[2][4][3], 2)
@@ -1087,6 +1097,11 @@ def process_values_view3(request):
         # Validação do segundo estado
         try:
             pressao2 = round(h.results[2][1][3], 2)
+            
+            # VALIDAÇÃO DE PRESSÃO NEGATIVA - ESTADO 2
+            if pressao2 < 0:
+                raise ValidationError("Erro: A pressão resultante do segundo estado não pode ser negativa.")
+
             temperatura2 = round(h.results[2][0][3], 2)
             volume_esp2 = round(h.results[2][2][3], 8)
             energia_int2 = round(h.results[2][3][3], 2)
@@ -1177,7 +1192,6 @@ def process_values_view3(request):
 
         ramo_atual = []
 
-        # Estado Inicial
         # Estado Inicial
         ramo_atual.append({
             'T': round(temperatura, 2),
@@ -1272,6 +1286,18 @@ def process_values_view3(request):
 
     except ValidationError as e:
         return render(request, 'erro_generico.html', {'message': str(e)})
+    
+    except BoundariesException:
+        # Capturando os limites da tabela de forma dinâmica
+        return render(request, 'erro_generico.html', {'message': 'Os valores fornecidos (ou calculados) estão fora dos limites das tabelas termodinâmicas'})
+
+    except TypeError as e:
+        # Captura erros como "Valores fora do limite da tabela." gerados dentro da subs_cls
+        return render(request, 'erro_generico.html', {'message': str(e)})
+
+    except IndexError:
+        # Proteção adicional caso estoure índice nas interpolações da tabela
+        return render(request, 'erro_generico.html', {'message': 'Ocorreu um erro ao acessar as tabelas termodinâmicas (valores fora do alcance esperado).'})
 
 
 
