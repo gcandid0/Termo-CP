@@ -1,6 +1,6 @@
 {% extends 'base2.html' %}
 
-{% block title %}TERMO-CP{% endblock %}
+{% block title %}TERMO-CP | Resultados Gás Ideal{% endblock %}
 
 {% block extra_head %}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
@@ -208,8 +208,8 @@
 
         <div class="state-card constants-card">
             <h2 style="font-size: 1.05em; margin-bottom: 5px;"><i class="fas fa-flask"></i> <span class="lang-text" data-pt-br="Calores Específicos" data-en="Specific Heats" data-es="Calores Específicos">Calores Específicos</span></h2>
-            <div class="data-row"><span class="data-label">Cp0:</span> <span class="data-value"><span class="format-num">{{ Cp0 }}</span> kJ/(kg·K)</span></div>
-            <div class="data-row"><span class="data-label">Cv0:</span> <span class="data-value"><span class="format-num">{{ Cv0 }}</span> kJ/(kg·K)</span></div>
+            <div class="data-row"><span class="data-label">Cp0:</span> <span class="data-value"><span class="format-num">{{ Cp0 }}</span> kJ/kg·K</span></div>
+            <div class="data-row"><span class="data-label">Cv0:</span> <span class="data-value"><span class="format-num">{{ Cv0 }}</span> kJ/kg·K</span></div>
         </div>
     </div>
 
@@ -247,7 +247,7 @@
 
         <div class="state-card constants-card final-state">
             <h2 style="font-size: 1.05em; margin-bottom: 5px; color: var(--secondary-color);"><i class="fas fa-superscript"></i> <span class="lang-text" data-pt-br="Constantes do Gás" data-en="Gas Constants" data-es="Constantes del Gas">Constantes do Gás</span></h2>
-            <div class="data-row"><span class="data-label lang-text" data-pt-br="Constante R:" data-en="R Constant:" data-es="Constante R:">Constante R:</span> <span class="data-value"><span class="format-num">{{ R }}</span> kJ/(kg·K)</span></div>
+            <div class="data-row"><span class="data-label lang-text" data-pt-br="Constante R:" data-en="R Constant:" data-es="Constante R:">Constante R:</span> <span class="data-value"><span class="format-num">{{ R }}</span> kJ/kg·K</span></div>
             <div class="data-row"><span class="data-label lang-text" data-pt-br="Razão (k):" data-en="Ratio (k):" data-es="Razón (k):">Razão (k):</span> <span class="data-value"><span class="format-num">{{ K }}</span></span></div>
         </div>
     </div>
@@ -259,7 +259,7 @@
     <div class="process-results">
         <div class="process-item"><span class="lang-text" data-pt-br="Calor (Q)" data-en="Heat (Q)" data-es="Calor (Q)">Calor (Q)</span><strong><span class="format-num">{{ Q12 }}</span> kJ/kg</strong></div>
         <div class="process-item"><span class="lang-text" data-pt-br="Trabalho (W)" data-en="Work (W)" data-es="Trabajo (W)">Trabalho (W)</span><strong><span class="format-num">{{ W12 }}</span> kJ/kg</strong></div>
-        <div class="process-item"><span class="lang-text" data-pt-br="Entropia Gerada (Sger)" data-en="Generated Entropy (Sger)" data-es="Entropía Generada (Sger)">Entropia Gerada (S<sub>ger</sub>)</span><strong><span class="format-num">{{ Sger }}</span> kJ/(kg·K)</strong></div>
+        <div class="process-item"><span class="lang-text" data-pt-br="Entropia Gerada (Sger)" data-en="Generated Entropy (Sger)" data-es="Entropía Generada (Sger)">Entropia Gerada (S<sub>ger</sub>)</span><strong><span class="format-num">{{ Sger }}</span> kJ/kg·K</strong></div>
         <div class="process-item"><span class="lang-text" data-pt-br="Temp. da Vizinhança" data-en="Surroundings Temp" data-es="Temp. del Entorno">Temp. da Vizinhança</span><strong><span class="format-num">{{ Tviz }}</span> °C</strong></div>
 
         {% if Sger != None and Sger < 0 %}
@@ -324,21 +324,26 @@
         <div class="math-step step-1">
             <div class="step-number">1</div>
             <div class="step-header">
-                <i class="fas fa-search-location"></i> <span class="lang-text" data-pt-br="Levantamento de Propriedades" data-en="Properties Gathering" data-es="Recopilación de Propiedades">Levantamento de Propriedades</span>
+                <i class="fas fa-search-location"></i> <span class="lang-text" data-pt-br="Levantamento de Propriedades e Regra de Ouro" data-en="Properties Gathering and Golden Rule" data-es="Recopilación de Propiedades y Regla de Oro">Levantamento de Propriedades e Regra de Ouro</span>
             </div>
-            <div class="step-description lang-text" data-pt-br="O primeiro passo é definir os estados termodinâmicos inicial e final do Gás Ideal considerando o processo Isobárico (Pressão Constante)." data-en="The first step is to define the initial and final thermodynamic states of the Ideal Gas considering the Isobaric process (Constant Pressure)." data-es="El primer paso es definir los estados termodinámicos inicial y final del Gas Ideal considerando el proceso Isobárico (Presión Constante).">
-                O primeiro passo é definir os estados termodinâmicos inicial e final do Gás Ideal considerando o processo Isobárico (Pressão Constante).
+            
+            <div style="background: #fff3cd; border-left: 4px solid #d32f2f; padding: 12px; margin-bottom: 15px; border-radius: 8px; color: #c62828; font-weight: bold; font-size: 0.95em;">
+                <i class="fas fa-exclamation-triangle"></i> <span class="lang-text" data-pt-br="REGRA DE OURO: Em cálculos envolvendo Gases Ideais, TODAS as temperaturas devem estar obrigatoriamente na escala absoluta (Kelvin - K). Para converter de °C para K, some 273,15." data-en="GOLDEN RULE: In calculations involving Ideal Gases, ALL temperatures must strictly be in the absolute scale (Kelvin - K). To convert from °C to K, add 273.15." data-es="REGLA DE ORO: En cálculos que involucran Gases Ideales, TODAS las temperaturas deben estar obligatoriamente en la escala absoluta (Kelvin - K). Para convertir de °C a K, sume 273,15.">REGRA DE OURO: Em cálculos envolvendo Gases Ideais, TODAS as temperaturas devem estar obrigatoriamente na escala absoluta (Kelvin - K). Para converter de °C para K, some 273,15.</span>
+            </div>
+
+            <div class="step-description lang-text" data-pt-br="Definindo os estados termodinâmicos inicial e final do Gás Ideal considerando o processo Isobárico (Pressão Constante)." data-en="Defining the initial and final thermodynamic states of the Ideal Gas considering the Isobaric process (Constant Pressure)." data-es="Definiendo los estados termodinámicos inicial y final del Gas Ideal considerando el proceso Isobárico (Presión Constante).">
+                Definindo os estados termodinâmicos inicial e final do Gás Ideal considerando o processo Isobárico (Pressão Constante).
             </div>
             <div class="state-boxes">
                 <div class="state-box">
                     <strong><i class="fas fa-play" style="font-size: 0.8em; color: #3498db;"></i> <span class="lang-text" data-pt-br="ESTADO 1" data-en="STATE 1" data-es="ESTADO 1">ESTADO 1</span></strong>
-                    T<sub>1</sub> = <span class="format-num">{{ T1 }}</span> °C<br>
+                    T<sub>1</sub> = <span class="format-num">{{ T1 }}</span> °C <br><small style="color: #d32f2f;">(+ 273.15 K)</small><br>
                     v<sub>1</sub> = <span class="format-num">{{ v1 }}</span> m³/kg<br>
                     P = <span class="format-num">{{ p }}</span> kPa
                 </div>
                 <div class="state-box">
                     <strong><i class="fas fa-stop" style="font-size: 0.8em; color: #e74c3c;"></i> <span class="lang-text" data-pt-br="ESTADO 2" data-en="STATE 2" data-es="ESTADO 2">ESTADO 2</span></strong>
-                    T<sub>2</sub> = <span class="format-num">{{ T2 }}</span> °C<br>
+                    T<sub>2</sub> = <span class="format-num">{{ T2 }}</span> °C <br><small style="color: #d32f2f;">(+ 273.15 K)</small><br>
                     v<sub>2</sub> = <span class="format-num">{{ v2 }}</span> m³/kg<br>
                     P = <span class="format-num">{{ p }}</span> kPa
                 </div>
@@ -350,8 +355,8 @@
             <div class="step-header">
                 <i class="fas fa-expand-arrows-alt"></i> <span class="lang-text" data-pt-br="Cálculo do Trabalho Isobárico (w)" data-en="Isobaric Work Calculation (w)" data-es="Cálculo del Trabajo Isobárico (w)">Cálculo do Trabalho Isobárico (w)</span>
             </div>
-            <div class="step-description lang-text" data-pt-br="Como o processo ocorre a pressão constante, o trabalho específico de fronteira móvel é representado pela área retangular sob a curva no diagrama P-v." data-en="Since the process occurs at constant pressure, the specific boundary work is represented by the rectangular area under the curve in the P-v diagram." data-es="Como el proceso ocurre a presión constante, el trabajo específico de frontera móvil está representado por el área rectangular bajo la curva en el diagrama P-v.">
-                Como o processo ocorre a pressão constante, o trabalho específico de fronteira móvel é representado pela área retangular sob a curva no diagrama P-v.
+            <div class="step-description lang-text" data-pt-br="Como o processo ocorre a pressão constante, o trabalho específico de fronteira móvel é a área retangular sob a curva no diagrama P-v. Note que o volume (v) derivado da equação Pv=RT depende do uso correto do Kelvin." data-en="Since the process occurs at constant pressure, the specific boundary work is the rectangular area under the curve in the P-v diagram. Note that the volume (v) derived from the equation Pv=RT depends on the correct use of Kelvin." data-es="Como el proceso ocurre a presión constante, el trabajo específico de frontera móvil es el área rectangular bajo la curva en el diagrama P-v. Tenga en cuenta que el volumen (v) derivado de la ecuación Pv=RT depende del uso correcto de Kelvin.">
+                Como o processo ocorre a pressão constante, o trabalho específico de fronteira móvel é a área retangular sob a curva no diagrama P-v. Note que o volume (v) derivado da equação Pv=RT depende do uso correto do Kelvin.
             </div>
 
             <div style="background: #fff4e6; border-left: 4px solid #e67e22; padding: 15px; margin-bottom: 20px; border-radius: 8px; font-family: 'Courier New', Courier, monospace; font-size: 0.95em; line-height: 1.6; color: #333;">
@@ -381,8 +386,8 @@
             <div class="step-header">
                 <i class="fas fa-fire"></i> <span class="lang-text" data-pt-br="Primeira Lei e Calor Específico (q)" data-en="First Law and Specific Heat (q)" data-es="Primera Ley y Calor Específico (q)">Primeira Lei e Calor Específico (q)</span>
             </div>
-            <div class="step-description lang-text" data-pt-br="Pela 1ª Lei da Termodinâmica para um processo isobárico com um gás ideal, o calor transferido equivale diretamente à variação da entalpia (Δh), sendo calculado usando o calor específico a pressão constante (Cp0)." data-en="By the 1st Law of Thermodynamics for an isobaric process with an ideal gas, the transferred heat directly equals the enthalpy change (Δh), calculated using the specific heat at constant pressure (Cp0)." data-es="Por la 1ª Ley de la Termodinámica para un proceso isobárico con un gas ideal, el calor transferido equivale directamente a la variación de entalpía (Δh), siendo calculado usando el calor específico a presión constante (Cp0).">
-                Pela 1ª Lei da Termodinâmica para um processo isobárico com um gás ideal, o calor transferido equivale diretamente à variação da entalpia (Δh), sendo calculado usando o calor específico a pressão constante (Cp0).
+            <div class="step-description lang-text" data-pt-br="Pela 1ª Lei da Termodinâmica para um processo isobárico, o calor transferido equivale à variação de entalpia (Δh). Embora a diferença (ΔT) seja a mesma em °C ou K, a dedução de 'dh = Cp0·dT' exige a escala absoluta." data-en="By the 1st Law of Thermodynamics for an isobaric process, the transferred heat equals the enthalpy change (Δh). Although the difference (ΔT) is the same in °C or K, the deduction of 'dh = Cp0·dT' requires the absolute scale." data-es="Por la 1ª Ley de la Termodinámica para un proceso isobárico, el calor transferido equivale al cambio de entalpía (Δh). Aunque la diferencia (ΔT) sea la misma en °C o K, la deducción de 'dh = Cp0·dT' exige la escala absoluta.">
+                Pela 1ª Lei da Termodinâmica para um processo isobárico, o calor transferido equivale à variação de entalpia (Δh). Embora a diferença (ΔT) seja a mesma em °C ou K, a dedução de 'dh = Cp0·dT' exige a escala absoluta.
             </div>
 
             <div style="background: #fdf2f0; border-left: 4px solid #e74c3c; padding: 15px; margin-bottom: 20px; border-radius: 8px; font-family: 'Courier New', Courier, monospace; font-size: 0.95em; line-height: 1.6; color: #333;">
@@ -401,7 +406,7 @@
                 q = Cp0 <span class="math-op">&times;</span> (T<sub>2</sub> <span class="math-op">-</span> T<sub>1</sub>)
             </div>
             <div class="step-calc">
-                q = <span class="val-badge format-num">{{ Cp0 }}</span> &times; ( <span class="val-badge format-num">{{ T2 }}</span> - <span class="val-badge format-num">{{ T1 }}</span> )
+                q = <span class="val-badge format-num">{{ Cp0 }}</span> &times; [ (<span class="val-badge"><span class="format-num">{{ T2 }}</span> + <span class="format-num">273.15</span></span>) - (<span class="val-badge"><span class="format-num">{{ T1 }}</span> + <span class="format-num">273.15</span></span>) ]
             </div>
             <div class="step-result">
                 q = <span class="format-num">{{ Q12 }}</span> kJ/kg
@@ -414,29 +419,24 @@
                 <i class="fas fa-balance-scale"></i> <span class="lang-text" data-pt-br="Segunda Lei e Entropia Gerada (sger)" data-en="Second Law and Entropy Generated (sger)" data-es="Segunda Ley y Entropía Generada (sger)">Segunda Lei e Entropia Gerada (sger)</span>
             </div>
 
-            <div style="background: #fff3cd; border-left: 4px solid #d32f2f; padding: 12px; margin-bottom: 15px; border-radius: 8px; color: #c62828; font-weight: bold; font-size: 0.95em;">
-                <i class="fas fa-exclamation-triangle"></i> <span class="lang-text" data-pt-br="REGRA DE OURO: Em cálculos de Gás Ideal, as temperaturas na fórmula logarítmica e no denominador DEVEM estar em Kelvin (K). Para converter de °C para K, some 273,15." data-en="GOLDEN RULE: In Ideal Gas calculations, temperatures in the logarithmic formula and denominator MUST be in Kelvin (K). To convert from °C to K, add 273.15." data-es="REGLA DE ORO: En cálculos de Gas Ideal, las temperaturas en la fórmula logarítmica y el denominador DEBEN estar en Kelvin (K). Para convertir de °C a K, sume 273,15.">REGRA DE OURO: Em cálculos de Gás Ideal, as temperaturas na fórmula logarítmica e no denominador DEVEM estar em Kelvin (K). Para converter de °C para K, some 273,15.</span>
-            </div>
-
-            <div class="step-description lang-text" data-pt-br="Calculamos a variação de entropia específica do Gás Ideal (Δs) e, subtraindo a entropia transferida por calor (q/TvizK), obtemos a entropia gerada." data-en="We calculate the specific entropy change of the Ideal Gas (Δs) and, by subtracting the entropy transferred by heat (q/TvizK), we obtain the generated entropy." data-es="Calculamos el cambio de entropía específica del Gas Ideal (Δs) y, al restar la entropía transferida por calor (q/TvizK), obtenemos la entropía generada.">
-                Calculamos a variação de entropia específica do Gás Ideal (Δs) e, subtraindo a entropia transferida por calor (q/Tviz
-                K), obtemos a entropia gerada.
+            <div class="step-description lang-text" data-pt-br="Calculamos a variação de entropia específica do Gás Ideal (Δs) e, subtraindo a entropia transferida por calor (q/Tviz), obtemos a entropia gerada." data-en="We calculate the specific entropy change of the Ideal Gas (Δs) and, by subtracting the entropy transferred by heat (q/Tviz), we obtain the generated entropy." data-es="Calculamos el cambio de entropía específica del Gas Ideal (Δs) y, al restar la entropía transferida por calor (q/Tviz), obtenemos la entropía generada.">
+                Calculamos a variação de entropia específica do Gás Ideal (Δs) e, subtraindo a entropia transferida por calor (q/Tviz), obtemos a entropia gerada.
             </div>
 
             <div style="background: #e8f5e9; border-left: 4px solid #2ecc71; padding: 15px; margin-bottom: 20px; border-radius: 8px; font-family: 'Courier New', Courier, monospace; font-size: 0.95em; line-height: 1.6; color: #333;">
                 <div style="font-family: Arial, sans-serif; font-weight: bold; margin-bottom: 10px; color: #27ae60; font-size: 1.05em;">
                     <i class="fas fa-lightbulb"></i> <span class="lang-text" data-pt-br="Dedução Teórica (Entropia - Gás Ideal):" data-en="Theoretical Deduction (Entropy - Ideal Gas):" data-es="Deducción Teórica (Entropía - Gas Ideal):">Dedução Teórica (Entropia - Gás Ideal):</span>
                 </div>
-                1. <span class="lang-text" data-pt-br="Variação de Entropia (Geral):" data-en="Entropy Change (General):" data-es="Cambio de Entropía (General):">Variação de Entropia (Geral):</span> &Delta;s = Cp0 &middot; ln(T<sub>2K</sub> / T<sub>1K</sub>) - R &middot; ln(P<sub>2</sub> / P<sub>1</sub>)<br>
-                2. <span class="lang-text" data-pt-br="Como P1 = P2, o termo da pressão zera:" data-en="Since P1 = P2, the pressure term becomes zero:" data-es="Como P1 = P2, el término de la presión se anula:">Como P1 = P2, o termo da pressão zera:</span> &Delta;s = Cp0 &middot; ln(T<sub>2K</sub> / T<sub>1K</sub>)<br>
-                3. <span class="lang-text" data-pt-br="Balanço de Entropia:" data-en="Entropy Balance:" data-es="Balance de Entropía:">Balanço de Entropia:</span> s<sub>ger</sub> = &Delta;s - (q / T<sub>vizK</sub>)<br>
+                1. <span class="lang-text" data-pt-br="Variação de Entropia (Geral):" data-en="Entropy Change (General):" data-es="Cambio de Entropía (General):">Variação de Entropia (Geral):</span> &Delta;s = Cp0 &middot; ln(T<sub>2</sub> / T<sub>1</sub>) - R &middot; ln(P<sub>2</sub> / P<sub>1</sub>)<br>
+                2. <span class="lang-text" data-pt-br="Como P1 = P2, o termo da pressão zera:" data-en="Since P1 = P2, the pressure term becomes zero:" data-es="Como P1 = P2, el término de la presión se anula:">Como P1 = P2, o termo da pressão zera:</span> &Delta;s = Cp0 &middot; ln(T<sub>2</sub> / T<sub>1</sub>)<br>
+                3. <span class="lang-text" data-pt-br="Balanço de Entropia:" data-en="Entropy Balance:" data-es="Balance de Entropía:">Balanço de Entropia:</span> s<sub>ger</sub> = &Delta;s - (q / T<sub>viz</sub>)<br>
                 <div style="margin-top: 8px; padding-top: 8px; border-top: 1px dashed #2ecc71; font-weight: bold; color: #27ae60; font-size: 1.1em;">
-                    &there4; s<sub>ger</sub> = [ Cp0 &middot; ln(T<sub>2K</sub> / T<sub>1K</sub>) ] - [ q / T<sub>vizK</sub> ]
+                    &there4; s<sub>ger</sub> = [ Cp0 &middot; ln(T<sub>2</sub> / T<sub>1</sub>) ] - [ q / T<sub>viz</sub> ]
                 </div>
             </div>
             
             <div class="formula-box">
-                s<sub>ger</sub> = [ Cp0 <span class="math-op">&times;</span> ln(T<sub>2K</sub> <span class="math-op">/</span> T<sub>1K</sub>) ] <span class="math-op">-</span> [ q <span class="math-op">/</span> (T<sub>viz</sub> <span class="math-op">+</span> <span class="format-num">273.15</span>) ]
+                s<sub>ger</sub> = [ Cp0 <span class="math-op">&times;</span> ln(T<sub>2</sub> <span class="math-op">/</span> T<sub>1</sub>) ] <span class="math-op">-</span> [ q <span class="math-op">/</span> (T<sub>viz</sub> <span class="math-op">+</span> <span class="format-num">273.15</span>) ]
             </div>
 
             <div class="step-calc">
@@ -445,7 +445,7 @@
 
             <div class="step-result" style="background: {% if Sger < 0 %}#ffebee{% else %}#e8f5e9{% endif %}; border-color: {% if Sger < 0 %}#ef9a9a{% else %}#a5d6a7{% endif %}; color: {% if Sger < 0 %}#c62828{% else %}#2e7d32{% endif %};">
                 <i class="fas {% if Sger < 0 %}fa-times-circle{% else %}fa-check-circle{% endif %}"></i>
-                s<sub>ger</sub> = <span class="format-num">{{ Sger }}</span> kJ/(kg·K)
+                s<sub>ger</sub> = <span class="format-num">{{ Sger }}</span> kJ/kg·K
                 <br><small style="font-weight: normal; margin-top: 5px; display: inline-block;">
                 <span class="lang-text"
                     data-pt-br="{% if Sger < 0 %}PROCESSO IMPOSSÍVEL (Sger < 0 viola a 2ª Lei){% else %}PROCESSO POSSÍVEL (Sger &ge; 0 satisfaz a 2ª Lei){% endif %}"
