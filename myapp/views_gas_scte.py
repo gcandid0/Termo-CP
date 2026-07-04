@@ -24,6 +24,22 @@ def to_celsius(T): return T - 273.15 if T is not None else None
 def rd(x, ndigits=4):
     return round(x, ndigits) if isinstance(x, (int, float)) and isfinite(x) else None
 
+# Helpers seguros para ler valores da sessão sem lançar TypeError/ValueError
+# quando a chave não existir (sessão expirada, acesso direto à URL, etc.)
+def safe_int(request, key, default=None):
+    val = request.session.get(key)
+    try:
+        return int(val)
+    except (TypeError, ValueError):
+        return default
+
+def safe_float(request, key, default=None):
+    val = request.session.get(key)
+    try:
+        return float(val)
+    except (TypeError, ValueError):
+        return default
+
 
 ###############################################################################
 # ETAPAS DE COLETA DAS CONSTANTES E ESTADOS
@@ -167,10 +183,15 @@ def process_values_view12(request):
         # =====================================
         # 2️⃣ CONSTANTES
         # =====================================
-        cprop1 = int(request.session.get('const_prop_1'))
-        cprop2 = int(request.session.get('const_prop_2'))
-        cval1  = float(request.session.get('const_val_1'))
-        cval2  = float(request.session.get('const_val_2'))
+        cprop1 = safe_int(request, 'const_prop_1')
+        cprop2 = safe_int(request, 'const_prop_2')
+        cval1  = safe_float(request, 'const_val_1')
+        cval2  = safe_float(request, 'const_val_2')
+
+        if None in (cprop1, cprop2, cval1, cval2):
+            return render(request, 'gas/results_12.html', {
+                'mensagem': 'Sessão expirada ou incompleta. Por favor, reinicie o processo isentrópico desde o início.'
+            })
 
         const_values = {cprop1: cval1, cprop2: cval2}
 
@@ -190,13 +211,14 @@ def process_values_view12(request):
             Cp = Cv + R
             K = Cp / Cv if Cv != 0 else None
         elif R is not None and K is not None:
-            Cv = R / (K - 1)
-            Cp = K * Cv
+            if K != 1:
+                Cv = R / (K - 1)
+                Cp = K * Cv
 
         if R is None or R <= 0:
-            return render(request, 'results_12.html', {'mensagem': 'Erro: Faltam dados ou (R) é inválido.'})
+            return render(request, 'gas/results_12.html', {'mensagem': 'Erro: Faltam dados ou (R) é inválido.'})
         if K is None or K <= 1:
-            return render(request, 'results_12.html', {'mensagem': 'Erro: K deve ser > 1 para gás ideal isentrópico.'})
+            return render(request, 'gas/results_12.html', {'mensagem': 'Erro: K deve ser > 1 para gás ideal isentrópico.'})
 
         # =====================================
         # 3️⃣ ESTADO 1 (CONTINUIDADE REAL)
@@ -208,10 +230,15 @@ def process_values_view12(request):
             v1 = float(ultimo[6])
 
         else:
-            s1p1 = int(request.session.get('state1_prop_1'))
-            s1v1 = float(request.session.get('state1_val_1'))
-            s1p2 = int(request.session.get('state1_prop_2'))
-            s1v2 = float(request.session.get('state1_val_2'))
+            s1p1 = safe_int(request, 'state1_prop_1')
+            s1v1 = safe_float(request, 'state1_val_1')
+            s1p2 = safe_int(request, 'state1_prop_2')
+            s1v2 = safe_float(request, 'state1_val_2')
+
+            if None in (s1p1, s1v1, s1p2, s1v2):
+                return render(request, 'gas/results_12.html', {
+                    'mensagem': 'Sessão expirada ou incompleta. Por favor, reinicie o processo isentrópico desde o início.'
+                })
 
             T1 = p1 = v1 = None
 
@@ -228,16 +255,21 @@ def process_values_view12(request):
                 if p1 is None: p1 = (R * T1) / v1
                 if v1 is None: v1 = (R * T1) / p1
             except ZeroDivisionError:
-                return render(request, 'results_12.html', {'mensagem': 'Divisão por zero ao definir o Estado 1.'})
+                return render(request, 'gas/results_12.html', {'mensagem': 'Divisão por zero ao definir o Estado 1.'})
 
         if None in (T1, p1, v1):
-            return render(request, 'results_12.html', {'mensagem': 'Estado 1 incompleto ou inválido.'})
+            return render(request, 'gas/results_12.html', {'mensagem': 'Estado 1 incompleto ou inválido.'})
 
         # =====================================
         # 4️⃣ ESTADO 2
         # =====================================
-        s2p = int(request.session.get('state2_prop'))
-        s2v = float(request.session.get('state2_val'))
+        s2p = safe_int(request, 'state2_prop')
+        s2v = safe_float(request, 'state2_val')
+
+        if s2p is None or s2v is None:
+            return render(request, 'gas/results_12.html', {
+                'mensagem': 'Sessão expirada ou incompleta. Por favor, reinicie o processo isentrópico desde o início.'
+            })
 
         T2 = p2 = v2 = None
 
@@ -252,9 +284,9 @@ def process_values_view12(request):
             # W12 = Cv * (T1 - T2)  ->  T2 = T1 - (W12 / Cv)
             T2 = T1 - (W12_input / Cv)
         elif s2p == 8:  # Calor (Q)
-            return render(request, 'results_12.html', {'mensagem': 'O calor (Q) em processo isentrópico é zero. Por favor, escolha outra variável.'})
+            return render(request, 'gas/results_12.html', {'mensagem': 'O calor (Q) em processo isentrópico é zero. Por favor, escolha outra variável.'})
         else:
-            return render(request, 'results_12.html', {'mensagem': f'Propriedade de entrada ({s2p}) desconhecida para o Estado 2.'})
+            return render(request, 'gas/results_12.html', {'mensagem': f'Propriedade de entrada ({s2p}) desconhecida para o Estado 2.'})
 
         # =====================================
         # 5️⃣ RELAÇÕES ISENTRÓPICAS (s = constante)
@@ -270,21 +302,22 @@ def process_values_view12(request):
 
             elif T2 is not None:
                 if T2 <= 0:
-                    return render(request, 'results_12.html', {'mensagem': 'Erro: A temperatura absoluta final (K) calculada é negativa ou zero.'})
+                    return render(request, 'gas/results_12.html', {'mensagem': 'Erro: A temperatura absoluta final (K) calculada é negativa ou zero.'})
                 v2 = v1 * (T1/T2)**(1/(K-1))
                 p2 = p1 * (v1/v2)**K
 
         except Exception as e:
-            return render(request, 'results_12.html', {'mensagem': f'Erro matemático ao relacionar estados (verifique entradas negativas): {e}'})
+            return render(request, 'gas/results_12.html', {'mensagem': f'Erro matemático ao relacionar estados (verifique entradas negativas): {e}'})
 
         if None in (T2, p2, v2):
-            return render(request, 'results_12.html', {'mensagem': 'As propriedades do Estado 2 não puderam ser resolvidas com os dados.'})
+            return render(request, 'gas/results_12.html', {'mensagem': 'As propriedades do Estado 2 não puderam ser resolvidas com os dados.'})
 
         # =====================================
         # 6️⃣ PROPRIEDADES DO PROCESSO
         # =====================================
-        Q12 = 0.0
-        Sger = 0.0
+        # Processo isentrópico: por definição, Q = 0 (adiabático) e Sger = 0
+        # (internamente reversível, Δs = 0). Por isso essas variáveis não são
+        # calculadas nem exibidas — só o trabalho (W) é relevante aqui.
         # W12 = \int p dv. Isentrópico: W = Cv * (T1 - T2)
         W12 = Cv * (T1 - T2)
 
@@ -380,15 +413,13 @@ def process_values_view12(request):
             'p2': rd(p2),
             'v1': rd(v1),
             'v2': rd(v2),
-            'Q12': rd(Q12),
             'W12': rd(W12),
-            'Sger': rd(Sger),
             'mensagem': "Processo isentrópico (s=constante) calculado com sucesso!",
             'teste': gas.lista_gas,
             'pontos_grafico_json': json.dumps(pontos_grafico) # Dados do Gráfico Interativo
         }
 
-        return render(request, 'results_12.html', context)
+        return render(request, 'gas/results_12.html', context)
 
     except Exception as e:
         print("Erro geral no cálculo isentrópico:", e)

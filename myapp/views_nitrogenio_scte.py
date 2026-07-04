@@ -18,6 +18,14 @@ def homepage_view36(request):
 
 def ask_known1_view36(request):
     estados.limpar_estados()  # limpa a lista
+
+    request.session['lista_estados'] = json.dumps(estados.lista_estados)
+
+    # --- ADICIONE ESTAS DUAS LINHAS PARA ZERAR O GRÁFICO ---
+    request.session['pontos_grafico'] = []
+    if 'dados_processo' in request.session:
+        del request.session['dados_processo']
+    # -------------------------------------------------------
     if request.method == 'POST':
         form = ScteKelvin(request.POST)
         if form.is_valid():
@@ -812,7 +820,7 @@ def process_values_view36(request):
             fase = ultimo_estado[0]
             temperatura = round(ultimo_estado[2][0][3], 2)
             pressao = round(ultimo_estado[2][1][3], 2)
-            
+
             # VALIDAÇÃO DE PRESSÃO NEGATIVA - ESTADO 1 (Salvo)
             if pressao < 0:
                 raise ValidationError("Erro: A pressão inicial não pode ser negativa.")
@@ -928,7 +936,7 @@ def process_values_view36(request):
             # Validação
             try:
                 pressao2 = round(h.results[2][1][3], 2)
-                
+
                 # VALIDAÇÃO DE PRESSÃO NEGATIVA - ESTADO 2 (Trabalho)
                 if pressao2 < 0:
                     raise ValidationError("Erro: A pressão resultante do segundo estado não pode ser negativa.")
@@ -981,7 +989,7 @@ def process_values_view36(request):
             # Validação
             try:
                 pressao2 = round(h.results[2][1][3], 2)
-                
+
                 # VALIDAÇÃO DE PRESSÃO NEGATIVA - ESTADO 2 (Entropia)
                 if pressao2 < 0:
                     raise ValidationError("Erro: A pressão resultante do segundo estado não pode ser negativa.")
@@ -1031,7 +1039,7 @@ def process_values_view36(request):
         # ==========================================================
         # GERAÇÃO DE MICROPROCESSOS: MATEMÁTICA PARAMÉTRICA (SOLUÇÃO ROBUSTA)
         # ==========================================================
-        
+
         import math
 
         pontos_grafico = request.session.get('pontos_grafico', [])
@@ -1068,22 +1076,22 @@ def process_values_view36(request):
                         h_mid = subs_cls(6, 1, 4, fixo_val, val_mid)
                     else:
                         h_mid = subs_cls(6, 1, 5, val_mid, fixo_val)
-                        
+
                     if h_mid.results[0] == fase:
                         val_a = val_mid
                     else:
                         val_b = val_mid
                 except Exception:
-                    val_b = val_mid 
-            
+                    val_b = val_mid
+
             val_front = val_a if fase == 3 else val_b
-            
+
             try:
                 if is_isobaric:
                     h_front_calc = subs_cls(6, 1, 4, fixo_val, val_front)
                 else:
                     h_front_calc = subs_cls(6, 1, 5, val_front, fixo_val)
-                    
+
                 pt_fronteira = {
                     'T': round(h_front_calc.results[2][0][3], 6),
                     'P': round(h_front_calc.results[2][1][3], 6),
@@ -1099,11 +1107,11 @@ def process_values_view36(request):
         def gerar_segmento(pt_A, pt_B, num_pontos):
             segmento = []
             if not pt_A or not pt_B: return segmento
-            
+
             # O SEGREDO VISUAL: Em termodinâmica, P e v se comportam exponencialmente.
-            # Interpolando em escala logarítmica, criamos a curva Pv^k = C perfeita 
+            # Interpolando em escala logarítmica, criamos a curva Pv^k = C perfeita
             # sem correr o risco de o sistema falhar e mandar o ponto pro (0,0).
-            
+
             use_log_P = pt_A['P'] > 0 and pt_B['P'] > 0
             use_log_v = pt_A['v'] > 0 and pt_B['v'] > 0
 
@@ -1113,15 +1121,15 @@ def process_values_view36(request):
             if use_log_v:
                 log_v_A = math.log10(pt_A['v'])
                 log_v_B = math.log10(pt_B['v'])
-            
+
             for i in range(num_pontos + 1):
                 f = i / float(num_pontos)
-                
+
                 # Interpolação linear padrão para T, s, h
                 t_i = pt_A['T'] + f * (pt_B['T'] - pt_A['T'])
                 s_i = pt_A['s'] + f * (pt_B['s'] - pt_A['s'])
                 h_i = pt_A['h'] + f * (pt_B['h'] - pt_A['h'])
-                
+
                 # Interpolação logarítmica para P e v (Gera a curvatura exata na tela)
                 if use_log_P:
                     p_i = 10 ** (log_P_A + f * (log_P_B - log_P_A))
@@ -1134,11 +1142,11 @@ def process_values_view36(request):
                     v_i = pt_A['v'] + f * (pt_B['v'] - pt_A['v'])
 
                 # Travas de segurança: Garante que os valores constantes fiquem perfeitamente retos
-                if is_isobaric: 
+                if is_isobaric:
                     p_i = pt_A['P'] # Processo isobárico cravado
                 else:
                     s_i = pt_A['s'] # Processo isentrópico cravado
-                
+
                 segmento.append({
                     'T': round(t_i, 6), 'P': round(p_i, 6), 'v': round(v_i, 10),
                     's': round(s_i, 6), 'h': round(h_i, 6)
@@ -1147,11 +1155,11 @@ def process_values_view36(request):
 
         # 3. Construção dos Ramos
         pontos_finais = []
-        
+
         if pt_fronteira:
             trecho1 = gerar_segmento(estado_inicial, pt_fronteira, 150)
             trecho2 = gerar_segmento(pt_fronteira, estado_final, 150)
-            
+
             if trecho1: trecho1.pop()  # Evita duplicar o ponto do vértice de junção
             pontos_finais = trecho1 + trecho2
         else:
@@ -1160,11 +1168,11 @@ def process_values_view36(request):
         # ==========================================================
         # CONEXÃO FINAL
         # ==========================================================
-        
+
         ramo_atual = pontos_finais
         pontos_grafico.append(ramo_atual)
         request.session['pontos_grafico'] = pontos_grafico
-        
+
         # ==========================================================
 
         return render(request, 'nitrogenio/results-nitrogenio-scte-4.html', {
@@ -1205,7 +1213,7 @@ def process_values_view36(request):
 
     except ValidationError as e:
         return render(request, 'erro_generico.html', {'message': str(e)})
-    
+
     except BoundariesException:
         # Capturando os limites da tabela de forma dinâmica
         return render(request, 'erro_generico.html', {'message': 'Os valores fornecidos (ou calculados) estão fora dos limites das tabelas termodinâmicas'})

@@ -975,7 +975,7 @@ def process_values_view4(request):
             pressao = round(ultimo_estado[2][1][3], 2)
             
             # VALIDAÇÃO DE PRESSÃO NEGATIVA - ESTADO 1 (Salvo)
-            if pressao < 0:
+            if pressao < 0.6113:
                 raise ValidationError("Erro: A pressão inicial não pode ser negativa.")
 
             volume_esp = round(ultimo_estado[2][2][3], 8)
@@ -1038,7 +1038,7 @@ def process_values_view4(request):
                 pressao = round(h.results[2][1][3], 2)
 
                 # VALIDAÇÃO DE PRESSÃO NEGATIVA - ESTADO 1 (Digitado)
-                if pressao < 0:
+                if pressao < 0.6113:
                     raise ValidationError("Erro: A pressão calculada ou inserida não pode ser negativa.")
 
                 volume_esp = round(h.results[2][2][3], 8)
@@ -1091,7 +1091,7 @@ def process_values_view4(request):
                 pressao2 = round(h.results[2][1][3], 2)
                 
                 # VALIDAÇÃO DE PRESSÃO NEGATIVA - ESTADO 2 (Trabalho)
-                if pressao2 < 0:
+                if pressao2 < 0.6113:
                     raise ValidationError("Erro: A pressão resultante do segundo estado não pode ser negativa.")
 
                 temperatura2 = round(h.results[2][0][3], 2)
@@ -1144,7 +1144,7 @@ def process_values_view4(request):
                 pressao2 = round(h.results[2][1][3], 2)
                 
                 # VALIDAÇÃO DE PRESSÃO NEGATIVA - ESTADO 2 (Entropia)
-                if pressao2 < 0:
+                if pressao2 < 0.6113:
                     raise ValidationError("Erro: A pressão resultante do segundo estado não pode ser negativa.")
 
                 temperatura2 = round(h.results[2][0][3], 2)

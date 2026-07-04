@@ -18,6 +18,16 @@ def homepage_view42(request):
 
 def ask_known1_view42(request):
     estados.limpar_estados()  # limpa a lista
+
+
+    request.session['lista_estados'] = json.dumps(estados.lista_estados)
+
+    # --- ADICIONE ESTAS DUAS LINHAS PARA ZERAR O GRÁFICO ---
+    request.session['pontos_grafico'] = []
+    if 'dados_processo' in request.session:
+        del request.session['dados_processo']
+    # -------------------------------------------------------
+
     if request.method == 'POST':
         form = vcteKelvin(request.POST)
         if form.is_valid():
@@ -827,7 +837,7 @@ def process_values_view42(request):
             fase = ultimo_estado[0]
             temperatura = round(ultimo_estado[2][0][3], 2)
             pressao = round(ultimo_estado[2][1][3], 2)
-            
+
             # VALIDAÇÃO DE PRESSÃO NEGATIVA - ESTADO 1 (Salvo)
             if pressao < 0:
                 raise ValidationError("Erro: A pressão inicial não pode ser negativa.")
@@ -881,7 +891,7 @@ def process_values_view42(request):
             try:
                 temperatura = round(h.results[2][0][3], 2)
                 pressao = round(h.results[2][1][3], 2)
-                
+
                 # VALIDAÇÃO DE PRESSÃO NEGATIVA - ESTADO 1 (Digitado)
                 if pressao < 0:
                     raise ValidationError("Erro: A pressão calculada ou inserida não pode ser negativa.")
@@ -929,7 +939,7 @@ def process_values_view42(request):
         fase2 = h.results[0]
         try:
             pressao2 = round(h.results[2][1][3], 2)
-            
+
             # VALIDAÇÃO DE PRESSÃO NEGATIVA - ESTADO 2
             if pressao2 < 0:
                 raise ValidationError("Erro: A pressão resultante do segundo estado não pode ser negativa.")
@@ -987,7 +997,7 @@ def process_values_view42(request):
         pontos_grafico = request.session.get('pontos_grafico', [])
 
         val_fixo = volume_esp
-        
+
         estado_inicial = {
             'T': round(temperatura, 6), 'P': round(pressao, 6), 'v': round(val_fixo, 10),
             's': round(entropia_esp, 6), 'h': round(entalpia_esp, 6), 'fase': fase
@@ -1005,7 +1015,7 @@ def process_values_view42(request):
             # 1. Busca Binária de Alta Precisão (Acha exatamente o vértice no domo)
             t_a = temperatura
             t_b = temperatura2
-            
+
             # AUMENTO DE PRECISÃO: 60 iterações para cravar o ponto na 6ª casa decimal
             for _ in range(60):
                 t_mid = (t_a + t_b) / 2.0
@@ -1017,11 +1027,11 @@ def process_values_view42(request):
                         t_b = t_mid
                 except Exception:
                     # Em caso de erro numérico na tabela, afasta do erro
-                    t_b = t_mid 
-            
+                    t_b = t_mid
+
             # O lado da mistura (fase 3) é matematicamente blindado contra erros
             t_front = t_a if fase == 3 else t_b
-            
+
             try:
                 h_front_calc = subs_cls(7, 0, 2, t_front, val_fixo)
                 pt_fronteira = {
@@ -1039,22 +1049,22 @@ def process_values_view42(request):
         def gerar_segmento(pt_A, pt_B, num_pontos):
             segmento = []
             if not pt_A or not pt_B: return segmento
-            
+
             # Aplica escala logarítmica para a Pressão (suaviza as curvas nos diagramas T-s e P-h)
             use_log_P = pt_A['P'] > 0 and pt_B['P'] > 0
 
             if use_log_P:
                 log_P_A = math.log10(pt_A['P'])
                 log_P_B = math.log10(pt_B['P'])
-            
+
             for i in range(num_pontos + 1):
                 f = i / float(num_pontos)
-                
+
                 # Interpolação linear para T, s, h
                 t_i = pt_A['T'] + f * (pt_B['T'] - pt_A['T'])
                 s_i = pt_A['s'] + f * (pt_B['s'] - pt_A['s'])
                 h_i = pt_A['h'] + f * (pt_B['h'] - pt_A['h'])
-                
+
                 # Interpolação logarítmica para P
                 if use_log_P:
                     p_i = 10 ** (log_P_A + f * (log_P_B - log_P_A))
@@ -1063,23 +1073,23 @@ def process_values_view42(request):
 
                 # Para processo isovolumétrico, o volume é 100% cravado
                 v_i = val_fixo
-                
+
                 segmento.append({
-                    'T': round(t_i, 6), 
-                    'P': round(p_i, 6), 
+                    'T': round(t_i, 6),
+                    'P': round(p_i, 6),
                     'v': round(v_i, 10),
-                    's': round(s_i, 6), 
+                    's': round(s_i, 6),
                     'h': round(h_i, 6)
                 })
             return segmento
 
         # 3. Construção dos Ramos (Densidade dobrada para evitar "degraus")
         pontos_finais = []
-        
+
         if pt_fronteira:
             trecho1 = gerar_segmento(estado_inicial, pt_fronteira, 150)
             trecho2 = gerar_segmento(pt_fronteira, estado_final, 150)
-            
+
             if trecho1: trecho1.pop()  # Evita duplicar o vértice
             pontos_finais = trecho1 + trecho2
         else:
@@ -1093,7 +1103,7 @@ def process_values_view42(request):
         ramo_atual = pontos_finais
         pontos_grafico.append(ramo_atual)
         request.session['pontos_grafico'] = pontos_grafico
-        
+
         # ==========================================================
 
         return render(request, 'metano/results-metano-vcte-5.html', {
@@ -1112,7 +1122,7 @@ def process_values_view42(request):
 
     except ValidationError as e:
         return render(request, 'erro_generico.html', {'message': str(e)})
-    
+
     except BoundariesException:
         # Capturando os limites da tabela de forma dinâmica
         return render(request, 'erro_generico.html', {'message': 'Os valores fornecidos (ou calculados) estão fora dos limites das tabelas termodinâmicas'})

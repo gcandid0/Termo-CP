@@ -20,6 +20,13 @@ def ask_known1_view35(request):
     estados.limpar_estados()  # limpa a lista
 
     request.session['lista_estados'] = json.dumps(estados.lista_estados)
+
+    # --- ADICIONE ESTAS DUAS LINHAS PARA ZERAR O GRÁFICO ---
+    request.session['pontos_grafico'] = []
+    if 'dados_processo' in request.session:
+        del request.session['dados_processo']
+    # -------------------------------------------------------
+
     if request.method == 'POST':
         form = PcteKelvin(request.POST)
         if form.is_valid():
@@ -824,7 +831,7 @@ def process_values_view35(request):
             fase = ultimo_estado[0]
             temperatura = round(ultimo_estado[2][0][3], 2)
             pressao = round(ultimo_estado[2][1][3], 2)
-            
+
             # VALIDAÇÃO DE PRESSÃO NEGATIVA - ESTADO 1 (Salvo)
             if pressao < 0:
                 raise ValidationError("Erro: A pressão inicial não pode ser negativa.")
@@ -876,7 +883,7 @@ def process_values_view35(request):
             try:
                 temperatura = round(h.results[2][0][3], 2)
                 pressao = round(h.results[2][1][3], 2)
-                
+
                 # VALIDAÇÃO DE PRESSÃO NEGATIVA - ESTADO 1 (Digitado)
                 if pressao < 0:
                     raise ValidationError("Erro: A pressão calculada ou inserida não pode ser negativa.")
@@ -932,7 +939,7 @@ def process_values_view35(request):
         # Validação do segundo estado
         try:
             pressao2 = round(h.results[2][1][3], 2)
-            
+
             # VALIDAÇÃO DE PRESSÃO NEGATIVA - ESTADO 2
             if pressao2 < 0:
                 raise ValidationError("Erro: A pressão resultante do segundo estado não pode ser negativa.")
@@ -1121,7 +1128,7 @@ def process_values_view35(request):
 
     except ValidationError as e:
         return render(request, 'erro_generico.html', {'message': str(e)})
-    
+
     except BoundariesException:
         # Capturando os limites da tabela de forma dinâmica
         return render(request, 'erro_generico.html', {'message': 'Os valores fornecidos (ou calculados) estão fora dos limites das tabelas termodinâmicas'})
