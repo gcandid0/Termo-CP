@@ -1745,7 +1745,7 @@
         hemboloB = lerp(hemboloB, targetH3B, 0.05);
         hemboloC = lerp(hemboloC, targetH3C, 0.05);
 
-        if (ha1 < 100) {
+	    if (ha1 < 100) {
             fill(183, 28, 28, 255);
             drawCap(r1, ha1); drawCap(r1, 100); drawSide(r1, ha1, 100);
         }
@@ -2672,7 +2672,7 @@
         // Renderização da lista de histórico
         // ------------------------------------------------------------------
         function renderHistoryList() {
-            const history = loadHistory();
+            const history = loadHistory().slice().sort(function(a, b) { return new Date(a.savedAt) - new Date(b.savedAt); });
             const listEl = document.getElementById('historyList');
             if (!listEl) return;
 
@@ -2785,41 +2785,25 @@
                         <h4 class="compare-card-title"><i class="fas fa-flask" aria-hidden="true"></i>${orderLabel} &ndash; ${entry.label}</h4>
                         ${dateRow}
                     </div>
-                    <div style="display:grid; grid-template-columns: repeat(${entry.processCode === 'scte' ? 1 : (entry.processCode === 'vcte' ? 2 : 3)},1fr); gap:8px; margin-bottom:16px;">
-                        ${entry.processCode !== 'scte' ? `<div class="report-metric-card">
-                            <div class="report-metric-label">Q</div>
-                            <div class="report-metric-value">${fmtReportNum(entry.rData.Q)} kJ</div>
-                        </div>` : ''}
-                        ${entry.processCode !== 'vcte' ? `<div class="report-metric-card">
-                            <div class="report-metric-label">W</div>
-                            <div class="report-metric-value">${fmtReportNum(entry.rData.W)} kJ</div>
-                        </div>` : ''}
-                        ${entry.processCode !== 'scte' ? `<div class="report-metric-card">
-                            <div class="report-metric-label">Sger</div>
-                            <div class="report-metric-value">${fmtReportNum(entry.rData.Sger)} kJ/K</div>
-                        </div>` : ''}
+                    <div style="display:grid; grid-template-columns: repeat(3,1fr); gap:8px; margin-bottom:16px;">
+                        <div class="report-metric-card">
+                            <div class="report-metric-label">${t('Calor (Q)','Heat (Q)','Calor (Q)')}</div>
+                            <div class="report-metric-value">${fmtHistoryNum(entry.rData.Q)} kJ</div>
+                        </div>
+                        <div class="report-metric-card">
+                            <div class="report-metric-label">${t('Trabalho (W)','Work (W)','Trabajo (W)')}</div>
+                            <div class="report-metric-value">${fmtHistoryNum(entry.rData.W)} kJ</div>
+                        </div>
+                        <div class="report-metric-card">
+                            <div class="report-metric-label">${t('Sger','Sgen','Sger')}</div>
+                            <div class="report-metric-value">${fmtHistoryNum(entry.rData.Sger)} kJ/K</div>
+                        </div>
                     </div>
                     ${buildStateTable(entry.rData.state1, 1, 2)}
                     <div style="height:12px;"></div>
                     ${buildStateTable(entry.rData.state2, 2, 2)}
                 </div>`;
             };
-
-            // Monta um bloco de variação (Δ) do Estado Final entre cada par
-            // consecutivo de cálculos selecionados (1→2, 2→3, 3→4...).
-            const variationBlocks = entries.slice(1).map(function(entry, idx) {
-                const prev = entries[idx];
-                const prevOrder = ordinalLabel(idx + 1);
-                const nextOrder = ordinalLabel(idx + 2);
-                return `<div class="comparison-block">
-                    <div class="comparison-block-title">
-                        <i class="fas fa-exchange-alt" style="margin-right:6px;"></i>
-                        ${t('Variação entre os Estados Finais de', "Change Between Final States of", "Variación entre los Estados Finales de")}
-                        ${prevOrder} ("${prev.label}") &rarr; ${nextOrder} ("${entry.label}")
-                    </div>
-                    ${buildComparisonRow(prev.rData.state2, entry.rData.state2)}
-                </div>`;
-            }).join('');
 
             const html = `
                 <h3 style="color: var(--primary-color); display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
@@ -2828,9 +2812,6 @@
                 </h3>
                 <div class="compare-scroll-wrap">
                     <div class="compare-grid" data-count="${entries.length}">${entries.map(buildCard).join('')}</div>
-                </div>
-                <div style="margin-top:20px;">
-                    ${variationBlocks}
                 </div>`;
 
             const target = document.getElementById('historyCompare');

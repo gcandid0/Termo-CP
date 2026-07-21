@@ -56,6 +56,7 @@ def ask_known1_view12(request):
     # GARANTIA DE LIMPEZA DO GRÁFICO AO INICIAR NOVO CICLO
     # ==========================================================
     request.session['pontos_grafico'] = []
+    request.session['historico_processos'] = []
     if 'dados_processo' in request.session:
         del request.session['dados_processo']
     if hasattr(gas, 'pontos_grafico_gas'):
@@ -65,8 +66,8 @@ def ask_known1_view12(request):
     if request.method == 'POST':
         form = ConstantesPoli12(request.POST)
         if form.is_valid():
-            request.session['const_prop_1'] = str(form.cleaned_data['property_choice'])
-            request.session['const_val_1'] = float(form.cleaned_data['value_input'])
+            request.session['isen_const_prop_1'] = str(form.cleaned_data['property_choice'])
+            request.session['isen_const_val_1'] = float(form.cleaned_data['value_input'])
             return redirect('ask_known2_12')
     else:
         form = ConstantesPoli12()
@@ -74,7 +75,7 @@ def ask_known1_view12(request):
 
 
 def ask_known2_view12(request):
-    first = request.session.get('const_prop_1')
+    first = request.session.get('isen_const_prop_1')
     excluded_properties = [str(first)] if first is not None else []
 
     if request.method == 'POST':
@@ -84,8 +85,8 @@ def ask_known2_view12(request):
             second_val = float(form.cleaned_data['value_input'])
 
             # Validação de Constantes
-            const1 = int(request.session.get('const_prop_1'))
-            val1 = float(request.session.get('const_val_1'))
+            const1 = int(request.session.get('isen_const_prop_1'))
+            val1 = float(request.session.get('isen_const_val_1'))
             const_values = {const1: val1, second_prop: second_val}
 
             Cv0 = const_values.get(11)
@@ -107,8 +108,16 @@ def ask_known2_view12(request):
                 if K != 1:
                     Cv0 = R / (K - 1)
                     Cp0 = K * Cv0
+            elif Cv0 is not None and K is not None:
+                Cp0 = K * Cv0
+                R = Cp0 - Cv0
+            elif Cp0 is not None and K is not None:
+                if K != 0:
+                    Cv0 = Cp0 / K
+                    R = Cp0 - Cv0
 
             error_messages = []
+            if R is None: error_messages.append("Não foi possível determinar R com as constantes informadas.")
             if R is not None and R <= 0: error_messages.append("R deve ser positivo.")
             if K is not None and K <= 1: error_messages.append("K deve ser maior que 1.")
 
@@ -117,8 +126,8 @@ def ask_known2_view12(request):
                 return render(request, "error_constants.html", context)
 
             # Salvando as escolhas validadas na sessão
-            request.session['const_prop_2'] = str(second_prop)
-            request.session['const_val_2'] = second_val
+            request.session['isen_const_prop_2'] = str(second_prop)
+            request.session['isen_const_val_2'] = second_val
             return redirect('ask_known3_12')
     else:
         form = ConstantesPoli12_2(excluded_properties=excluded_properties)
@@ -129,8 +138,8 @@ def ask_known3_view12(request):
     if request.method == 'POST':
         form = Prop1_12(request.POST)
         if form.is_valid():
-            request.session['state1_prop_1'] = str(form.cleaned_data['property_choice'])
-            request.session['state1_val_1'] = float(form.cleaned_data['value_input'])
+            request.session['isen_state1_prop_1'] = str(form.cleaned_data['property_choice'])
+            request.session['isen_state1_val_1'] = float(form.cleaned_data['value_input'])
             return redirect('ask_known4_12')
     else:
         form = Prop1_12()
@@ -138,14 +147,14 @@ def ask_known3_view12(request):
 
 
 def ask_known4_view12(request):
-    first = request.session.get('state1_prop_1')
+    first = request.session.get('isen_state1_prop_1')
     excluded_properties = [str(first)] if first is not None else []
 
     if request.method == 'POST':
         form = Prop1_2_12(request.POST, excluded_properties=excluded_properties)
         if form.is_valid():
-            request.session['state1_prop_2'] = str(form.cleaned_data['property_choice'])
-            request.session['state1_val_2'] = float(form.cleaned_data['value_input'])
+            request.session['isen_state1_prop_2'] = str(form.cleaned_data['property_choice'])
+            request.session['isen_state1_val_2'] = float(form.cleaned_data['value_input'])
             return redirect('ask_known5_12')
     else:
         form = Prop1_2_12(excluded_properties=excluded_properties)
@@ -156,8 +165,8 @@ def ask_known5_view12(request):
     if request.method == 'POST':
         form = Prop2_12(request.POST)
         if form.is_valid():
-            request.session['state2_prop'] = str(form.cleaned_data['property_choice'])
-            request.session['state2_val'] = float(form.cleaned_data['value_input'])
+            request.session['isen_state2_prop'] = str(form.cleaned_data['property_choice'])
+            request.session['isen_state2_val'] = float(form.cleaned_data['value_input'])
             return redirect('process_values_12')
     else:
         form = Prop2_12()
@@ -183,10 +192,10 @@ def process_values_view12(request):
         # =====================================
         # 2️⃣ CONSTANTES
         # =====================================
-        cprop1 = safe_int(request, 'const_prop_1')
-        cprop2 = safe_int(request, 'const_prop_2')
-        cval1  = safe_float(request, 'const_val_1')
-        cval2  = safe_float(request, 'const_val_2')
+        cprop1 = safe_int(request, 'isen_const_prop_1')
+        cprop2 = safe_int(request, 'isen_const_prop_2')
+        cval1  = safe_float(request, 'isen_const_val_1')
+        cval2  = safe_float(request, 'isen_const_val_2')
 
         if None in (cprop1, cprop2, cval1, cval2):
             return render(request, 'gas/results_12.html', {
@@ -214,6 +223,13 @@ def process_values_view12(request):
             if K != 1:
                 Cv = R / (K - 1)
                 Cp = K * Cv
+        elif Cv is not None and K is not None:
+            Cp = K * Cv
+            R = Cp - Cv
+        elif Cp is not None and K is not None:
+            if K != 0:
+                Cv = Cp / K
+                R = Cp - Cv
 
         if R is None or R <= 0:
             return render(request, 'gas/results_12.html', {'mensagem': 'Erro: Faltam dados ou (R) é inválido.'})
@@ -230,10 +246,10 @@ def process_values_view12(request):
             v1 = float(ultimo[6])
 
         else:
-            s1p1 = safe_int(request, 'state1_prop_1')
-            s1v1 = safe_float(request, 'state1_val_1')
-            s1p2 = safe_int(request, 'state1_prop_2')
-            s1v2 = safe_float(request, 'state1_val_2')
+            s1p1 = safe_int(request, 'isen_state1_prop_1')
+            s1v1 = safe_float(request, 'isen_state1_val_1')
+            s1p2 = safe_int(request, 'isen_state1_prop_2')
+            s1v2 = safe_float(request, 'isen_state1_val_2')
 
             if None in (s1p1, s1v1, s1p2, s1v2):
                 return render(request, 'gas/results_12.html', {
@@ -263,8 +279,8 @@ def process_values_view12(request):
         # =====================================
         # 4️⃣ ESTADO 2
         # =====================================
-        s2p = safe_int(request, 'state2_prop')
-        s2v = safe_float(request, 'state2_val')
+        s2p = safe_int(request, 'isen_state2_prop')
+        s2v = safe_float(request, 'isen_state2_val')
 
         if s2p is None or s2v is None:
             return render(request, 'gas/results_12.html', {
@@ -400,6 +416,19 @@ def process_values_view12(request):
         request.session['lista_gas'] = json.dumps(gas.lista_gas)
 
         # =====================================
+        # 7️⃣.1 HISTÓRICO DE PROCESSOS (para o Relatório Final)
+        # Isentrópico: Q e Sger são sempre nulos por definição.
+        # =====================================
+        historico_processos = request.session.get('historico_processos', [])
+        historico_processos.append({
+            'TempViz': None,
+            'Q': 0,
+            'W': rd(W12),
+            'Sger': 0,
+        })
+        request.session['historico_processos'] = historico_processos
+
+        # =====================================
         # 8️⃣ CONTEXTO PARA O TEMPLATE HTML
         # =====================================
         context = {
@@ -416,7 +445,8 @@ def process_values_view12(request):
             'W12': rd(W12),
             'mensagem': "Processo isentrópico (s=constante) calculado com sucesso!",
             'teste': gas.lista_gas,
-            'pontos_grafico_json': json.dumps(pontos_grafico) # Dados do Gráfico Interativo
+            'pontos_grafico_json': json.dumps(pontos_grafico), # Dados do Gráfico Interativo
+            'historico_processos_json': json.dumps(historico_processos) # Histórico p/ Relatório Final
         }
 
         return render(request, 'gas/results_12.html', context)

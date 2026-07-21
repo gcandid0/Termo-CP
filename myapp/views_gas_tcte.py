@@ -47,6 +47,7 @@ def ask_known1_view10(request):
     # GARANTIA DE LIMPEZA DO GRÁFICO AO INICIAR NOVO CICLO
     # ==========================================================
     request.session['pontos_grafico'] = []
+    request.session['historico_processos'] = []
     if 'dados_processo' in request.session:
         del request.session['dados_processo']
     if hasattr(gas, 'pontos_grafico_gas'):
@@ -162,6 +163,21 @@ def ask_known6_view10(request):
 
 def process_values_view10(request):
     try:
+        # =====================================
+        # 0️⃣ Ressincroniza a lista de estados com a SESSÃO do usuário atual
+        # =====================================
+        # IMPORTANTE: `gas` é uma instância única compartilhada no módulo (via
+        # `std.instancia_gas`), reaproveitada por TODOS os processos de gás e
+        # TODAS as requisições. Sem este passo, `gas.lista_gas` pode conter o
+        # estado deixado por outro usuário ou por outro tipo de processo
+        # (isobárico, isocórico, politrópico, etc.), fazendo o relatório final
+        # exibir mais "Estados" do que processos realmente calculados nesta sessão.
+        if 'lista_gas' not in request.session:
+            request.session['lista_gas'] = json.dumps([])
+        try:
+            gas.lista_gas = json.loads(request.session['lista_gas'])
+        except Exception:
+            gas.lista_gas = []
 
         # =====================================
         # 1️⃣ Recupera constantes
@@ -349,6 +365,18 @@ def process_values_view10(request):
         request.session['lista_gas'] = json.dumps(gas.lista_gas, default=str)
 
         # =====================================
+        # 6️⃣.1 HISTÓRICO DE PROCESSOS (para o Relatório Final)
+        # =====================================
+        historico_processos = request.session.get('historico_processos', [])
+        historico_processos.append({
+            'TempViz': rd(Tviz_C),
+            'Q': rd(Q12),
+            'W': rd(W12),
+            'Sger': rd(S_ger),
+        })
+        request.session['historico_processos'] = historico_processos
+
+        # =====================================
         # 7️⃣ Contexto
         # =====================================
 
@@ -367,7 +395,8 @@ def process_values_view10(request):
             'Sger': rd(S_ger),
             'Tviz': rd(Tviz_C),
             'teste': gas.lista_gas,
-            'pontos_grafico_json': json.dumps(pontos_grafico) # Envia para o Javascript desenhar
+            'pontos_grafico_json': json.dumps(pontos_grafico), # Envia para o Javascript desenhar
+            'historico_processos_json': json.dumps(historico_processos) # Histórico p/ Relatório Final
         }
 
         return render(request, 'gas/results_10.html', context)

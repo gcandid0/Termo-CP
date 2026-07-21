@@ -762,7 +762,6 @@
 
     <div class="process-results">
         <div class="process-item"><span class="lang-text" data-pt-br="Calor (Q)" data-en="Heat (Q)" data-es="Calor (Q)">Calor (Q)</span><strong><span class="format-num">{{ Q12 }}</span> kJ/kg</strong></div>
-        <div class="process-item"><span class="lang-text" data-pt-br="Trabalho (W)" data-en="Work (W)" data-es="Trabajo (W)">Trabalho (W)</span><strong><span class="format-num">{{ W12 }}</span> kJ/kg</strong></div>
         <div class="process-item"><span class="lang-text" data-pt-br="Entropia Gerada (Sger)" data-en="Generated Entropy (Sger)" data-es="Entropía Generada (Sger)">Entropia Gerada (S<sub>ger</sub>)</span><strong><span class="format-num">{{ Sger }}</span> kJ/kg·K</strong></div>
         <div class="process-item"><span class="lang-text" data-pt-br="Temp. da Vizinhança" data-en="Surroundings Temp" data-es="Temp. del Entorno">Temp. da Vizinhança</span><strong><span class="format-num">{{ Tviz }}</span> °C</strong></div>
 
@@ -1091,27 +1090,9 @@
                     </div>
                     <div class="report-diagram-item">
                         <div class="report-diagram-label"><i class="fas fa-chart-area" style="margin-right:5px;"></i>
-                            <span class="lang-text" data-pt-br="Diagrama T-s (Temperatura × Entropia)" data-en="T-s Diagram (Temperature × Entropy)" data-es="Diagrama T-s (Temperatura × Entropía)">Diagrama T-s (Temperatura × Entropia)</span>
-                        </div>
-                        <div class="report-diagram-canvas-wrap"><canvas id="reportChartTs"></canvas></div>
-                    </div>
-                    <div class="report-diagram-item">
-                        <div class="report-diagram-label"><i class="fas fa-chart-area" style="margin-right:5px;"></i>
                             <span class="lang-text" data-pt-br="Diagrama T-v (Temperatura × Volume Específico)" data-en="T-v Diagram (Temperature × Specific Volume)" data-es="Diagrama T-v (Temperatura × Volumen Específico)">Diagrama T-v (Temperatura × Volume Específico)</span>
                         </div>
                         <div class="report-diagram-canvas-wrap"><canvas id="reportChartTv"></canvas></div>
-                    </div>
-                    <div class="report-diagram-item">
-                        <div class="report-diagram-label"><i class="fas fa-chart-area" style="margin-right:5px;"></i>
-                            <span class="lang-text" data-pt-br="Diagrama P-h (Pressão × Entalpia)" data-en="P-h Diagram (Pressure × Enthalpy)" data-es="Diagrama P-h (Presión × Entalpía)">Diagrama P-h (Pressão × Entalpia)</span>
-                        </div>
-                        <div class="report-diagram-canvas-wrap"><canvas id="reportChartPh"></canvas></div>
-                    </div>
-                    <div class="report-diagram-item">
-                        <div class="report-diagram-label"><i class="fas fa-chart-area" style="margin-right:5px;"></i>
-                            <span class="lang-text" data-pt-br="Diagrama h-s — Mollier (Entalpia × Entropia)" data-en="h-s Diagram — Mollier (Enthalpy × Entropy)" data-es="Diagrama h-s — Mollier (Entalpía × Entropía)">Diagrama h-s — Mollier (Entalpia × Entropia)</span>
-                        </div>
-                        <div class="report-diagram-canvas-wrap"><canvas id="reportChartHs"></canvas></div>
                     </div>
                 </div>
             </div>
@@ -1128,10 +1109,7 @@
         <div class="chart-controls">
             <select id="chartTypeSelector" aria-label="Selecionar tipo de diagrama termodinâmico">
                 <option value="Pv" class="lang-text" data-pt-br="Diagrama P-v (Pressão x Volume)" data-en="P-v Diagram (Pressure x Volume)" data-es="Diagrama P-v (Presión x Volumen)">Diagrama P-v (Pressão x Volume)</option>
-                <option value="Ts" class="lang-text" data-pt-br="Diagrama T-s (Temperatura x Entropia)" data-en="T-s Diagram (Temperature x Entropy)" data-es="Diagrama T-s (Temperatura x Entropía)">Diagrama T-s (Temperatura x Entropia)</option>
                 <option value="Tv" class="lang-text" data-pt-br="Diagrama T-v (Temperatura x Volume)" data-en="T-v Diagram (Temperature x Volume)" data-es="Diagrama T-v (Temperatura x Volumen)">Diagrama T-v (Temperatura x Volume)</option>
-                <option value="Ph" class="lang-text" data-pt-br="Diagrama P-h (Pressão x Entalpia)" data-en="P-h Diagram (Pressure x Enthalpy)" data-es="Diagrama P-h (Presión x Entalpía)">Diagrama P-h (Pressão x Entalpia)</option>
-                <option value="hs" class="lang-text" data-pt-br="Diagrama h-s (Mollier - Entalpia x Entropia)" data-en="h-s Diagram (Mollier - Enthalpy x Entropy)" data-es="Diagrama h-s (Mollier - Entalpía x Entropía)">Diagrama h-s (Mollier - Entalpia x Entropia)</option>
             </select>
             <button id="btnToggleFullCycle" class="btn btn-secondary" style="display: none;">
                 <i class="fas fa-layer-group" style="margin-right: 6px;"></i>
@@ -1303,26 +1281,11 @@
             xLab: () => t('Volume Específico (v) [m³/kg]', 'Specific Volume (v) [m³/kg]', 'Volumen Específico (v) [m³/kg]'),
             yLab: () => t('Pressão (P) [kPa]', 'Pressure (P) [kPa]', 'Presión (P) [kPa]')
         },
-        'Ts': {
-            xKey: 's', yKey: 'T', xLog: false, yLog: false,
-            xLab: () => t('Entropia (s) [kJ/kg.K]', 'Entropy (s) [kJ/kg.K]', 'Entropía (s) [kJ/kg.K]'),
-            yLab: () => t('Temperatura (T) [°C]', 'Temperature (T) [°C]', 'Temperatura (T) [°C]')
-        },
         'Tv': {
             xKey: 'v', yKey: 'T', xLog: true, yLog: false,
             xLab: () => t('Volume Específico (v) [m³/kg]', 'Specific Volume (v) [m³/kg]', 'Volumen Específico (v) [m³/kg]'),
             yLab: () => t('Temperatura (T) [°C]', 'Temperature (T) [°C]', 'Temperatura (T) [°C]')
         },
-        'Ph': {
-            xKey: 'h', yKey: 'P', xLog: false, yLog: true,
-            xLab: () => t('Entalpia (h) [kJ/kg]', 'Enthalpy (h) [kJ/kg]', 'Entalpía (h) [kJ/kg]'),
-            yLab: () => t('Pressão (P) [kPa]', 'Pressure (P) [kPa]', 'Presión (P) [kPa]')
-        },
-        'hs': {
-            xKey: 's', yKey: 'h', xLog: false, yLog: false,
-            xLab: () => t('Entropia (s) [kJ/kg.K]', 'Entropy (s) [kJ/kg.K]', 'Entropía (s) [kJ/kg.K]'),
-            yLab: () => t('Entalpia (h) [kJ/kg]', 'Enthalpy (h) [kJ/kg]', 'Entalpía (h) [kJ/kg]')
-        }
     };
 
     function renderChart(showAll) {
@@ -1877,7 +1840,7 @@
                     <div class="report-metric-value">${fmtReportNum(proc.Q)} kJ/kg</div>
                 </div>
                 <div class="report-metric-card" style="${sgerStyle}">
-                    <div class="report-metric-label"><i class="fas fa-balance-scale"></i> Sger</div>
+                    <div class="report-metric-label"><i class="fas fa-balance-scale"></i> ${t('Entropia Gerada (Sger)','Generated Entropy (Sger)','Entropía Generada (Sger)')}</div>
                     <div class="report-metric-value" style="color:${sgerColor};">${fmtReportNum(proc.Sger)} kJ/kg&middot;K</div>
                     ${sgerBadge}
                 </div>
@@ -2127,10 +2090,7 @@
     async function renderAllReportCharts() {
         const charts = [
             { canvasId: 'reportChartPv', type: 'Pv' },
-            { canvasId: 'reportChartTs', type: 'Ts' },
             { canvasId: 'reportChartTv', type: 'Tv' },
-            { canvasId: 'reportChartPh', type: 'Ph' },
-            { canvasId: 'reportChartHs', type: 'hs' }
         ];
         for (const { canvasId, type } of charts) {
             await renderSingleReportChart(canvasId, type);
@@ -2422,7 +2382,7 @@
         // Renderização da lista de histórico
         // ------------------------------------------------------------------
         function renderHistoryList() {
-            const history = loadHistory();
+            const history = loadHistory().slice().sort(function(a, b) { return new Date(a.savedAt) - new Date(b.savedAt); });
             const listEl = document.getElementById('historyList');
             if (!listEl) return;
 
@@ -2540,16 +2500,16 @@
                     </div>
                     <div style="display:grid; grid-template-columns: repeat(3,1fr); gap:8px; margin-bottom:16px;">
                         <div class="report-metric-card">
-                            <div class="report-metric-label">Q</div>
-                            <div class="report-metric-value">${fmtReportNum(entry.rData.Q)} kJ/kg</div>
+                            <div class="report-metric-label">${t('Calor (Q)','Heat (Q)','Calor (Q)')}</div>
+                            <div class="report-metric-value">${fmtHistoryNum(entry.rData.Q)} kJ/kg</div>
                         </div>
                         <div class="report-metric-card">
-                            <div class="report-metric-label">W</div>
-                            <div class="report-metric-value">${fmtReportNum(entry.rData.W)} kJ/kg</div>
+                            <div class="report-metric-label">${t('Trabalho (W)','Work (W)','Trabajo (W)')}</div>
+                            <div class="report-metric-value">${fmtHistoryNum(entry.rData.W)} kJ/kg</div>
                         </div>
                         <div class="report-metric-card">
-                            <div class="report-metric-label">Sger</div>
-                            <div class="report-metric-value">${fmtReportNum(entry.rData.Sger)} kJ/kg&middot;K</div>
+                            <div class="report-metric-label">${t('Entropia Gerada (Sger)','Generated Entropy (Sger)','Entropía Generada (Sger)')}</div>
+                            <div class="report-metric-value">${fmtHistoryNum(entry.rData.Sger)} kJ/kg&middot;K</div>
                         </div>
                     </div>
                     ${buildStateTable(entry.rData.state1, 1, 2)}
@@ -2558,22 +2518,6 @@
                 </div>`;
             };
 
-            // Monta um bloco de variação (Δ) do Estado Final entre cada par
-            // consecutivo de cálculos selecionados (1→2, 2→3, 3→4...).
-            const variationBlocks = entries.slice(1).map(function(entry, idx) {
-                const prev = entries[idx];
-                const prevOrder = ordinalLabel(idx + 1);
-                const nextOrder = ordinalLabel(idx + 2);
-                return `<div class="comparison-block">
-                    <div class="comparison-block-title">
-                        <i class="fas fa-exchange-alt" style="margin-right:6px;"></i>
-                        ${t('Variação entre os Estados Finais de', "Change Between Final States of", "Variación entre los Estados Finales de")}
-                        ${prevOrder} ("${prev.label}") &rarr; ${nextOrder} ("${entry.label}")
-                    </div>
-                    ${buildComparisonRow(prev.rData.state2, entry.rData.state2)}
-                </div>`;
-            }).join('');
-
             const html = `
                 <h3 style="color: var(--primary-color); display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
                     <span><i class="fas fa-columns" style="margin-right:8px;"></i>${t('Comparação entre Cálculos', 'Calculation Comparison', 'Comparación entre Cálculos')}</span>
@@ -2581,9 +2525,6 @@
                 </h3>
                 <div class="compare-scroll-wrap">
                     <div class="compare-grid" data-count="${entries.length}">${entries.map(buildCard).join('')}</div>
-                </div>
-                <div style="margin-top:20px;">
-                    ${variationBlocks}
                 </div>`;
 
             const target = document.getElementById('historyCompare');

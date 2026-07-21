@@ -43,6 +43,7 @@ def ask_known1_view11(request):
     # GARANTIA DE LIMPEZA DO GRÁFICO AO INICIAR NOVO CICLO
     # ==========================================================
     request.session['pontos_grafico'] = []
+    request.session['historico_processos'] = []
     if 'dados_processo' in request.session:
         del request.session['dados_processo']
     if hasattr(gas, 'pontos_grafico_gas'):
@@ -52,8 +53,8 @@ def ask_known1_view11(request):
     if request.method == 'POST':
         form = ConstantesPoli11(request.POST)
         if form.is_valid():
-            request.session['const_prop_1'] = str(form.cleaned_data['property_choice'])
-            request.session['const_val_1'] = float(form.cleaned_data['value_input'])
+            request.session['poli_const_prop_1'] = str(form.cleaned_data['property_choice'])
+            request.session['poli_const_val_1'] = float(form.cleaned_data['value_input'])
             return redirect('ask_known2_11')
     else:
         form = ConstantesPoli11()
@@ -64,7 +65,7 @@ def ask_known1_view11(request):
 # Passo 2 – Escolha da segunda constante (com verificação antecipada)
 ###############################################################################
 def ask_known2_view11(request):
-    prop = request.session.get('const_prop_1')
+    prop = request.session.get('poli_const_prop_1')
     excluded_properties = [str(prop)] if prop is not None else []
 
     if request.method == 'POST':
@@ -73,19 +74,36 @@ def ask_known2_view11(request):
             second_property_choice = int(form.cleaned_data['property_choice'])
             second_value_input = float(form.cleaned_data['value_input'])
 
-            const1 = int(request.session.get('const_prop_1')); val1 = float(request.session.get('const_val_1'))
+            const1 = int(request.session.get('poli_const_prop_1')); val1 = float(request.session.get('poli_const_val_1'))
             const_values = {const1: val1, second_property_choice: second_value_input}
             Cv0 = const_values.get(11); Cp0 = const_values.get(12); R = const_values.get(13); K = const_values.get(14)
-            if Cp0 is not None and Cv0 is not None: R = Cp0 - Cv0; K = (Cp0 / Cv0) if Cv0 != 0 else None
+
+            # Lógica de determinação cruzada (igual às demais views: Cp+Cv, Cp+R, Cv+R, R+K)
+            if Cp0 is not None and Cv0 is not None:
+                R = Cp0 - Cv0
+                K = Cp0 / Cv0 if Cv0 else None
+            elif Cp0 is not None and R is not None:
+                Cv0 = Cp0 - R
+                K = Cp0 / Cv0 if Cv0 else None
+            elif Cv0 is not None and R is not None:
+                Cp0 = Cv0 + R
+                K = Cp0 / Cv0 if Cv0 else None
+            elif R is not None and K is not None:
+                if K != 1:
+                    Cv0 = R / (K - 1)
+                    Cp0 = K * Cv0
 
             error_messages = []
+            if R is not None and R <= 0: error_messages.append("R deve ser positivo.")
+            if K is not None and K <= 1: error_messages.append("K deve ser maior que 1.")
             if Cp0 is not None and Cv0 is not None and Cp0 <= Cv0: error_messages.append("Cp deve ser maior que Cv.")
+
             if error_messages:
-                context = {"mensagem_erro": "Erro nas Constantes: " + ", ".join(error_messages)}
+                context = {"Cv0": Cv0, "Cp0": Cp0, "R": R, "K": K, "error_messages": error_messages}
                 return render(request, "error_constants.html", context)
 
-            request.session['const_prop_2'] = str(second_property_choice)
-            request.session['const_val_2'] = float(second_value_input)
+            request.session['poli_const_prop_2'] = str(second_property_choice)
+            request.session['poli_const_val_2'] = float(second_value_input)
             return redirect('ask_known3_11')
 
     else:
@@ -100,8 +118,8 @@ def ask_known3_view11(request):
     if request.method == 'POST':
         form = Prop1Poli11(request.POST)
         if form.is_valid():
-            request.session['state1_prop_1'] = str(form.cleaned_data['property_choice'])
-            request.session['state1_val_1'] = float(form.cleaned_data['value_input'])
+            request.session['poli_state1_prop_1'] = str(form.cleaned_data['property_choice'])
+            request.session['poli_state1_val_1'] = float(form.cleaned_data['value_input'])
             return redirect('ask_known4_11')
     else:
         form = Prop1Poli11()
@@ -112,14 +130,14 @@ def ask_known3_view11(request):
 # Passo 4 – Segunda propriedade do estado 1
 ###############################################################################
 def ask_known4_view11(request):
-    first = request.session.get('state1_prop_1')
+    first = request.session.get('poli_state1_prop_1')
     excluded_properties = [str(first)] if first is not None else []
 
     if request.method == 'POST':
         form = Prop1Poli11_2(request.POST, excluded_properties=excluded_properties)
         if form.is_valid():
-            request.session['state1_prop_2'] = str(form.cleaned_data['property_choice'])
-            request.session['state1_val_2'] = float(form.cleaned_data['value_input'])
+            request.session['poli_state1_prop_2'] = str(form.cleaned_data['property_choice'])
+            request.session['poli_state1_val_2'] = float(form.cleaned_data['value_input'])
             return redirect('ask_known5_11')
     else:
         form = Prop1Poli11_2(excluded_properties=excluded_properties)
@@ -133,8 +151,8 @@ def ask_known5_view11(request):
     if request.method == 'POST':
         form = Prop2TCte11(request.POST)
         if form.is_valid():
-            request.session['state2_prop'] = str(form.cleaned_data['property_choice'])
-            request.session['state2_val'] = float(form.cleaned_data['value_input'])
+            request.session['poli_state2_prop'] = str(form.cleaned_data['property_choice'])
+            request.session['poli_state2_val'] = float(form.cleaned_data['value_input'])
             return redirect('ask_known6_11')
     else:
         form = Prop2TCte11()
@@ -148,7 +166,7 @@ def ask_known6_view11(request):
     if request.method == 'POST':
         form = NGasIdeal11(request.POST)
         if form.is_valid():
-            request.session['n_value'] = float(form.cleaned_data['N_value_input'])
+            request.session['poli_n_value'] = float(form.cleaned_data['N_value_input'])
             return redirect('ask_known7_11')
     else:
         form = NGasIdeal11()
@@ -162,7 +180,7 @@ def ask_known7_view11(request):
     if request.method == 'POST':
         form = TvizGasIdeal11(request.POST)
         if form.is_valid():
-            request.session['tviz_value'] = float(form.cleaned_data['Tviz_value_input'])
+            request.session['poli_tviz_value'] = float(form.cleaned_data['Tviz_value_input'])
             return redirect('process_values_11')
     else:
         form = TvizGasIdeal11()
@@ -190,10 +208,10 @@ def process_values_view11(request):
         # =====================================
         # 1️⃣ CONSTANTES
         # =====================================
-        const1 = int(request.session.get('const_prop_1'))
-        const2 = int(request.session.get('const_prop_2'))
-        val1 = float(request.session.get('const_val_1'))
-        val2 = float(request.session.get('const_val_2'))
+        const1 = int(request.session.get('poli_const_prop_1'))
+        const2 = int(request.session.get('poli_const_prop_2'))
+        val1 = float(request.session.get('poli_const_val_1'))
+        val2 = float(request.session.get('poli_const_val_2'))
 
         const_values = {const1: val1, const2: val2}
 
@@ -202,25 +220,31 @@ def process_values_view11(request):
         R  = const_values.get(13)
         k  = const_values.get(14)
 
-        if Cp and Cv:
+        # Derivação cruzada: cobre TODAS as combinações possíveis de 2
+        # constantes escolhidas pelo usuário (Cv+Cp, Cp+R, Cv+R, ou R+K).
+        # Antes, a combinação "R + K" não era tratada e deixava Cv/Cp
+        # como None, causando TypeError mais abaixo (Cp - R com Cp=None).
+        if Cp is not None and Cv is not None:
             R = Cp - Cv
-            k = Cp / Cv
-
-        if R is None or R <= 0:
-            return redirect('error_type11')
-
-        if Cv is None:
+            k = Cp / Cv if Cv != 0 else None
+        elif Cp is not None and R is not None:
             Cv = Cp - R
-        if Cp is None:
+            k = Cp / Cv if Cv != 0 else None
+        elif Cv is not None and R is not None:
             Cp = Cv + R
-        if k is None:
-            k = Cp / Cv
+            k = Cp / Cv if Cv != 0 else None
+        elif R is not None and k is not None and (k - 1) != 0:
+            Cv = R / (k - 1)
+            Cp = k * Cv
+
+        if R is None or R <= 0 or Cv is None or Cp is None or k is None:
+            return redirect('error_type11')
 
         # =====================================
         # 2️⃣ n e T_viz
         # =====================================
-        n = float(request.session.get('n_value'))
-        Tviz = to_kelvin(float(request.session.get('tviz_value')))
+        n = float(request.session.get('poli_n_value'))
+        Tviz = to_kelvin(float(request.session.get('poli_tviz_value')))
 
         # =====================================
         # 3️⃣ ESTADO 1 (CONTINUIDADE REAL)
@@ -235,10 +259,10 @@ def process_values_view11(request):
 
         else:
 
-            s1p1 = int(request.session.get('state1_prop_1'))
-            s1v1 = float(request.session.get('state1_val_1'))
-            s1p2 = int(request.session.get('state1_prop_2'))
-            s1v2 = float(request.session.get('state1_val_2'))
+            s1p1 = int(request.session.get('poli_state1_prop_1'))
+            s1v1 = float(request.session.get('poli_state1_val_1'))
+            s1p2 = int(request.session.get('poli_state1_prop_2'))
+            s1v2 = float(request.session.get('poli_state1_val_2'))
 
             T1 = p1 = v1 = None
 
@@ -263,8 +287,8 @@ def process_values_view11(request):
         # =====================================
         # 4️⃣ ESTADO 2 - DADO PELO USUÁRIO
         # =====================================
-        s2p = int(request.session.get('state2_prop'))
-        s2v = float(request.session.get('state2_val'))
+        s2p = int(request.session.get('poli_state2_prop'))
+        s2v = float(request.session.get('poli_state2_val'))
 
         T2 = p2 = v2 = None
         Q_user = None
@@ -428,6 +452,18 @@ def process_values_view11(request):
         request.session['lista_gas'] = json.dumps(gas.lista_gas)
 
         # =====================================
+        # 9️⃣.1 HISTÓRICO DE PROCESSOS (para o Relatório Final)
+        # =====================================
+        historico_processos = request.session.get('historico_processos', [])
+        historico_processos.append({
+            'TempViz': rd(Tviz - 273.15),
+            'Q': rd(Q),
+            'W': rd(W),
+            'Sger': rd(Sger),
+        })
+        request.session['historico_processos'] = historico_processos
+
+        # =====================================
         # 🔟 CONTEXTO
         # =====================================
         context = {
@@ -448,7 +484,8 @@ def process_values_view11(request):
             'processo_impossivel': processo_impossivel,
             'teste': gas.lista_gas,
             'Tviz': rd(Tviz-273.15),
-            'pontos_grafico_json': json.dumps(pontos_grafico) # Envia para o Chart.js
+            'pontos_grafico_json': json.dumps(pontos_grafico), # Envia para o Chart.js
+            'historico_processos_json': json.dumps(historico_processos) # Histórico p/ Relatório Final
         }
 
         return render(request, 'gas/results_11.html', context)
