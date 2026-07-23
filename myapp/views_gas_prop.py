@@ -121,7 +121,7 @@ def process_values_view6(request):
             temperatura_c = temperatura_k - 273.15
 
         return render(request, 'gas/results_6.html', {
-            'temperatura': round(temperatura_c, 2),
+            'temperatura': round(temperatura_c, 3),
             'pressao': round(pressao, 6),
             'volume': round(volume, 6),
             'R': R_value_input,

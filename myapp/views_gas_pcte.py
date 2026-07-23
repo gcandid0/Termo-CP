@@ -346,6 +346,13 @@ def process_values_view8(request):
         # Sincroniza com a classe gas
         if hasattr(gas, 'pontos_grafico_gas'):
             gas.pontos_grafico_gas = pontos_grafico
+
+        # Não permitir pressão ou volume negativos
+        if p1 < 0.0001 or v1 < 0.0001 or p2 < 0.0001 or v2 < 0.0001:
+            return redirect('error_type7')
+
+        if v1 > 1000 or v2 > 1000:
+            return redirect('error_type7')
         # ==========================================================
 
         # =====================================

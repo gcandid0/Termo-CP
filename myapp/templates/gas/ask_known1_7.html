@@ -247,7 +247,7 @@
             </div>
 
             <div class="button-container">
-                <a href="{% url 'ask_known3_6' %}" class="btn btn-secondary">
+                <a href="{% url 'ask_known3_7' %}" class="btn btn-secondary">
                     <i class="fas fa-arrow-left" style="margin-right: 8px;"></i>
                     <span class="lang-text" data-pt-br="Voltar" data-en="Back" data-es="Volver">Voltar</span>
                 </a>
@@ -296,7 +296,7 @@
                               'data-es="Introduzca el valor de la Temperatura (°C)">' +
                               'Digite o valor da Temperatura (°C)</span>';
             
-            numberInput.setAttribute('min', '-500');
+            numberInput.setAttribute('min', '-273.15');
             numberInput.setAttribute('max', '10000');
             
         } else if (selectedValue == '1') {
@@ -307,7 +307,7 @@
                               'data-es="Introduzca el valor de la Presión (kPa)">' +
                               'Digite o valor da Pressão (kPa)</span>';
             
-            numberInput.setAttribute('min', '0');
+            numberInput.setAttribute('min', '0.0001');
             numberInput.setAttribute('max', '50000');
             
         } else if (selectedValue == '2') {
@@ -318,7 +318,7 @@
                               'data-es="Introduzca el valor del Volumen Específico (m³/kg)">' +
                               'Digite o valor do Volume Específico (m³/kg)</span>';
             
-            numberInput.setAttribute('min', '0');
+            numberInput.setAttribute('min', '0.0001');
             numberInput.setAttribute('max', '10000');
         }
 
