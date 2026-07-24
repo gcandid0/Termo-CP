@@ -154,7 +154,7 @@ python manage.py migrate
 python manage.py runserver
 ```
 
-Acesse em [http://127.0.0.1:8000](http://127.0.0.1:8000).
+Acesse em [...](...).
 
 > Se o repositório ainda não possuir um `requirements.txt`, gere um com `pip freeze > requirements.txt` após instalar Django e demais dependências utilizadas no projeto.
 
@@ -174,8 +174,6 @@ Este software é resultado de pesquisa acadêmica e está descrito nos seguintes
 - SANTOS, G. C. M.; FONSECA, F. B. **Software for simulating thermodynamic states of water in a cylinder-piston system**. In: *Proceedings of the XLVI Ibero-Latin-American Congress on Computational Methods in Engineering (CILAMCE)*, Vitória, ES, Brasil, 2025.
 - SANTOS, G. C. M.; FONSECA, F. B. **Modelagem e Análise Termodinâmica de Processos em Sistema Fechado com Água**. In: *XIII Congresso Brasileiro de Termodinâmica / IX Escola de Termodinâmica*, Brasília, DF, Brasil, 2026.
 - SANTOS, G. C. M.; FONSECA, F. B. **Desenvolvimento de uma simulação interativa de cilindro-pistão para o ensino de Termodinâmica**. In: *XII Congreso Internacional de Ingeniería Mecánica, Mecatrónica y Automatización (CIMM)*, 2025.
-- SANTOS, G. C. M.; FONSECA, F. B. **TERMO-CP: uma plataforma interativa para cálculo e visualização de processos e estados termodinâmicos**. CONEM2026-1510. In: *13º Congresso Nacional de Engenharia Mecânica (CONEM)*, São Luís, MA, Brasil, 2026.
-- SANTOS, G. C. M.; FONSECA, F. B. **Expansão da Plataforma TERMO-CP: Integração de Diferentes Substâncias Puras para Simulação de Processos Termodinâmicos**. *XIII Congresso Brasileiro de Termodinâmica*, 2026.
 - FONSECA, F. B.; SANTOS, G. C. M.; FEITOSA, S. A. I. Capítulo: **TERMOPROP e TERMO-CP: ferramentas computacionais de livre acesso para determinação e aplicação de propriedades termodinâmicas**. In: Livro (capítulo), 2025.
 
 ### Referências bibliográficas centrais
