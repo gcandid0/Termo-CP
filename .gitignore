@@ -1,6 +1,35 @@
+# Ambiente virtual
 venv/
+env/
+.venv/
+
+# Python
 __pycache__/
 *.pyc
+*.pyo
+*.pyd
+
+# Variáveis de ambiente
 .env
+
+# Banco de dados
 db.sqlite3
+db.sqlite3-journal
+
+# Django
+staticfiles/
+media/
+
+# Sistema
 .DS_Store
+Thumbs.db
+
+# Editores/IDEs
+.vscode/
+.idea/
+*.swp
+
+# Testes / coverage
+.pytest_cache/
+.coverage
+htmlcov/
