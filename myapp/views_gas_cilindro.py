@@ -108,13 +108,16 @@ def process_values_view7(request):
             temperatura_k = (pressao * volume) / R_value_input
             temperatura_c = temperatura_k - 273.15
 
+        # Não permitir pressão ou volume negativos
+        if pressao < 0.0001 or volume < 0.0001:
+            return redirect('error_type7')
 
         if volume > 1000:
             return redirect('error_type7')
 
 
         return render(request, 'gas/results_7.html', {
-            'temperatura': round(temperatura_c, 2),
+            'temperatura': round(temperatura_c, 3),
             'pressao': round(pressao, 6),
             'volume': round(volume, 6),
             'R': R_value_input,

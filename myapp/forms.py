@@ -340,8 +340,10 @@ class ConstantesPCte8_2(forms.Form):
 
 
 class Prop1PCte8(forms.Form):
+    """Primeira propriedade do Estado 1 (livre escolha entre T, p ou v)."""
     PROPERTY_CHOICES = [
         ('0', P_TEMP),
+        ('1', P_PRESS),
         ('2', P_VOL),
     ]
     property_choice = forms.ChoiceField(
@@ -351,7 +353,27 @@ class Prop1PCte8(forms.Form):
     )
     value_input = forms.FloatField(label=LBL_DIGITE_VALOR, required=True)
 
+class Prop1PCte8_2(forms.Form):
+    """Segunda propriedade do Estado 1 (exclui a já escolhida em Prop1PCte8)."""
+    def __init__(self, *args, **kwargs):
+        excluded_properties = kwargs.pop('excluded_properties', [])
+        super().__init__(*args, **kwargs)
+
+        all_properties = [
+            ('0', P_TEMP),
+            ('1', P_PRESS),
+            ('2', P_VOL),
+        ]
+        filtered_properties = [(num, name) for num, name in all_properties if num not in excluded_properties]
+        self.fields['property_choice'] = forms.ChoiceField(
+            choices=filtered_properties,
+            widget=forms.RadioSelect,
+            label=LBL_SEL_OUTRA_PROP
+        )
+    value_input = forms.FloatField(label=LBL_DIGITE_VALOR, required=True)
+
 class Prop2PCte8(forms.Form):
+
     PROPERTY_CHOICES = [
         ('0', P_TEMP),
         ('2', P_VOL),
@@ -363,12 +385,6 @@ class Prop2PCte8(forms.Form):
         label=LBL_SEL_PROP
     )
     value_input = forms.FloatField(label=LBL_DIGITE_VALOR, required=True)
-
-class PGasIdeal8(forms.Form):
-    P_value_input = forms.FloatField(
-        label=t_html("Digite o valor da Pressão", "Enter the Pressure value", "Introduzca el valor de la Presión"), 
-        required=True
-    )
 
 class TvizGasIdeal8(forms.Form):
     Tviz_value_input = forms.FloatField(
@@ -412,15 +428,36 @@ class ConstantesVCte9_2(forms.Form):
     value_input = forms.FloatField(label=LBL_DIGITE_VALOR, required=True)
 
 class Prop1VCte9(forms.Form):
+    """Primeira propriedade do Estado 1 (livre escolha entre T, p ou v)."""
     PROPERTY_CHOICES = [
         ('0', P_TEMP),
         ('1', P_PRESS),
+        ('2', P_VOL),
     ]
     property_choice = forms.ChoiceField(
         choices=PROPERTY_CHOICES,
         widget=forms.RadioSelect,
         label=LBL_SEL_PROP
     )
+    value_input = forms.FloatField(label=LBL_DIGITE_VALOR, required=True)
+
+class Prop1VCte9_2(forms.Form):
+    """Segunda propriedade do Estado 1 (exclui a já escolhida em Prop1VCte9)."""
+    def __init__(self, *args, **kwargs):
+        excluded_properties = kwargs.pop('excluded_properties', [])
+        super().__init__(*args, **kwargs)
+
+        all_properties = [
+            ('0', P_TEMP),
+            ('1', P_PRESS),
+            ('2', P_VOL),
+        ]
+        filtered_properties = [(num, name) for num, name in all_properties if num not in excluded_properties]
+        self.fields['property_choice'] = forms.ChoiceField(
+            choices=filtered_properties,
+            widget=forms.RadioSelect,
+            label=LBL_SEL_OUTRA_PROP
+        )
     value_input = forms.FloatField(label=LBL_DIGITE_VALOR, required=True)
 
 class Prop2VCte9(forms.Form):
@@ -435,12 +472,6 @@ class Prop2VCte9(forms.Form):
         label=LBL_SEL_PROP
     )
     value_input = forms.FloatField(label=LBL_DIGITE_VALOR, required=True)
-
-class VGasIdeal9(forms.Form):
-    V_value_input = forms.FloatField(
-        label=t_html("Digite o valor do Volume", "Enter the Volume value", "Introduzca el valor del Volumen"), 
-        required=True
-    )
 
 class TvizGasIdeal9(forms.Form):
     Tviz_value_input = forms.FloatField(
@@ -484,7 +515,9 @@ class ConstantesTCte10_2(forms.Form):
     value_input = forms.FloatField(label=LBL_DIGITE_VALOR, required=True)
 
 class Prop1TCte10(forms.Form):
+    """Primeira propriedade do Estado 1 (livre escolha entre T, p ou v)."""
     PROPERTY_CHOICES = [
+        ('0', P_TEMP),
         ('1', P_PRESS),
         ('2', P_VOL),
     ]
@@ -493,6 +526,25 @@ class Prop1TCte10(forms.Form):
         widget=forms.RadioSelect,
         label=LBL_SEL_PROP
     )
+    value_input = forms.FloatField(label=LBL_DIGITE_VALOR, required=True)
+
+class Prop1TCte10_2(forms.Form):
+    """Segunda propriedade do Estado 1 (exclui a já escolhida em Prop1TCte10)."""
+    def __init__(self, *args, **kwargs):
+        excluded_properties = kwargs.pop('excluded_properties', [])
+        super().__init__(*args, **kwargs)
+
+        all_properties = [
+            ('0', P_TEMP),
+            ('1', P_PRESS),
+            ('2', P_VOL),
+        ]
+        filtered_properties = [(num, name) for num, name in all_properties if num not in excluded_properties]
+        self.fields['property_choice'] = forms.ChoiceField(
+            choices=filtered_properties,
+            widget=forms.RadioSelect,
+            label=LBL_SEL_OUTRA_PROP
+        )
     value_input = forms.FloatField(label=LBL_DIGITE_VALOR, required=True)
 
 class Prop2TCte10(forms.Form):
@@ -507,12 +559,6 @@ class Prop2TCte10(forms.Form):
         label=LBL_SEL_PROP
     )
     value_input = forms.FloatField(label=LBL_DIGITE_VALOR, required=True)
-
-class TGasIdeal10(forms.Form):
-    T_value_input = forms.FloatField(
-        label=t_html("Digite o valor da Temperatura", "Enter the Temperature value", "Introduzca el valor de la Temperatura"), 
-        required=True
-    )
 
 class TvizGasIdeal10(forms.Form):
     Tviz_value_input = forms.FloatField(
