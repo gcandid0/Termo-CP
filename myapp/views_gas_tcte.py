@@ -16,7 +16,7 @@ if not hasattr(gas, 'lista_gas') or gas.lista_gas is None:
 
 from .forms import (
     ConstantesTCte10, ConstantesTCte10_2,
-    TGasIdeal10, Prop1TCte10, Prop2TCte10, TvizGasIdeal10
+    Prop1TCte10, Prop1TCte10_2, Prop2TCte10, TvizGasIdeal10
 )
 
 # Funções Auxiliares
@@ -116,24 +116,30 @@ def ask_known2_view10(request):
     return render(request, 'gas/ask_known2_10.html', {'form': form})
 
 def ask_known3_view10(request):
-    if request.method == 'POST':
-        form = TGasIdeal10(request.POST)
-        if form.is_valid():
-            request.session['T_value_input'] = float(form.cleaned_data['T_value_input'])
-            return redirect('ask_known4_10')
-    else:
-        form = TGasIdeal10()
-    return render(request, 'gas/ask_known3_10.html', {'form': form})
-
-def ask_known4_view10(request):
+    # Primeira propriedade do Estado 1: usuário escolhe livremente entre T, p ou v
     if request.method == 'POST':
         form = Prop1TCte10(request.POST)
         if form.is_valid():
-            request.session['third_property_choice'] = int(form.cleaned_data['property_choice'])
-            request.session['third_value_input'] = float(form.cleaned_data['value_input'])
-            return redirect('ask_known5_10')
+            request.session['state1_property_choice_1'] = str(form.cleaned_data['property_choice'])
+            request.session['state1_value_input_1'] = float(form.cleaned_data['value_input'])
+            return redirect('ask_known4_10')
     else:
         form = Prop1TCte10()
+    return render(request, 'gas/ask_known3_10.html', {'form': form})
+
+def ask_known4_view10(request):
+    # Segunda propriedade do Estado 1: exclui a já escolhida na etapa anterior
+    first = request.session.get('state1_property_choice_1')
+    excluded_properties = [str(first)] if first is not None else []
+
+    if request.method == 'POST':
+        form = Prop1TCte10_2(request.POST, excluded_properties=excluded_properties)
+        if form.is_valid():
+            request.session['state1_property_choice_2'] = str(form.cleaned_data['property_choice'])
+            request.session['state1_value_input_2'] = float(form.cleaned_data['value_input'])
+            return redirect('ask_known5_10')
+    else:
+        form = Prop1TCte10_2(excluded_properties=excluded_properties)
     return render(request, 'gas/ask_known4_10.html', {'form': form})
 
 def ask_known5_view10(request):
@@ -213,9 +219,6 @@ def process_values_view10(request):
         # =====================================
         # 2️⃣ Escolhas de propriedades
         # =====================================
-        p1_choice = int(request.session.get('third_property_choice'))
-        p1_val    = float(request.session.get('third_value_input'))
-
         p2_choice = int(request.session.get('four_property_choice'))
         p2_val    = float(request.session.get('four_value_input'))
 
@@ -235,19 +238,33 @@ def process_values_view10(request):
             v1 = float(ultimo[6])
 
         else:
-            T_input_C = float(request.session.get('T_value_input'))
-            T_K = to_kelvin(T_input_C)
+            # Primeiro processo: Estado 1 definido por 2 propriedades livres (T, p ou v)
+            s1p1 = int(request.session.get('state1_property_choice_1'))
+            s1v1 = float(request.session.get('state1_value_input_1'))
+            s1p2 = int(request.session.get('state1_property_choice_2'))
+            s1v2 = float(request.session.get('state1_value_input_2'))
 
-            if p1_choice == 1:
-                p1 = p1_val
-                v1 = (R * T_K) / p1
+            T_K = p1 = v1 = None
+            for prop, val in [(s1p1, s1v1), (s1p2, s1v2)]:
+                if prop == 0:    # Temperatura (°C -> K)
+                    T_K = to_kelvin(val)
+                elif prop == 1:  # Pressão
+                    p1 = val
+                elif prop == 2:  # Volume específico
+                    v1 = val
 
-            elif p1_choice == 2:
-                v1 = p1_val
-                p1 = (R * T_K) / v1
-
-            else:
+            try:
+                # Equação de estado do gás ideal: p*v = R*T
+                if T_K is None: T_K = (p1 * v1) / R
+                if p1 is None: p1 = (R * T_K) / v1
+                if v1 is None: v1 = (R * T_K) / p1
+            except (TypeError, ZeroDivisionError):
                 return redirect('error_type10')
+
+            if T_K is None or p1 is None or v1 is None:
+                return redirect('error_type10')
+
+            T_input_C = to_celsius(T_K)
 
         # =====================================
         # 4️⃣ ESTADO 2

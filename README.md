@@ -1,6 +1,6 @@
 # TERMO-CP
 
-**TERMO-CP** é uma plataforma web interativa para **cálculo, simulação e visualização de estados e processos termodinâmicos** em um **sistema fechado do tipo cilindro-pistão**, contendo 1,0 kg de **água pura** (substância pura) ou de um **gás ideal**.
+**TERMO-CP** é uma plataforma web interativa para **cálculo, simulação e visualização de estados e processos termodinâmicos** em um **sistema fechado do tipo cilindro-pistão**, contendo 1,0 kg de uma das seguintes substâncias: **água pura**, **gás ideal**, **amônia**, **dióxido de carbono (CO₂)**, **R-410a**, **R-134a**, **nitrogênio** ou **metano**.
 
 O projeto é desenvolvido no âmbito da **Universidade Federal de Rondonópolis (UFR)** e tem como objetivo oferecer uma ferramenta gratuita, acessível e didática que substitua a consulta manual a tabelas termodinâmicas e a resolução repetitiva de interpolações, apoiando o ensino e a aprendizagem de Termodinâmica em cursos de Engenharia.
 
@@ -10,15 +10,14 @@ O projeto é desenvolvido no âmbito da **Universidade Federal de Rondonópolis 
 
 - **Gabriel Candido Messias dos Santos** — [gabrielcandidomds@gmail.com](mailto:gabrielcandidomds@gmail.com)
 - **Fábio Basaglia Fonseca** — [fabio.fonseca@ufr.edu.br](mailto:fabio.fonseca@ufr.edu.br)
-- **Shaider Alberico Irineu Feitosa** (colaborador do projeto TERMOPROP, base do TERMO-CP)
 
 Instituto de Ciências Agrárias e Tecnológicas, Universidade Federal de Rondonópolis (UFR), Av. dos Estudantes, 5055, Sagrada Família, Rondonópolis – MT, Brasil.
 
 ## 📋 Sobre o projeto
 
-O TERMO-CP simula, de forma gráfica e interativa, os estados de **líquido comprimido**, **vapor superaquecido** e a **região de mistura líquido-vapor (saturação)** da água, além do comportamento de **gases ideais**, dentro de um conjunto cilindro-pistão. O usuário informa propriedades termodinâmicas conhecidas (temperatura, pressão, volume específico, energia interna, entalpia, entropia ou título) e a plataforma determina automaticamente o estado termodinâmico correspondente e as demais propriedades, indicando também a posição do pistão e a fase da substância.
+O TERMO-CP simula, de forma gráfica e interativa, os estados de **líquido comprimido**, **vapor superaquecido** e a **região de mistura líquido-vapor (saturação)** de substâncias puras — **água, amônia, CO₂, R-410a, R-134a, nitrogênio e metano** —, além do comportamento de **gases ideais**, dentro de um conjunto cilindro-pistão. O usuário informa propriedades termodinâmicas conhecidas (temperatura, pressão, volume específico, energia interna, entalpia, entropia ou título) e a plataforma determina automaticamente o estado termodinâmico correspondente e as demais propriedades, indicando também a posição do pistão e a fase da substância.
 
-Além da determinação de estados isolados, o TERMO-CP permite **simular processos termodinâmicos completos**, calculando grandezas como calor transferido (*Q*), trabalho realizado (*W*) e entropia gerada (*S*ger) entre um estado inicial e um estado final, com base na Primeira e na Segunda Leis da Termodinâmica.
+Além da determinação de estados isolados, o TERMO-CP permite **simular processos termodinâmicos completos**, calculando grandezas como calor transferido (*Q*), trabalho realizado (*W*) e entropia gerada (*S*ger) entre um estado inicial e um estado final, com base na Primeira e na Segunda Leis da Termodinâmica. Cada processo calculado gera automaticamente um **diagrama gráfico interativo** (p-v, T-s, entre outros) traçando a trajetória do sistema entre o estado inicial e o final, além de alimentar um **relatório final consolidado**, que reúne todos os estados e processos calculados em uma mesma sessão (permitindo montar ciclos termodinâmicos completos) e um **comparador de processos**, que confronta lado a lado os resultados (Q, W, Sger) de diferentes processos ou substâncias simulados pelo usuário.
 
 O projeto é derivado do **TERMOPROP**, programa mais amplo desenvolvido pelo mesmo grupo de pesquisa para cálculo de propriedades termodinâmicas de diversas substâncias e misturas.
 
@@ -31,7 +30,7 @@ O projeto é derivado do **TERMOPROP**, programa mais amplo desenvolvido pelo me
 
 ## ⚙️ Funcionalidades
 
-### Substância pura (água)
+### Substâncias puras (água, amônia, CO₂, R-410a, R-134a, nitrogênio e metano)
 
 - Determinação do estado termodinâmico a partir de **duas propriedades conhecidas** (temperatura, pressão, volume específico, energia interna, entalpia, entropia ou título), identificando automaticamente a fase: líquido comprimido, líquido saturado, mistura líquido-vapor ou vapor superaquecido.
 - Simulação de processos:
@@ -41,21 +40,35 @@ O projeto é derivado do **TERMOPROP**, programa mais amplo desenvolvido pelo me
 - Cálculo de calor transferido, trabalho realizado e entropia gerada em cada processo, considerando a temperatura da vizinhança informada pelo usuário.
 - Continuidade entre estados: o estado final de um processo pode ser usado automaticamente como estado inicial do processo seguinte (armazenamento temporário em sessão), possibilitando a montagem sequencial de ciclos termodinâmicos.
 - Interpolação linear sobre tabelas termodinâmicas estruturadas (baseadas em Borgnakke e Sonntag) para determinação de propriedades intermediárias.
+- Disponível para as sete substâncias puras suportadas pela plataforma: água, amônia, dióxido de carbono, R-410a, R-134a, nitrogênio e metano.
 
 ### Gases ideais
 
-- Determinação de propriedades a partir da Equação de Estado do Gás Ideal (*PV = mRT*), informando três das quatro propriedades (pressão, volume específico, temperatura, constante do gás).
+- Determinação de propriedades a partir da Equação de Estado do Gás Ideal (*PV = mRT*), informando duas das três propriedades de estado (pressão, volume específico, temperatura), além das constantes do gás (*c*v0, *c*p0, *R*, *k*).
 - Simulação de processos **isobáricos, isocóricos, isotérmicos e politrópicos**, além de processos isentrópicos.
 - Cálculo de energia interna, entalpia e entropia específicas considerando calores específicos constantes (*c*v0, *c*p0).
+
+### Diagramas de processos
+
+- Geração automática de **diagramas gráficos interativos** (p-v, T-s, entre outras representações) para cada processo calculado, traçando a trajetória do sistema entre o estado inicial e o estado final ponto a ponto.
+- Diagramas construídos dinamicamente a partir dos microprocessos internos calculados (ex.: 150 subdivisões por transformação), garantindo curvas suaves e fisicamente consistentes com o tipo de processo (isobárico, isocórico, isotérmico, isentrópico, politrópico).
+- Integração dos gráficos ao relatório final, permitindo visualizar todo o histórico de estados de um ciclo em um único painel.
+
+### Relatório final e comparador de processos
+
+- **Relatório final:** consolida, em um único painel, todos os estados e processos calculados durante a sessão do usuário (Q, W, Sger, propriedades de cada estado), permitindo acompanhar a evolução de um ciclo termodinâmico completo do início ao fim.
+- **Comparador de processos:** confronta lado a lado os resultados obtidos em diferentes processos ou substâncias simuladas, facilitando a análise comparativa de desempenho (calor, trabalho e geração de entropia) entre cenários distintos.
+- Ambos os recursos são reiniciados automaticamente ao início de um novo ciclo de simulação, evitando mistura de dados entre sessões ou tipos de processo distintos.
 
 ### Interface gráfica
 
 - Visualização dinâmica, em tempo real, do sistema cilindro-pistão, com atualização da posição do pistão conforme o volume calculado.
-- Diferenciação visual das fases da água por coloração (azul claro para líquido, azul escuro para vapor), com escala logarítmica de volume.
+- Diferenciação visual das fases da substância por coloração (tons claros para líquido, tons escuros para vapor/gás), com escala logarítmica de volume.
 - Formulários com validação automática de dados, impedindo a inserção de valores fora dos limites das tabelas de referência.
 - Exibição comparativa entre estado inicial e estado final de cada processo simulado.
+- Suporte a múltiplos idiomas (português, inglês e espanhol) em toda a interface.
 
-> 💡 O escopo desta plataforma abrange os estados entre líquido comprimido e vapor superaquecido da água (fase sólida não incluída). Uma expansão em desenvolvimento (ver [Roadmap](#-roadmap)) contempla também amônia, dióxido de carbono, R-410a, R-134a, nitrogênio e metano.
+> 💡 O escopo desta plataforma abrange os estados entre líquido comprimido e vapor superaquecido, para todas as substâncias puras suportadas (fase sólida não incluída), além do comportamento de gases ideais. Novas substâncias e recursos adicionais são descritos no [Roadmap](#-roadmap).
 
 ## 🧮 Fundamentação termodinâmica
 
@@ -162,9 +175,9 @@ Acesse em [...](...).
 
 Conforme apresentado nas publicações do grupo de pesquisa, os próximos passos previstos para o TERMO-CP incluem:
 
-- Incorporação de novas substâncias puras e fluidos refrigerantes: **amônia, dióxido de carbono, R-410a, R-134a, nitrogênio e metano**.
-- Ampliação dos recursos gráficos de visualização.
-- Implementação de módulos para simulação de **ciclos termodinâmicos completos** (ex.: Ciclo Rankine).
+- Ampliação dos recursos gráficos de visualização e dos diagramas de processos (novos tipos de diagrama e maior interatividade).
+- Expansão do relatório final e do comparador de processos, com exportação de resultados (ex.: PDF, planilha).
+- Implementação de módulos para simulação de **ciclos termodinâmicos completos** (ex.: Ciclo Rankine), unindo múltiplos processos já suportados em um único fluxo guiado.
 - Avaliações educacionais sistemáticas do impacto da ferramenta no processo de ensino-aprendizagem.
 
 ## 📚 Publicações relacionadas

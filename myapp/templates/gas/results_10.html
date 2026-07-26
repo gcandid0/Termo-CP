@@ -702,10 +702,11 @@
     <!-- COLUNA ESQUERDA -->
     <div class="side-column" style="display: flex; flex-direction: column; gap: 15px; flex: 1; min-height: 0;">
         <div class="state-card" style="flex: 1;">
-            <h2><i class="fas fa-play-circle"></i> <span class="lang-text" data-pt-br="Estado Inicial (1)" data-en="Initial State (1)" data-es="Estado Inicial (1)">Estado Inicial (1)</span></h2>
+            <h2><i class="fas fa-play-circle"></i> <span id="stateHeaderInitial" class="lang-text" data-pt-br="Estado Inicial (1)" data-en="Initial State (1)" data-es="Estado Inicial (1)">Estado Inicial (1)</span></h2>
             <div class="data-row"><span class="data-label lang-text" data-pt-br="Temperatura (T):" data-en="Temperature (T):" data-es="Temperatura (T):">Temperatura (T):</span> <span class="data-value"><span class="format-num">{{ T }}</span> °C</span></div>
             <div class="data-row"><span class="data-label lang-text" data-pt-br="Volume específico (v):" data-en="Specific Volume (v):" data-es="Volumen específico (v):">Volume específico (v):</span> <span class="data-value"><span class="format-num">{{ v1 }}</span> m³/kg</span></div>
             <div class="data-row"><span class="data-label lang-text" data-pt-br="Pressão (p):" data-en="Pressure (p):" data-es="Presión (p):">Pressão (p):</span> <span class="data-value"><span class="format-num">{{ p1 }}</span> kPa</span></div>
+            <div class="data-row"><span class="data-label lang-text" data-pt-br="Massa (m):" data-en="Mass (m):" data-es="Masa (m):">Massa (m):</span> <span class="data-value"><span class="format-num">1.0</span> kg</span></div>
         </div>
 
         <div class="state-card constants-card" style="flex: 0 0 auto;">
@@ -725,8 +726,8 @@
             </h4>
             <input type="range" id="volumeSlider" min="1" max="2" step="1" value="1" aria-labelledby="volumeSliderLabel">
             <div style="display: flex; justify-content: space-between; font-size: 0.75em; color: #666; padding: 0 10%; font-weight: bold;">
-                <span class="lang-text" data-pt-br="ESTADO 1" data-en="STATE 1" data-es="ESTADO 1">ESTADO 1</span>
-                <span class="lang-text" data-pt-br="ESTADO 2" data-en="STATE 2" data-es="ESTADO 2">ESTADO 2</span>
+                <span id="sliderStateStart" class="lang-text" data-pt-br="ESTADO 1" data-en="STATE 1" data-es="ESTADO 1">ESTADO 1</span>
+                <span id="sliderStateEnd" class="lang-text" data-pt-br="ESTADO 2" data-en="STATE 2" data-es="ESTADO 2">ESTADO 2</span>
             </div>
         </div>
 
@@ -743,10 +744,11 @@
     <!-- COLUNA DIREITA -->
     <div class="side-column" style="display: flex; flex-direction: column; gap: 15px; flex: 1; min-height: 0;">
         <div class="state-card final-state" style="flex: 1;">
-            <h2><i class="fas fa-stop-circle"></i> <span class="lang-text" data-pt-br="Estado Final (2)" data-en="Final State (2)" data-es="Estado Final (2)">Estado Final (2)</span></h2>
+            <h2><i class="fas fa-stop-circle"></i> <span id="stateHeaderFinal" class="lang-text" data-pt-br="Estado Final (2)" data-en="Final State (2)" data-es="Estado Final (2)">Estado Final (2)</span></h2>
             <div class="data-row"><span class="data-label lang-text" data-pt-br="Temperatura (T):" data-en="Temperature (T):" data-es="Temperatura (T):">Temperatura (T):</span> <span class="data-value"><span class="format-num">{{ T }}</span> °C</span></div>
             <div class="data-row"><span class="data-label lang-text" data-pt-br="Volume específico (v):" data-en="Specific Volume (v):" data-es="Volumen específico (v):">Volume específico (v):</span> <span class="data-value"><span class="format-num">{{ v2 }}</span> m³/kg</span></div>
             <div class="data-row"><span class="data-label lang-text" data-pt-br="Pressão (p):" data-en="Pressure (p):" data-es="Presión (p):">Pressão (p):</span> <span class="data-value"><span class="format-num">{{ p2 }}</span> kPa</span></div>
+            <div class="data-row"><span class="data-label lang-text" data-pt-br="Massa (m):" data-en="Mass (m):" data-es="Masa (m):">Massa (m):</span> <span class="data-value"><span class="format-num">1.0</span> kg</span></div>
         </div>
 
         <div class="state-card constants-card final-state" style="flex: 0 0 auto;">
@@ -761,9 +763,9 @@
     <h3><i class="fas fa-chart-line"></i> <span class="lang-text" data-pt-br="Resultados do Processo" data-en="Process Results" data-es="Resultados del Proceso">Resultados do Processo</span></h3>
 
     <div class="process-results">
-        <div class="process-item"><span class="lang-text" data-pt-br="Calor (Q)" data-en="Heat (Q)" data-es="Calor (Q)">Calor (Q)</span><strong><span class="format-num">{{ Q12 }}</span> kJ/kg</strong></div>
-        <div class="process-item"><span class="lang-text" data-pt-br="Trabalho (W)" data-en="Work (W)" data-es="Trabajo (W)">Trabalho (W)</span><strong><span class="format-num">{{ W12 }}</span> kJ/kg</strong></div>
-        <div class="process-item"><span class="lang-text" data-pt-br="Entropia Gerada (Sger)" data-en="Generated Entropy (Sger)" data-es="Entropía Generada (Sger)">Entropia Gerada (S<sub>ger</sub>)</span><strong><span class="format-num">{{ Sger }}</span> kJ/kg·K</strong></div>
+        <div class="process-item"><span class="lang-text" data-pt-br="Calor (Q)" data-en="Heat (Q)" data-es="Calor (Q)">Calor (Q)</span><strong><span class="format-num abs-num">{{ Q12 }}</span> kJ</strong></div>
+        <div class="process-item"><span class="lang-text" data-pt-br="Trabalho (W)" data-en="Work (W)" data-es="Trabajo (W)">Trabalho (W)</span><strong><span class="format-num abs-num">{{ W12 }}</span> kJ</strong></div>
+        <div class="process-item"><span class="lang-text" data-pt-br="Entropia Gerada (Sger)" data-en="Generated Entropy (Sger)" data-es="Entropía Generada (Sger)">Entropia Gerada (S<sub>ger</sub>)</span><strong><span class="format-num abs-num">{{ Sger }}</span> kJ/K</strong></div>
         <div class="process-item"><span class="lang-text" data-pt-br="Temp. da Vizinhança" data-en="Surroundings Temp" data-es="Temp. del Entorno">Temp. da Vizinhança</span><strong><span class="format-num">{{ Tviz }}</span> °C</strong></div>
 
         {% if Sger != None and Sger < 0 %}
@@ -851,13 +853,13 @@
             </div>
             <div class="state-boxes">
                 <div class="state-box">
-                    <strong><i class="fas fa-play" style="font-size: 0.8em; color: #3498db;"></i> <span class="lang-text" data-pt-br="ESTADO 1" data-en="STATE 1" data-es="ESTADO 1">ESTADO 1</span></strong>
+                    <strong><i class="fas fa-play" style="font-size: 0.8em; color: #3498db;"></i> <span id="stateBoxStart" class="lang-text" data-pt-br="ESTADO 1" data-en="STATE 1" data-es="ESTADO 1">ESTADO 1</span></strong>
                     T<sub>1</sub> = <span class="format-num">{{ T }}</span> °C <br><small style="color: #d32f2f;">(+ 273.15 K)</small><br>
                     v<sub>1</sub> = <span class="format-num">{{ v1 }}</span> m³/kg<br>
                     P<sub>1</sub> = <span class="format-num">{{ p1 }}</span> kPa
                 </div>
                 <div class="state-box">
-                    <strong><i class="fas fa-stop" style="font-size: 0.8em; color: #e74c3c;"></i> <span class="lang-text" data-pt-br="ESTADO 2" data-en="STATE 2" data-es="ESTADO 2">ESTADO 2</span></strong>
+                    <strong><i class="fas fa-stop" style="font-size: 0.8em; color: #e74c3c;"></i> <span id="stateBoxEnd" class="lang-text" data-pt-br="ESTADO 2" data-en="STATE 2" data-es="ESTADO 2">ESTADO 2</span></strong>
                     T<sub>2</sub> = <span class="format-num">{{ T }}</span> °C <br><small style="color: #d32f2f;">(+ 273.15 K)</small><br>
                     v<sub>2</sub> = <span class="format-num">{{ v2 }}</span> m³/kg<br>
                     P<sub>2</sub> = <span class="format-num">{{ p2 }}</span> kPa
@@ -878,21 +880,21 @@
                 <div style="font-family: Arial, sans-serif; font-weight: bold; margin-bottom: 10px; color: #d35400; font-size: 1.05em;">
                     <i class="fas fa-lightbulb"></i> <span class="lang-text" data-pt-br="Dedução Teórica (Trabalho de Fronteira):" data-en="Theoretical Deduction (Boundary Work):" data-es="Deducción Teórica (Trabajo de Frontera):">Dedução Teórica (Trabalho de Fronteira):</span>
                 </div>
-                1. <span class="lang-text" data-pt-br="Definição de Trabalho:" data-en="Work Definition:" data-es="Definición de Trabajo:">Definição de Trabalho:</span> w = &int; P dv<br>
-                2. <span class="lang-text" data-pt-br="Substituindo P = RT/v:" data-en="Substituting P = RT/v:" data-es="Sustituyendo P = RT/v:">Substituindo P = RT/v:</span> w = &int; (R&middot;T / v) dv<br>
-                3. <span class="lang-text" data-pt-br="Como R e T são constantes:" data-en="Since R and T are constant:" data-es="Como R y T son constantes:">Como R e T são constantes:</span> w = R&middot;T &int; (1/v) dv<br>
+                1. <span class="lang-text" data-pt-br="Definição de Trabalho (forma extensiva, com massa m):" data-en="Work Definition (extensive form, with mass m):" data-es="Definición de Trabajo (forma extensiva, con masa m):">Definição de Trabalho (forma extensiva, com massa m):</span> W = &int; P dV<br>
+                2. <span class="lang-text" data-pt-br="Substituindo P = mRT/V:" data-en="Substituting P = mRT/V:" data-es="Sustituyendo P = mRT/V:">Substituindo P = mRT/V:</span> W = &int; (m&middot;R&middot;T / V) dV<br>
+                3. <span class="lang-text" data-pt-br="Como m, R e T são constantes, e V = m&middot;v:" data-en="Since m, R and T are constant, and V = m&middot;v:" data-es="Como m, R y T son constantes, y V = m&middot;v:">Como m, R e T são constantes, e V = m&middot;v:</span> W = m&middot;R&middot;T &int; (1/v) dv<br>
                 <div style="margin-top: 8px; padding-top: 8px; border-top: 1px dashed #e67e22; font-weight: bold; color: #d35400; font-size: 1.1em;">
-                    &there4; w = R &middot; T<sub>K</sub> &middot; ln(v<sub>2</sub> / v<sub>1</sub>)
+                    &there4; W = m &middot; R &middot; T<sub>K</sub> &middot; ln(v<sub>2</sub> / v<sub>1</sub>)
                 </div>
             </div>
             <div class="formula-box">
-                w = R <span class="math-op">&times;</span> T <span class="math-op">&times;</span> ln(v<sub>2</sub> <span class="math-op">/</span> v<sub>1</sub>)
+                W = m <span class="math-op">&times;</span> R <span class="math-op">&times;</span> T <span class="math-op">&times;</span> ln(v<sub>2</sub> <span class="math-op">/</span> v<sub>1</sub>)
             </div>
             <div class="step-calc">
-                w = <span class="val-badge format-num">{{ R }}</span> &times; ( <span class="val-badge"><span class="format-num">{{ T }}</span> + <span class="format-num">273.15</span></span> ) &times; ln( <span class="val-badge format-num">{{ v2|floatformat:6 }}</span> / <span class="val-badge format-num">{{ v1|floatformat:6 }}</span> )
+                W = <span class="val-badge format-num">1.0</span> &times; <span class="val-badge format-num">{{ R }}</span> &times; ( <span class="val-badge"><span class="format-num">{{ T }}</span> + <span class="format-num">273.15</span></span> ) &times; ln( <span class="val-badge format-num">{{ v2|floatformat:6 }}</span> / <span class="val-badge format-num">{{ v1|floatformat:6 }}</span> )
             </div>
             <div class="step-result">
-                w = <span class="format-num">{{ W12 }}</span> kJ/kg
+                W = <span class="format-num abs-num">{{ W12 }}</span> kJ
             </div>
         </div>
 
@@ -909,20 +911,20 @@
                 <div style="font-family: Arial, sans-serif; font-weight: bold; margin-bottom: 10px; color: #c0392b; font-size: 1.05em;">
                     <i class="fas fa-lightbulb"></i> <span class="lang-text" data-pt-br="Dedução Teórica (Calor Isotérmico):" data-en="Theoretical Deduction (Isothermal Heat):" data-es="Deducción Teórica (Calor Isotérmico):">Dedução Teórica (Calor Isotérmico):</span>
                 </div>
-                1. <span class="lang-text" data-pt-br="Balanço de energia:" data-en="Energy balance:" data-es="Balance de energía:">Balanço de energia:</span> q - w = &Delta;u<br>
-                2. <span class="lang-text" data-pt-br="Como T = cte, &Delta;u = 0:" data-en="Since T = const, &Delta;u = 0:" data-es="Dado que T = const, &Delta;u = 0:">Como T = cte, &Delta;u = 0:</span> q - w = 0<br>
+                1. <span class="lang-text" data-pt-br="Balanço de energia (forma extensiva, com massa m):" data-en="Energy balance (extensive form, with mass m):" data-es="Balance de energía (forma extensiva, con masa m):">Balanço de energia (forma extensiva, com massa m):</span> Q - W = &Delta;U<br>
+                2. <span class="lang-text" data-pt-br="Como T = cte, &Delta;U = 0 (mesmo com massa m):" data-en="Since T = const, &Delta;U = 0 (even with mass m):" data-es="Dado que T = const, &Delta;U = 0 (incluso con masa m):">Como T = cte, &Delta;U = 0 (mesmo com massa m):</span> Q - W = 0<br>
                 <div style="margin-top: 8px; padding-top: 8px; border-top: 1px dashed #e74c3c; font-weight: bold; color: #c0392b; font-size: 1.1em;">
-                    &there4; q = w
+                    &there4; Q = W
                 </div>
             </div>
             <div class="formula-box">
-                q = w
+                Q = W
             </div>
             <div class="step-calc">
-                q = <span class="val-badge format-num">{{ W12 }}</span>
+                Q = <span class="val-badge format-num">{{ W12 }}</span>
             </div>
             <div class="step-result">
-                q = <span class="format-num">{{ Q12 }}</span> kJ/kg
+                Q = <span class="format-num abs-num">{{ Q12 }}</span> kJ
             </div>
         </div>
 
@@ -930,34 +932,34 @@
             <div class="step-number">4</div>
             <div class="step-header">
                 <i class="fas fa-balance-scale"></i>
-                <span class="lang-text" data-pt-br="Segunda Lei e Entropia Gerada (" data-en="Second Law and Entropy Generated (" data-es="Segunda Ley y Entropía Generada (">Segunda Lei e Entropia Gerada (</span>s<sub>ger</sub><span class="lang-text" data-pt-br=")" data-en=")" data-es=")">)</span>
+                <span class="lang-text" data-pt-br="Segunda Lei e Entropia Gerada (sger)" data-en="Second Law and Entropy Generated (sger)" data-es="Segunda Ley y Entropía Generada (sger)">Segunda Lei e Entropia Gerada (sger)</span>
             </div>
 
-            <div class="step-description lang-text" data-pt-br="Como a temperatura é constante, a variação de entropia específica do Gás Ideal (Δs) depende apenas da variação de pressão (ou volume). Ao subtrair a entropia transferida por calor, obtemos a entropia gerada." data-en="Since the temperature is constant, the specific entropy change of the Ideal Gas (Δs) depends only on the pressure (or volume) change. By subtracting the entropy transferred by heat, we obtain the generated entropy." data-es="Como la temperatura es constante, el cambio de entropía específica del Gas Ideal (Δs) depende solo del cambio de presión (o volumen). Al restar la entropía transferida por calor, obtenemos la entropía generada.">
-                Como a temperatura é constante, a variação de entropia específica do Gás Ideal (Δs) depende apenas da variação de pressão (ou volume). Ao subtrair a entropia transferida por calor, obtemos a entropia gerada.
+            <div class="step-description lang-text" data-pt-br="Por simplificação, na 2ª Lei da Termodinâmica, considera-se a temperatura da fronteira igual à temperatura da vizinhança." data-en="For simplification, in the 2nd Law of Thermodynamics, the boundary temperature is considered equal to the surroundings temperature." data-es="Por simplificación, en la 2ª Ley de la Termodinámica, se considera que la temperatura de la frontera es igual a la temperatura del entorno.">
+                Por simplificação, na 2ª Lei da Termodinâmica, considera-se a temperatura da fronteira igual à temperatura da vizinhança.
             </div>
 
             <div style="background: #e8f5e9; border-left: 4px solid #2ecc71; padding: 15px; margin-bottom: 20px; border-radius: 8px; font-family: 'Courier New', Courier, monospace; font-size: 0.95em; line-height: 1.6; color: #333;">
                 <div style="font-family: Arial, sans-serif; font-weight: bold; margin-bottom: 10px; color: #27ae60; font-size: 1.05em;">
                     <i class="fas fa-lightbulb"></i> <span class="lang-text" data-pt-br="Dedução Teórica (Entropia - Gás Ideal):" data-en="Theoretical Deduction (Entropy - Ideal Gas):" data-es="Deducción Teórica (Entropía - Gas Ideal):">Dedução Teórica (Entropia - Gás Ideal):</span>
                 </div>
-                1. <span class="lang-text" data-pt-br="Variação de Entropia (Geral):" data-en="Entropy Change (General):" data-es="Cambio de Entropía (General):">Variação de Entropia (Geral):</span> &Delta;s = Cp0 &middot; ln(T<sub>2</sub> / T<sub>1</sub>) - R &middot; ln(P<sub>2</sub> / P<sub>1</sub>)<br>
+                1. <span class="lang-text" data-pt-br="Variação de Entropia (gás ideal, considerando calor específico constante):" data-en="Entropy Change (ideal gas, considering constant specific heat):" data-es="Cambio de Entropía (gas ideal, considerando calor específico constante):">Variação de Entropia (gás ideal, considerando calor específico constante):</span> &Delta;s = Cp0 &middot; ln(T<sub>2</sub> / T<sub>1</sub>) - R &middot; ln(P<sub>2</sub> / P<sub>1</sub>)<br>
                 2. <span class="lang-text" data-pt-br="Como T1 = T2, ln(1) = 0:" data-en="Since T1 = T2, ln(1) = 0:" data-es="Como T1 = T2, ln(1) = 0:">Como T1 = T2, ln(1) = 0:</span> &Delta;s = - R &middot; ln(P<sub>2</sub> / P<sub>1</sub>)<br>
-                3. <span class="lang-text" data-pt-br="Balanço de Entropia:" data-en="Entropy Balance:" data-es="Balance de Entropía:">Balanço de Entropia:</span> s<sub>ger</sub> = &Delta;s - (q / T<sub>viz</sub>)<br>
+                3. <span class="lang-text" data-pt-br="Da 2ª Lei:" data-en="From the 2nd Law:" data-es="De la 2ª Ley:">Da 2ª Lei:</span> s<sub>ger</sub> = &Delta;s - (q / T<sub>viz</sub>)<br>
                 <div style="margin-top: 8px; padding-top: 8px; border-top: 1px dashed #2ecc71; font-weight: bold; color: #27ae60; font-size: 1.1em;">
                     &there4; s<sub>ger</sub> = [ - R &middot; ln(P<sub>2</sub> / P<sub>1</sub>) ] - [ q / T<sub>viz</sub> ]
                 </div>
             </div>
 
             <div class="formula-box">
-                s<sub>ger</sub> = [ -R <span class="math-op">&times;</span> ln(P<sub>2</sub> <span class="math-op">/</span> P<sub>1</sub>) ] <span class="math-op">-</span> [ q <span class="math-op">/</span> (T<sub>viz</sub> <span class="math-op">+</span> <span class="format-num">273.15</span>) ]
+                S<sub>ger</sub> = [ -m <span class="math-op">&times;</span> R <span class="math-op">&times;</span> ln(P<sub>2</sub> <span class="math-op">/</span> P<sub>1</sub>) ] <span class="math-op">-</span> [ Q <span class="math-op">/</span> (T<sub>viz</sub> <span class="math-op">+</span> <span class="format-num">273.15</span>) ]
             </div>
             <div class="step-calc">
-                s<sub>ger</sub> = [ -<span class="val-badge format-num">{{ R }}</span> &times; ln( <span class="val-badge format-num">{{ p2 }}</span> / <span class="val-badge format-num">{{ p1 }}</span> ) ] - [ <span class="val-badge format-num">{{ Q12 }}</span> / ( <span class="val-badge format-num">{{ Tviz }}</span> + <span class="format-num">273.15</span> ) ]
+                S<sub>ger</sub> = [ -<span class="val-badge format-num">1.0</span> &times; <span class="val-badge format-num">{{ R }}</span> &times; ln( <span class="val-badge format-num">{{ p2 }}</span> / <span class="val-badge format-num">{{ p1 }}</span> ) ] - [ <span class="val-badge format-num">{{ Q12 }}</span> / ( <span class="val-badge format-num">{{ Tviz }}</span> + <span class="format-num">273.15</span> ) ]
             </div>
             <div class="step-result" style="background: {% if Sger < 0 %}#ffebee{% else %}#e8f5e9{% endif %}; border-color: {% if Sger < 0 %}#ef9a9a{% else %}#a5d6a7{% endif %}; color: {% if Sger < 0 %}#c62828{% else %}#2e7d32{% endif %};">
                 <i class="fas {% if Sger < 0 %}fa-times-circle{% else %}fa-check-circle{% endif %}"></i>
-                s<sub>ger</sub> = <span class="format-num">{{ Sger }}</span> kJ/kg·K
+                S<sub>ger</sub> = <span class="format-num abs-num">{{ Sger }}</span> kJ/K
                 <br><small style="font-weight: normal; margin-top: 5px; display: inline-block;">
                 {% if Sger < 0 %}
                     <span class="lang-text" data-pt-br="PROCESSO IMPOSSÍVEL (" data-en="IMPOSSIBLE PROCESS (" data-es="PROCESO IMPOSIBLE (">PROCESSO IMPOSSÍVEL (</span>s<sub>ger</sub><span class="lang-text" data-pt-br=" < 0 viola a 2ª Lei)" data-en=" < 0 violates 2nd Law)" data-es=" < 0 viola la 2ª Ley)"> &lt; 0 viola a 2ª Lei)</span>
@@ -1195,6 +1197,13 @@
             let rawValue = el.getAttribute('data-raw');
             let normalizedValue = rawValue.replace(',', '.');
 
+            if (el.classList.contains('abs-num')) {
+                let numAbs = parseFloat(normalizedValue);
+                if (!isNaN(numAbs)) {
+                    normalizedValue = String(Math.abs(numAbs));
+                }
+            }
+
             if (isEnglish) {
                 el.innerText = normalizedValue;
             } else {
@@ -1234,6 +1243,9 @@
 
         // --- ATUALIZA A FORMATAÇÃO DOS NÚMEROS AQUI ---
         updateNumberFormatting();
+
+        // --- ATUALIZA A NUMERAÇÃO DOS ESTADOS (INICIAL/FINAL) AO MUDAR O IDIOMA ---
+        updateStateNumbering();
     });
 
     // --- DADOS DOS MICROPROCESSOS PARA O GRÁFICO ---
@@ -1246,6 +1258,33 @@
     } catch(e) {
         console.error("Erro ao ler dados do gráfico:", e);
     }
+
+    // --- NUMERAÇÃO DINÂMICA DOS ESTADOS (INICIAL/FINAL) ---
+    // Segue a mesma lógica usada nos gráficos: o número do estado inicial do
+    // processo atual é a quantidade de processos já registrados em pontosGrafico
+    // (1 se ainda não houver nenhum), e o estado final é sempre o próximo.
+    function updateStateNumbering() {
+        const totalProcessos = pontosGrafico.length;
+        const n1 = totalProcessos > 0 ? totalProcessos : 1;
+        const n2 = n1 + 1;
+
+        const applyLabel = (id, ptTemplate, enTemplate, esTemplate) => {
+            const el = document.getElementById(id);
+            if (!el) return;
+            el.setAttribute('data-pt-br', ptTemplate);
+            el.setAttribute('data-en', enTemplate);
+            el.setAttribute('data-es', esTemplate);
+            el.textContent = t(ptTemplate, enTemplate, esTemplate);
+        };
+
+        applyLabel('stateHeaderInitial', `Estado Inicial (${n1})`, `Initial State (${n1})`, `Estado Inicial (${n1})`);
+        applyLabel('stateHeaderFinal', `Estado Final (${n2})`, `Final State (${n2})`, `Estado Final (${n2})`);
+        applyLabel('sliderStateStart', `ESTADO ${n1}`, `STATE ${n1}`, `ESTADO ${n1}`);
+        applyLabel('sliderStateEnd', `ESTADO ${n2}`, `STATE ${n2}`, `ESTADO ${n2}`);
+        applyLabel('stateBoxStart', `ESTADO ${n1}`, `STATE ${n1}`, `ESTADO ${n1}`);
+        applyLabel('stateBoxEnd', `ESTADO ${n2}`, `STATE ${n2}`, `ESTADO ${n2}`);
+    }
+    updateStateNumbering();
 
     // --- HISTÓRICO DE RESULTADOS (Q, W, Sger, TempViz) DE TODOS OS PROCESSOS JÁ CONTINUADOS ---
     const rawHistorico = '{{ historico_processos_json|escapejs }}';
@@ -1396,14 +1435,14 @@
                         position: 'bottom',
                         title: { display: true, text: conf.xLab(), font: {weight: 'bold', size: 14}, color: '#333' },
                         grid: { color: 'rgba(0,0,0,0.08)' },
-                        ticks: { color: '#555', font: { size: 11 }, callback: function(value) { return formatadorNum.format(value); } },
+                        ticks: { color: '#555', font: { size: 11 }, autoSkip: true, maxRotation: 0, callback: function(value) { if (conf.xLog) { const av = Math.abs(value); if (av === 0) return null; const lg = Math.log10(av); const lead = av / Math.pow(10, Math.floor(lg + 1e-9)); const isNice = [1,2,5].some(n => Math.abs(lead - n) < 1e-6); if (!isNice) return null; } return formatadorNum.format(value); } },
                         grace: '5%'
                     },
                     y: {
                         type: conf.yLog ? 'logarithmic' : 'linear',
                         title: { display: true, text: conf.yLab(), font: {weight: 'bold', size: 14}, color: '#333' },
                         grid: { color: 'rgba(0,0,0,0.08)' },
-                        ticks: { color: '#555', font: { size: 11 }, callback: function(value) { return formatadorNum.format(value); } },
+                        ticks: { color: '#555', font: { size: 11 }, autoSkip: true, maxRotation: 0, callback: function(value) { if (conf.yLog) { const av = Math.abs(value); if (av === 0) return null; const lg = Math.log10(av); const lead = av / Math.pow(10, Math.floor(lg + 1e-9)); const isNice = [1,2,5].some(n => Math.abs(lead - n) < 1e-6); if (!isNice) return null; } return formatadorNum.format(value); } },
                         grace: '5%'
                     }
                 },
@@ -1713,10 +1752,14 @@
     function fmtReportNum(val) {
         let lang = localStorage.getItem('preferredLang') || 'pt-br';
         let localeStr = lang === 'en' ? 'en-US' : (lang === 'es' ? 'es-ES' : 'pt-BR');
-        const raw = String(val || '').replace(',', '.');
+        // Cuidado: usar "val || ''" trata 0 como falso e esconde valores legitimamente
+        // iguais a zero (ex.: Q = 0, Sger = 0, Tviz = 0). Por isso checamos
+        // explicitamente undefined/null em vez de depender da coerção booleana.
+        const hasValue = val !== undefined && val !== null && val !== '';
+        const raw = String(hasValue ? val : '').replace(',', '.');
         const num = parseFloat(raw);
-        if (isNaN(num)) return String(val || '--');
-        return new Intl.NumberFormat(localeStr, { maximumFractionDigits: 6 }).format(num);
+        if (isNaN(num)) return hasValue ? String(val) : '--';
+        return new Intl.NumberFormat(localeStr, { maximumFractionDigits: 6 }).format(Math.abs(num));
     }
 
     function fmtHistoryNum(val) {
@@ -1725,7 +1768,7 @@
         const raw = String(val === undefined || val === null ? '' : val).replace(',', '.');
         const num = parseFloat(raw);
         const safeNum = isNaN(num) ? 0 : num;
-        return new Intl.NumberFormat(localeStr, { maximumFractionDigits: 6 }).format(safeNum);
+        return new Intl.NumberFormat(localeStr, { maximumFractionDigits: 6 }).format(Math.abs(safeNum));
     }
 
     // Retorna os "estados-marco" (1, 2, 3...) construídos a partir de TODOS os
@@ -1876,15 +1919,15 @@
                 </div>
                 <div class="report-metric-card">
                     <div class="report-metric-label"><i class="fas fa-fire"></i> ${t('Calor (Q)','Heat (Q)','Calor (Q)')}</div>
-                    <div class="report-metric-value">${fmtReportNum(proc.Q)} kJ/kg</div>
+                    <div class="report-metric-value">${fmtReportNum(proc.Q)} kJ</div>
                 </div>
                 <div class="report-metric-card">
                     <div class="report-metric-label"><i class="fas fa-cogs"></i> ${t('Trabalho (W)','Work (W)','Trabajo (W)')}</div>
-                    <div class="report-metric-value">${fmtReportNum(proc.W)} kJ/kg</div>
+                    <div class="report-metric-value">${fmtReportNum(proc.W)} kJ</div>
                 </div>
                 <div class="report-metric-card" style="${sgerStyle}">
                     <div class="report-metric-label"><i class="fas fa-balance-scale"></i> ${t('Entropia Gerada (Sger)','Generated Entropy (Sger)','Entropía Generada (Sger)')}</div>
-                    <div class="report-metric-value" style="color:${sgerColor};">${fmtReportNum(proc.Sger)} kJ/kg&middot;K</div>
+                    <div class="report-metric-value" style="color:${sgerColor};">${fmtReportNum(proc.Sger)} kJ/K</div>
                     ${sgerBadge}
                 </div>
             </div>`;
@@ -2088,14 +2131,14 @@
                             type: conf.xLog ? 'logarithmic' : 'linear',
                             title: { display: true, text: conf.xLab(), font: { weight: 'bold', size: 11 }, color: '#20376B' },
                             grid: { color: 'rgba(0,0,0,0.07)' },
-                            ticks: { font: { size: 10 }, callback: v => fmtN.format(v) },
+                            ticks: { font: { size: 10 }, autoSkip: true, maxRotation: 0, callback: (v) => { if (conf.xLog) { const av = Math.abs(v); if (av === 0) return null; const lg = Math.log10(av); const lead = av / Math.pow(10, Math.floor(lg + 1e-9)); const isNice = [1,2,5].some(n => Math.abs(lead - n) < 1e-6); if (!isNice) return null; } return fmtN.format(v); } },
                             grace: '5%'
                         },
                         y: {
                             type: conf.yLog ? 'logarithmic' : 'linear',
                             title: { display: true, text: conf.yLab(), font: { weight: 'bold', size: 11 }, color: '#20376B' },
                             grid: { color: 'rgba(0,0,0,0.07)' },
-                            ticks: { font: { size: 10 }, callback: v => fmtN.format(v) },
+                            ticks: { font: { size: 10 }, autoSkip: true, maxRotation: 0, callback: (v) => { if (conf.yLog) { const av = Math.abs(v); if (av === 0) return null; const lg = Math.log10(av); const lead = av / Math.pow(10, Math.floor(lg + 1e-9)); const isNice = [1,2,5].some(n => Math.abs(lead - n) < 1e-6); if (!isNice) return null; } return fmtN.format(v); } },
                             grace: '5%'
                         }
                     },
@@ -2496,9 +2539,9 @@
                             <span class="history-badge" style="background:${entry.color};">${procLabel}</span>
                         </div>
                         <div class="history-item-summary">
-                            <span>Q: <strong>${q} kJ/kg</strong></span>
-                            <span>W: <strong>${w} kJ/kg</strong></span>
-                            <span>Sger: <strong>${sger} kJ/kg&middot;K</strong></span>
+                            <span>Q: <strong>${q} kJ</strong></span>
+                            <span>W: <strong>${w} kJ</strong></span>
+                            <span>Sger: <strong>${sger} kJ/K</strong></span>
                         </div>
                     </div>
                     <div class="history-item-actions">
@@ -2547,15 +2590,15 @@
                     <div style="display:grid; grid-template-columns: repeat(3,1fr); gap:8px; margin-bottom:16px;">
                         <div class="report-metric-card">
                             <div class="report-metric-label">${t('Calor (Q)','Heat (Q)','Calor (Q)')}</div>
-                            <div class="report-metric-value">${fmtHistoryNum(entry.rData.Q)} kJ/kg</div>
+                            <div class="report-metric-value">${fmtHistoryNum(entry.rData.Q)} kJ</div>
                         </div>
                         <div class="report-metric-card">
                             <div class="report-metric-label">${t('Trabalho (W)','Work (W)','Trabajo (W)')}</div>
-                            <div class="report-metric-value">${fmtHistoryNum(entry.rData.W)} kJ/kg</div>
+                            <div class="report-metric-value">${fmtHistoryNum(entry.rData.W)} kJ</div>
                         </div>
                         <div class="report-metric-card">
                             <div class="report-metric-label">${t('Entropia Gerada (Sger)','Generated Entropy (Sger)','Entropía Generada (Sger)')}</div>
-                            <div class="report-metric-value">${fmtHistoryNum(entry.rData.Sger)} kJ/kg&middot;K</div>
+                            <div class="report-metric-value">${fmtHistoryNum(entry.rData.Sger)} kJ/K</div>
                         </div>
                     </div>
                     ${buildStateTable(entry.rData.state1, 1, 2)}
