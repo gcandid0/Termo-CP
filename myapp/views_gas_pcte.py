@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.http import JsonResponse
 from django.core.exceptions import ValidationError
 from math import log
 import json
@@ -316,11 +317,11 @@ def process_values_view8(request):
         num_passos = 150
         passo_T = (T2 - T1) / num_passos if T1 != T2 else 0
 
-        # Funções teóricas para o gráfico (Ref arbitrária: 273.15 K e 100 kPa)
-        def calc_h(T_K): return Cp0 * T_K
+        # Funções teóricas para o gráfico (Ref: 25°C / 298.15 K e 100 kPa)
+        def calc_h(T_K): return Cp0 * (T_K - 298.15)
         def calc_s(T_K, P_kPa):
             if T_K <= 0 or P_kPa <= 0: return 0
-            return Cp0 * log(T_K / 273.15) - R * log(P_kPa / 100)
+            return Cp0 * log(T_K / 298.15) - R * log(P_kPa / 100)
 
         ramo_atual = []
 

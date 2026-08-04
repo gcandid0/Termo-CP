@@ -794,9 +794,9 @@
             <span class="icon-tooltip lang-text" data-pt-br="Histórico de Cálculos" data-en="Calculation History" data-es="Historial de Cálculos">Histórico de Cálculos</span>
         </button>
 
-        <a href="javascript:history.back()" class="icon-btn" style="background: #eef1f6; color: var(--primary-color); box-shadow: 0 4px 15px rgba(0,0,0,0.08);">
-            <i class="fas fa-arrow-left"></i>
-            <span class="icon-tooltip lang-text" data-pt-br="Voltar" data-en="Back" data-es="Volver">Voltar</span>
+        <a href="/" class="icon-btn" style="background: #eef1f6; color: var(--primary-color); box-shadow: 0 4px 15px rgba(0,0,0,0.08);">
+            <i class="fas fa-home"></i>
+            <span class="icon-tooltip lang-text" data-pt-br="Tela Inicial" data-en="Home Screen" data-es="Pantalla de Inicio">Tela Inicial</span>
         </a>
         <button id="openModalBtn" class="icon-btn" style="background: linear-gradient(135deg, #2980b9 0%, #1c5d8a 100%); color: white; box-shadow: 0 4px 15px rgba(41,128,185,0.35);">
             <i class="fas fa-arrow-right"></i>
@@ -1148,6 +1148,16 @@
 
         <div style="position: relative; height:450px; width:100%; background: #ffffff; border-radius:8px; border: 1px solid #ddd;">
             <canvas id="thermoChart"></canvas>
+        </div>
+
+        <div class="diagram-note" style="margin-top: 10px; padding: 8px 12px; background: #f8f9fa; border-left: 3px solid #0D6AB0; border-radius: 6px; font-size: 0.78em; color: #555; line-height: 1.4;">
+            <i class="fas fa-info-circle" style="color: #0D6AB0; margin-right: 5px;"></i>
+            <span class="lang-text"
+                data-pt-br="Obs.: h e s calculados com ref. em 25°C e 100 kPa (h=0, s=0): h = cp&middot;(T&minus;298,15); s = cp&middot;ln(T/298,15) &minus; R&middot;ln(P/100). Só as diferenças (&Delta;h, &Delta;s) têm significado físico."
+                data-en="Note: h and s calculated with reference at 25°C and 100 kPa (h=0, s=0): h = cp&middot;(T&minus;298.15); s = cp&middot;ln(T/298.15) &minus; R&middot;ln(P/100). Only the differences (&Delta;h, &Delta;s) have physical meaning."
+                data-es="Nota: h y s calculados con referencia en 25°C y 100 kPa (h=0, s=0): h = cp&middot;(T&minus;298,15); s = cp&middot;ln(T/298,15) &minus; R&middot;ln(P/100). Solo las diferencias (&Delta;h, &Delta;s) tienen significado físico.">
+                Obs.: h e s calculados com ref. em 25°C e 100 kPa (h=0, s=0): h = cp&middot;(T&minus;298,15); s = cp&middot;ln(T/298,15) &minus; R&middot;ln(P/100). Só as diferenças (&Delta;h, &Delta;s) têm significado físico.
+            </span>
         </div>
     </div>
 </div>

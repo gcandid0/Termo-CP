@@ -378,13 +378,13 @@ def process_values_view11(request):
         num_passos = 150 # Usamos 15 passos para desenhar a curva Pv^n perfeitamente
         passo_v = (v2 - v1) / num_passos if v1 != v2 else 0
 
-        # Funções teóricas para o gráfico (Ref arbitrária: 273.15 K e 100 kPa)
+        # Funções teóricas para o gráfico (Ref: 25°C / 298.15 K e 100 kPa)
         # Proteção caso Cp não tenha sido informado pelo usuário
         cp_calc = Cp if Cp else 0
-        def calc_h(T_K): return cp_calc * T_K
+        def calc_h(T_K): return cp_calc * (T_K - 298.15)
         def calc_s(T_K, P_kPa):
             if T_K <= 0 or P_kPa <= 0: return 0
-            return cp_calc * log(T_K / 273.15) - R * log(P_kPa / 100)
+            return cp_calc * log(T_K / 298.15) - R * log(P_kPa / 100)
 
         ramo_atual = []
 

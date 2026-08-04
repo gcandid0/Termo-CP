@@ -2,6 +2,9 @@ from django.shortcuts import render, redirect
 from .forms import PropertyForm, SecondPropertyForm
 from django.core.exceptions import ValidationError
 from . import tabelas_termoprop as tbs
+from django.core.mail import EmailMessage, BadHeaderError
+from django.conf import settings
+from django.contrib import messages
 
 def homepage_view(request):
     return render(request, 'Inicio.html')
@@ -13,6 +16,36 @@ def sobre_view(request):
     return render(request, 'sobre.html')
 
 def contato_view(request):
+    if request.method == 'POST':
+        nome = request.POST.get('nome', '').strip()
+        email = request.POST.get('email', '').strip()
+        mensagem = request.POST.get('mensagem', '').strip()
+
+        if not nome or not email or not mensagem:
+            messages.error(request, 'Por favor, preencha todos os campos.')
+            return redirect('contato')
+
+        assunto = f'[TERMO-CP] Nova mensagem de {nome}'
+        corpo = f'Nome: {nome}\nE-mail: {email}\n\nMensagem:\n{mensagem}'
+
+        try:
+            email_msg = EmailMessage(
+                subject=assunto,
+                body=corpo,
+                from_email=settings.EMAIL_HOST_USER,
+                to=[settings.CONTACT_EMAIL_DESTINATION],
+                reply_to=[email],
+            )
+            email_msg.send(fail_silently=False)
+            messages.success(request, 'Mensagem enviada com sucesso!')
+        except BadHeaderError:
+            messages.error(request, 'Cabeçalho inválido detectado.')
+        except Exception as e:
+            print(f'Erro ao enviar e-mail: {e}')  # Aparece no log do PythonAnywhere para depuração
+            messages.error(request, 'Erro ao enviar a mensagem. Tente novamente mais tarde.')
+
+        return redirect('contato')
+
     return render(request, 'contato.html')
 
 
