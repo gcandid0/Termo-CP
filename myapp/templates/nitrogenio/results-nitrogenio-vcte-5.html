@@ -507,19 +507,19 @@
     }
 
     .modal-btn {
-        display: block; 
-        padding: 12px; 
+        display: block;
+        padding: 12px;
         margin: 10px 0;
-        background-color: var(--primary-color); 
+        background-color: var(--primary-color);
         color: white;
-        text-decoration: none; 
-        border-radius: 5px; 
+        text-decoration: none;
+        border-radius: 5px;
         transition: background 0.3s ease;
         font-weight: bold;
     }
-    .modal-btn:hover { 
-        background-color: var(--secondary-color); 
-        color: white; 
+    .modal-btn:hover {
+        background-color: var(--secondary-color);
+        color: white;
     }
 
     .chart-controls { display: flex; justify-content: center; align-items: center; margin-bottom: 15px; gap: 15px; flex-wrap: wrap; }
@@ -545,15 +545,15 @@
 <div class="top-row" id="main-content">
     <div class="state-card">
         <h2><i class="fas fa-play-circle"></i> <span class="lang-text" data-pt-br="Estado Inicial (1)" data-en="Initial State (1)" data-es="Estado Inicial (1)">Estado Inicial (1)</span></h2>
-        
+
         <div class="data-row">
-            <span class="data-label lang-text" data-pt-br="Fase:" data-en="Phase:" data-es="Fase:">Fase:</span> 
+            <span class="data-label lang-text" data-pt-br="Fase:" data-en="Phase:" data-es="Fase:">Fase:</span>
             <span class="data-value">
                 {% if fase == 1 %}
                     <span class="lang-text" data-pt-br="Líquido Comprimido" data-en="Compressed Liquid" data-es="Líquido Comprimido">Líquido Comprimido</span>
                 {% elif fase == 2 %}
                     <span class="lang-text" data-pt-br="Vapor Superaquecido" data-en="Superheated Vapor" data-es="Vapor Sobrecalentado">Vapor Superaquecido</span>
-                {% else %} 
+                {% else %}
                     <span class="lang-text" data-pt-br="Região de Saturação" data-en="Saturation Region" data-es="Región de Saturación">Região de Saturação</span>
                 {% endif %}
             </span>
@@ -574,7 +574,7 @@
         <div class="slider-mini-container">
             <h4 id="volumeSliderLabel">
                 <i class="fas fa-eye"></i>
-                <span class="lang-text" data-pt-br="Visualizando Cilindro:" data-en="Viewing Cylinder:" data-es="Viendo Cilindro:">Visualizando Cilindro:</span> 
+                <span class="lang-text" data-pt-br="Visualizando Cilindro:" data-en="Viewing Cylinder:" data-es="Viendo Cilindro:">Visualizando Cilindro:</span>
                 <span id="volumeValue" style="color: var(--secondary-color);" class="lang-text" data-pt-br="Estado Inicial" data-en="Initial State" data-es="Estado Inicial">Estado Inicial</span>
             </h4>
             <input type="range" id="volumeSlider" min="1" max="2" step="1" value="1" aria-labelledby="volumeSliderLabel">
@@ -597,15 +597,15 @@
 
     <div class="state-card final-state">
         <h2><i class="fas fa-stop-circle"></i> <span class="lang-text" data-pt-br="Estado Final (2)" data-en="Final State (2)" data-es="Estado Final (2)">Estado Final (2)</span></h2>
-        
+
         <div class="data-row">
-            <span class="data-label lang-text" data-pt-br="Fase:" data-en="Phase:" data-es="Fase:">Fase:</span> 
+            <span class="data-label lang-text" data-pt-br="Fase:" data-en="Phase:" data-es="Fase:">Fase:</span>
             <span class="data-value">
                 {% if fase2 == 1 %}
                     <span class="lang-text" data-pt-br="Líquido Comprimido" data-en="Compressed Liquid" data-es="Líquido Comprimido">Líquido Comprimido</span>
                 {% elif fase2 == 2 %}
                     <span class="lang-text" data-pt-br="Vapor Superaquecido" data-en="Superheated Vapor" data-es="Vapor Sobrecalentado">Vapor Superaquecido</span>
-                {% else %} 
+                {% else %}
                     <span class="lang-text" data-pt-br="Região de Saturação" data-en="Saturation Region" data-es="Región de Saturación">Região de Saturação</span>
                 {% endif %}
             </span>
@@ -727,7 +727,7 @@
             <div class="step-result" style="color: #8e44ad; border-color: #9b59b6; background: #f5eef8;">
                 W = 0 kJ
             </div>
-        </div>  
+        </div>
 
         <div class="math-step step-3">
             <div class="step-number">3</div>
@@ -836,11 +836,11 @@
                 <option value="hs" class="lang-text" data-pt-br="Diagrama h-s (Mollier)" data-en="h-s Diagram (Mollier)" data-es="Diagrama h-s (Mollier)">Diagrama h-s (Mollier - Entalpia x Entropia)</option>
             </select>
             <button id="btnToggleFullCycle" class="btn btn-secondary" style="display: none;">
-                <i class="fas fa-layer-group" style="margin-right: 6px;"></i> 
+                <i class="fas fa-layer-group" style="margin-right: 6px;"></i>
                 <span id="toggleText" class="lang-text" data-pt-br="Ver todos processos" data-en="View All Processes" data-es="Ver todos los procesos">Ver todos processos</span>
             </button>
             <button id="btnResetZoom" class="btn btn-outline">
-                <i class="fas fa-expand" style="margin-right: 6px;"></i> 
+                <i class="fas fa-expand" style="margin-right: 6px;"></i>
                 <span class="lang-text" data-pt-br="Resetar Zoom" data-en="Reset Zoom" data-es="Restablecer Zoom">Resetar Zoom</span>
             </button>
         </div>
@@ -1061,7 +1061,7 @@
             renderChart(showingAll);
         }
         createHtmlScale(); // Atualiza as tags do p5.js
-        
+
         // Atualiza textos dinâmicos de botões
         const toggleText = document.getElementById('toggleText');
         if (toggleText) {
@@ -1124,7 +1124,7 @@
     document.getElementById('btnToggleFullCycle').onclick = function() {
         showingAll = !showingAll;
         document.getElementById('toggleText').textContent = showingAll ? t("Ver Processo Atual", "View Current Process", "Ver Proceso Actual") : t("Ver todos processos", "View All Processes", "Ver todos los procesos");
-        
+
         if(showingAll) {
             this.querySelector('i').className = 'fas fa-search';
         } else {
@@ -1148,29 +1148,29 @@
     const COLORS = ['#FF3D00', '#4CAF50', '#9C27B0', '#03A9F4', '#FF9800', '#795548', '#E91E63', '#607D8B'];
 
     const chartConfigs = {
-        'Pv': { 
+        'Pv': {
             xKey: 'v', yKey: 'P', xLog: true, yLog: true,
             xLab: () => t('Volume Específico (v) [m³/kg]', 'Specific Volume (v) [m³/kg]', 'Volumen Específico (v) [m³/kg]'),
             yLab: () => t('Pressão (P) [kPa]', 'Pressure (P) [kPa]', 'Presión (P) [kPa]')
         },
-        'Ts': { 
+        'Ts': {
             xKey: 's', yKey: 'T', xLog: false, yLog: false,
-            xLab: () => t('Entropia (s) [kJ/kg.K]', 'Entropy (s) [kJ/kg.K]', 'Entropía (s) [kJ/kg.K]'), 
+            xLab: () => t('Entropia (s) [kJ/kg.K]', 'Entropy (s) [kJ/kg.K]', 'Entropía (s) [kJ/kg.K]'),
             yLab: () => t('Temperatura (T) [K]', 'Temperature (T) [K]', 'Temperatura (T) [K]')
         },
-        'Tv': { 
+        'Tv': {
             xKey: 'v', yKey: 'T', xLog: true, yLog: false,
-            xLab: () => t('Volume Específico (v) [m³/kg]', 'Specific Volume (v) [m³/kg]', 'Volumen Específico (v) [m³/kg]'), 
+            xLab: () => t('Volume Específico (v) [m³/kg]', 'Specific Volume (v) [m³/kg]', 'Volumen Específico (v) [m³/kg]'),
             yLab: () => t('Temperatura (T) [K]', 'Temperature (T) [K]', 'Temperatura (T) [K]')
         },
-        'Ph': { 
+        'Ph': {
             xKey: 'h', yKey: 'P', xLog: false, yLog: true,
-            xLab: () => t('Entalpia (h) [kJ/kg]', 'Enthalpy (h) [kJ/kg]', 'Entalpía (h) [kJ/kg]'), 
+            xLab: () => t('Entalpia (h) [kJ/kg]', 'Enthalpy (h) [kJ/kg]', 'Entalpía (h) [kJ/kg]'),
             yLab: () => t('Pressão (P) [kPa]', 'Pressure (P) [kPa]', 'Presión (P) [kPa]')
         },
-        'hs': { 
+        'hs': {
             xKey: 's', yKey: 'h', xLog: false, yLog: false,
-            xLab: () => t('Entropia (s) [kJ/kg.K]', 'Entropy (s) [kJ/kg.K]', 'Entropía (s) [kJ/kg.K]'), 
+            xLab: () => t('Entropia (s) [kJ/kg.K]', 'Entropy (s) [kJ/kg.K]', 'Entropía (s) [kJ/kg.K]'),
             yLab: () => t('Entalpia (h) [kJ/kg]', 'Enthalpy (h) [kJ/kg]', 'Entalpía (h) [kJ/kg]')
         }
     };
@@ -1259,10 +1259,10 @@
         for (let i = startIndex; i < pontosGrafico.length; i++) {
             let ramo = pontosGrafico[i];
             let color = COLORS[i % COLORS.length];
-            
-            let dataPoints = ramo.map(pt => ({ 
-                x: (conf.xLog && pt[conf.xKey] <= 0) ? 0.000001 : pt[conf.xKey], 
-                y: (conf.yLog && pt[conf.yKey] <= 0) ? 0.000001 : pt[conf.yKey] 
+
+            let dataPoints = ramo.map(pt => ({
+                x: (conf.xLog && pt[conf.xKey] <= 0) ? 0.000001 : pt[conf.xKey],
+                y: (conf.yLog && pt[conf.yKey] <= 0) ? 0.000001 : pt[conf.yKey]
             }));
 
             datasetsToRender.push({
@@ -1274,7 +1274,7 @@
                 borderJoinStyle: 'round', // <--- DEIXA A QUINA NO DOMO SUAVE
                 borderCapStyle: 'round',  // <--- ARREDONDA AS PONTAS DA LINHA
                 fill: false,
-                pointStyle: 'line', 
+                pointStyle: 'line',
                 tension: 0,
                 pointRadius: 0,
                 pointHitRadius: 10,
@@ -1344,10 +1344,10 @@
                 plugins: {
                     legend: {
                         position: 'top',
-                        labels: { 
+                        labels: {
                             usePointStyle: true,
-                            filter: (item) => item.text !== lEstados, 
-                            font: { size: 13 } 
+                            filter: (item) => item.text !== lEstados,
+                            font: { size: 13 }
                         }
                     },
                     tooltip: {
@@ -1420,20 +1420,20 @@
 
                                     if (p1 && p2) {
                                         const angle = Math.atan2(p2.y - p1.y, p2.x - p1.x);
-                                        
+
                                         ctx.save();
                                         ctx.translate(p2.x, p2.y);
                                         ctx.rotate(angle);
-                                        
+
                                         ctx.beginPath();
                                         ctx.moveTo(0, 0);
                                         ctx.lineTo(-8, -4);
                                         ctx.lineTo(-8, 4);
                                         ctx.closePath();
-                                        
+
                                         ctx.fillStyle = dataset.borderColor;
                                         ctx.fill();
-                                        
+
                                         ctx.strokeStyle = '#FFFFFF';
                                         ctx.lineWidth = 1;
                                         ctx.stroke();
@@ -1532,7 +1532,7 @@
                 valText.setAttribute('data-pt-br', 'Estado Inicial');
                 valText.setAttribute('data-en', 'Initial State');
                 valText.setAttribute('data-es', 'Estado Inicial');
-                
+
                 currentDataFase = state1_3D.rawFase;
                 currentDataVolume = state1_3D.rawVol;
                 currentDataVL = state1_3D.rawVL;
@@ -1540,7 +1540,7 @@
                 valText.setAttribute('data-pt-br', 'Estado Final');
                 valText.setAttribute('data-en', 'Final State');
                 valText.setAttribute('data-es', 'Estado Final');
-                
+
                 currentDataFase = state2_3D.rawFase;
                 currentDataVolume = state2_3D.rawVol;
                 currentDataVL = state2_3D.rawVL;
@@ -1610,6 +1610,7 @@
             drawCap(r4, ha4); drawCap(r4, 100); drawSide(r4, ha4, 100);
         }
 
+
         fill(162, 162, 162);
         drawCap(r3, hemboloB); drawCap(r3, hemboloC); drawSide(r3, hemboloC, hemboloB);
 
@@ -1632,7 +1633,7 @@
         const canvasCenterY = (canvasRect.top - wrapperRect.top) + canvasRect.height / 2;
 
         let logDivisions = [0.0001, 0.001, 0.01, 0.1, 1, 10, 100, 1000];
-        
+
         let lang = localStorage.getItem('preferredLang') || 'pt-br';
         let localeStr = lang === 'en' ? 'en-US' : (lang === 'es' ? 'es-ES' : 'pt-BR');
         const formataNum = new Intl.NumberFormat(localeStr, { maximumFractionDigits: 4 });
@@ -1733,86 +1734,82 @@
     }
 
     function getFaseLabel(fase) {
-        const f = parseInt(fase, 10);
-        const m = {
-            1: ['Líquido Comprimido','Compressed Liquid','Líquido Comprimido'],
-            2: ['Vapor Superaquecido','Superheated Vapor','Vapor Sobrecalentado'],
-            3: ['Região de Saturação','Saturation Region','Región de Saturación']
-        };
-        const arr = m[f] || ['--','--','--'];
+        const m = { 1: ['Líquido Comprimido','Compressed Liquid','Líquido Comprimido'],
+                     2: ['Vapor Superaquecido','Superheated Vapor','Vapor Sobrecalentado'],
+                     3: ['Região de Saturação','Saturation Region','Región de Saturación'] };
+        const arr = m[fase] || ['--','--','--'];
         return t(arr[0], arr[1], arr[2]);
     }
 
+    // Retorna os "estados-marco" (1, 2, 3...) construídos a partir de TODOS os
+    // processos já encadeados (cada "Continuar" gera um novo ramo em pontosGrafico).
+    // estado[0] = início do 1º processo; estado[k] = fim do processo k.
     function getCheckpointStates() {
-        let estadosList = [];
-
         if (pontosGrafico && pontosGrafico.length > 0) {
-            estadosList.push({ ...pontosGrafico[0][0] });
+            const estadosList = [{ ...pontosGrafico[0][0] }];
             for (let i = 0; i < pontosGrafico.length; i++) {
                 const ramo = pontosGrafico[i];
                 estadosList.push({ ...ramo[ramo.length - 1] });
             }
-        } else {
-            estadosList.push({
-                T: rData.state1?.T, P: rData.state1?.P, v: rData.state1?.v,
-                h: rData.state1?.h, s: rData.state1?.s, u: rData.state1?.u,
-                titulo: rData.state1?.titulo, fase: rData.state1?.fase,
-                vl: state1_3D.rawVL
-            });
-            estadosList.push({
-                T: rData.state2?.T, P: rData.state2?.P, v: rData.state2?.v,
-                h: rData.state2?.h, s: rData.state2?.s, u: rData.state2?.u,
-                titulo: rData.state2?.titulo, fase: rData.state2?.fase,
-                vl: state2_3D.rawVL
-            });
-            return estadosList;
-        }
 
-        if (estadosList.length > 0) {
+            // Os pontos crus do gráfico (pontosGrafico) só trazem T,P,v,s,h — nunca
+            // 'fase', 'titulo' ou 'vl' (necessários para os cilindros 3D e o rótulo de
+            // fase na tabela). Por isso é preciso injetar esses dados nos pontos que
+            // representam o INÍCIO e o FIM do processo atual (rData.state1/state2).
+            //
+            // O estado 1 do processo atual corresponde ao PENÚLTIMO ponto da lista
+            // (índice 0 continua sendo o estado original de toda a cadeia, quando há
+            // mais de um processo encadeado) e o estado 2 ao ÚLTIMO ponto.
             const lastIdx = estadosList.length - 1;
             const startIdx = Math.max(0, estadosList.length - 2);
 
-            estadosList[startIdx].fase = parseInt(rData.state1?.fase || state1_3D.rawFase, 10);
-            estadosList[startIdx].T = rData.state1?.T;
-            estadosList[startIdx].P = rData.state1?.P;
-            estadosList[startIdx].v = rData.state1?.v;
-            estadosList[startIdx].u = rData.state1?.u;
-            estadosList[startIdx].h = rData.state1?.h;
-            estadosList[startIdx].s = rData.state1?.s;
-            estadosList[startIdx].titulo = rData.state1?.titulo;
-            estadosList[startIdx].vl = state1_3D.rawVL;
+            if (rData.state1) {
+                estadosList[startIdx].fase = parseInt(rData.state1.fase || state1_3D.rawFase, 10);
+                estadosList[startIdx].titulo = rData.state1.titulo;
+                estadosList[startIdx].vl = state1_3D.rawVL;
+            }
+            if (rData.state2) {
+                estadosList[lastIdx].fase = parseInt(rData.state2.fase || state2_3D.rawFase, 10);
+                estadosList[lastIdx].titulo = rData.state2.titulo;
+                estadosList[lastIdx].vl = state2_3D.rawVL;
+            }
 
-            estadosList[lastIdx].fase = parseInt(rData.state2?.fase || state2_3D.rawFase, 10);
-            estadosList[lastIdx].T = rData.state2?.T;
-            estadosList[lastIdx].P = rData.state2?.P;
-            estadosList[lastIdx].v = rData.state2?.v;
-            estadosList[lastIdx].u = rData.state2?.u;
-            estadosList[lastIdx].h = rData.state2?.h;
-            estadosList[lastIdx].s = rData.state2?.s;
-            estadosList[lastIdx].titulo = rData.state2?.titulo;
-            estadosList[lastIdx].vl = state2_3D.rawVL;
-        }
-
-        for (let i = 0; i < estadosList.length; i++) {
-            if (!estadosList[i].fase) {
-                if (estadosList[i].titulo !== undefined && estadosList[i].titulo !== null && String(estadosList[i].titulo).trim() !== '') {
-                    estadosList[i].fase = 3;
-                } else if (estadosList[i].v !== undefined && estadosList[i].v !== null) {
-                    estadosList[i].fase = parseFloat(estadosList[i].v) <= 0.003155 ? 1 : 2;
+            // Fallback para os demais pontos de fronteira (histórico com 2+ processos)
+            // que ainda não têm 'fase' definida: usa o título (mistura) ou uma
+            // heurística baseada em v (líquido comprimido vs. vapor superaquecido).
+            for (let i = 0; i <= lastIdx; i++) {
+                if (!estadosList[i].fase) {
+                    if (estadosList[i].titulo !== undefined && estadosList[i].titulo !== null && String(estadosList[i].titulo).trim() !== '') {
+                        estadosList[i].fase = 3;
+                    } else if (estadosList[i].v !== undefined && estadosList[i].v !== null) {
+                        estadosList[i].fase = parseFloat(estadosList[i].v) <= 0.003155 ? 1 : 2;
+                    }
+                }
+                if (estadosList[i].fase == 3 && (estadosList[i].vl === undefined || estadosList[i].vl === null)) {
+                    estadosList[i].vl = estadosList[i].v * 0.05;
                 }
             }
-            if (estadosList[i].fase == 3 && (estadosList[i].vl === undefined || estadosList[i].vl === null)) {
-                estadosList[i].vl = estadosList[i].v * 0.05;
-            }
-        }
 
-        return estadosList;
+            return estadosList;
+        }
+        // Fallback (sem histórico de microprocessos): usa só os dados do processo atual
+        const toPoint = (state, fase3d, vol3d, vl3d) => ({
+            T: state ? state.T : null, P: state ? state.P : null, v: state ? state.v : null,
+            h: state ? state.h : null, s: state ? state.s : null, u: state ? state.u : null,
+            titulo: state ? state.titulo : undefined,
+            fase: fase3d, vl: (vl3d !== null && vl3d !== undefined) ? vl3d : vol3d
+        });
+        return [
+            toPoint(rData.state1, state1_3D.rawFase, state1_3D.rawVol, state1_3D.rawVL),
+            toPoint(rData.state2, state2_3D.rawFase, state2_3D.rawVol, state2_3D.rawVL)
+        ];
     }
 
+    // Move o cilindro 3D para um estado arbitrário (fase + volume), antes da captura
     function setCylinderState(fase, vol, vl) {
-        currentDataFase = parseInt(fase, 10) || 1;
-        currentDataVolume = parseFloat(vol);
-        currentDataVL = (vl !== null && vl !== undefined) ? parseFloat(vl) : currentDataVolume;
+        currentDataFase = fase || 1;
+        currentDataVolume = vol;
+        currentDataVL = (vl !== null && vl !== undefined) ? vl : vol;
         estado = 1;
     }
 
@@ -1836,9 +1833,11 @@
         loadingMsg.style.color = '#555';
 
         try {
+            // Preenche resultados e propriedades de TODOS os processos já encadeados
             populateReportMetrics();
             populateReportStates();
 
+            // Captura o cilindro (com a escala e a legenda ao lado) em cada estado-marco
             const checkpointStates = getCheckpointStates();
             const cylinderImages = [];
             for (let i = 0; i < checkpointStates.length; i++) {
@@ -1849,9 +1848,11 @@
             }
             populateReportCylinder(cylinderImages);
 
+            // Devolve a visualização para onde o usuário estava antes de abrir o relatório
             slider.value = originalSliderValue;
             slider.dispatchEvent(new Event('input'));
 
+            // Renderiza todos os diagramas
             loadingMsg.textContent = t('Renderizando diagramas termodinâmicos...','Rendering thermodynamic diagrams...','Renderizando diagramas termodinámicos...');
             await renderAllReportCharts();
 
@@ -1866,9 +1867,13 @@
         }
     }
 
+    // Captura o Cilindro-Pistão JUNTO com a régua de escala e a legenda. O html2canvas
+    // tira uma "foto" do container inteiro (não só do <canvas> do p5.js), por isso a
+    // escala — que é HTML sobreposto, não faz parte do desenho 3D — aparece na imagem.
     function captureCylinderAtState(fase, vol, vl) {
         return new Promise(resolve => {
             setCylinderState(fase, vol, vl);
+            // Aguarda a animação de lerp convergir (~2s a 60fps)
             setTimeout(() => {
                 const wrapperEl = document.getElementById('canvas-wrapper');
                 const fallbackToRawCanvas = () => {
@@ -1899,6 +1904,8 @@
     }
 
     function populateReportMetrics() {
+        // historicoProcessos acumula Q/W/Sger/TempViz de TODOS os processos já
+        // encadeados via "Continuar". Sem histórico (sessão antiga), cai no processo atual.
         const processos = (historicoProcessos && historicoProcessos.length > 0)
             ? historicoProcessos
             : [{ TempViz: rData.TempViz, Q: rData.Q, W: rData.W, Sger: rData.Sger }];
@@ -1922,7 +1929,7 @@
                    </div>`
                 : '';
 
-            html += `${procLabel}<div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px;">
+            html += `${procLabel}<div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px;">
                 <div class="report-metric-card">
                     <div class="report-metric-label"><i class="fas fa-thermometer-half"></i> ${t('Temp. Vizinhança','Surroundings Temp.','Temp. del Entorno')}</div>
                     <div class="report-metric-value">${fmtReportNum(proc.TempViz)} K</div>
@@ -1930,6 +1937,10 @@
                 <div class="report-metric-card">
                     <div class="report-metric-label"><i class="fas fa-fire"></i> ${t('Calor (Q)','Heat (Q)','Calor (Q)')}</div>
                     <div class="report-metric-value">${fmtReportNum(proc.Q)} kJ</div>
+                </div>
+                <div class="report-metric-card">
+                    <div class="report-metric-label"><i class="fas fa-cogs"></i> ${t('Trabalho (W)','Work (W)','Trabajo (W)')}</div>
+                    <div class="report-metric-value">${fmtReportNum(proc.W)} kJ</div>
                 </div>
                 <div class="report-metric-card" style="${sgerStyle}">
                     <div class="report-metric-label"><i class="fas fa-balance-scale"></i> Sger</div>
@@ -1955,7 +1966,7 @@
                 ? `${t('Estado Final','Final State','Estado Final')} (${stateNum})`
                 : `${t('Estado Intermediário','Intermediate State','Estado Intermedio')} (${stateNum})`;
 
-        const hasTitulo = state.titulo !== undefined && state.titulo !== null && String(state.titulo).trim() !== '';
+        const hasTitulo = state.titulo !== undefined && state.titulo !== null;
         const extraRow  = hasTitulo
             ? `<tr><td class="prop-label">${t('Título (x):','Quality (x):','Calidad (x):')}</td><td class="prop-value">${fmtReportNum(state.titulo)} %</td></tr>`
             : '';
@@ -2215,6 +2226,9 @@
         }
     }
 
+    // ── Redimensiona os gráficos do relatório antes e depois da impressão ──
+    // O CSS @media print muda a largura dos wrappers para 100%; o Chart.js
+    // precisa ser notificado para redesenhar na nova dimensão.
     function resizeAllReportCharts() {
         Object.values(reportChartInstances).forEach(chart => {
             if (chart && typeof chart.resize === 'function') {
@@ -2224,6 +2238,7 @@
     }
 
     window.addEventListener('beforeprint', () => {
+        // Pequeno atraso para o CSS de impressão ser aplicado antes do resize
         setTimeout(resizeAllReportCharts, 50);
     });
 
@@ -2239,7 +2254,7 @@
                     targetH3B = logDivisionToHeight(currentDataVolume, -260, 100);
                     targetH3C = targetH3B - 40;
                     targetHa1 = targetH3B;
-                    targetHa4 = logDivisionToHeight(0.00001, -260, 100);
+                    targetHa4 = targetH3B;
                 } else if (opcao == 2) {
                     targetH3B = logDivisionToHeight(currentDataVolume, -260, 100);
                     targetH3C = targetH3B - 40;
@@ -2555,7 +2570,7 @@
                 // NOVA LÓGICA DE TRADUÇÃO DO TÍTULO PRINCIPAL:
                 let displayLabel = entry.label;
                 const defaultNames = DEFAULT_NAMES[entry.processCode];
-                
+
                 if (defaultNames) {
                     // Se o nome salvo for igual a qualquer um dos nomes padrão, aplica a tradução dinâmica
                     if (entry.label === defaultNames.pt || entry.label === defaultNames.en || entry.label === defaultNames.es) {
