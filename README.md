@@ -16,7 +16,7 @@
 <a href="https://www.djangoproject.com/"><img src="https://img.shields.io/badge/Django-6.0.5-092E20?style=for-the-badge&logo=django&logoColor=white" alt="Django">
 <a href="https://www.python.org/"><img src="https://img.shields.io/badge/Python%203-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python 3">
 <a href="https://p5js.org/"><img src="https://img.shields.io/badge/P5.js-ED225D?style=for-the-badge&logo=p5dotjs&logoColor=white" alt="P5.js">
-<img src="https://img.shields.io/badge/Licen%C3%A7a-Todos%20os%20direitos%20reservados-b91c1c?style=for-the-badge" alt="Licença">
+<a href="https://github.com/gcandid0/Termo-CP/blob/main/LICENSE"><img src="https://img.shields.io/badge/Licen%C3%A7a-Todos%20os%20direitos%20reservados-b91c1c?style=for-the-badge" alt="Licença">
 
 <br/>
 
