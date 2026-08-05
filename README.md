@@ -173,10 +173,8 @@ Os resultados podem ser exportados como imagem/relatório diretamente da página
 <!-- Marque o que já está pronto e o que está planejado -->
 - [x] Cálculo de estados para 8 substâncias
 - [x] Simulação de processos com animação do pistão
-- [x] Exportação de relatório (imagem)
+- [x] Exportação de relatório
 - [x] Suporte a PT/EN/ES
-- [ ] `<próxima funcionalidade planejada>`
-- [ ] `<próxima funcionalidade planejada>`
 
 ---
 
