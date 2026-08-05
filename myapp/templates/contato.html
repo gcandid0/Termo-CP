@@ -113,6 +113,34 @@
     }
     .social-tag:hover i { color: white; }
 
+    /* --- BLOCO DO PROJETO (GitHub / Licença) --- */
+    .project-links {
+        margin-top: 18px;
+        padding-top: 18px;
+        border-top: 1px dashed #e0e0e0;
+        flex-shrink: 0;
+    }
+
+    .project-links-title {
+        font-size: 0.8em;
+        font-weight: bold;
+        color: #888;
+        text-transform: uppercase;
+        margin-bottom: 10px;
+        text-align: center;
+    }
+
+    .project-links .social-tag {
+        background-color: #f2f2f2;
+    }
+
+    .project-links .social-tag.github {
+        background-color: #24292e;
+        color: white;
+    }
+    .project-links .social-tag.github i { color: white; }
+    .project-links .social-tag.github:hover { background-color: #444d56; }
+
     /* --- SEÇÃO DE FEEDBACK --- */
     .form-header { margin-bottom: 15px; text-align: center; }
     .form-header p { color: #666; font-size: 0.95em; margin: 0; }
@@ -206,6 +234,7 @@
                     <a href="mailto:gabrielcandidomds@gmail.com" class="social-tag"><i class="fas fa-envelope"></i> <span class="lang-text" data-pt-br="Email" data-en="Email" data-es="Correo">Email</span></a>
                     <a href="https://www.linkedin.com/in/gabriel-candido-235637226/" target="_blank" class="social-tag"><i class="fab fa-linkedin-in"></i> LinkedIn</a>
                     <a href="http://lattes.cnpq.br/6696786236047929" target="_blank" class="social-tag"><i class="fas fa-file-alt"></i> Lattes</a>
+                    <a href="https://github.com/gcandid0" target="_blank" class="social-tag"><i class="fab fa-github"></i> GitHub</a>
                 </div>
             </div>
 
@@ -221,6 +250,23 @@
                     <a href="mailto:fabio.fonseca@ufr.edu.br" class="social-tag"><i class="fas fa-envelope"></i> <span class="lang-text" data-pt-br="Email" data-en="Email" data-es="Correo">Email</span></a>
                     <a href="http://lattes.cnpq.br/4673164208199862" target="_blank" class="social-tag"><i class="fas fa-file-alt"></i> Lattes</a>
                 </div>
+            </div>
+        </div>
+
+        <div class="project-links">
+            <div class="project-links-title lang-text" data-pt-br="Sobre o Projeto" data-en="About the Project" data-es="Sobre el Proyecto">
+                Sobre o Projeto
+            </div>
+            <div class="social-links">
+                <a href="https://github.com/gcandid0/Termo-CP" target="_blank" class="social-tag github">
+                    <i class="fab fa-github"></i> GitHub
+                </a>
+                <a href="https://github.com/gcandid0/Termo-CP/issues" target="_blank" class="social-tag">
+                    <i class="fas fa-bug"></i> <span class="lang-text" data-pt-br="Reportar Issue" data-en="Report Issue" data-es="Reportar Issue">Reportar Issue</span>
+                </a>
+                <a href="https://github.com/gcandid0/Termo-CP/blob/main/LICENSE" target="_blank" class="social-tag">
+                    <i class="fas fa-balance-scale"></i> <span class="lang-text" data-pt-br="Licença" data-en="License" data-es="Licencia">Licença</span>
+                </a>
             </div>
         </div>
     </div>
