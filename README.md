@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://gcandid0.pythonanywhere.com/">
-    <img src="https://img.shields.io/badge/TERMO--CP-Simula%C3%A7%C3%A3o%20Termodin%C3%A2mica-2b6cb0?style=for-the-badge" alt="TERMO-CP Banner" width="100%">
+    <img src="./assets/logo.png" alt="TERMO-CP Logo" width="120">
   </a>
 </p>
 
@@ -16,6 +16,11 @@
 <img src="https://img.shields.io/badge/Django-092E20?style=for-the-badge&logo=django&logoColor=white" alt="Django">
 <img src="https://img.shields.io/badge/Python%203-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python 3">
 <img src="https://img.shields.io/badge/P5.js-ED225D?style=for-the-badge&logo=p5dotjs&logoColor=white" alt="P5.js">
+
+<br/>
+
+<a href="http://lattes.cnpq.br/6696786236047929"><img src="https://img.shields.io/badge/Lattes-Curr%C3%ADculo-1a5fb4?style=for-the-badge&logo=googlescholar&logoColor=white" alt="Lattes"></a>
+<a href="https://www.linkedin.com/in/gabriel-candido-235637226/"><img src="https://img.shields.io/badge/LinkedIn-Gabriel%20Candido-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn"></a>
 
 </div>
 
@@ -39,7 +44,7 @@ O projeto tem foco educacional, voltado a estudantes, professores e engenheiros 
 
 <div align="center">
   <a href="https://gcandid0.pythonanywhere.com/">
-    <img src="https://img.shields.io/badge/Interface-TERMO--CP-1a1a2e?style=for-the-badge" alt="TERMO-CP Interface" width="600">
+    <img src="./assets/screenshot-home.png" alt="Tela inicial do TERMO-CP" width="900" style="border-radius: 12px;">
   </a>
 </div>
 
