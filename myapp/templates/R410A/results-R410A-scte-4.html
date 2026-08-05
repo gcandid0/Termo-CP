@@ -544,7 +544,7 @@
 {% block content %}
 <div class="top-row" id="main-content">
     <div class="state-card">
-        <h2><i class="fas fa-play-circle"></i> <span class="lang-text" data-pt-br="Estado Inicial (1)" data-en="Initial State (1)" data-es="Estado Inicial (1)">Estado Inicial (1)</span></h2>
+        <h2><i class="fas fa-play-circle"></i> <span id="stateHeaderInitial" class="lang-text" data-pt-br="Estado Inicial (1)" data-en="Initial State (1)" data-es="Estado Inicial (1)">Estado Inicial (1)</span></h2>
 
         <div class="data-row">
             <span class="data-label lang-text" data-pt-br="Fase:" data-en="Phase:" data-es="Fase:">Fase:</span>
@@ -579,8 +579,8 @@
             </h4>
             <input type="range" id="volumeSlider" min="1" max="2" step="1" value="1" aria-labelledby="volumeSliderLabel">
             <div style="display: flex; justify-content: space-between; font-size: 0.75em; color: #666; padding: 0 10%; font-weight: bold;">
-                <span class="lang-text" data-pt-br="ESTADO 1" data-en="STATE 1" data-es="ESTADO 1">ESTADO 1</span>
-                <span class="lang-text" data-pt-br="ESTADO 2" data-en="STATE 2" data-es="ESTADO 2">ESTADO 2</span>
+                <span id="sliderStateStart" class="lang-text" data-pt-br="ESTADO 1" data-en="STATE 1" data-es="ESTADO 1">ESTADO 1</span>
+                <span id="sliderStateEnd" class="lang-text" data-pt-br="ESTADO 2" data-en="STATE 2" data-es="ESTADO 2">ESTADO 2</span>
             </div>
         </div>
 
@@ -596,7 +596,7 @@
     </div>
 
     <div class="state-card final-state">
-        <h2><i class="fas fa-stop-circle"></i> <span class="lang-text" data-pt-br="Estado Final (2)" data-en="Final State (2)" data-es="Estado Final (2)">Estado Final (2)</span></h2>
+        <h2><i class="fas fa-stop-circle"></i> <span id="stateHeaderFinal" class="lang-text" data-pt-br="Estado Final (2)" data-en="Final State (2)" data-es="Estado Final (2)">Estado Final (2)</span></h2>
 
         <div class="data-row">
             <span class="data-label lang-text" data-pt-br="Fase:" data-en="Phase:" data-es="Fase:">Fase:</span>
@@ -683,13 +683,13 @@
             </div>
             <div class="state-boxes">
                 <div class="state-box">
-                    <strong><i class="fas fa-play" style="font-size: 0.8em; color: #3498db;"></i> <span class="lang-text" data-pt-br="ESTADO 1" data-en="STATE 1" data-es="ESTADO 1">ESTADO 1</span></strong>
+                    <strong><i class="fas fa-play" style="font-size: 0.8em; color: #3498db;"></i> <span id="stateBoxStart" class="lang-text" data-pt-br="ESTADO 1" data-en="STATE 1" data-es="ESTADO 1">ESTADO 1</span></strong>
                     v<sub>1</sub> = <span class="format-num">{{ volume_especifico|floatformat:6 }}</span> m³/kg<br>
                     u<sub>1</sub> = <span class="format-num">{{ energia_interna }}</span> kJ/kg<br>
                     s<sub>1</sub> = <span class="format-num">{{ entropia_especifica }}</span> kJ/kg.K
                 </div>
                 <div class="state-box">
-                    <strong><i class="fas fa-stop" style="font-size: 0.8em; color: #e74c3c;"></i> <span class="lang-text" data-pt-br="ESTADO 2" data-en="STATE 2" data-es="ESTADO 2">ESTADO 2</span></strong>
+                    <strong><i class="fas fa-stop" style="font-size: 0.8em; color: #e74c3c;"></i> <span id="stateBoxEnd" class="lang-text" data-pt-br="ESTADO 2" data-en="STATE 2" data-es="ESTADO 2">ESTADO 2</span></strong>
                     v<sub>2</sub> = <span class="format-num">{{ volume_especifico2|floatformat:6 }}</span> m³/kg<br>
                     u<sub>2</sub> = <span class="format-num">{{ energia_interna2 }}</span> kJ/kg<br>
                     s<sub>2</sub> = <span class="format-num">{{ entropia_especifica2 }}</span> kJ/kg.K
@@ -1024,6 +1024,9 @@
         }
 
         updateNumberFormatting();
+
+        // --- ATUALIZA A NUMERAÇÃO DOS ESTADOS (INICIAL/FINAL) AO MUDAR O IDIOMA ---
+        updateStateNumbering();
     });
 
     // --- DADOS DOS MICROPROCESSOS PARA O GRÁFICO (MÉTODO SEGURO) ---
@@ -1037,6 +1040,33 @@
     } catch(e) {
         console.error("Erro ao ler dados do gráfico do Django:", e);
     }
+
+    // --- NUMERAÇÃO DINÂMICA DOS ESTADOS (INICIAL/FINAL) ---
+    // Segue a mesma lógica usada nos gráficos: o número do estado inicial do
+    // processo atual é a quantidade de processos já registrados em pontosGrafico
+    // (1 se ainda não houver nenhum), e o estado final é sempre o próximo.
+    function updateStateNumbering() {
+        const totalProcessos = pontosGrafico.length;
+        const n1 = totalProcessos > 0 ? totalProcessos : 1;
+        const n2 = n1 + 1;
+
+        const applyLabel = (id, ptTemplate, enTemplate, esTemplate) => {
+            const el = document.getElementById(id);
+            if (!el) return;
+            el.setAttribute('data-pt-br', ptTemplate);
+            el.setAttribute('data-en', enTemplate);
+            el.setAttribute('data-es', esTemplate);
+            el.textContent = t(ptTemplate, enTemplate, esTemplate);
+        };
+
+        applyLabel('stateHeaderInitial', `Estado Inicial (${n1})`, `Initial State (${n1})`, `Estado Inicial (${n1})`);
+        applyLabel('stateHeaderFinal', `Estado Final (${n2})`, `Final State (${n2})`, `Estado Final (${n2})`);
+        applyLabel('sliderStateStart', `ESTADO ${n1}`, `STATE ${n1}`, `ESTADO ${n1}`);
+        applyLabel('sliderStateEnd', `ESTADO ${n2}`, `STATE ${n2}`, `ESTADO ${n2}`);
+        applyLabel('stateBoxStart', `ESTADO ${n1}`, `STATE ${n1}`, `ESTADO ${n1}`);
+        applyLabel('stateBoxEnd', `ESTADO ${n2}`, `STATE ${n2}`, `ESTADO ${n2}`);
+    }
+    updateStateNumbering();
 
     // --- HISTÓRICO DE RESULTADOS DE TODOS OS PROCESSOS JÁ CONTINUADOS ---
     const rawHistorico = '{{ historico_processos_json|default:"[]"|escapejs }}';
@@ -1133,7 +1163,7 @@
         const hg = [252.51, 255.19, 257.08, 257.8, 260.35, 262.83, 265.23, 267.54, 269.77, 271.89, 273.9, 275.78, 277.53, 279.12, 280.55, 281.78, 282.79, 283.55, 284.02, 284.16, 283.89, 283.13, 281.76, 279.58, 276.3, 271.33, 263.26, 245.64, 226.46];
         const sf = [-0.1227, -0.0912, -0.0688, -0.0603, -0.0299, 0.0, 0.0294, 0.0585, 0.0871, 0.1154, 0.1435, 0.1713, 0.1989, 0.2264, 0.2537, 0.281, 0.3083, 0.3357, 0.3631, 0.3908, 0.4189, 0.4473, 0.4765, 0.5067, 0.5384, 0.5729, 0.613, 0.6752, 0.7449];
         const sg = [1.1907, 1.1732, 1.1613, 1.1568, 1.1416, 1.1273, 1.1139, 1.1012, 1.0893, 1.0779, 1.0671, 1.0567, 1.0466, 1.0368, 1.0272, 1.0176, 1.0081, 0.9984, 0.9884, 0.9781, 0.9671, 0.9552, 0.9421, 0.9273, 0.9099, 0.8882, 0.8583, 0.8017, 0.7449];
-
+        
         let dome = [];
         let critPt = {};
         const lastIdx = P.length - 1;
@@ -1558,7 +1588,6 @@
             fill(255, 152, 0, 100);
             drawCap(r4, ha4); drawCap(r4, 100); drawSide(r4, ha4, 100);
         }
-
 
         fill(162, 162, 162);
         drawCap(r3, hemboloB); drawCap(r3, hemboloC); drawSide(r3, hemboloC, hemboloB);
