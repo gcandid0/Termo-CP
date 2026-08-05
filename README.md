@@ -13,16 +13,20 @@
 <br/>
 
 <a href="https://gcandid0.pythonanywhere.com/"><img src="https://img.shields.io/badge/Acessar-gcandid0.pythonanywhere.com-2b9246?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Acessar plataforma"></a>
-<img src="https://img.shields.io/badge/Django-092E20?style=for-the-badge&logo=django&logoColor=white" alt="Django">
+<img src="https://img.shields.io/badge/Django-6.0.5-092E20?style=for-the-badge&logo=django&logoColor=white" alt="Django">
 <img src="https://img.shields.io/badge/Python%203-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python 3">
 <img src="https://img.shields.io/badge/P5.js-ED225D?style=for-the-badge&logo=p5dotjs&logoColor=white" alt="P5.js">
+<img src="https://img.shields.io/badge/Licen%C3%A7a-Todos%20os%20direitos%20reservados-b91c1c?style=for-the-badge" alt="Licença">
 
 <br/>
 
 <a href="http://lattes.cnpq.br/6696786236047929"><img src="https://img.shields.io/badge/Lattes-Curr%C3%ADculo-1a5fb4?style=for-the-badge&logo=googlescholar&logoColor=white" alt="Lattes"></a>
 <a href="https://www.linkedin.com/in/gabriel-candido-235637226/"><img src="https://img.shields.io/badge/LinkedIn-Gabriel%20Candido-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn"></a>
+<a href="https://github.com/gcandid0/Termo-CP"><img src="https://img.shields.io/badge/GitHub-Termo--CP-181717?style=for-the-badge&logo=github&logoColor=white" alt="GitHub"></a>
 
 </div>
+
+<p align="center"><sub>Desenvolvido no âmbito de pesquisa acadêmica da <strong>Universidade Federal de Rondonópolis (UFR)</strong> · em processo de registro junto ao INPI</sub></p>
 
 ## Índice
 
@@ -34,8 +38,10 @@
 - [Stack Tecnológica](#️-stack-tecnológica)
 - [Roadmap](#️-roadmap)
 - [Contato](#-contato)
+- [Autores](#-autores)
 - [Licença](#-licença)
 - [Como citar](#-como-citar)
+- [Contribuindo](#-contribuindo)
 
 ---
 
@@ -82,16 +88,19 @@ A plataforma está disponível em três idiomas, selecionáveis diretamente no m
 
 ## 🚀 Como usar
 
+> [!IMPORTANT]
+> O código-fonte está disponível neste repositório apenas para **visualização e estudo acadêmico**, conforme a [licença](#-licença) vigente. Para rodar localmente com fins de pesquisa/avaliação:
+
 **Pré-requisitos:**
 - Python 3
-- Django
+- pip
 
 ### Instalação local
 
 ```bash
 # Clone o repositório
-git clone https://github.com/<seu-usuario>/termo-cp.git
-cd termo-cp
+git clone https://github.com/gcandid0/Termo-CP.git
+cd Termo-CP
 
 # Crie e ative um ambiente virtual
 python3 -m venv venv
@@ -101,8 +110,9 @@ source venv/bin/activate
 pip install -r requirements.txt
 
 # Configure as variáveis de ambiente (.env)
-cp .env.example .env
-# defina SECRET_KEY e DEBUG
+# crie um arquivo .env na raiz com:
+# SECRET_KEY=<sua-chave>
+# DEBUG=True
 
 # Rode as migrações e o servidor
 python manage.py migrate
@@ -110,6 +120,16 @@ python manage.py runserver
 ```
 
 Acesse `http://127.0.0.1:8000/` no navegador.
+
+**Dependências principais** (`requirements.txt`):
+
+| Pacote | Versão |
+|---|---|
+| Django | 6.0.5 |
+| asgiref | 3.11.1 |
+| python-dotenv | 1.2.2 |
+| sqlparse | 0.5.5 |
+| tzdata | 2026.2 |
 
 ### Uso online
 
@@ -162,28 +182,42 @@ Os resultados podem ser exportados como imagem/relatório diretamente da página
 
 ## 📬 Contato
 
-Dúvidas, sugestões ou relatos de problemas podem ser enviados pelo [formulário de contato](https://gcandid0.pythonanywhere.com/) da plataforma.
+Dúvidas, sugestões ou relatos de problemas podem ser enviados pelo [formulário de contato](https://gcandid0.pythonanywhere.com/) da plataforma, por [issues no GitHub](https://github.com/gcandid0/Termo-CP/issues) ou diretamente pelos e-mails abaixo.
 
-## Responsáveis
+## 👤 Autores
 
-Projeto desenvolvido por **Gabriel Candido** e **Fábio Fonseca**.
+Projeto desenvolvido no âmbito de pesquisa acadêmica da **Universidade Federal de Rondonópolis (UFR)**:
+
+- **Gabriel Candido Messias dos Santos** — [gabrielcandidomds@gmail.com](mailto:gabrielcandidomds@gmail.com) · [Lattes](http://lattes.cnpq.br/6696786236047929) · [LinkedIn](https://www.linkedin.com/in/gabriel-candido-235637226/)
+- **Fábio Basaglia Fonseca** — [fabio.fonseca@ufr.edu.br](mailto:fabio.fonseca@ufr.edu.br)
 
 ## 📄 Licença
 
-<!-- Defina a licença do projeto, ex.: MIT, GPL-3.0, ou "Todos os direitos reservados" -->
-Este projeto é distribuído sob a licença `<defina aqui>`. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
+O TERMO-CP está em **processo de registro junto ao INPI** (Lei nº 9.609/1998 e Lei nº 9.610/1998) e seus direitos autorais são reservados aos autores e à UFR.
+
+Até a conclusão do registro e definição formal dos termos de licenciamento:
+
+- ✅ É permitida a **visualização e o estudo** do código-fonte para fins acadêmicos, de pesquisa e avaliação, sem fins comerciais.
+- ❌ **Não é permitida**, sem autorização expressa e por escrito dos autores: reprodução, distribuição, modificação, criação de obras derivadas, uso comercial, sublicença ou cessão de direitos.
+
+O software é fornecido "no estado em que se encontra", sem garantias de qualquer tipo. Veja o texto completo em [LICENSE](LICENSE).
 
 ## 📚 Como citar
 
 Se o TERMO-CP for utilizado em trabalhos acadêmicos, você pode citá-lo como:
 
 ```
-CANDIDO, G.; FONSECA, F. TERMO-CP: plataforma computacional para simulação de
-estados e processos termodinâmicos. <ano>. Disponível em:
+SANTOS, G. C. M. dos; FONSECA, F. B. TERMO-CP: plataforma computacional para
+simulação de estados e processos termodinâmicos. Universidade Federal de
+Rondonópolis (UFR), <ano>. Disponível em:
 https://gcandid0.pythonanywhere.com/. Acesso em: <data>.
 ```
+
+## 🤝 Contribuindo
+
+Contribuições são bem-vindas, respeitando os termos da [licença](#-licença) — em especial, entre em contato com os autores antes de propor alterações de código. Veja o guia completo em [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ---
 
 > [!WARNING]
-> O TERMO-CP tem finalidade educacional. Resultados devem ser validados antes de aplicações de engenharia críticas.
+> O TERMO-CP tem finalidade educacional e os resultados devem ser validados antes de aplicações de engenharia críticas. O software encontra-se em processo de registro no INPI e é distribuído sob termos restritivos — consulte a [Licença](#-licença) antes de qualquer uso além de visualização e estudo.
