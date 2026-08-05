@@ -225,14 +225,70 @@ El software se proporciona "tal cual", sin garantías de ningún tipo. Consulta 
 
 ## Cómo citar
 
-Si TERMO-CP se utiliza en trabajos académicos, puedes citarlo como:
+Si TERMO-CP se utiliza en trabajos académicos, puedes citarlo en diferentes formatos:
+
+<details>
+<summary><strong>APA</strong></summary>
 
 ```
-SANTOS, G. C. M. dos; FONSECA, F. B. TERMO-CP: plataforma computacional para
-la simulación de estados y procesos termodinámicos. Universidade Federal de
-Rondonópolis (UFR), <año>. Disponible en:
-https://gcandid0.pythonanywhere.com/. Acceso en: <fecha>.
+Santos, G. C. M., & Fonseca, F. B. (<año>). TERMO-CP: plataforma computacional
+para la simulación de estados y procesos termodinámicos [Software].
+Universidade Federal de Rondonópolis. https://gcandid0.pythonanywhere.com/
 ```
+</details>
+
+<details>
+<summary><strong>Vancouver</strong></summary>
+
+```
+Santos GCM, Fonseca FB. TERMO-CP: plataforma computacional para la simulación
+de estados y procesos termodinámicos [Internet]. Rondonópolis: Universidade
+Federal de Rondonópolis; <año> [citado <fecha>]. Disponible en:
+https://gcandid0.pythonanywhere.com/
+```
+</details>
+
+<details>
+<summary><strong>IEEE</strong></summary>
+
+```
+G. C. M. Santos y F. B. Fonseca, "TERMO-CP: plataforma computacional para la
+simulación de estados y procesos termodinámicos," Universidade Federal de
+Rondonópolis (UFR), <año>. [En línea]. Disponible:
+https://gcandid0.pythonanywhere.com/
+```
+</details>
+
+<details>
+<summary><strong>BibTeX</strong></summary>
+
+```bibtex
+@software{termo_cp,
+  author  = {Santos, Gabriel Candido Messias dos and Fonseca, Fábio Basaglia},
+  title   = {TERMO-CP: plataforma computacional para la simulación de estados
+             y procesos termodinámicos},
+  year    = {<año>},
+  institution = {Universidade Federal de Rondonópolis (UFR)},
+  url     = {https://gcandid0.pythonanywhere.com/},
+  note    = {Acceso en: <fecha>}
+}
+```
+</details>
+
+<details>
+<summary><strong>RIS</strong> (Zotero, Mendeley, EndNote)</summary>
+
+```
+TY  - COMP
+AU  - Santos, Gabriel Candido Messias dos
+AU  - Fonseca, Fábio Basaglia
+TI  - TERMO-CP: plataforma computacional para la simulación de estados y procesos termodinámicos
+PY  - <año>
+PB  - Universidade Federal de Rondonópolis (UFR)
+UR  - https://gcandid0.pythonanywhere.com/
+ER  -
+```
+</details>
 
 ## Contribuir
 

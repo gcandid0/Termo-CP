@@ -23,7 +23,7 @@
 
 <br/>
 
-<a href="https://github.com/gcandid0/Termo-CP/stargazers"><img src="https://img.shields.io/github/stars/gcandid0/Termo-CP?style=flat-square&color=f0b429&label=stars" alt="GitHub estrelas"></a>
+<a href="https://github.com/gcandid0/Termo-CP/stargazers"><img src="https://img.shields.io/github/stars/gcandid0/Termo-CP?style=flat-square&color=f0b429&label=stars" alt="GitHub stars"></a>
 <a href="https://github.com/gcandid0/Termo-CP/commits/main"><img src="https://img.shields.io/github/last-commit/gcandid0/Termo-CP?style=flat-square&color=2b9246&label=ultimo%20commit" alt="Último commit"></a>
 <a href="https://github.com/gcandid0/Termo-CP"><img src="https://img.shields.io/github/repo-size/gcandid0/Termo-CP?style=flat-square&color=1a5fb4&label=tamanho" alt="Tamanho do repositório"></a>
 <a href="https://github.com/gcandid0/Termo-CP/issues"><img src="https://img.shields.io/github/issues/gcandid0/Termo-CP?style=flat-square&color=b91c1c&label=issues" alt="Issues"></a>
@@ -226,14 +226,81 @@ O software é fornecido "no estado em que se encontra", sem garantias de qualque
 
 ## Como citar
 
-Se o TERMO-CP for utilizado em trabalhos acadêmicos, você pode citá-lo como:
+Se o TERMO-CP for utilizado em trabalhos acadêmicos, você pode citá-lo em diferentes formatos:
+
+<details>
+<summary><strong>ABNT</strong></summary>
 
 ```
-SANTOS, G. C. M. dos; FONSECA, F. B. TERMO-CP: plataforma computacional para
-simulação de estados e processos termodinâmicos. Universidade Federal de
-Rondonópolis (UFR), <ano>. Disponível em:
-https://gcandid0.pythonanywhere.com/. Acesso em: <data>.
+SANTOS, Gabriel Candido Messias dos; FONSECA, Fábio Basaglia. TERMO-CP:
+plataforma computacional para simulação de estados e processos termodinâmicos.
+Rondonópolis: Universidade Federal de Rondonópolis (UFR), <ano>. Disponível
+em: https://gcandid0.pythonanywhere.com/. Acesso em: <data>.
 ```
+</details>
+
+<details>
+<summary><strong>APA</strong></summary>
+
+```
+Santos, G. C. M., & Fonseca, F. B. (<ano>). TERMO-CP: plataforma computacional
+para simulação de estados e processos termodinâmicos [Software]. Universidade
+Federal de Rondonópolis. https://gcandid0.pythonanywhere.com/
+```
+</details>
+
+<details>
+<summary><strong>Vancouver</strong></summary>
+
+```
+Santos GCM, Fonseca FB. TERMO-CP: plataforma computacional para simulação de
+estados e processos termodinâmicos [Internet]. Rondonópolis: Universidade
+Federal de Rondonópolis; <ano> [citado <data>]. Disponível em:
+https://gcandid0.pythonanywhere.com/
+```
+</details>
+
+<details>
+<summary><strong>IEEE</strong></summary>
+
+```
+G. C. M. Santos and F. B. Fonseca, "TERMO-CP: plataforma computacional para
+simulação de estados e processos termodinâmicos," Universidade Federal de
+Rondonópolis (UFR), <ano>. [Online]. Disponível:
+https://gcandid0.pythonanywhere.com/
+```
+</details>
+
+<details>
+<summary><strong>BibTeX</strong></summary>
+
+```bibtex
+@software{termo_cp,
+  author  = {Santos, Gabriel Candido Messias dos and Fonseca, Fábio Basaglia},
+  title   = {TERMO-CP: plataforma computacional para simulação de estados e
+             processos termodinâmicos},
+  year    = {<ano>},
+  institution = {Universidade Federal de Rondonópolis (UFR)},
+  url     = {https://gcandid0.pythonanywhere.com/},
+  note    = {Acesso em: <data>}
+}
+```
+</details>
+
+<details>
+<summary><strong>RIS</strong> (Zotero, Mendeley, EndNote)</summary>
+
+```
+TY  - COMP
+AU  - Santos, Gabriel Candido Messias dos
+AU  - Fonseca, Fábio Basaglia
+TI  - TERMO-CP: plataforma computacional para simulação de estados e processos termodinâmicos
+PY  - <ano>
+PB  - Universidade Federal de Rondonópolis (UFR)
+UR  - https://gcandid0.pythonanywhere.com/
+ER  -
+```
+</details>
 
 ## Contribuindo
 
