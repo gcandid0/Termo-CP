@@ -24,6 +24,19 @@
 
 </div>
 
+## Índice
+
+- [Sobre o TERMO-CP](#sobre-o-termo-cp)
+- [Idiomas](#-idiomas)
+- [Substâncias suportadas](#substâncias-suportadas)
+- [Como usar](#-como-usar)
+- [Funcionalidades](#-funcionalidades)
+- [Stack Tecnológica](#️-stack-tecnológica)
+- [Roadmap](#️-roadmap)
+- [Contato](#-contato)
+- [Licença](#-licença)
+- [Como citar](#-como-citar)
+
 ---
 
 ## Sobre o TERMO-CP
@@ -47,6 +60,12 @@ O projeto tem foco educacional, voltado a estudantes, professores e engenheiros 
     <img src="./assets/screenshot-home.png" alt="Tela inicial do TERMO-CP" width="900" style="border-radius: 12px;">
   </a>
 </div>
+
+## 🌐 Idiomas
+
+A plataforma está disponível em três idiomas, selecionáveis diretamente no menu superior:
+
+🇧🇷 Português &nbsp;|&nbsp; 🇺🇸 English &nbsp;|&nbsp; 🇪🇸 Español
 
 ## Substâncias suportadas
 
@@ -129,6 +148,18 @@ Os resultados podem ser exportados como imagem/relatório diretamente da página
 
 ---
 
+## 🗺️ Roadmap
+
+<!-- Marque o que já está pronto e o que está planejado -->
+- [x] Cálculo de estados para 8 substâncias
+- [x] Simulação de processos com animação do pistão
+- [x] Exportação de relatório (imagem)
+- [x] Suporte a PT/EN/ES
+- [ ] `<próxima funcionalidade planejada>`
+- [ ] `<próxima funcionalidade planejada>`
+
+---
+
 ## 📬 Contato
 
 Dúvidas, sugestões ou relatos de problemas podem ser enviados pelo [formulário de contato](https://gcandid0.pythonanywhere.com/) da plataforma.
@@ -136,6 +167,21 @@ Dúvidas, sugestões ou relatos de problemas podem ser enviados pelo [formulári
 ## Responsáveis
 
 Projeto desenvolvido por **Gabriel Candido** e **Fábio Fonseca**.
+
+## 📄 Licença
+
+<!-- Defina a licença do projeto, ex.: MIT, GPL-3.0, ou "Todos os direitos reservados" -->
+Este projeto é distribuído sob a licença `<defina aqui>`. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
+
+## 📚 Como citar
+
+Se o TERMO-CP for utilizado em trabalhos acadêmicos, você pode citá-lo como:
+
+```
+CANDIDO, G.; FONSECA, F. TERMO-CP: plataforma computacional para simulação de
+estados e processos termodinâmicos. <ano>. Disponível em:
+https://gcandid0.pythonanywhere.com/. Acesso em: <data>.
+```
 
 ---
 
