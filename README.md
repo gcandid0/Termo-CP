@@ -1,3 +1,4 @@
+<a name="topo"></a>
 <p align="center">
   <a href="https://gcandid0.pythonanywhere.com/">
     <img src="./assets/logo.png" alt="TERMO-CP Logo" width="120">
@@ -10,15 +11,24 @@
 
 ### Plataforma web para simulação de estados e processos termodinâmicos em sistemas cilindro-pistão.
 
+<sub>🇧🇷 Português &nbsp;|&nbsp; <a href="./README.en.md">🇺🇸 English</a> &nbsp;|&nbsp; <a href="./README.es.md">🇪🇸 Español</a></sub>
+
 <br/>
 
 <a href="https://gcandid0.pythonanywhere.com/"><img src="https://img.shields.io/badge/Acessar-gcandid0.pythonanywhere.com-2b9246?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Acessar plataforma"></a>
-<a href="https://www.djangoproject.com/"><img src="https://img.shields.io/badge/Django-6.0.5-092E20?style=for-the-badge&logo=django&logoColor=white" alt="Django">
-<a href="https://www.python.org/"><img src="https://img.shields.io/badge/Python%203-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python 3">
-<a href="https://p5js.org/"><img src="https://img.shields.io/badge/P5.js-ED225D?style=for-the-badge&logo=p5dotjs&logoColor=white" alt="P5.js">
-<a href="https://github.com/gcandid0/Termo-CP/blob/main/LICENSE"><img src="https://img.shields.io/badge/Licen%C3%A7a-Todos%20os%20direitos%20reservados-b91c1c?style=for-the-badge" alt="Licença">
+<a href="https://www.djangoproject.com/"><img src="https://img.shields.io/badge/Django-6.0.5-092E20?style=for-the-badge&logo=django&logoColor=white" alt="Django"></a>
+<a href="https://www.python.org/"><img src="https://img.shields.io/badge/Python%203-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python 3"></a>
+<a href="https://p5js.org/"><img src="https://img.shields.io/badge/P5.js-ED225D?style=for-the-badge&logo=p5dotjs&logoColor=white" alt="P5.js"></a>
+<a href="https://github.com/gcandid0/Termo-CP/blob/main/LICENSE"><img src="https://img.shields.io/badge/Licen%C3%A7a-Todos%20os%20direitos%20reservados-b91c1c?style=for-the-badge" alt="Licença"></a>
 
 <br/>
+
+<a href="https://github.com/gcandid0/Termo-CP/stargazers"><img src="https://img.shields.io/github/stars/gcandid0/Termo-CP?style=flat-square&color=f0b429&label=stars" alt="GitHub stars"></a>
+<a href="https://github.com/gcandid0/Termo-CP/commits/main"><img src="https://img.shields.io/github/last-commit/gcandid0/Termo-CP?style=flat-square&color=2b9246&label=último%20commit" alt="Último commit"></a>
+<a href="https://github.com/gcandid0/Termo-CP"><img src="https://img.shields.io/github/repo-size/gcandid0/Termo-CP?style=flat-square&color=1a5fb4&label=tamanho" alt="Tamanho do repositório"></a>
+<a href="https://github.com/gcandid0/Termo-CP/issues"><img src="https://img.shields.io/github/issues/gcandid0/Termo-CP?style=flat-square&color=b91c1c&label=issues" alt="Issues"></a>
+
+<br/><br/>
 
 <a href="http://lattes.cnpq.br/6696786236047929"><img src="https://img.shields.io/badge/Lattes-Curr%C3%ADculo-1a5fb4?style=for-the-badge&logo=googlescholar&logoColor=white" alt="Lattes"></a>
 <a href="https://www.linkedin.com/in/gabriel-candido-235637226/"><img src="https://img.shields.io/badge/LinkedIn-Gabriel%20Candido-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn"></a>
@@ -31,17 +41,17 @@
 ## Índice
 
 - [Sobre o TERMO-CP](#sobre-o-termo-cp)
-- [Idiomas](#-idiomas)
+- [Idiomas](#idiomas)
 - [Substâncias suportadas](#substâncias-suportadas)
-- [Como usar](#-como-usar)
-- [Funcionalidades](#-funcionalidades)
-- [Stack Tecnológica](#️-stack-tecnológica)
-- [Roadmap](#️-roadmap)
-- [Contato](#-contato)
-- [Autores](#-autores)
-- [Licença](#-licença)
-- [Como citar](#-como-citar)
-- [Contribuindo](#-contribuindo)
+- [Como usar](#como-usar)
+- [Funcionalidades](#funcionalidades)
+- [Stack Tecnológica](#stack-tecnológica)
+- [Roadmap](#roadmap)
+- [Contato](#contato)
+- [Autores](#autores)
+- [Licença](#licença)
+- [Como citar](#como-citar)
+- [Contribuindo](#contribuindo)
 
 ---
 
@@ -67,11 +77,15 @@ O projeto tem foco educacional, voltado a estudantes, professores e engenheiros 
   </a>
 </div>
 
-## 🌐 Idiomas
+<p align="right"><a href="#topo">↑ voltar ao topo</a></p>
+
+## Idiomas
 
 A plataforma está disponível em três idiomas, selecionáveis diretamente no menu superior:
 
 🇧🇷 Português &nbsp;|&nbsp; 🇺🇸 English &nbsp;|&nbsp; 🇪🇸 Español
+
+<p align="right"><a href="#topo">↑ voltar ao topo</a></p>
 
 ## Substâncias suportadas
 
@@ -86,10 +100,12 @@ A plataforma está disponível em três idiomas, selecionáveis diretamente no m
 | Nitrogênio | ✅ | ✅ |
 | Metano | ✅ | ✅ |
 
-## 🚀 Como usar
+<p align="right"><a href="#topo">↑ voltar ao topo</a></p>
+
+## Como usar
 
 > [!IMPORTANT]
-> O código-fonte está disponível neste repositório apenas para **visualização e estudo acadêmico**, conforme a [licença](#-licença) vigente. Para rodar localmente com fins de pesquisa/avaliação:
+> O código-fonte está disponível neste repositório apenas para **visualização e estudo acadêmico**, conforme a [licença](#licença) vigente. Para rodar localmente com fins de pesquisa/avaliação:
 
 **Pré-requisitos:**
 - Python 3
@@ -137,9 +153,11 @@ Não é necessário instalar nada - acesse diretamente a versão publicada:
 
 **[gcandid0.pythonanywhere.com →](https://gcandid0.pythonanywhere.com/)**
 
+<p align="right"><a href="#topo">↑ voltar ao topo</a></p>
+
 ---
 
-## ✨ Funcionalidades
+## Funcionalidades
 
 ### Simulação de Estados
 
@@ -157,18 +175,22 @@ Cada resultado é acompanhado de uma animação 3D em P5.js que representa o com
 
 Os resultados podem ser exportados como imagem/relatório diretamente da página, usando html2canvas.
 
+<p align="right"><a href="#topo">↑ voltar ao topo</a></p>
+
 ---
 
-## 🛠️ Stack Tecnológica
+## Stack Tecnológica
 
 - **Backend:** Python 3 + Django
 - **Frontend:** HTML5, JavaScript, P5.js
 - **Deploy:** PythonAnywhere
 - **Configuração:** python-dotenv (`.env` com `SECRET_KEY` e `DEBUG`)
 
+<p align="right"><a href="#topo">↑ voltar ao topo</a></p>
+
 ---
 
-## 🗺️ Roadmap
+## Roadmap
 
 <!-- Marque o que já está pronto e o que está planejado -->
 - [x] Cálculo de estados para 8 substâncias
@@ -176,20 +198,22 @@ Os resultados podem ser exportados como imagem/relatório diretamente da página
 - [x] Exportação de relatório
 - [x] Suporte a PT/EN/ES
 
+<p align="right"><a href="#topo">↑ voltar ao topo</a></p>
+
 ---
 
-## 📬 Contato
+## Contato
 
 Dúvidas, sugestões ou relatos de problemas podem ser enviados pelo [formulário de contato](https://gcandid0.pythonanywhere.com/) da plataforma, por [issues no GitHub](https://github.com/gcandid0/Termo-CP/issues) ou diretamente pelos e-mails abaixo.
 
-## 👤 Autores
+## Autores
 
 Projeto desenvolvido no âmbito de pesquisa acadêmica da **Universidade Federal de Rondonópolis (UFR)**:
 
 - **Gabriel Candido Messias dos Santos** — [gabrielcandidomds@gmail.com](mailto:gabrielcandidomds@gmail.com) · [Lattes](http://lattes.cnpq.br/6696786236047929) · [LinkedIn](https://www.linkedin.com/in/gabriel-candido-235637226/)
 - **Fábio Basaglia Fonseca** — [fabio.fonseca@ufr.edu.br](mailto:fabio.fonseca@ufr.edu.br)
 
-## 📄 Licença
+## Licença
 
 O TERMO-CP está em **processo de registro junto ao INPI** (Lei nº 9.609/1998 e Lei nº 9.610/1998) e seus direitos autorais são reservados aos autores e à UFR.
 
@@ -200,7 +224,7 @@ Até a conclusão do registro e definição formal dos termos de licenciamento:
 
 O software é fornecido "no estado em que se encontra", sem garantias de qualquer tipo. Veja o texto completo em [LICENSE](LICENSE).
 
-## 📚 Como citar
+## Como citar
 
 Se o TERMO-CP for utilizado em trabalhos acadêmicos, você pode citá-lo como:
 
@@ -211,11 +235,28 @@ Rondonópolis (UFR), <ano>. Disponível em:
 https://gcandid0.pythonanywhere.com/. Acesso em: <data>.
 ```
 
-## 🤝 Contribuindo
+## Contribuindo
 
-Contribuições são bem-vindas, respeitando os termos da [licença](#-licença) — em especial, entre em contato com os autores antes de propor alterações de código. Veja o guia completo em [CONTRIBUTING.md](CONTRIBUTING.md).
+Contribuições são bem-vindas, respeitando os termos da [licença](#licença) — em especial, entre em contato com os autores antes de propor alterações de código. Veja o guia completo em [CONTRIBUTING.md](CONTRIBUTING.md).
+
+<p align="right"><a href="#topo">↑ voltar ao topo</a></p>
 
 ---
 
 > [!WARNING]
-> O TERMO-CP tem finalidade educacional e os resultados devem ser validados antes de aplicações de engenharia críticas. O software encontra-se em processo de registro no INPI e é distribuído sob termos restritivos — consulte a [Licença](#-licença) antes de qualquer uso além de visualização e estudo.
+> O TERMO-CP tem finalidade educacional e os resultados devem ser validados antes de aplicações de engenharia críticas. O software encontra-se em processo de registro no INPI e é distribuído sob termos restritivos — consulte a [Licença](#licença) antes de qualquer uso além de visualização e estudo.
+
+<br>
+
+<div align="center">
+  <img src="./assets/logo.png" alt="TERMO-CP" width="48">
+  <br>
+  <sub>
+    <strong>TERMO-CP</strong> · desenvolvido na <a href="https://www.ufr.edu.br/">Universidade Federal de Rondonópolis (UFR)</a><br>
+    <a href="https://gcandid0.pythonanywhere.com/">Plataforma</a> ·
+    <a href="https://github.com/gcandid0/Termo-CP">GitHub</a> ·
+    <a href="http://lattes.cnpq.br/6696786236047929">Lattes</a> ·
+    <a href="https://www.linkedin.com/in/gabriel-candido-235637226/">LinkedIn</a> ·
+    <a href="mailto:gabrielcandidomds@gmail.com">Contato</a>
+  </sub>
+</div>
