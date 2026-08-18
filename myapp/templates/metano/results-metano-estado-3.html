@@ -34,15 +34,14 @@
         overflow-y: auto; /* Se a tela for pequena, SÓ o cartão rola */
     }
 
-    /* Scrollbar customizada (Em tons de Marrom para o Metano) */
+    /* Scrollbar customizada para o cartão ficar elegante */
     .results-card::-webkit-scrollbar { width: 6px; }
     .results-card::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 10px; }
     .results-card::-webkit-scrollbar-thumb { background: #ccc; border-radius: 10px; }
-    .results-card::-webkit-scrollbar-thumb:hover { background: #8B4513; }
+    .results-card::-webkit-scrollbar-thumb:hover { background: var(--primary-color); }
 
-    /* Título modificado para Metano */
-    .methane-title {
-        color: #8B4513 !important;
+    .results-card h2 {
+        color: var(--primary-color);
         font-size: 1.6em;
         border-bottom: 2px solid #eee;
         padding-bottom: 12px;
@@ -62,9 +61,7 @@
 
     .data-row:last-child { border-bottom: none; }
     .data-label { font-weight: bold; color: #555; }
-
-    /* Valores em Marrom para o Metano */
-    .methane-value { font-weight: bold; color: #8B4513 !important; text-align: right; }
+    .data-value { font-weight: bold; color: var(--primary-color); text-align: right; }
 
     /* Container do Canvas (Direita) */
     .visualization-container {
@@ -79,6 +76,15 @@
         overflow: hidden;
         height: 100%; /* Preenche dinamicamente o espaço sem quebrar a tela */
         width: 100%;
+    }
+
+    /* Canvas tem resolução lógica fixa (400x560); o CSS escala a exibição
+       para caber no container mantendo a proporção, sem cortar o cilindro. */
+    .visualization-container canvas {
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: contain;
+        display: block;
     }
 
     /* --- Estilos da Legenda do Cilindro --- */
@@ -105,8 +111,6 @@
 
     .legend-cilindro { background-color: transparent; border: 1px solid #888; }
     .legend-pistao { background-color: #a2a2a2; }
-
-    /* Cores restritas à legenda desta página (Metano) */
     .legend-vapor { background-color: rgba(160, 82, 45, 0.7); border: 1px solid #333; }
     .legend-liquido { background-color: #8B4513; }
 
@@ -139,9 +143,8 @@
     .btn-secondary { background-color: #6c757d; color: white; }
     .btn-secondary:hover { background-color: #5a6268; transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
 
-    /* Botão Primário Marrom para Metano */
-    .methane-btn { background-color: #8B4513 !important; color: #FFFFFF !important; }
-    .methane-btn:hover { background-color: #A0522D !important; transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
+    .btn-primary { background-color: var(--secondary-color); color: white; }
+    .btn-primary:hover { background-color: var(--primary-color); transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
 
     /* Labels da Escala do P5 */
     .scale-label {
@@ -188,14 +191,14 @@
 <div class="results-dashboard">
     <!-- Bloco Esquerdo: Resultados -->
     <div class="results-card">
-        <h2 class="methane-title">
+        <h2>
             <i class="fas fa-clipboard-list"></i>
             <span class="lang-text" data-pt-br="Resultados" data-en="Results" data-es="Resultados">Resultados</span>
         </h2>
 
         <div class="data-row">
             <span class="data-label lang-text" data-pt-br="Fase:" data-en="Phase:" data-es="Fase:">Fase:</span>
-            <span class="methane-value">
+            <span class="data-value">
                 {% if fase == 1 %}
                     <span class="lang-text" data-pt-br="Líquido comprimido" data-en="Compressed liquid" data-es="Líquido comprimido">Líquido comprimido</span>
                 {% elif fase == 2 %}
@@ -208,51 +211,51 @@
 
         <div class="data-row">
             <span class="data-label lang-text" data-pt-br="Massa (m):" data-en="Mass (m):" data-es="Masa (m):">Massa (m):</span>
-            <span class="methane-value">1,0 kg</span>
+            <span class="data-value">1,0 kg</span>
         </div>
 
         <div class="data-row">
             <span class="data-label lang-text" data-pt-br="Temperatura (T):" data-en="Temperature (T):" data-es="Temperatura (T):">Temperatura (T):</span>
-            <span class="methane-value">{{ temperatura }} K</span>
+            <span class="data-value">{{ temperatura }} K</span>
         </div>
 
         <div class="data-row">
             <span class="data-label lang-text" data-pt-br="Pressão (p):" data-en="Pressure (p):" data-es="Presión (p):">Pressão (p):</span>
-            <span class="methane-value">{{ pressao }} kPa</span>
+            <span class="data-value">{{ pressao }} kPa</span>
         </div>
 
         <div class="data-row">
             <span class="data-label lang-text" data-pt-br="Volume específico (v):" data-en="Specific volume (v):" data-es="Volumen específico (v):">Volume específico (v):</span>
-            <span class="methane-value">{{ volume_especifico }} m³/kg</span>
+            <span class="data-value">{{ volume_especifico }} m³/kg</span>
         </div>
 
         <div class="data-row">
             <span class="data-label lang-text" data-pt-br="Energia interna (u):" data-en="Internal energy (u):" data-es="Energía interna (u):">Energia interna (u):</span>
-            <span class="methane-value">{{ energia_interna }} kJ/kg</span>
+            <span class="data-value">{{ energia_interna }} kJ/kg</span>
         </div>
 
         <div class="data-row">
             <span class="data-label lang-text" data-pt-br="Entalpia (h):" data-en="Enthalpy (h):" data-es="Entalpía (h):">Entalpia (h):</span>
-            <span class="methane-value">{{ entalpia_especifica }} kJ/kg</span>
+            <span class="data-value">{{ entalpia_especifica }} kJ/kg</span>
         </div>
 
         <div class="data-row">
             <span class="data-label lang-text" data-pt-br="Entropia (s):" data-en="Entropy (s):" data-es="Entropía (s):">Entropia (s):</span>
-            <span class="methane-value">{{ entropia_especifica }} kJ/kg.K</span>
+            <span class="data-value">{{ entropia_especifica }} kJ/kg.K</span>
         </div>
 
         {% if fase == 3 %}
         <div class="data-row">
             <span class="data-label lang-text" data-pt-br="Título (x):" data-en="Quality (x):" data-es="Calidad (x):">Título (x):</span>
-            <span class="methane-value">{{ titulo }} %</span>
+            <span class="data-value">{{ titulo }} %</span>
         </div>
         <div class="data-row">
             <span class="data-label lang-text" data-pt-br="Volume líquido (Vl):" data-en="Liquid volume (Vl):" data-es="Volumen líquido (Vl):">Volume líquido (Vl):</span>
-            <span class="methane-value">{{ VolumeL }} m³</span>
+            <span class="data-value">{{ VolumeL }} m³</span>
         </div>
         <div class="data-row">
             <span class="data-label lang-text" data-pt-br="Volume vapor (Vv):" data-en="Vapor volume (Vv):" data-es="Volumen vapor (Vv):">Volume vapor (Vv):</span>
-            <span class="methane-value">{{ VolumeV }} m³</span>
+            <span class="data-value">{{ VolumeV }} m³</span>
         </div>
         {% endif %}
 
@@ -330,8 +333,9 @@
 
     function setup() {
         const wrapper = document.getElementById('canvas-wrapper');
-        // Cria o canvas usando exatamente o tamanho da div mãe pra evitar rolagem
-        canvas = createCanvas(wrapper.clientWidth, wrapper.clientHeight, WEBGL);
+        // Canvas com resolução lógica fixa; o CSS (object-fit: contain) escala
+        // a exibição para caber em qualquer tamanho de container sem cortar o desenho.
+        canvas = createCanvas(400, 560, WEBGL);
         canvas.parent('canvas-wrapper');
         noStroke();
         setTimeout(createHtmlScale, 100);
@@ -349,15 +353,13 @@
         hemboloB = lerp(hemboloB, targetH3B, 0.1);
         hemboloC = lerp(hemboloC, targetH3C, 0.1);
 
-        // METANO: DESENHANDO O LÍQUIDO (Marrom Escuro)
+        // Desenho do Líquido
         if (ha1 < 100) {
-            fill(139, 69, 19, 255); // #8B4513
+            fill(139, 69, 19, 255);
             drawCap(r1, ha1); drawCap(r1, 100); drawSide(r1, ha1, 100);
         }
-
-        // METANO: DESENHANDO O VAPOR (Marrom Claro com Transparência)
         if (ha4 < 100) {
-            fill(160, 82, 45, 100); // #A0522D
+            fill(160, 82, 45, 100);
             drawCap(r4, ha4); drawCap(r4, 100); drawSide(r4, ha4, 100);
         }
 
@@ -383,10 +385,18 @@
         const canvasRect = canvas.elt.getBoundingClientRect();
         const wrapperRect = document.getElementById('canvas-wrapper').getBoundingClientRect();
 
-        const canvasCenterX = (canvasRect.left - wrapperRect.left) + width / 2;
-        const canvasCenterY = (canvasRect.top - wrapperRect.top) + height / 2;
+        // Fator de escala entre o tamanho lógico do canvas (400x560) e o tamanho exibido em CSS
+        // canvasRect é a CAIXA (100% do container). Como o canvas usa object-fit:contain,
+        // o desenho real fica "letterboxed" dentro dessa caixa — precisamos calcular o
+        // tamanho/posição REAIS do conteúdo renderizado, não apenas o tamanho da caixa.
+        const scale = Math.min(canvasRect.width / width, canvasRect.height / height);
+        const scaleX = scale;
+        const scaleY = scale;
 
-        // Compensa o Translate (Y) que aplicamos no Draw
+        const canvasCenterX = (canvasRect.left - wrapperRect.left) + canvasRect.width / 2;
+        const canvasCenterY = (canvasRect.top - wrapperRect.top) + canvasRect.height / 2;
+
+        // Compensa o Translate (Y) que aplicamos no Draw (em unidades lógicas do canvas)
         const translateYOffset = height * 0.15;
 
         let logDivisions = [0.0001, 0.001, 0.01, 0.1, 1, 10, 100, 1000];
@@ -397,8 +407,9 @@
 
         for (let div of logDivisions) {
             let yPosP5 = logDivisionToHeight(div, -266, 108);
-            let yPosCSS = canvasCenterY + translateYOffset + yPosP5 - 6;
-            let xPosCSS = canvasCenterX - r2 - 85;
+            let yTranslated = yPosP5 + translateYOffset;
+            let yPosCSS = canvasCenterY + (yTranslated * scaleY) - 6;
+            let xPosCSS = canvasCenterX - (112 * scaleX) - 65;
 
             let label = document.createElement('div');
             label.className = 'scale-label';
@@ -416,11 +427,12 @@
         };
 
         let yPosP5_1000 = logDivisionToHeight(1000, -266, 108);
+        let yTranslatedTitle = yPosP5_1000 + translateYOffset;
         let titleLabel = document.createElement('div');
         titleLabel.className = 'scale-label';
         titleLabel.innerText = strVolume[currentLang];
-        titleLabel.style.top = (canvasCenterY + translateYOffset + yPosP5_1000 - 55) + 'px';
-        titleLabel.style.left = (canvasCenterX - r2 - 85) + 'px';
+        titleLabel.style.top = (canvasCenterY + (yTranslatedTitle * scaleY) - (55 * scaleY)) + 'px';
+        titleLabel.style.left = (canvasCenterX - (112 * scaleX) - 75) + 'px';
         titleLabel.style.fontWeight = 'bold';
         titleLabel.style.width = '80px';
         titleLabel.style.fontSize = '14px';
@@ -430,8 +442,8 @@
 
     // Se a janela for redimensionada, o canvas acompanha dinamicamente e recria a escala
     function windowResized() {
-        const wrapper = document.getElementById('canvas-wrapper');
-        resizeCanvas(wrapper.clientWidth, wrapper.clientHeight);
+        // Canvas tem resolução lógica fixa (escalada via CSS), então só
+        // precisamos recalcular a posição das labels quando a tela muda.
         setTimeout(createHtmlScale, 100);
     }
 
