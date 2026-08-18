@@ -86,6 +86,15 @@
         width: 100%;
     }
 
+    /* Canvas tem resolução lógica fixa (400x560); o CSS escala a exibição
+       para caber no container mantendo a proporção, sem cortar o cilindro. */
+    .visualization-container canvas {
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: contain;
+        display: block;
+    }
+
     /* --- Estilos da Legenda do estado --- */
     .legend-container {
         position: absolute;
@@ -166,10 +175,24 @@
             align-items: center;
             max-height: none; /* Em mobile, permite rolar a página inteira */
             overflow: visible;
+            padding: 12px;
+            gap: 20px;
         }
-        .results-card, .visualization-container { width: 100%; max-width: 800px; height: auto; min-height: 400px;}
+        .results-card { width: 100%; max-width: 800px; height: auto; }
+        .visualization-container { width: 100%; max-width: 800px; height: 420px; min-height: 420px; }
         .button-group { flex-direction: column; }
         .btn { width: 100%; }
+    }
+
+    @media (max-width: 480px) {
+        .results-card { padding: 18px 16px; }
+        .gas-title { font-size: 1.3em; }
+        .data-row { font-size: 0.9em; padding: 6px 0; }
+        .visualization-container { height: 360px; min-height: 360px; }
+        .legend-container { font-size: 9px; padding: 6px 8px; bottom: 8px; right: 8px; gap: 3px; }
+        .legend-item { gap: 5px; }
+        .legend-color { width: 11px; height: 8px; }
+        .scale-label { font-size: 9px; width: 42px; }
     }
 </style>
 {% endblock %}
@@ -276,8 +299,9 @@
 
     function setup() {
         const wrapper = document.getElementById('canvas-wrapper');
-        // Cria o canvas usando exatamente o tamanho da div mãe pra evitar rolagem
-        canvas = createCanvas(wrapper.clientWidth, wrapper.clientHeight, WEBGL);
+        // Canvas com resolução lógica fixa; o CSS (object-fit: contain) escala
+        // a exibição para caber em qualquer tamanho de container sem cortar o desenho.
+        canvas = createCanvas(400, 560, WEBGL);
         canvas.parent('canvas-wrapper');
         noStroke();
         setTimeout(createHtmlScale, 100);
@@ -322,11 +346,19 @@
         const canvasRect = canvas.elt.getBoundingClientRect();
         const wrapperRect = document.getElementById('canvas-wrapper').getBoundingClientRect();
 
-        const canvasCenterX = (canvasRect.left - wrapperRect.left) + width / 2;
-        const canvasCenterY = (canvasRect.top - wrapperRect.top) + height / 2;
-        
-        // Compensa o Translate (Y) que aplicamos no Draw
-        const translateYOffset = height * 0.15; 
+        // Fator de escala entre o tamanho lógico do canvas (400x560) e o tamanho exibido em CSS
+        // canvasRect é a CAIXA (100% do container). Como o canvas usa object-fit:contain,
+        // o desenho real fica "letterboxed" dentro dessa caixa — precisamos calcular o
+        // tamanho/posição REAIS do conteúdo renderizado, não apenas o tamanho da caixa.
+        const scale = Math.min(canvasRect.width / width, canvasRect.height / height);
+        const scaleX = scale;
+        const scaleY = scale;
+
+        const canvasCenterX = (canvasRect.left - wrapperRect.left) + canvasRect.width / 2;
+        const canvasCenterY = (canvasRect.top - wrapperRect.top) + canvasRect.height / 2;
+
+        // Compensa o Translate (Y) que aplicamos no Draw (em unidades lógicas do canvas)
+        const translateYOffset = height * 0.15;
 
         let logDivisions = [0.0001, 0.001, 0.01, 0.1, 1, 10, 100, 1000];
 
@@ -336,8 +368,9 @@
 
         for (let div of logDivisions) {
             let yPosP5 = logDivisionToHeight(div, -266, 108);
-            let yPosCSS = canvasCenterY + translateYOffset + yPosP5 - 6;
-            let xPosCSS = canvasCenterX - r2 - 85;
+            let yTranslated = yPosP5 + translateYOffset;
+            let yPosCSS = canvasCenterY + (yTranslated * scaleY) - 6;
+            let xPosCSS = canvasCenterX - (r2 * scaleX) - 85;
 
             let label = document.createElement('div');
             label.className = 'scale-label';
@@ -355,22 +388,23 @@
         };
 
         let yPosP5_1000 = logDivisionToHeight(1000, -266, 108);
+        let yTranslatedTitle = yPosP5_1000 + translateYOffset;
         let titleLabel = document.createElement('div');
         titleLabel.className = 'scale-label';
         titleLabel.innerText = strVolume[currentLang];
-        titleLabel.style.top = (canvasCenterY + translateYOffset + yPosP5_1000 - 55) + 'px';
-        titleLabel.style.left = (canvasCenterX - r2 - 85) + 'px';
+        titleLabel.style.top = (canvasCenterY + (yTranslatedTitle * scaleY) - (55 * scaleY)) + 'px';
+        titleLabel.style.left = (canvasCenterX - (r2 * scaleX) - 85) + 'px';
         titleLabel.style.fontWeight = 'bold';
         titleLabel.style.width = '80px';
         titleLabel.style.fontSize = '14px';
-        
+
         scaleContainer.appendChild(titleLabel);
     }
 
     // Se a janela for redimensionada, o canvas acompanha dinamicamente e recria a escala
     function windowResized() {
-        const wrapper = document.getElementById('canvas-wrapper');
-        resizeCanvas(wrapper.clientWidth, wrapper.clientHeight);
+        // Canvas tem resolução lógica fixa (escalada via CSS), então só
+        // precisamos recalcular a posição das labels quando a tela muda.
         setTimeout(createHtmlScale, 100);
     }
 
