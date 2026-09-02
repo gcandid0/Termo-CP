@@ -466,7 +466,11 @@
     .report-cylinder-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
     .report-cylinder-item { background: #000; border-radius: 10px; overflow: hidden; text-align: center; }
     .report-cylinder-label { padding: 10px; font-size: 0.9em; font-weight: bold; color: white; background: rgba(32,55,107,0.9); }
-    .report-cylinder-item img { width: 100%; max-width: 400px; height: auto; display: block; margin: 0 auto; }
+    .report-cylinder-frame {
+        width: 100%; height: 300px; background: #000;
+        display: flex; align-items: center; justify-content: center; overflow: hidden;
+    }
+    .report-cylinder-frame img { max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; display: block; margin: 0 auto; }
     /* ===== DIAGRAMAS - IMPRESSÃO TÉCNICA ===== */
 
     .report-diagram-grid{
@@ -628,9 +632,14 @@
             break-inside: avoid;
             page-break-inside: avoid;
         }
-        .report-cylinder-item img {
-            max-height: 255px !important;
-            width: 100% !important;
+        .report-cylinder-frame {
+            height: 255px !important;
+        }
+        .report-cylinder-frame img {
+            max-height: 100% !important;
+            max-width: 100% !important;
+            width: auto !important;
+            height: auto !important;
             object-fit: contain !important;
         }
         .report-cylinder-label {
@@ -1241,13 +1250,6 @@
             let rawValue = el.getAttribute('data-raw');
             let normalizedValue = rawValue.replace(',', '.');
 
-            if (el.classList.contains('abs-num')) {
-                let numAbs = parseFloat(normalizedValue);
-                if (!isNaN(numAbs)) {
-                    normalizedValue = String(Math.abs(numAbs));
-                }
-            }
-
             if (isEnglish) {
                 el.innerText = normalizedValue;
             } else {
@@ -1807,7 +1809,7 @@
         const raw = String(hasValue ? val : '').replace(',', '.');
         const num = parseFloat(raw);
         if (isNaN(num)) return hasValue ? String(val) : '--';
-        return new Intl.NumberFormat(localeStr, { maximumFractionDigits: 6 }).format(Math.abs(num));
+        return new Intl.NumberFormat(localeStr, { maximumFractionDigits: 6 }).format(num);
     }
 
     function fmtHistoryNum(val) {
@@ -1816,7 +1818,7 @@
         const raw = String(val === undefined || val === null ? '' : val).replace(',', '.');
         const num = parseFloat(raw);
         const safeNum = isNaN(num) ? 0 : num;
-        return new Intl.NumberFormat(localeStr, { maximumFractionDigits: 6 }).format(Math.abs(safeNum));
+        return new Intl.NumberFormat(localeStr, { maximumFractionDigits: 6 }).format(safeNum);
     }
 
     // Retorna os "estados-marco" (1, 2, 3...) construídos a partir de TODOS os
@@ -1909,10 +1911,11 @@
             setCylinderState(vol);
             setTimeout(() => {
                 const wrapperEl = document.getElementById('canvas-wrapper');
+                const p5Canvas  = wrapperEl ? wrapperEl.querySelector('canvas') : null;
+
                 const fallbackToRawCanvas = () => {
-                    const p5Canvas = wrapperEl ? wrapperEl.querySelector('canvas') : null;
                     if (p5Canvas) {
-                        try { resolve(p5Canvas.toDataURL('image/png')); return; }
+                        try { resolve({ src: p5Canvas.toDataURL('image/png'), ratio: 400/550 }); return; }
                         catch(e) { console.warn('Canvas capture error:', e); }
                     }
                     resolve(null);
@@ -1923,12 +1926,45 @@
                     return;
                 }
 
+                // html2canvas NÃO respeita object-fit:contain em <canvas> — ele estica o
+                // bitmap (400x550) para preencher toda a caixa do wrapper, distorcendo o
+                // cilindro. Para evitar isso, fixamos temporariamente o tamanho do canvas
+                // em pixels CSS já na proporção correta (letterbox), do mesmo jeito que o
+                // object-fit faz visualmente, tiramos a foto, e depois desfazemos.
+                const rect = wrapperEl.getBoundingClientRect();
+                const wrapperRatio = (rect.width && rect.height) ? (rect.width / rect.height) : 1;
+                let prevWidth = null, prevHeight = null;
+                if (p5Canvas) {
+                    const canvasRatio = 400 / 550;
+                    let boxW, boxH;
+                    if (wrapperRatio > canvasRatio) {
+                        boxH = rect.height;
+                        boxW = boxH * canvasRatio;
+                    } else {
+                        boxW = rect.width;
+                        boxH = boxW / canvasRatio;
+                    }
+                    prevWidth  = p5Canvas.style.width;
+                    prevHeight = p5Canvas.style.height;
+                    p5Canvas.style.setProperty('width',  boxW + 'px', 'important');
+                    p5Canvas.style.setProperty('height', boxH + 'px', 'important');
+                }
+
+                const restoreCanvasStyle = () => {
+                    if (p5Canvas) {
+                        if (prevWidth)  p5Canvas.style.setProperty('width',  prevWidth);  else p5Canvas.style.removeProperty('width');
+                        if (prevHeight) p5Canvas.style.setProperty('height', prevHeight); else p5Canvas.style.removeProperty('height');
+                    }
+                };
+
                 html2canvas(wrapperEl, { backgroundColor: '#000000', scale: 2, useCORS: true, logging: false })
                     .then(snapCanvas => {
-                        try { resolve(snapCanvas.toDataURL('image/png')); }
+                        restoreCanvasStyle();
+                        try { resolve({ src: snapCanvas.toDataURL('image/png'), ratio: wrapperRatio }); }
                         catch(e) { console.warn('Snapshot capture error:', e); fallbackToRawCanvas(); }
                     })
                     .catch(e => {
+                        restoreCanvasStyle();
                         console.warn('html2canvas falhou, usando captura simples do canvas (sem escala):', e);
                         fallbackToRawCanvas();
                     });
@@ -2110,12 +2146,16 @@
     function populateReportCylinder(images) {
         const noImg = t('Visualização não disponível','Visualization not available','Visualización no disponible');
         let html = '';
-        images.forEach((img, idx) => {
+        images.forEach((entry, idx) => {
             const label = `${t('Estado','State','Estado')} ${idx+1}`;
-            html += img
+            const src   = entry && entry.src ? entry.src : entry; // compat com retorno antigo (string)
+            const ratio = (entry && entry.ratio) ? entry.ratio : 1;
+            html += src
                 ? `<div class="report-cylinder-item">
                        <div class="report-cylinder-label"><i class="fas fa-cube" style="margin-right:6px;"></i>${label}</div>
-                       <img src="${img}" alt="${label}" />
+                       <div class="report-cylinder-frame">
+                           <img src="${src}" alt="${label}" style="aspect-ratio:${ratio};" />
+                       </div>
                    </div>`
                 : `<div class="report-cylinder-item">
                        <div class="report-cylinder-label"><i class="fas fa-cube" style="margin-right:6px;"></i>${label}</div>
