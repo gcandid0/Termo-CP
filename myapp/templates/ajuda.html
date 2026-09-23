@@ -1,0 +1,449 @@
+{% extends 'base.html' %}
+
+{% block title %}TERMO-CP{% endblock %}
+
+{% block extra_css %}
+<style>
+    .help-wrapper {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        padding: 30px 40px 40px;
+        gap: 20px;
+        width: 100%;
+        max-width: 1100px;
+        margin: 0 auto;
+    }
+
+    .help-header {
+        text-align: center;
+        margin-bottom: 5px;
+    }
+
+    .help-header h2 {
+        color: var(--primary-color);
+        font-size: 1.9em;
+        margin: 0 0 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+    }
+
+    .help-header p {
+        color: #666;
+        font-size: 1em;
+        margin: 0;
+        max-width: 700px;
+        margin: 0 auto;
+    }
+
+    /* --- Passos rápidos --- */
+    .quick-steps {
+        display: flex;
+        gap: 16px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .quick-step {
+        flex: 1;
+        min-width: 200px;
+        background: var(--card-bg, white);
+        border-radius: 10px;
+        box-shadow: var(--shadow);
+        padding: 18px;
+        text-align: center;
+        border-top: 3px solid var(--secondary-color);
+    }
+
+    .quick-step .step-num {
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        background: var(--primary-color);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        margin: 0 auto 10px;
+    }
+
+    .quick-step h4 {
+        margin: 0 0 6px;
+        color: var(--primary-color);
+        font-size: 1em;
+    }
+
+    .quick-step p {
+        margin: 0;
+        font-size: 0.85em;
+        color: #666;
+    }
+
+    /* --- Accordion --- */
+    .accordion {
+        background: var(--card-bg, white);
+        border-radius: 10px;
+        box-shadow: var(--shadow);
+        overflow: hidden;
+    }
+
+    .accordion-item {
+        border-bottom: 1px solid #eee;
+    }
+
+    .accordion-item:last-child {
+        border-bottom: none;
+    }
+
+    .accordion-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 18px 22px;
+        cursor: pointer;
+        background: white;
+        transition: var(--hover-transition);
+        user-select: none;
+    }
+
+    .accordion-header:hover {
+        background: #f8fbff;
+    }
+
+    .accordion-header i.icon-topic {
+        color: var(--secondary-color);
+        font-size: 1.1em;
+        width: 22px;
+        text-align: center;
+        flex-shrink: 0;
+    }
+
+    .accordion-header span.topic-title {
+        flex: 1;
+        font-weight: bold;
+        color: var(--primary-color);
+        font-size: 1.05em;
+    }
+
+    .accordion-header i.chevron {
+        color: #999;
+        transition: transform 0.25s ease;
+        flex-shrink: 0;
+    }
+
+    .accordion-item.open .accordion-header i.chevron {
+        transform: rotate(180deg);
+    }
+
+    .accordion-body {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease;
+        background: #f9fbfd;
+    }
+
+    .accordion-item.open .accordion-body {
+        max-height: 1200px;
+    }
+
+    .accordion-body-inner {
+        padding: 4px 22px 22px 56px;
+        color: #444;
+        font-size: 0.95em;
+        line-height: 1.6;
+    }
+
+    .accordion-body-inner ul, .accordion-body-inner ol {
+        margin: 8px 0;
+        padding-left: 20px;
+    }
+
+    .accordion-body-inner li {
+        margin-bottom: 6px;
+    }
+
+    .accordion-body-inner .tip {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        background: #eaf4ff;
+        border-left: 3px solid var(--secondary-color);
+        padding: 10px 14px;
+        border-radius: 6px;
+        margin-top: 10px;
+        font-size: 0.9em;
+    }
+
+    .accordion-body-inner .tip i {
+        color: var(--secondary-color);
+        margin-top: 2px;
+    }
+
+    /* --- Chips de substâncias --- */
+    .substance-chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 10px;
+    }
+
+    .substance-chips span {
+        background: #eee;
+        color: #444;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 0.85em;
+        font-weight: bold;
+    }
+
+    @media (max-width: 992px) {
+        .help-wrapper { padding: 20px; }
+        .quick-steps { flex-direction: column; }
+        .accordion-body-inner { padding-left: 22px; }
+    }
+</style>
+{% endblock %}
+
+{% block help_content %}
+<p class="lang-text"
+   data-pt-br="Esta página reúne o tutorial completo do TERMO-CP, com explicações sobre como calcular estados e processos termodinâmicos para cada substância disponível. Use-a como referência sempre que tiver dúvidas durante os cálculos."
+   data-en="This page brings together the complete TERMO-CP tutorial, explaining how to calculate thermodynamic states and processes for each available substance. Use it as a reference whenever you have doubts during your calculations."
+   data-es="Esta página reúne el tutorial completo de TERMO-CP, con explicaciones sobre cómo calcular estados y procesos termodinámicos para cada sustancia disponible. Úsela como referencia siempre que tenga dudas durante los cálculos.">
+    Esta página reúne o tutorial completo do TERMO-CP, com explicações sobre como calcular estados e processos termodinâmicos para cada substância disponível. Use-a como referência sempre que tiver dúvidas durante os cálculos.
+</p>
+{% endblock %}
+
+{% block content %}
+<div class="help-wrapper">
+
+    <div class="help-header">
+        <h2>
+            <i class="fas fa-circle-question"></i>
+            <span class="lang-text" data-pt-br="Central de Ajuda" data-en="Help Center" data-es="Centro de Ayuda">Central de Ajuda</span>
+        </h2>
+        <p class="lang-text"
+           data-pt-br="Um guia rápido para aprender a calcular estados, simular processos e usar todos os recursos do TERMO-CP."
+           data-en="A quick guide to learn how to calculate states, simulate processes and use all TERMO-CP features."
+           data-es="Una guía rápida para aprender a calcular estados, simular procesos y usar todas las funciones de TERMO-CP.">
+            Um guia rápido para aprender a calcular estados, simular processos e usar todos os recursos do TERMO-CP.
+        </p>
+    </div>
+
+    <!-- PASSOS RÁPIDOS -->
+    <div class="quick-steps">
+        <div class="quick-step">
+            <div class="step-num">1</div>
+            <h4 class="lang-text" data-pt-br="Escolha a substância" data-en="Choose the substance" data-es="Elige la sustancia">Escolha a substância</h4>
+            <p class="lang-text"
+               data-pt-br="Selecione água, amônia, CO₂, gás ideal, entre outras, no menu superior."
+               data-en="Select water, ammonia, CO₂, ideal gas, among others, from the top menu."
+               data-es="Selecciona agua, amoníaco, CO₂, gas ideal, entre otras, en el menú superior.">
+                Selecione água, amônia, CO₂, gás ideal, entre outras, no menu superior.
+            </p>
+        </div>
+        <div class="quick-step">
+            <div class="step-num">2</div>
+            <h4 class="lang-text" data-pt-br="Estado ou Processo" data-en="State or Process" data-es="Estado o Proceso">Estado ou Processo</h4>
+            <p class="lang-text"
+               data-pt-br="Vá em 'Estados' para calcular propriedades, ou em 'Processos' para simular uma transformação."
+               data-en="Go to 'States' to calculate properties, or 'Processes' to simulate a transformation."
+               data-es="Ve a 'Estados' para calcular propiedades, o a 'Procesos' para simular una transformación.">
+                Vá em "Estados" para calcular propriedades, ou em "Processos" para simular uma transformação.
+            </p>
+        </div>
+        <div class="quick-step">
+            <div class="step-num">3</div>
+            <h4 class="lang-text" data-pt-br="Informe os dados" data-en="Enter the data" data-es="Ingresa los datos">Informe os dados</h4>
+            <p class="lang-text"
+               data-pt-br="Preencha duas propriedades conhecidas (ex: pressão e temperatura) e envie o formulário."
+               data-en="Fill in two known properties (e.g., pressure and temperature) and submit the form."
+               data-es="Completa dos propiedades conocidas (ej: presión y temperatura) y envía el formulario.">
+                Preencha duas propriedades conhecidas (ex: pressão e temperatura) e envie o formulário.
+            </p>
+        </div>
+        <div class="quick-step">
+            <div class="step-num">4</div>
+            <h4 class="lang-text" data-pt-br="Veja o resultado" data-en="See the result" data-es="Ve el resultado">Veja o resultado</h4>
+            <p class="lang-text"
+               data-pt-br="Confira as propriedades calculadas, a animação 3D do pistão e exporte o relatório."
+               data-en="Check the calculated properties, the 3D piston animation, and export the report."
+               data-es="Consulta las propiedades calculadas, la animación 3D del pistón y exporta el informe.">
+                Confira as propriedades calculadas, a animação 3D do pistão e exporte o relatório.
+            </p>
+        </div>
+    </div>
+
+    <!-- ACCORDION DETALHADO -->
+    <div class="accordion" id="help-accordion">
+
+        <div class="accordion-item open">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+                <i class="fas fa-atom icon-topic"></i>
+                <span class="topic-title lang-text" data-pt-br="Como calcular um Estado termodinâmico" data-en="How to calculate a thermodynamic State" data-es="Cómo calcular un Estado termodinámico">Como calcular um Estado termodinâmico</span>
+                <i class="fas fa-chevron-down chevron"></i>
+            </div>
+            <div class="accordion-body">
+                <div class="accordion-body-inner">
+                    <p class="lang-text"
+                       data-pt-br="No menu superior, escolha a substância desejada e depois clique em 'Estados'. O cálculo de estado determina todas as propriedades termodinâmicas de uma substância a partir de duas propriedades conhecidas."
+                       data-en="In the top menu, choose the desired substance and then click 'States'. The state calculation determines all thermodynamic properties of a substance from two known properties."
+                       data-es="En el menú superior, elige la sustancia deseada y luego haz clic en 'Estados'. El cálculo de estado determina todas las propiedades termodinámicas de una sustancia a partir de dos propiedades conocidas.">
+                        No menu superior, escolha a substância desejada e depois clique em "Estados". O cálculo de estado determina todas as propriedades termodinâmicas de uma substância a partir de duas propriedades conhecidas.
+                    </p>
+                    <ol class="lang-html"
+                        data-pt-br="<li>Selecione as duas propriedades que você já conhece (ex: Pressão e Temperatura, ou Temperatura e Título).</li><li>Digite os valores nos campos correspondentes, respeitando as unidades indicadas.</li><li>Clique em calcular para obter P, T, v, u, h, s e, quando aplicável, o título (x).</li><li>Visualize a animação 3D do cilindro-pistão representando o estado calculado.</li>"
+                        data-en="<li>Select the two properties you already know (e.g., Pressure and Temperature, or Temperature and Quality).</li><li>Type the values in the corresponding fields, respecting the indicated units.</li><li>Click calculate to obtain P, T, v, u, h, s and, when applicable, the quality (x).</li><li>View the 3D piston-cylinder animation representing the calculated state.</li>"
+                        data-es="<li>Selecciona las dos propiedades que ya conoces (ej: Presión y Temperatura, o Temperatura y Título).</li><li>Ingresa los valores en los campos correspondientes, respetando las unidades indicadas.</li><li>Haz clic en calcular para obtener P, T, v, u, h, s y, cuando aplique, el título (x).</li><li>Visualiza la animación 3D del cilindro-pistón que representa el estado calculado.</li>">
+                        <li>Selecione as duas propriedades que você já conhece (ex: Pressão e Temperatura, ou Temperatura e Título).</li>
+                        <li>Digite os valores nos campos correspondentes, respeitando as unidades indicadas.</li>
+                        <li>Clique em calcular para obter P, T, v, u, h, s e, quando aplicável, o título (x).</li>
+                        <li>Visualize a animação 3D do cilindro-pistão representando o estado calculado.</li>
+                    </ol>
+                    <div class="tip">
+                        <i class="fas fa-lightbulb"></i>
+                        <span class="lang-text"
+                              data-pt-br="Dica: se o ponto informado cair na região de saturação, o próprio sistema calcula o título (x) automaticamente."
+                              data-en="Tip: if the given point falls in the saturation region, the system automatically calculates the quality (x)."
+                              data-es="Consejo: si el punto indicado cae en la región de saturación, el sistema calcula automáticamente el título (x).">
+                            Dica: se o ponto informado cair na região de saturação, o próprio sistema calcula o título (x) automaticamente.
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="accordion-item">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+                <i class="fas fa-diagram-project icon-topic"></i>
+                <span class="topic-title lang-text" data-pt-br="Como simular um Processo" data-en="How to simulate a Process" data-es="Cómo simular un Proceso">Como simular um Processo</span>
+                <i class="fas fa-chevron-down chevron"></i>
+            </div>
+            <div class="accordion-body">
+                <div class="accordion-body-inner">
+                    <p class="lang-text"
+                       data-pt-br="A simulação de processos calcula a transformação completa entre um estado inicial e um estado final, incluindo as trocas de energia envolvidas."
+                       data-en="Process simulation calculates the complete transformation between an initial and a final state, including the energy exchanges involved."
+                       data-es="La simulación de procesos calcula la transformación completa entre un estado inicial y un estado final, incluyendo los intercambios de energía involucrados.">
+                        A simulação de processos calcula a transformação completa entre um estado inicial e um estado final, incluindo as trocas de energia envolvidas.
+                    </p>
+                    <ol class="lang-html"
+                        data-pt-br="<li>Clique em 'Processos' no menu superior e escolha a substância.</li><li>Defina o estado inicial informando duas propriedades conhecidas.</li><li>Escolha o tipo de processo: isobárico, isocórico, isotérmico, adiabático ou politrópico.</li><li>Informe o dado final necessário (ex: pressão final, ou volume final).</li><li>O sistema calcula o estado final, o trabalho (W) e o calor (Q) trocados.</li>"
+                        data-en="<li>Click 'Processes' in the top menu and choose the substance.</li><li>Set the initial state by entering two known properties.</li><li>Choose the process type: isobaric, isochoric, isothermal, adiabatic or polytropic.</li><li>Enter the required final data (e.g., final pressure, or final volume).</li><li>The system calculates the final state, the work (W) and heat (Q) exchanged.</li>"
+                        data-es="<li>Haz clic en 'Procesos' en el menú superior y elige la sustancia.</li><li>Define el estado inicial ingresando dos propiedades conocidas.</li><li>Elige el tipo de proceso: isobárico, isocórico, isotérmico, adiabático o politrópico.</li><li>Ingresa el dato final necesario (ej: presión final, o volumen final).</li><li>El sistema calcula el estado final, el trabajo (W) y el calor (Q) intercambiados.</li>">
+                        <li>Clique em "Processos" no menu superior e escolha a substância.</li>
+                        <li>Defina o estado inicial informando duas propriedades conhecidas.</li>
+                        <li>Escolha o tipo de processo: isobárico, isocórico, isotérmico, adiabático ou politrópico.</li>
+                        <li>Informe o dado final necessário (ex: pressão final, ou volume final).</li>
+                        <li>O sistema calcula o estado final, o trabalho (W) e o calor (Q) trocados.</li>
+                    </ol>
+                    <div class="tip">
+                        <i class="fas fa-lightbulb"></i>
+                        <span class="lang-text"
+                              data-pt-br="Dica: acompanhe a animação do pistão para entender visualmente se o sistema está se expandindo ou sendo comprimido."
+                              data-en="Tip: watch the piston animation to visually understand whether the system is expanding or being compressed."
+                              data-es="Consejo: sigue la animación del pistón para entender visualmente si el sistema se está expandiendo o comprimiendo.">
+                            Dica: acompanhe a animação do pistão para entender visualmente se o sistema está se expandindo ou sendo comprimido.
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="accordion-item">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+                <i class="fas fa-flask icon-topic"></i>
+                <span class="topic-title lang-text" data-pt-br="Substâncias disponíveis" data-en="Available substances" data-es="Sustancias disponibles">Substâncias disponíveis</span>
+                <i class="fas fa-chevron-down chevron"></i>
+            </div>
+            <div class="accordion-body">
+                <div class="accordion-body-inner">
+                    <p class="lang-text"
+                       data-pt-br="O TERMO-CP calcula estados e processos para as seguintes substâncias, cada uma com suas próprias tabelas de propriedades:"
+                       data-en="TERMO-CP calculates states and processes for the following substances, each with its own property tables:"
+                       data-es="TERMO-CP calcula estados y procesos para las siguientes sustancias, cada una con sus propias tablas de propiedades:">
+                        O TERMO-CP calcula estados e processos para as seguintes substâncias, cada uma com suas próprias tabelas de propriedades:
+                    </p>
+                    <div class="substance-chips">
+                        <span>Água</span>
+                        <span>Amônia</span>
+                        <span>CO₂</span>
+                        <span>R-410a</span>
+                        <span>R-134a</span>
+                        <span>Nitrogênio</span>
+                        <span>Metano</span>
+                        <span class="lang-text" data-pt-br="Gás Ideal" data-en="Ideal Gas" data-es="Gas Ideal">Gás Ideal</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="accordion-item">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+                <i class="fas fa-file-export icon-topic"></i>
+                <span class="topic-title lang-text" data-pt-br="Exportando relatórios" data-en="Exporting reports" data-es="Exportando informes">Exportando relatórios</span>
+                <i class="fas fa-chevron-down chevron"></i>
+            </div>
+            <div class="accordion-body">
+                <div class="accordion-body-inner">
+                    <p class="lang-text"
+                       data-pt-br="Depois de calcular um estado ou processo, use o botão de exportar (disponível na página de resultado) para salvar os resultados e a animação como imagem, usando html2canvas. Ideal para anexar em relatórios e trabalhos acadêmicos."
+                       data-en="After calculating a state or process, use the export button (available on the result page) to save the results and animation as an image, using html2canvas. Ideal for attaching to reports and academic work."
+                       data-es="Después de calcular un estado o proceso, usa el botón de exportar (disponible en la página de resultado) para guardar los resultados y la animación como imagen, usando html2canvas. Ideal para adjuntar en informes y trabajos académicos.">
+                        Depois de calcular um estado ou processo, use o botão de exportar (disponível na página de resultado) para salvar os resultados e a animação como imagem, usando html2canvas. Ideal para anexar em relatórios e trabalhos acadêmicos.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="accordion-item">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+                <i class="fas fa-globe icon-topic"></i>
+                <span class="topic-title lang-text" data-pt-br="Trocando o idioma" data-en="Changing the language" data-es="Cambiando el idioma">Trocando o idioma</span>
+                <i class="fas fa-chevron-down chevron"></i>
+            </div>
+            <div class="accordion-body">
+                <div class="accordion-body-inner">
+                    <p class="lang-text"
+                       data-pt-br="Clique nas bandeiras no canto superior direito para alternar entre Português, Inglês e Espanhol. Sua preferência fica salva no navegador e é aplicada automaticamente nas próximas visitas."
+                       data-en="Click the flags in the top-right corner to switch between Portuguese, English and Spanish. Your preference is saved in the browser and applied automatically on future visits."
+                       data-es="Haz clic en las banderas en la esquina superior derecha para alternar entre Portugués, Inglés y Español. Tu preferencia se guarda en el navegador y se aplica automáticamente en las próximas visitas.">
+                        Clique nas bandeiras no canto superior direito para alternar entre Português, Inglês e Espanhol. Sua preferência fica salva no navegador e é aplicada automaticamente nas próximas visitas.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="accordion-item">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+                <i class="fas fa-headset icon-topic"></i>
+                <span class="topic-title lang-text" data-pt-br="Ainda com dúvidas?" data-en="Still have questions?" data-es="¿Aún tienes dudas?">Ainda com dúvidas?</span>
+                <i class="fas fa-chevron-down chevron"></i>
+            </div>
+            <div class="accordion-body">
+                <div class="accordion-body-inner">
+                    <p class="lang-text"
+                       data-pt-br="Acesse a página de Contato para enviar dúvidas, relatar erros ou sugerir melhorias diretamente à equipe de desenvolvimento."
+                       data-en="Visit the Contact page to send questions, report bugs, or suggest improvements directly to the development team."
+                       data-es="Visita la página de Contacto para enviar dudas, reportar errores o sugerir mejoras directamente al equipo de desarrollo.">
+                        Acesse a página de Contato para enviar dúvidas, relatar erros ou sugerir melhorias diretamente à equipe de desenvolvimento.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Abre/fecha um item do accordion de ajuda
+    function toggleAccordion(headerEl) {
+        const item = headerEl.parentElement;
+        item.classList.toggle('open');
+    }
+</script>
+{% endblock %}

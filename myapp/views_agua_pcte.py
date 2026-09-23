@@ -1198,7 +1198,7 @@ def process_values_view3(request):
             'P': round(pressao, 2),
             'v': round(volume_esp, 6),
             's': round(entropia_esp, 4),
-            'h': round(entalpia_esp, 2),
+            'h': round(entalpia_esp, 2), 'u': round((entalpia_esp) - (pressao) * (volume_esp), 6),
             'fase': fase, # Adicionando a fase para o 3D
             'vl': round(volume_l, 8) if volume_l else round(volume_esp, 8)
         })
@@ -1222,7 +1222,7 @@ def process_values_view3(request):
                         'P': round(h_micro.results[2][1][3], 2),
                         'v': round(v_micro, 6),
                         's': round(h_micro.results[2][5][3], 4),
-                        'h': round(h_micro.results[2][4][3], 2),
+                        'h': round(h_micro.results[2][4][3], 2), 'u': round((h_micro.results[2][4][3]) - (h_micro.results[2][1][3]) * (v_micro), 6),
                         'fase': fase_micro, # Adicionando fase
                         'vl': round(vl_micro, 8)
                     })
@@ -1235,7 +1235,7 @@ def process_values_view3(request):
             'P': round(pressao2, 2),
             'v': round(volume_esp2, 6),
             's': round(entropia_esp2, 4),
-            'h': round(entalpia_esp2, 2),
+            'h': round(entalpia_esp2, 2), 'u': round((entalpia_esp2) - (pressao2) * (volume_esp2), 6),
             'fase': fase2, # Adicionando fase
             'vl': round(volume_l2, 8) if volume_l2 else round(volume_esp2, 8)
         })

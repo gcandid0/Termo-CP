@@ -15,6 +15,9 @@ def estado_view(request):
 def sobre_view(request):
     return render(request, 'sobre.html')
 
+def ajuda_view(request):
+    return render(request, 'ajuda.html')
+
 def contato_view(request):
     if request.method == 'POST':
         nome = request.POST.get('nome', '').strip()

@@ -1,6 +1,11 @@
-{% extends 'base.html' %}
+{% extends 'base2.html' %}
 
 {% block title %}TERMO-CP{% endblock %}
+{% block extra_head %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/hammerjs@2.0.8"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@2.0.1/dist/chartjs-plugin-zoom.min.js"></script>
+{% endblock %}
 
 {% block extra_css %}
 <style>
@@ -146,6 +151,16 @@
     .btn-primary { background-color: var(--secondary-color); color: white; }
     .btn-primary:hover { background-color: var(--primary-color); transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
 
+    .btn-outline { background-color: transparent; border: 2px solid var(--primary-color); color: var(--primary-color); }
+    .btn-outline:hover { background-color: var(--primary-color); color: white; }
+
+    .chart-controls { display: flex; justify-content: center; align-items: center; margin-bottom: 15px; gap: 15px; flex-wrap: wrap; }
+    .chart-controls select {
+        padding: 8px 12px; border-radius: 6px; border: 1px solid #ccc;
+        font-size: 0.95em; background: white; cursor: pointer;
+    }
+    .zoom-tip { font-size: 0.8em; color: #666; font-style: italic; margin-bottom: 10px; text-align: center; }
+
     /* Labels da Escala do P5 */
     .scale-label {
         position: absolute;
@@ -185,6 +200,28 @@
         .scale-label { font-size: 9px; width: 42px; }
     }
 </style>
+{% endblock %}
+
+{% block help_title %}
+<span class="lang-text" data-pt-br="Ajuda &ndash; Resultados do Estado" data-en="Help &ndash; State Results" data-es="Ayuda &ndash; Resultados del Estado">Ajuda &ndash; Resultados do Estado</span>
+{% endblock %}
+
+{% block help_content %}
+<p class="lang-text"
+   data-pt-br="Esta tela mostra todas as propriedades termodinâmicas calculadas para o estado de Metano, junto com a animação 3D do cilindro-pistão correspondente."
+   data-en="This screen shows all thermodynamic properties calculated for the state of Methane, along with the corresponding 3D piston-cylinder animation."
+   data-es="Esta pantalla muestra todas las propiedades termodinámicas calculadas para el estado de Metano, junto con la animación 3D del cilindro-pistón correspondiente.">
+    Esta tela mostra todas as propriedades termodinâmicas calculadas para o estado de Metano, junto com a animação 3D do cilindro-pistão correspondente.
+</p>
+<div class="help-tip">
+    <i class="fas fa-lightbulb"></i>
+    <span class="lang-text"
+          data-pt-br="Dica: use o botão de exportar para salvar os resultados e a animação como imagem (relatório)."
+          data-en="Tip: use the export button to save the results and animation as an image (report)."
+          data-es="Consejo: usa el botón de exportar para guardar los resultados y la animación como imagen (informe).">
+        Dica: use o botão de exportar para salvar os resultados e a animação como imagem (relatório).
+    </span>
+</div>
 {% endblock %}
 
 {% block content %}
@@ -270,6 +307,10 @@
         {% endif %}
 
         <div class="button-group">
+            <button type="button" id="btnStateDiagram" class="btn" style="background: var(--primary-color); color: white;">
+                <i class="fas fa-chart-area" style="margin-right: 5px;"></i>
+                <span class="lang-text" data-pt-br="Diagrama" data-en="Diagram" data-es="Diagrama">Diagrama</span>
+            </button>
             <a href="{% url 'ask_known2_38' %}" class="btn btn-secondary">
                 <i class="fas fa-arrow-left" style="margin-right: 5px;"></i>
                 <span class="lang-text" data-pt-br="Voltar" data-en="Go Back" data-es="Volver">Voltar</span>
@@ -305,11 +346,295 @@
         </div>
     </div>
 </div>
+
+<div id="diagramModal" class="modal">
+    <div class="modal-content modal-chart">
+        <span class="close-btn" id="closeDiagramBtn">&times;</span>
+        <h3 style="color: var(--primary-color); margin-top: 0; margin-bottom: 5px;" class="lang-text" data-pt-br="Diagrama Termodinâmico do Estado" data-en="Thermodynamic State Diagram" data-es="Diagrama Termodinámico del Estado">Diagrama Termodinâmico do Estado</h3>
+        <p class="zoom-tip"><i class="fas fa-search"></i> <span class="lang-text" data-pt-br="Dica: Use o scroll do mouse para dar Zoom e clique para arrastar o gráfico." data-en="Tip: Use mouse scroll to Zoom and click to drag the chart." data-es="Consejo: Use la rueda del ratón para hacer Zoom y haga clic para arrastrar el gráfico.">Dica: Use o scroll do mouse para dar Zoom e clique para arrastar o gráfico.</span></p>
+
+        <div class="chart-controls">
+            <select id="chartTypeSelector" aria-label="Selecionar tipo de diagrama termodinâmico">
+                <option value="Pv" class="lang-text" data-pt-br="Diagrama P-v (Pressão x Volume)" data-en="P-v Diagram (Pressure x Volume)" data-es="Diagrama P-v (Presión x Volumen)">Diagrama P-v (Pressão x Volume)</option>
+                <option value="Ts" class="lang-text" data-pt-br="Diagrama T-s (Temperatura x Entropia)" data-en="T-s Diagram (Temperature x Entropy)" data-es="Diagrama T-s (Temperatura x Entropía)">Diagrama T-s (Temperatura x Entropia)</option>
+                <option value="Tv" class="lang-text" data-pt-br="Diagrama T-v (Temperatura x Volume)" data-en="T-v Diagram (Temperature x Volume)" data-es="Diagrama T-v (Temperatura x Volumen)">Diagrama T-v (Temperatura x Volume)</option>
+                <option value="Ph" class="lang-text" data-pt-br="Diagrama P-h (Pressão x Entalpia)" data-en="P-h Diagram (Pressure x Enthalpy)" data-es="Diagrama P-h (Presión x Entalpía)">Diagrama P-h (Pressão x Entalpia)</option>
+                <option value="hs" class="lang-text" data-pt-br="Diagrama h-s (Mollier)" data-en="h-s Diagram (Mollier)" data-es="Diagrama h-s (Mollier)">Diagrama h-s (Mollier - Entalpia x Entropia)</option>
+                <option value="PT" class="lang-text" data-pt-br="Diagrama P-T (Pressão x Temperatura)" data-en="P-T Diagram (Pressure x Temperature)" data-es="Diagrama P-T (Presión x Temperatura)">Diagrama P-T (Pressão x Temperatura)</option>
+                <option value="Ps" class="lang-text" data-pt-br="Diagrama P-s (Pressão x Entropia)" data-en="P-s Diagram (Pressure x Entropy)" data-es="Diagrama P-s (Presión x Entropía)">Diagrama P-s (Pressão x Entropia)</option>
+                <option value="Pu" class="lang-text" data-pt-br="Diagrama P-u (Pressão x Energia Interna)" data-en="P-u Diagram (Pressure x Internal Energy)" data-es="Diagrama P-u (Presión x Energía Interna)">Diagrama P-u (Pressão x Energia Interna)</option>
+                <option value="Tu" class="lang-text" data-pt-br="Diagrama T-u (Temperatura x Energia Interna)" data-en="T-u Diagram (Temperature x Internal Energy)" data-es="Diagrama T-u (Temperatura x Energía Interna)">Diagrama T-u (Temperatura x Energia Interna)</option>
+                <option value="Th" class="lang-text" data-pt-br="Diagrama T-h (Temperatura x Entalpia)" data-en="T-h Diagram (Temperature x Enthalpy)" data-es="Diagrama T-h (Temperatura x Entalpía)">Diagrama T-h (Temperatura x Entalpia)</option>
+            </select>
+            <button type="button" id="btnResetZoom" class="btn btn-outline">
+                <i class="fas fa-expand" style="margin-right: 6px;"></i>
+                <span class="lang-text" data-pt-br="Resetar Zoom" data-en="Reset Zoom" data-es="Restablecer Zoom">Resetar Zoom</span>
+            </button>
+        </div>
+
+        <div class="chart-canvas-wrapper">
+            <canvas id="thermoChart"></canvas>
+        </div>
+    </div>
+</div>
 {% endblock %}
 
 {% block extra_js %}
 <!-- Importação do p5.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+
+<script id="estado-point-data" type="application/json">
+{
+    "fase": {{ fase }},
+    "T": "{{ temperatura }}",
+    "P": "{{ pressao }}",
+    "v": "{{ volume_especifico|floatformat:8 }}",
+    "u": "{{ energia_interna }}",
+    "h": "{{ entalpia_especifica }}",
+    "s": "{{ entropia_especifica }}"
+}
+</script>
+
+<script>
+    // --- FUNÇÃO AUXILIAR DE TRADUÇÃO PARA JS (Diagrama do Estado) ---
+    function t(pt, en, es) {
+        let lang = localStorage.getItem('preferredLang') || 'pt-br';
+        if (lang === 'en') return en;
+        if (lang === 'es') return es;
+        return pt;
+    }
+
+    // --- DADOS DO PONTO DE ESTADO PARA O DIAGRAMA ---
+    const rawStatePoint = document.getElementById('estado-point-data').textContent.trim();
+    let statePointRaw = {};
+    try {
+        if (rawStatePoint) statePointRaw = JSON.parse(rawStatePoint);
+    } catch(e) {
+        console.error("Erro ao ler dados do estado para o gráfico:", e);
+    }
+    const statePoint = {
+        T: parseFloat(String(statePointRaw.T || '0').replace(',', '.')),
+        P: parseFloat(String(statePointRaw.P || '0').replace(',', '.')),
+        v: parseFloat(String(statePointRaw.v || '0').replace(',', '.')),
+        u: parseFloat(String(statePointRaw.u || '0').replace(',', '.')),
+        h: parseFloat(String(statePointRaw.h || '0').replace(',', '.')),
+        s: parseFloat(String(statePointRaw.s || '0').replace(',', '.'))
+    };
+
+    let thermoChartInstance = null;
+    const ctxChart = document.getElementById('thermoChart').getContext('2d');
+    const chartTypeSelector = document.getElementById('chartTypeSelector');
+
+    document.getElementById('btnStateDiagram').onclick = () => {
+        document.getElementById('diagramModal').style.display = "block";
+        renderStateChart();
+    };
+    document.getElementById('closeDiagramBtn').onclick = () => document.getElementById('diagramModal').style.display = "none";
+    document.getElementById('btnResetZoom').onclick = () => { if (thermoChartInstance) thermoChartInstance.resetZoom(); };
+    chartTypeSelector.addEventListener('change', renderStateChart);
+
+    window.addEventListener('click', (e) => {
+        if (e.target === document.getElementById('diagramModal')) document.getElementById('diagramModal').style.display = "none";
+    });
+
+    document.addEventListener('languageChanged', function() {
+        if (document.getElementById('diagramModal').style.display === "block") renderStateChart();
+    });
+
+    const chartConfigs = {
+        'Pv': { xKey: 'v', yKey: 'P', xLog: true, yLog: true,
+            xLab: () => t('Volume Específico (v) [m³/kg]', 'Specific Volume (v) [m³/kg]', 'Volumen Específico (v) [m³/kg]'),
+            yLab: () => t('Pressão (P) [kPa]', 'Pressure (P) [kPa]', 'Presión (P) [kPa]') },
+        'Ts': { xKey: 's', yKey: 'T', xLog: false, yLog: false,
+            xLab: () => t('Entropia (s) [kJ/kg.K]', 'Entropy (s) [kJ/kg.K]', 'Entropía (s) [kJ/kg.K]'),
+            yLab: () => t('Temperatura (T) [°C]', 'Temperature (T) [°C]', 'Temperatura (T) [°C]') },
+        'Tv': { xKey: 'v', yKey: 'T', xLog: true, yLog: false,
+            xLab: () => t('Volume Específico (v) [m³/kg]', 'Specific Volume (v) [m³/kg]', 'Volumen Específico (v) [m³/kg]'),
+            yLab: () => t('Temperatura (T) [°C]', 'Temperature (T) [°C]', 'Temperatura (T) [°C]') },
+        'Ph': { xKey: 'h', yKey: 'P', xLog: false, yLog: true,
+            xLab: () => t('Entalpia (h) [kJ/kg]', 'Enthalpy (h) [kJ/kg]', 'Entalpía (h) [kJ/kg]'),
+            yLab: () => t('Pressão (P) [kPa]', 'Pressure (P) [kPa]', 'Presión (P) [kPa]') },
+        'hs': { xKey: 's', yKey: 'h', xLog: false, yLog: false,
+            xLab: () => t('Entropia (s) [kJ/kg.K]', 'Entropy (s) [kJ/kg.K]', 'Entropía (s) [kJ/kg.K]'),
+            yLab: () => t('Entalpia (h) [kJ/kg]', 'Enthalpy (h) [kJ/kg]', 'Entalpía (h) [kJ/kg]') },
+        'PT': { xKey: 'T', yKey: 'P', xLog: false, yLog: true,
+            xLab: () => t('Temperatura (T) [°C]', 'Temperature (T) [°C]', 'Temperatura (T) [°C]'),
+            yLab: () => t('Pressão (P) [kPa]', 'Pressure (P) [kPa]', 'Presión (P) [kPa]') },
+        'Ps': { xKey: 's', yKey: 'P', xLog: false, yLog: true,
+            xLab: () => t('Entropia (s) [kJ/kg.K]', 'Entropy (s) [kJ/kg.K]', 'Entropía (s) [kJ/kg.K]'),
+            yLab: () => t('Pressão (P) [kPa]', 'Pressure (P) [kPa]', 'Presión (P) [kPa]') },
+        'Pu': { xKey: 'u', yKey: 'P', xLog: false, yLog: true,
+            xLab: () => t('Energia Interna (u) [kJ/kg]', 'Internal Energy (u) [kJ/kg]', 'Energía Interna (u) [kJ/kg]'),
+            yLab: () => t('Pressão (P) [kPa]', 'Pressure (P) [kPa]', 'Presión (P) [kPa]') },
+        'Tu': { xKey: 'u', yKey: 'T', xLog: false, yLog: false,
+            xLab: () => t('Energia Interna (u) [kJ/kg]', 'Internal Energy (u) [kJ/kg]', 'Energía Interna (u) [kJ/kg]'),
+            yLab: () => t('Temperatura (T) [°C]', 'Temperature (T) [°C]', 'Temperatura (T) [°C]') },
+        'Th': { xKey: 'h', yKey: 'T', xLog: false, yLog: false,
+            xLab: () => t('Entalpia (h) [kJ/kg]', 'Enthalpy (h) [kJ/kg]', 'Entalpía (h) [kJ/kg]'),
+            yLab: () => t('Temperatura (T) [°C]', 'Temperature (T) [°C]', 'Temperatura (T) [°C]') }
+    };
+
+    function getSaturationDome(type) {
+        const T = [90.7, 95.0, 100.0, 105.0, 110.0, 111.7, 115.0, 120.0, 125.0, 130.0, 135.0, 140.0, 145.0, 150.0, 155.0, 160.0, 165.0, 170.0, 175.0, 180.0, 185.0, 190.0, 190.6];
+        const P = [11.7, 19.8, 34.4, 56.4, 88.2, 101.3, 132.3, 191.6, 269.0, 367.6, 490.7, 641.6, 823.7, 1040.5, 1295.6, 1592.8, 1935.9, 2329.3, 2777.6, 3286.4, 3863.2, 4520.5, 4599.2];
+        const vf = [0.002215, 0.002243, 0.002278, 0.002315, 0.002353, 0.002367, 0.00235, 0.002439, 0.002486, 0.002537, 0.002592, 0.002653, 0.002719, 0.002794, 0.002877, 0.002974, 0.003086, 0.003222, 0.003393, 0.003623, 0.003977, 0.004968, 0.006148];
+        const vg = [3.98163, 2.45069, 1.47885, 0.94012, 0.62443, 0.54997, 0.4304, 0.3061, 0.22357, 0.16701, 0.12717, 0.09841, 0.07717, 0.06118, 0.04892, 0.03936, 0.03177, 0.02563, 0.02058, 0.01629, 0.01243, 0.00797, 0.00615	];
+        const hf = [-358.07, -343.75, -326.83, -309.66, -292.29, -286.5, -274.74, -256.98, -238.99, -220.72, -202.13, -183.16, -163.73, -143.74, -123.09, -101.61, -79.08, -55.17, -29.33, -0.53, 33.83, 91.56, 129.74];
+        const hg = [185.05, 193.43, 202.94, 212.16, 221.0, 223.83, 229.38, 237.23, 244.45, 251.0, 256.77, 261.69, 265.66, 268.54, 270.18, 270.35, 268.74, 264.85, 257.87, 246.25, 226.0, 172.14, 129.74];
+        const sf = [4.2264, 4.3805, 4.5538, 4.7208, 4.8817, 4.9336, 5.0368, 5.1867, 5.3321, 5.4734, 5.6113, 5.7464, 5.8794, 6.0108, 6.1415, 6.2724, 6.4046, 6.5399, 6.6811, 6.8333, 7.0095, 7.3015, 7.4999];
+        const sg = [10.2155, 10.035, 9.8514, 9.6905, 9.548, 9.5042, 9.4205, 9.3051, 9.1996, 9.102, 9.0106, 8.9239, 8.8406, 8.7594, 8.6787, 8.5971, 8.5126, 8.4224, 8.3223, 8.2043, 8.0483, 7.7256, 7.4999];
+
+        const uf = hf.map((hv, i) => hv - P[i] * vf[i]);
+        const ug = hg.map((hv, i) => hv - P[i] * vg[i]);
+
+        let dome = [];
+        let critPt = {};
+        const lastIdx = P.length - 1;
+
+        if (type === 'Pv') {
+            for(let i=0; i <= lastIdx; i++) dome.push({x: vf[i], y: P[i]});
+            critPt = {x: vf[lastIdx], y: P[lastIdx]};
+            for(let i = lastIdx - 1; i >= 0; i--) dome.push({x: vg[i], y: P[i]});
+        } else if (type === 'Ts') {
+            for(let i=0; i <= lastIdx; i++) dome.push({x: sf[i], y: T[i]});
+            critPt = {x: sf[lastIdx], y: T[lastIdx]};
+            for(let i = lastIdx - 1; i >= 0; i--) dome.push({x: sg[i], y: T[i]});
+        } else if (type === 'Tv') {
+            for(let i=0; i <= lastIdx; i++) dome.push({x: vf[i], y: T[i]});
+            critPt = {x: vf[lastIdx], y: T[lastIdx]};
+            for(let i = lastIdx - 1; i >= 0; i--) dome.push({x: vg[i], y: T[i]});
+        } else if (type === 'Ph') {
+            for(let i=0; i <= lastIdx; i++) dome.push({x: hf[i], y: P[i]});
+            critPt = {x: hf[lastIdx], y: P[lastIdx]};
+            for(let i = lastIdx - 1; i >= 0; i--) dome.push({x: hg[i], y: P[i]});
+        } else if (type === 'hs') {
+            for(let i=0; i <= lastIdx; i++) dome.push({x: sf[i], y: hf[i]});
+            critPt = {x: sf[lastIdx], y: hf[lastIdx]};
+            for(let i = lastIdx - 1; i >= 0; i--) dome.push({x: sg[i], y: hg[i]});
+        } else if (type === 'PT') {
+            for(let i=0; i <= lastIdx; i++) dome.push({x: T[i], y: P[i]});
+            critPt = {x: T[lastIdx], y: P[lastIdx]};
+        } else if (type === 'Ps') {
+            for(let i=0; i <= lastIdx; i++) dome.push({x: sf[i], y: P[i]});
+            critPt = {x: sf[lastIdx], y: P[lastIdx]};
+            for(let i = lastIdx - 1; i >= 0; i--) dome.push({x: sg[i], y: P[i]});
+        } else if (type === 'Pu') {
+            for(let i=0; i <= lastIdx; i++) dome.push({x: uf[i], y: P[i]});
+            critPt = {x: uf[lastIdx], y: P[lastIdx]};
+            for(let i = lastIdx - 1; i >= 0; i--) dome.push({x: ug[i], y: P[i]});
+        } else if (type === 'Tu') {
+            for(let i=0; i <= lastIdx; i++) dome.push({x: uf[i], y: T[i]});
+            critPt = {x: uf[lastIdx], y: T[lastIdx]};
+            for(let i = lastIdx - 1; i >= 0; i--) dome.push({x: ug[i], y: T[i]});
+        } else if (type === 'Th') {
+            for(let i=0; i <= lastIdx; i++) dome.push({x: hf[i], y: T[i]});
+            critPt = {x: hf[lastIdx], y: T[lastIdx]};
+            for(let i = lastIdx - 1; i >= 0; i--) dome.push({x: hg[i], y: T[i]});
+        }
+
+        return { points: dome, critical: critPt };
+    }
+
+    function renderStateChart() {
+        const type = chartTypeSelector.value;
+        const conf = chartConfigs[type];
+        const satData = getSaturationDome(type);
+
+        const lDomo = t('Domo de Saturação', 'Saturation Dome', 'Domo de Saturación');
+        const lPonto = t('Ponto Crítico', 'Critical Point', 'Punto Crítico');
+        const lEstado = t('Estado Calculado', 'Calculated State', 'Estado Calculado');
+
+        let datasetsToRender = [];
+
+        datasetsToRender.push({
+            label: lDomo, data: satData.points, borderColor: '#888888', borderDash: [5, 4],
+            borderWidth: 2, fill: false, pointStyle: 'line', pointRadius: 0, tension: 0, order: 2
+        });
+
+        datasetsToRender.push({
+            label: lPonto, data: [satData.critical], backgroundColor: '#888888', borderColor: '#888888',
+            pointStyle: 'triangle', pointRadius: 6, pointHoverRadius: 8, showLine: false, order: 2
+        });
+
+        const xVal = (conf.xLog && statePoint[conf.xKey] <= 0) ? 0.000001 : statePoint[conf.xKey];
+        const yVal = (conf.yLog && statePoint[conf.yKey] <= 0) ? 0.000001 : statePoint[conf.yKey];
+
+        datasetsToRender.push({
+            label: lEstado, data: [{x: xVal, y: yVal}], pointStyle: 'circle', pointRadius: 8,
+            pointBackgroundColor: '#FF0000', pointBorderColor: '#7A0000', pointBorderWidth: 2,
+            showLine: false, order: 0
+        });
+
+        // --- Folga extra nos eixos para o ponto do estado nunca ficar colado no canto do gráfico ---
+        const allXVals = satData.points.map(p => p.x).concat([satData.critical.x, xVal]).filter(v => isFinite(v) && v > 0);
+        const allYVals = satData.points.map(p => p.y).concat([satData.critical.y, yVal]).filter(v => isFinite(v) && v > 0);
+        const xDataMin = Math.min(...allXVals), xDataMax = Math.max(...allXVals);
+        const yDataMin = Math.min(...allYVals), yDataMax = Math.max(...allYVals);
+        const xBounds = conf.xLog
+            ? { min: xDataMin / 3, max: xDataMax * 3 }
+            : { min: xDataMin - (xDataMax - xDataMin) * 0.15, max: xDataMax + (xDataMax - xDataMin) * 0.15 };
+        const yBounds = conf.yLog
+            ? { min: yDataMin / 3, max: yDataMax * 3 }
+            : { min: yDataMin - (yDataMax - yDataMin) * 0.15, max: yDataMax + (yDataMax - yDataMin) * 0.15 };
+
+        if (thermoChartInstance) thermoChartInstance.destroy();
+
+        let lang = localStorage.getItem('preferredLang') || 'pt-br';
+        let localeStr = lang === 'en' ? 'en-US' : (lang === 'es' ? 'es-ES' : 'pt-BR');
+        const formatadorNum = new Intl.NumberFormat(localeStr, { maximumFractionDigits: 4 });
+
+        thermoChartInstance = new Chart(ctxChart, {
+            type: 'line',
+            data: { datasets: datasetsToRender },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: { mode: 'nearest', intersect: true },
+                layout: { padding: { top: 10, right: 30, bottom: 10, left: 10 } },
+                scales: {
+                    x: {
+                        type: conf.xLog ? 'logarithmic' : 'linear', position: 'bottom',
+                        min: xBounds.min, max: xBounds.max,
+                        title: { display: true, text: conf.xLab(), font: {weight: 'bold', size: 14}, color: '#20376B' },
+                        grid: { color: 'rgba(0,0,0,0.1)', tickColor: 'rgba(0,0,0,0.1)' },
+                        ticks: { color: '#555', font: { size: 11 }, callback: function(value) { return formatadorNum.format(value); } }
+                    },
+                    y: {
+                        type: conf.yLog ? 'logarithmic' : 'linear',
+                        min: yBounds.min, max: yBounds.max,
+                        title: { display: true, text: conf.yLab(), font: {weight: 'bold', size: 14}, color: '#20376B' },
+                        grid: { color: 'rgba(0,0,0,0.1)', tickColor: 'rgba(0,0,0,0.1)' },
+                        ticks: { color: '#555', font: { size: 11 }, callback: function(value) { return formatadorNum.format(value); } }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: { usePointStyle: true, filter: (item) => item.text !== lEstado, font: { size: 13 } }
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(32, 55, 107, 0.95)', padding: 12,
+                        titleFont: { size: 14 }, bodyFont: { size: 13 }, displayColors: false,
+                        filter: function(tooltipItem) { return tooltipItem.dataset.label !== lDomo; },
+                        callbacks: {
+                            title: (items) => items[0].dataset.label === lEstado ? lEstado : items[0].dataset.label,
+                            label: (context) => {
+                                const xValF = formatadorNum.format(context.parsed.x);
+                                const yValF = formatadorNum.format(context.parsed.y);
+                                return ` ${conf.xKey}: ${xValF} | ${conf.yKey}: ${yValF}`;
+                            }
+                        }
+                    },
+                    zoom: {
+                        pan: { enabled: true, mode: 'xy' },
+                        zoom: { wheel: { enabled: true }, pinch: { enabled: true }, mode: 'xy' },
+                        limits: { x: { min: 'original', max: 'original' }, y: { min: 'original', max: 'original' } }
+                    }
+                }
+            }
+        });
+    }
+</script>
 
 <script>
     // Variáveis da Modelagem 3D

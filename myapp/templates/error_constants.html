@@ -126,6 +126,15 @@
 </style>
 {% endblock %}
 
+{% block help_content %}
+<p class="lang-text"
+   data-pt-br="Não foi possível calcular o resultado com os valores informados: eles estão fora da faixa válida para as constantes ou propriedades desta substância. Volte e informe valores dentro dos limites indicados."
+   data-en="The result could not be calculated with the values entered: they are outside the valid range for this substance's constants or properties. Go back and enter values within the indicated limits."
+   data-es="No fue posible calcular el resultado con los valores ingresados: están fuera del rango válido para las constantes o propiedades de esta sustancia. Vuelva atrás e ingrese valores dentro de los límites indicados.">
+    Não foi possível calcular o resultado com os valores informados: eles estão fora da faixa válida para as constantes ou propriedades desta substância. Volte e informe valores dentro dos limites indicados.
+</p>
+{% endblock %}
+
 {% block content %}
 <div class="error-wrapper">
     <div class="error-container">

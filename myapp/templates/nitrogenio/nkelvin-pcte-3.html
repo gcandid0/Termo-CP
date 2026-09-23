@@ -106,6 +106,28 @@
 </style>
 {% endblock %}
 
+{% block help_title %}
+<span class="lang-text" data-pt-br="Ajuda &ndash; Condições do ambiente" data-en="Help &ndash; Ambient conditions" data-es="Ayuda &ndash; Condiciones del ambiente">Ajuda &ndash; Condições do ambiente</span>
+{% endblock %}
+
+{% block help_content %}
+<p class="lang-text"
+   data-pt-br="Informe a temperatura do ambiente (vizinhança) ao redor do sistema. Esse valor é usado para calcular a geração de entropia durante a troca de calor do processo."
+   data-en="Enter the ambient (surroundings) temperature around the system. This value is used to calculate entropy generation during the process's heat exchange."
+   data-es="Ingresa la temperatura del ambiente (entorno) alrededor del sistema. Este valor se usa para calcular la generación de entropía durante el intercambio de calor del proceso.">
+    Informe a temperatura do ambiente (vizinhança) ao redor do sistema. Esse valor é usado para calcular a geração de entropia durante a troca de calor do processo.
+</p>
+<div class="help-tip">
+    <i class="fas fa-lightbulb"></i>
+    <span class="lang-text"
+          data-pt-br="Dica: se você não tiver esse dado, uma temperatura ambiente típica (ex: 25°C) pode ser usada como referência."
+          data-en="Tip: if you don't have this data, a typical ambient temperature (e.g., 25°C) can be used as a reference."
+          data-es="Consejo: si no tienes este dato, una temperatura ambiente típica (ej: 25°C) puede usarse como referencia.">
+        Dica: se você não tiver esse dado, uma temperatura ambiente típica (ex: 25°C) pode ser usada como referência.
+    </span>
+</div>
+{% endblock %}
+
 {% block content %}
 <div class="form-wrapper">
     <div class="container">

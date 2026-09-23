@@ -1000,12 +1000,12 @@ def process_values_view42(request):
 
         estado_inicial = {
             'T': round(temperatura, 6), 'P': round(pressao, 6), 'v': round(val_fixo, 10),
-            's': round(entropia_esp, 6), 'h': round(entalpia_esp, 6), 'fase': fase
+            's': round(entropia_esp, 6), 'h': round(entalpia_esp, 6), 'u': round((entalpia_esp) - (pressao) * (val_fixo), 6), 'fase': fase
         }
 
         estado_final = {
             'T': round(temperatura2, 6), 'P': round(pressao2, 6), 'v': round(val_fixo, 10),
-            's': round(entropia_esp2, 6), 'h': round(entalpia_esp2, 6), 'fase': fase2
+            's': round(entropia_esp2, 6), 'h': round(entalpia_esp2, 6), 'u': round((entalpia_esp2) - (pressao2) * (val_fixo), 6), 'fase': fase2
         }
 
         pt_fronteira = None
@@ -1039,7 +1039,7 @@ def process_values_view42(request):
                     'P': round(h_front_calc.results[2][1][3], 6),
                     'v': round(val_fixo, 10),
                     's': round(h_front_calc.results[2][5][3], 6),
-                    'h': round(h_front_calc.results[2][4][3], 6),
+                    'h': round(h_front_calc.results[2][4][3], 6), 'u': round((h_front_calc.results[2][4][3]) - (h_front_calc.results[2][1][3]) * (val_fixo), 6),
                     'fase': 'fronteira'
                 }
             except Exception:
@@ -1079,7 +1079,7 @@ def process_values_view42(request):
                     'P': round(p_i, 6),
                     'v': round(v_i, 10),
                     's': round(s_i, 6),
-                    'h': round(h_i, 6)
+                    'h': round(h_i, 6), 'u': round((h_i) - (p_i) * (v_i), 6)
                 })
             return segmento
 

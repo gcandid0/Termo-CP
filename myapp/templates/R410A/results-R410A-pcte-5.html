@@ -742,6 +742,28 @@
 </style>
 {% endblock %}
 
+{% block help_title %}
+<span class="lang-text" data-pt-br="Ajuda &ndash; Resultados do Processo" data-en="Help &ndash; Process Results" data-es="Ayuda &ndash; Resultados del Proceso">Ajuda &ndash; Resultados do Processo</span>
+{% endblock %}
+
+{% block help_content %}
+<p class="lang-text"
+   data-pt-br="Aqui estão os resultados do processo isobárico de R-410a: os estados inicial e final completos, o calor (Q) e o trabalho (W) trocados, a entropia gerada, e a animação do pistão."
+   data-en="Here are the results of the R-410a isobaric process: the complete initial and final states, the heat (Q) and work (W) exchanged, the entropy generated, and the piston animation."
+   data-es="Aquí están los resultados del proceso isobárico de R-410a: los estados inicial y final completos, el calor (Q) y el trabajo (W) intercambiados, la entropía generada y la animación del pistón.">
+    Aqui estão os resultados do processo isobárico de R-410a: os estados inicial e final completos, o calor (Q) e o trabalho (W) trocados, a entropia gerada, e a animação do pistão.
+</p>
+<div class="help-tip">
+    <i class="fas fa-lightbulb"></i>
+    <span class="lang-text"
+          data-pt-br="Dica: use o botão de exportar para salvar este relatório como imagem."
+          data-en="Tip: use the export button to save this report as an image."
+          data-es="Consejo: usa el botón de exportar para guardar este informe como imagen.">
+        Dica: use o botão de exportar para salvar este relatório como imagem.
+    </span>
+</div>
+{% endblock %}
+
 {% block content %}
 <div class="top-row" id="main-content">
     <div class="state-card">
@@ -1193,6 +1215,36 @@
                         </div>
                         <div class="report-diagram-canvas-wrap"><canvas id="reportChartHs"></canvas></div>
                     </div>
+                    <div class="report-diagram-item">
+                        <div class="report-diagram-label"><i class="fas fa-chart-area" style="margin-right:5px;"></i>
+                            <span class="lang-text" data-pt-br="Diagrama P-T (Pressão × Temperatura)" data-en="P-T Diagram (Pressure × Temperature)" data-es="Diagrama P-T (Presión × Temperatura)">Diagrama P-T (Pressão × Temperatura)</span>
+                        </div>
+                        <div class="report-diagram-canvas-wrap"><canvas id="reportChartPT"></canvas></div>
+                    </div>
+                    <div class="report-diagram-item">
+                        <div class="report-diagram-label"><i class="fas fa-chart-area" style="margin-right:5px;"></i>
+                            <span class="lang-text" data-pt-br="Diagrama P-s (Pressão × Entropia)" data-en="P-s Diagram (Pressure × Entropy)" data-es="Diagrama P-s (Presión × Entropía)">Diagrama P-s (Pressão × Entropia)</span>
+                        </div>
+                        <div class="report-diagram-canvas-wrap"><canvas id="reportChartPs"></canvas></div>
+                    </div>
+                    <div class="report-diagram-item">
+                        <div class="report-diagram-label"><i class="fas fa-chart-area" style="margin-right:5px;"></i>
+                            <span class="lang-text" data-pt-br="Diagrama P-u (Pressão × Energia Interna)" data-en="P-u Diagram (Pressure × Internal Energy)" data-es="Diagrama P-u (Presión × Energía Interna)">Diagrama P-u (Pressão × Energia Interna)</span>
+                        </div>
+                        <div class="report-diagram-canvas-wrap"><canvas id="reportChartPu"></canvas></div>
+                    </div>
+                    <div class="report-diagram-item">
+                        <div class="report-diagram-label"><i class="fas fa-chart-area" style="margin-right:5px;"></i>
+                            <span class="lang-text" data-pt-br="Diagrama T-u (Temperatura × Energia Interna)" data-en="T-u Diagram (Temperature × Internal Energy)" data-es="Diagrama T-u (Temperatura × Energía Interna)">Diagrama T-u (Temperatura × Energia Interna)</span>
+                        </div>
+                        <div class="report-diagram-canvas-wrap"><canvas id="reportChartTu"></canvas></div>
+                    </div>
+                    <div class="report-diagram-item">
+                        <div class="report-diagram-label"><i class="fas fa-chart-area" style="margin-right:5px;"></i>
+                            <span class="lang-text" data-pt-br="Diagrama T-h (Temperatura × Entalpia)" data-en="T-h Diagram (Temperature × Enthalpy)" data-es="Diagrama T-h (Temperatura × Entalpía)">Diagrama T-h (Temperatura × Entalpia)</span>
+                        </div>
+                        <div class="report-diagram-canvas-wrap"><canvas id="reportChartTh"></canvas></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1212,6 +1264,11 @@
                 <option value="Tv" class="lang-text" data-pt-br="Diagrama T-v (Temperatura x Volume)" data-en="T-v Diagram (Temperature x Volume)" data-es="Diagrama T-v (Temperatura x Volumen)">Diagrama T-v (Temperatura x Volume)</option>
                 <option value="Ph" class="lang-text" data-pt-br="Diagrama P-h (Pressão x Entalpia)" data-en="P-h Diagram (Pressure x Enthalpy)" data-es="Diagrama P-h (Presión x Entalpía)">Diagrama P-h (Pressão x Entalpia)</option>
                 <option value="hs" class="lang-text" data-pt-br="Diagrama h-s (Mollier)" data-en="h-s Diagram (Mollier)" data-es="Diagrama h-s (Mollier)">Diagrama h-s (Mollier - Entalpia x Entropia)</option>
+                <option value="PT" class="lang-text" data-pt-br="Diagrama P-T (Pressão x Temperatura)" data-en="P-T Diagram (Pressure x Temperature)" data-es="Diagrama P-T (Presión x Temperatura)">Diagrama P-T (Pressão x Temperatura)</option>
+                <option value="Ps" class="lang-text" data-pt-br="Diagrama P-s (Pressão x Entropia)" data-en="P-s Diagram (Pressure x Entropy)" data-es="Diagrama P-s (Presión x Entropía)">Diagrama P-s (Pressão x Entropia)</option>
+                <option value="Pu" class="lang-text" data-pt-br="Diagrama P-u (Pressão x Energia Interna)" data-en="P-u Diagram (Pressure x Internal Energy)" data-es="Diagrama P-u (Presión x Energía Interna)">Diagrama P-u (Pressão x Energia Interna)</option>
+                <option value="Tu" class="lang-text" data-pt-br="Diagrama T-u (Temperatura x Energia Interna)" data-en="T-u Diagram (Temperature x Internal Energy)" data-es="Diagrama T-u (Temperatura x Energía Interna)">Diagrama T-u (Temperatura x Energia Interna)</option>
+                <option value="Th" class="lang-text" data-pt-br="Diagrama T-h (Temperatura x Entalpia)" data-en="T-h Diagram (Temperature x Enthalpy)" data-es="Diagrama T-h (Temperatura x Entalpía)">Diagrama T-h (Temperatura x Entalpia)</option>
             </select>
             <button id="btnToggleFullCycle" class="btn btn-secondary" style="display: none;">
                 <i class="fas fa-layer-group" style="margin-right: 6px;"></i>
@@ -1222,7 +1279,7 @@
             </button>
         </div>
 
-        <div style="position: relative; height:450px; width:100%; background: #ffffff; border-radius:8px; border: 1px solid #ddd;">
+        <div class="chart-canvas-wrapper">
             <canvas id="thermoChart"></canvas>
         </div>
     </div>
@@ -1432,6 +1489,31 @@
             xKey: 's', yKey: 'h', xLog: false, yLog: false,
             xLab: () => t('Entropia (s) [kJ/kg.K]', 'Entropy (s) [kJ/kg.K]', 'Entropía (s) [kJ/kg.K]'),
             yLab: () => t('Entalpia (h) [kJ/kg]', 'Enthalpy (h) [kJ/kg]', 'Entalpía (h) [kJ/kg]')
+        },
+        'PT': {
+            xKey: 'T', yKey: 'P', xLog: false, yLog: true,
+            xLab: () => t('Temperatura (T) [°C]', 'Temperature (T) [°C]', 'Temperatura (T) [°C]'),
+            yLab: () => t('Pressão (P) [kPa]', 'Pressure (P) [kPa]', 'Presión (P) [kPa]')
+        },
+        'Ps': {
+            xKey: 's', yKey: 'P', xLog: false, yLog: true,
+            xLab: () => t('Entropia (s) [kJ/kg.K]', 'Entropy (s) [kJ/kg.K]', 'Entropía (s) [kJ/kg.K]'),
+            yLab: () => t('Pressão (P) [kPa]', 'Pressure (P) [kPa]', 'Presión (P) [kPa]')
+        },
+        'Pu': {
+            xKey: 'u', yKey: 'P', xLog: false, yLog: true,
+            xLab: () => t('Energia Interna (u) [kJ/kg]', 'Internal Energy (u) [kJ/kg]', 'Energía Interna (u) [kJ/kg]'),
+            yLab: () => t('Pressão (P) [kPa]', 'Pressure (P) [kPa]', 'Presión (P) [kPa]')
+        },
+        'Tu': {
+            xKey: 'u', yKey: 'T', xLog: false, yLog: false,
+            xLab: () => t('Energia Interna (u) [kJ/kg]', 'Internal Energy (u) [kJ/kg]', 'Energía Interna (u) [kJ/kg]'),
+            yLab: () => t('Temperatura (T) [°C]', 'Temperature (T) [°C]', 'Temperatura (T) [°C]')
+        },
+        'Th': {
+            xKey: 'h', yKey: 'T', xLog: false, yLog: false,
+            xLab: () => t('Entalpia (h) [kJ/kg]', 'Enthalpy (h) [kJ/kg]', 'Entalpía (h) [kJ/kg]'),
+            yLab: () => t('Temperatura (T) [°C]', 'Temperature (T) [°C]', 'Temperatura (T) [°C]')
         }
     };
 
@@ -1444,6 +1526,9 @@
         const hg = [252.51, 255.19, 257.08, 257.8, 260.35, 262.83, 265.23, 267.54, 269.77, 271.89, 273.9, 275.78, 277.53, 279.12, 280.55, 281.78, 282.79, 283.55, 284.02, 284.16, 283.89, 283.13, 281.76, 279.58, 276.3, 271.33, 263.26, 245.64, 226.46];
         const sf = [-0.1227, -0.0912, -0.0688, -0.0603, -0.0299, 0.0, 0.0294, 0.0585, 0.0871, 0.1154, 0.1435, 0.1713, 0.1989, 0.2264, 0.2537, 0.281, 0.3083, 0.3357, 0.3631, 0.3908, 0.4189, 0.4473, 0.4765, 0.5067, 0.5384, 0.5729, 0.613, 0.6752, 0.7449];
         const sg = [1.1907, 1.1732, 1.1613, 1.1568, 1.1416, 1.1273, 1.1139, 1.1012, 1.0893, 1.0779, 1.0671, 1.0567, 1.0466, 1.0368, 1.0272, 1.0176, 1.0081, 0.9984, 0.9884, 0.9781, 0.9671, 0.9552, 0.9421, 0.9273, 0.9099, 0.8882, 0.8583, 0.8017, 0.7449];
+
+        const uf = hf.map((hv, i) => hv - P[i] * vf[i]);
+        const ug = hg.map((hv, i) => hv - P[i] * vg[i]);
 
         let dome = [];
         let critPt = {};
@@ -1469,6 +1554,25 @@
             for(let i=0; i <= lastIdx; i++) dome.push({x: sf[i], y: hf[i]});
             critPt = {x: sf[lastIdx], y: hf[lastIdx]};
             for(let i = lastIdx - 1; i >= 0; i--) dome.push({x: sg[i], y: hg[i]});
+        } else if (type === 'PT') {
+            for(let i=0; i <= lastIdx; i++) dome.push({x: T[i], y: P[i]});
+            critPt = {x: T[lastIdx], y: P[lastIdx]};
+        } else if (type === 'Ps') {
+            for(let i=0; i <= lastIdx; i++) dome.push({x: sf[i], y: P[i]});
+            critPt = {x: sf[lastIdx], y: P[lastIdx]};
+            for(let i = lastIdx - 1; i >= 0; i--) dome.push({x: sg[i], y: P[i]});
+        } else if (type === 'Pu') {
+            for(let i=0; i <= lastIdx; i++) dome.push({x: uf[i], y: P[i]});
+            critPt = {x: uf[lastIdx], y: P[lastIdx]};
+            for(let i = lastIdx - 1; i >= 0; i--) dome.push({x: ug[i], y: P[i]});
+        } else if (type === 'Tu') {
+            for(let i=0; i <= lastIdx; i++) dome.push({x: uf[i], y: T[i]});
+            critPt = {x: uf[lastIdx], y: T[lastIdx]};
+            for(let i = lastIdx - 1; i >= 0; i--) dome.push({x: ug[i], y: T[i]});
+        } else if (type === 'Th') {
+            for(let i=0; i <= lastIdx; i++) dome.push({x: hf[i], y: T[i]});
+            critPt = {x: hf[lastIdx], y: T[lastIdx]};
+            for(let i = lastIdx - 1; i >= 0; i--) dome.push({x: hg[i], y: T[i]});
         }
         return { points: dome, critical: critPt };
     }
@@ -1542,13 +1646,26 @@
             label: lEstados,
             data: stateMarkers.map(m => ({x: m.x, y: m.y})),
             pointStyle: 'circle',
-            pointRadius: 14,
-            pointBackgroundColor: '#fff',
-            pointBorderColor: '#20376B',
+            pointRadius: 13,
+            pointBackgroundColor: '#FFFFFF',
+            pointBorderColor: '#1E5FDB',
             pointBorderWidth: 2,
             showLine: false,
             order: 0
         });
+
+        // --- Folga extra nos eixos para os pontos de estado nunca ficarem colados no canto do gráfico ---
+        const allPlottedPts = datasetsToRender.flatMap(ds => ds.data);
+        const allXVals = allPlottedPts.map(p => p.x).filter(v => isFinite(v) && v > 0);
+        const allYVals = allPlottedPts.map(p => p.y).filter(v => isFinite(v) && v > 0);
+        const xDataMin = Math.min(...allXVals), xDataMax = Math.max(...allXVals);
+        const yDataMin = Math.min(...allYVals), yDataMax = Math.max(...allYVals);
+        const xBounds = conf.xLog
+            ? { min: xDataMin / 3, max: xDataMax * 3 }
+            : { min: xDataMin - (xDataMax - xDataMin) * 0.15, max: xDataMax + (xDataMax - xDataMin) * 0.15 };
+        const yBounds = conf.yLog
+            ? { min: yDataMin / 3, max: yDataMax * 3 }
+            : { min: yDataMin - (yDataMax - yDataMin) * 0.15, max: yDataMax + (yDataMax - yDataMin) * 0.15 };
 
         if (thermoChartInstance) thermoChartInstance.destroy();
 
@@ -1568,17 +1685,17 @@
                     x: {
                         type: conf.xLog ? 'logarithmic' : 'linear',
                         position: 'bottom',
+                        min: xBounds.min, max: xBounds.max,
                         title: { display: true, text: conf.xLab(), font: {weight: 'bold', size: 14}, color: '#20376B' },
                         grid: { color: 'rgba(0,0,0,0.1)', tickColor: 'rgba(0,0,0,0.1)' },
-                        ticks: { color: '#555', font: { size: 11 }, callback: function(value) { return formatadorNum.format(value); } },
-                        grace: '5%'
+                        ticks: { color: '#555', font: { size: 11 }, callback: function(value) { return formatadorNum.format(value); } }
                     },
                     y: {
                         type: conf.yLog ? 'logarithmic' : 'linear',
+                        min: yBounds.min, max: yBounds.max,
                         title: { display: true, text: conf.yLab(), font: {weight: 'bold', size: 14}, color: '#20376B' },
                         grid: { color: 'rgba(0,0,0,0.1)', tickColor: 'rgba(0,0,0,0.1)' },
-                        ticks: { color: '#555', font: { size: 11 }, callback: function(value) { return formatadorNum.format(value); } },
-                        grace: '5%'
+                        ticks: { color: '#555', font: { size: 11 }, callback: function(value) { return formatadorNum.format(value); } }
                     }
                 },
                 plugins: {
@@ -1636,7 +1753,7 @@
                             if (dataset.label === lEstados) {
                                 chart.getDatasetMeta(dsIdx).data.forEach((point, pIdx) => {
                                     ctx.fillStyle = '#20376B';
-                                    ctx.font = 'bold 12px Arial';
+                                    ctx.font = 'bold 14px Arial';
                                     ctx.textAlign = 'center';
                                     ctx.textBaseline = 'middle';
                                     ctx.fillText(stateMarkers[pIdx].val, point.x, point.y);
@@ -2391,8 +2508,8 @@
         datasets.push({
             label: t('Estados','States','Estados'),
             data: stateMarkers.map(m => ({x: m.x, y: m.y})),
-            pointStyle: 'circle', pointRadius: 12,
-            pointBackgroundColor: '#fff', pointBorderColor: '#20376B',
+            pointStyle: 'circle', pointRadius: 16,
+            pointBackgroundColor: '#FFFFFF', pointBorderColor: '#1E5FDB',
             pointBorderWidth: 2, showLine: false, order: 0
         });
         return { datasets, stateMarkers };
@@ -2460,7 +2577,7 @@
                             if (dataset.label === lEstados) {
                                 chart.getDatasetMeta(dsIdx).data.forEach((point, pIdx) => {
                                     ctx.fillStyle = '#20376B';
-                                    ctx.font = 'bold 10px Arial';
+                                    ctx.font = 'bold 12px Arial';
                                     ctx.textAlign = 'center';
                                     ctx.textBaseline = 'middle';
                                     ctx.fillText(stateMarkers[pIdx].val, point.x, point.y);
@@ -2480,7 +2597,12 @@
             { canvasId: 'reportChartTs', type: 'Ts' },
             { canvasId: 'reportChartTv', type: 'Tv' },
             { canvasId: 'reportChartPh', type: 'Ph' },
-            { canvasId: 'reportChartHs', type: 'hs' }
+            { canvasId: 'reportChartHs', type: 'hs' },
+            { canvasId: 'reportChartPT', type: 'PT' },
+            { canvasId: 'reportChartPs', type: 'Ps' },
+            { canvasId: 'reportChartPu', type: 'Pu' },
+            { canvasId: 'reportChartTu', type: 'Tu' },
+            { canvasId: 'reportChartTh', type: 'Th' }
         ];
         for (const { canvasId, type } of charts) {
             await renderSingleReportChart(canvasId, type);

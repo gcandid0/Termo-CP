@@ -16,6 +16,7 @@ urlpatterns = [
     path('', include('myapp.estados_urls')),
     path('', include('myapp.processos_urls')),
     path('', include('myapp.contato_urls')),
+    path('', include('myapp.ajuda_urls')),
 ]
 
 # Redirecionamentos para as páginas iniciais

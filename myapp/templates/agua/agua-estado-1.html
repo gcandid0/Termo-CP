@@ -205,6 +205,36 @@
 </style>
 {% endblock %}
 
+{% block help_title %}
+<span class="lang-text" data-pt-br="Ajuda &ndash; Primeira propriedade" data-en="Help &ndash; First property" data-es="Ayuda &ndash; Primera propiedad">Ajuda &ndash; Primeira propriedade</span>
+{% endblock %}
+
+{% block help_content %}
+<p class="lang-text"
+   data-pt-br="Nesta tela você escolhe a primeira propriedade que já conhece sobre o estado da água."
+   data-en="On this screen you choose the first property you already know about the water's state."
+   data-es="En esta pantalla eliges la primera propiedad que ya conoces sobre el estado del agua.">
+    Nesta tela você escolhe a primeira propriedade que já conhece sobre o estado da água.
+</p>
+<ol class="lang-html"
+    data-pt-br="<li>Clique no cartão da propriedade que você já sabe (ex: Temperatura ou Pressão).</li><li>Um campo numérico aparecerá abaixo &ndash; digite o valor respeitando a unidade indicada (°C para temperatura, kPa para pressão).</li><li>Clique em Continuar para informar a segunda propriedade conhecida na próxima tela.</li>"
+    data-en="<li>Click the card of the property you already know (e.g., Temperature or Pressure).</li><li>A numeric field will appear below &ndash; enter the value respecting the indicated unit (°C for temperature, kPa for pressure).</li><li>Click Continue to enter the second known property on the next screen.</li>"
+    data-es="<li>Haz clic en la tarjeta de la propiedad que ya conoces (ej: Temperatura o Presión).</li><li>Aparecerá un campo numérico abajo &ndash; ingresa el valor respetando la unidad indicada (°C para temperatura, kPa para presión).</li><li>Haz clic en Continuar para ingresar la segunda propiedad conocida en la siguiente pantalla.</li>">
+    <li>Clique no cartão da propriedade que você já sabe (ex: Temperatura ou Pressão).</li>
+    <li>Um campo numérico aparecerá abaixo &ndash; digite o valor respeitando a unidade indicada (°C para temperatura, kPa para pressão).</li>
+    <li>Clique em Continuar para informar a segunda propriedade conhecida na próxima tela.</li>
+</ol>
+<div class="help-tip">
+    <i class="fas fa-lightbulb"></i>
+    <span class="lang-text"
+          data-pt-br="Dica: os limites mínimo e máximo aceitos para o valor são definidos automaticamente conforme a propriedade escolhida."
+          data-en="Tip: the minimum and maximum accepted values are set automatically depending on the chosen property."
+          data-es="Consejo: los límites mínimo y máximo aceptados se definen automáticamente según la propiedad elegida.">
+        Dica: os limites mínimo e máximo aceitos para o valor são definidos automaticamente conforme a propriedade escolhida.
+    </span>
+</div>
+{% endblock %}
+
 {% block content %}
 <div class="form-wrapper">
     <div class="container">

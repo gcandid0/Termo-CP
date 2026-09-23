@@ -315,7 +315,7 @@ def process_values_view9(request):
             'P': round(p1, 2),
             'v': round(v1, 6),
             's': round(calc_s(T1, p1), 4),
-            'h': round(calc_h(T1), 2)
+            'h': round(calc_h(T1), 2), 'u': round((calc_h(T1)) - (p1) * (v1), 6)
         })
 
         if passo_T != 0:
@@ -329,7 +329,7 @@ def process_values_view9(request):
                     'P': round(P_micro, 2),
                     'v': round(v_micro, 6),
                     's': round(calc_s(T_micro, P_micro), 4),
-                    'h': round(calc_h(T_micro), 2)
+                    'h': round(calc_h(T_micro), 2), 'u': round((calc_h(T_micro)) - (P_micro) * (v_micro), 6)
                 })
 
         # Ponto Final
@@ -338,7 +338,7 @@ def process_values_view9(request):
             'P': round(p2, 2),
             'v': round(v2, 6),
             's': round(calc_s(T2, p2), 4),
-            'h': round(calc_h(T2), 2)
+            'h': round(calc_h(T2), 2), 'u': round((calc_h(T2)) - (p2) * (v2), 6)
         })
 
         pontos_grafico.append(ramo_atual)

@@ -128,6 +128,38 @@
 </style>
 {% endblock %}
 
+{% block help_title %}
+<span class="lang-text" data-pt-br="Ajuda &ndash; Processos" data-en="Help &ndash; Processes" data-es="Ayuda &ndash; Procesos">Ajuda &ndash; Processos</span>
+{% endblock %}
+
+{% block help_content %}
+<p class="lang-text"
+   data-pt-br="Aqui você simula uma transformação termodinâmica completa: de um estado inicial a um estado final."
+   data-en="Here you simulate a complete thermodynamic transformation: from an initial state to a final state."
+   data-es="Aquí simulas una transformación termodinámica completa: de un estado inicial a un estado final.">
+    Aqui você simula uma transformação termodinâmica completa: de um estado inicial a um estado final.
+</p>
+<ol class="lang-html"
+    data-pt-br="<li>Escolha a substância que sofrerá o processo.</li><li>Defina o estado inicial, informando duas propriedades conhecidas (igual à tela de Estados).</li><li>Escolha o tipo de processo: isobárico (P constante), isocórico (v constante), isotérmico (T constante), adiabático ou politrópico.</li><li>Informe o dado adicional pedido para aquele tipo de processo (ex: pressão final).</li><li>Veja o estado final calculado, o trabalho (W) e o calor (Q) trocados, além da animação do pistão.</li>"
+    data-en="<li>Choose the substance that will undergo the process.</li><li>Set the initial state by entering two known properties (same as the States screen).</li><li>Choose the process type: isobaric (constant P), isochoric (constant v), isothermal (constant T), adiabatic or polytropic.</li><li>Enter the extra data requested for that process type (e.g., final pressure).</li><li>See the calculated final state, the work (W) and heat (Q) exchanged, plus the piston animation.</li>"
+    data-es="<li>Elige la sustancia que sufrirá el proceso.</li><li>Define el estado inicial, ingresando dos propiedades conocidas (igual que en la pantalla de Estados).</li><li>Elige el tipo de proceso: isobárico (P constante), isocórico (v constante), isotérmico (T constante), adiabático o politrópico.</li><li>Ingresa el dato adicional solicitado para ese tipo de proceso (ej: presión final).</li><li>Consulta el estado final calculado, el trabajo (W) y el calor (Q) intercambiados, además de la animación del pistón.</li>">
+    <li>Escolha a substância que sofrerá o processo.</li>
+    <li>Defina o estado inicial, informando duas propriedades conhecidas (igual à tela de Estados).</li>
+    <li>Escolha o tipo de processo: isobárico (P constante), isocórico (v constante), isotérmico (T constante), adiabático ou politrópico.</li>
+    <li>Informe o dado adicional pedido para aquele tipo de processo (ex: pressão final).</li>
+    <li>Veja o estado final calculado, o trabalho (W) e o calor (Q) trocados, além da animação do pistão.</li>
+</ol>
+<div class="help-tip">
+    <i class="fas fa-lightbulb"></i>
+    <span class="lang-text"
+          data-pt-br="Dica: não sabe qual tipo de processo escolher? Um processo isobárico mantém a pressão constante, um isocórico mantém o volume constante, e assim por diante."
+          data-en="Tip: not sure which process type to choose? An isobaric process keeps pressure constant, an isochoric one keeps volume constant, and so on."
+          data-es="Consejo: ¿no sabes qué tipo de proceso elegir? Un proceso isobárico mantiene la presión constante, uno isocórico mantiene el volumen constante, y así sucesivamente.">
+        Dica: não sabe qual tipo de processo escolher? Um processo isobárico mantém a pressão constante, um isocórico mantém o volume constante, e assim por diante.
+    </span>
+</div>
+{% endblock %}
+
 {% block content %}
 <div class="processes-wrapper">
     <div class="processes-container">

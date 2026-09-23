@@ -739,6 +739,15 @@
 </style>
 {% endblock %}
 
+{% block help_content %}
+<p class="lang-text"
+   data-pt-br="Aqui estão os resultados do processo calculado para o Gás Ideal: as propriedades dos estados inicial e final, além de grandezas como calor, trabalho e variação de entropia. Use os botões disponíveis para ver gráficos, comparar cálculos ou iniciar um novo processo."
+   data-en="Here are the results of the calculated Ideal Gas process: the properties of the initial and final states, plus quantities such as heat, work, and entropy variation. Use the available buttons to view charts, compare calculations, or start a new process."
+   data-es="Aquí están los resultados del proceso calculado para el Gas Ideal: las propiedades de los estados inicial y final, además de magnitudes como calor, trabajo y variación de entropía. Use los botones disponibles para ver gráficos, comparar cálculos o iniciar un nuevo proceso.">
+    Aqui estão os resultados do processo calculado para o Gás Ideal: as propriedades dos estados inicial e final, além de grandezas como calor, trabalho e variação de entropia. Use os botões disponíveis para ver gráficos, comparar cálculos ou iniciar um novo processo.
+</p>
+{% endblock %}
+
 {% block content %}
 <div class="top-row" id="main-content">
 
@@ -1163,6 +1172,36 @@
                         </div>
                         <div class="report-diagram-canvas-wrap"><canvas id="reportChartHs"></canvas></div>
                     </div>
+                    <div class="report-diagram-item">
+                        <div class="report-diagram-label"><i class="fas fa-chart-area" style="margin-right:5px;"></i>
+                            <span class="lang-text" data-pt-br="Diagrama P-T (Pressão × Temperatura)" data-en="P-T Diagram (Pressure × Temperature)" data-es="Diagrama P-T (Presión × Temperatura)">Diagrama P-T (Pressão × Temperatura)</span>
+                        </div>
+                        <div class="report-diagram-canvas-wrap"><canvas id="reportChartPT"></canvas></div>
+                    </div>
+                    <div class="report-diagram-item">
+                        <div class="report-diagram-label"><i class="fas fa-chart-area" style="margin-right:5px;"></i>
+                            <span class="lang-text" data-pt-br="Diagrama P-s (Pressão × Entropia)" data-en="P-s Diagram (Pressure × Entropy)" data-es="Diagrama P-s (Presión × Entropía)">Diagrama P-s (Pressão × Entropia)</span>
+                        </div>
+                        <div class="report-diagram-canvas-wrap"><canvas id="reportChartPs"></canvas></div>
+                    </div>
+                    <div class="report-diagram-item">
+                        <div class="report-diagram-label"><i class="fas fa-chart-area" style="margin-right:5px;"></i>
+                            <span class="lang-text" data-pt-br="Diagrama P-u (Pressão × Energia Interna)" data-en="P-u Diagram (Pressure × Internal Energy)" data-es="Diagrama P-u (Presión × Energía Interna)">Diagrama P-u (Pressão × Energia Interna)</span>
+                        </div>
+                        <div class="report-diagram-canvas-wrap"><canvas id="reportChartPu"></canvas></div>
+                    </div>
+                    <div class="report-diagram-item">
+                        <div class="report-diagram-label"><i class="fas fa-chart-area" style="margin-right:5px;"></i>
+                            <span class="lang-text" data-pt-br="Diagrama T-u (Temperatura × Energia Interna)" data-en="T-u Diagram (Temperature × Internal Energy)" data-es="Diagrama T-u (Temperatura × Energía Interna)">Diagrama T-u (Temperatura × Energia Interna)</span>
+                        </div>
+                        <div class="report-diagram-canvas-wrap"><canvas id="reportChartTu"></canvas></div>
+                    </div>
+                    <div class="report-diagram-item">
+                        <div class="report-diagram-label"><i class="fas fa-chart-area" style="margin-right:5px;"></i>
+                            <span class="lang-text" data-pt-br="Diagrama T-h (Temperatura × Entalpia)" data-en="T-h Diagram (Temperature × Enthalpy)" data-es="Diagrama T-h (Temperatura × Entalpía)">Diagrama T-h (Temperatura × Entalpia)</span>
+                        </div>
+                        <div class="report-diagram-canvas-wrap"><canvas id="reportChartTh"></canvas></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1182,6 +1221,11 @@
                 <option value="Tv" class="lang-text" data-pt-br="Diagrama T-v (Temperatura x Volume)" data-en="T-v Diagram (Temperature x Volume)" data-es="Diagrama T-v (Temperatura x Volumen)">Diagrama T-v (Temperatura x Volume)</option>
                 <option value="Ph" class="lang-text" data-pt-br="Diagrama P-h (Pressão x Entalpia)" data-en="P-h Diagram (Pressure x Enthalpy)" data-es="Diagrama P-h (Presión x Entalpía)">Diagrama P-h (Pressão x Entalpia)</option>
                 <option value="hs" class="lang-text" data-pt-br="Diagrama h-s (Mollier - Entalpia x Entropia)" data-en="h-s Diagram (Mollier - Enthalpy x Entropy)" data-es="Diagrama h-s (Mollier - Entalpía x Entropía)">Diagrama h-s (Mollier - Entalpia x Entropia)</option>
+                <option value="PT" class="lang-text" data-pt-br="Diagrama P-T (Pressão x Temperatura)" data-en="P-T Diagram (Pressure x Temperature)" data-es="Diagrama P-T (Presión x Temperatura)">Diagrama P-T (Pressão x Temperatura)</option>
+                <option value="Ps" class="lang-text" data-pt-br="Diagrama P-s (Pressão x Entropia)" data-en="P-s Diagram (Pressure x Entropy)" data-es="Diagrama P-s (Presión x Entropía)">Diagrama P-s (Pressão x Entropia)</option>
+                <option value="Pu" class="lang-text" data-pt-br="Diagrama P-u (Pressão x Energia Interna)" data-en="P-u Diagram (Pressure x Internal Energy)" data-es="Diagrama P-u (Presión x Energía Interna)">Diagrama P-u (Pressão x Energia Interna)</option>
+                <option value="Tu" class="lang-text" data-pt-br="Diagrama T-u (Temperatura x Energia Interna)" data-en="T-u Diagram (Temperature x Internal Energy)" data-es="Diagrama T-u (Temperatura x Energía Interna)">Diagrama T-u (Temperatura x Energia Interna)</option>
+                <option value="Th" class="lang-text" data-pt-br="Diagrama T-h (Temperatura x Entalpia)" data-en="T-h Diagram (Temperature x Enthalpy)" data-es="Diagrama T-h (Temperatura x Entalpía)">Diagrama T-h (Temperatura x Entalpia)</option>
             </select>
             <button id="btnToggleFullCycle" class="btn btn-secondary" style="display: none;">
                 <i class="fas fa-layer-group" style="margin-right: 6px;"></i>
@@ -1192,7 +1236,7 @@
             </button>
         </div>
 
-        <div style="position: relative; height:450px; width:100%; background: #ffffff; border-radius:8px; border: 1px solid #ddd;">
+        <div class="chart-canvas-wrapper">
             <canvas id="thermoChart"></canvas>
         </div>
 
@@ -1412,6 +1456,31 @@
             xKey: 's', yKey: 'h', xLog: false, yLog: false,
             xLab: () => t('Entropia (s) [kJ/kg.K]', 'Entropy (s) [kJ/kg.K]', 'Entropía (s) [kJ/kg.K]'),
             yLab: () => t('Entalpia (h) [kJ/kg]', 'Enthalpy (h) [kJ/kg]', 'Entalpía (h) [kJ/kg]')
+        },
+        'PT': {
+            xKey: 'T', yKey: 'P', xLog: false, yLog: true,
+            xLab: () => t('Temperatura (T) [°C]', 'Temperature (T) [°C]', 'Temperatura (T) [°C]'),
+            yLab: () => t('Pressão (P) [kPa]', 'Pressure (P) [kPa]', 'Presión (P) [kPa]')
+        },
+        'Ps': {
+            xKey: 's', yKey: 'P', xLog: false, yLog: true,
+            xLab: () => t('Entropia (s) [kJ/kg.K]', 'Entropy (s) [kJ/kg.K]', 'Entropía (s) [kJ/kg.K]'),
+            yLab: () => t('Pressão (P) [kPa]', 'Pressure (P) [kPa]', 'Presión (P) [kPa]')
+        },
+        'Pu': {
+            xKey: 'u', yKey: 'P', xLog: false, yLog: true,
+            xLab: () => t('Energia Interna (u) [kJ/kg]', 'Internal Energy (u) [kJ/kg]', 'Energía Interna (u) [kJ/kg]'),
+            yLab: () => t('Pressão (P) [kPa]', 'Pressure (P) [kPa]', 'Presión (P) [kPa]')
+        },
+        'Tu': {
+            xKey: 'u', yKey: 'T', xLog: false, yLog: false,
+            xLab: () => t('Energia Interna (u) [kJ/kg]', 'Internal Energy (u) [kJ/kg]', 'Energía Interna (u) [kJ/kg]'),
+            yLab: () => t('Temperatura (T) [°C]', 'Temperature (T) [°C]', 'Temperatura (T) [°C]')
+        },
+        'Th': {
+            xKey: 'h', yKey: 'T', xLog: false, yLog: false,
+            xLab: () => t('Entalpia (h) [kJ/kg]', 'Enthalpy (h) [kJ/kg]', 'Entalpía (h) [kJ/kg]'),
+            yLab: () => t('Temperatura (T) [°C]', 'Temperature (T) [°C]', 'Temperatura (T) [°C]')
         }
     };
 
@@ -1456,9 +1525,9 @@
             label: lEstados,
             data: stateMarkers.map(m => ({x: m.x, y: m.y})),
             pointStyle: 'circle',
-            pointRadius: 14,
-            pointBackgroundColor: '#fff',
-            pointBorderColor: '#53B366',
+            pointRadius: 13,
+            pointBackgroundColor: '#FFFFFF',
+            pointBorderColor: '#1E5FDB',
             pointBorderWidth: 2,
             showLine: false,
             order: 0
@@ -1535,7 +1604,7 @@
                             if (dataset.label === lEstados) {
                                 chart.getDatasetMeta(dsIdx).data.forEach((point, pIdx) => {
                                     ctx.fillStyle = '#53B366';
-                                    ctx.font = 'bold 12px Arial';
+                                    ctx.font = 'bold 14px Arial';
                                     ctx.textAlign = 'center';
                                     ctx.textBaseline = 'middle';
                                     ctx.fillText(stateMarkers[pIdx].val, point.x, point.y);
@@ -2188,8 +2257,8 @@
         datasets.push({
             label: t('Estados','States','Estados'),
             data: stateMarkers.map(m => ({x: m.x, y: m.y})),
-            pointStyle: 'circle', pointRadius: 12,
-            pointBackgroundColor: '#fff', pointBorderColor: '#53B366',
+            pointStyle: 'circle', pointRadius: 16,
+            pointBackgroundColor: '#FFFFFF', pointBorderColor: '#1E5FDB',
             pointBorderWidth: 2, showLine: false, order: 0
         });
         return { datasets, stateMarkers };
@@ -2250,7 +2319,7 @@
                             if (dataset.label === lEstados) {
                                 chart.getDatasetMeta(dsIdx).data.forEach((point, pIdx) => {
                                     ctx.fillStyle = '#20376B';
-                                    ctx.font = 'bold 10px Arial';
+                                    ctx.font = 'bold 12px Arial';
                                     ctx.textAlign = 'center';
                                     ctx.textBaseline = 'middle';
                                     ctx.fillText(stateMarkers[pIdx].val, point.x, point.y);
@@ -2270,7 +2339,12 @@
             { canvasId: 'reportChartTs', type: 'Ts' },
             { canvasId: 'reportChartTv', type: 'Tv' },
             { canvasId: 'reportChartPh', type: 'Ph' },
-            { canvasId: 'reportChartHs', type: 'hs' }
+            { canvasId: 'reportChartHs', type: 'hs' },
+            { canvasId: 'reportChartPT', type: 'PT' },
+            { canvasId: 'reportChartPs', type: 'Ps' },
+            { canvasId: 'reportChartPu', type: 'Pu' },
+            { canvasId: 'reportChartTu', type: 'Tu' },
+            { canvasId: 'reportChartTh', type: 'Th' }
         ];
         for (const { canvasId, type } of charts) {
             await renderSingleReportChart(canvasId, type);
