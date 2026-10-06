@@ -1,12 +1,10 @@
 {% extends 'base2.html' %}
 
-{% block title %}TERMO-CP{% endblock %}
+{% block title %}TERMO-CP – Metano{% endblock %}
 
 {% block extra_head %}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/hammerjs@2.0.8"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@2.0.1/dist/chartjs-plugin-zoom.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 {% endblock %}
 
@@ -191,7 +189,6 @@
         padding: 8px 12px; border-radius: 6px; border: 2px solid var(--primary-color);
         font-family: inherit; color: var(--primary-color); font-weight: bold; outline: none; cursor: pointer;
     }
-    .zoom-tip { font-size: 0.8em; color: #666; font-style: italic; margin-bottom: 10px; }
 
     /* --- ESTILOS DO MEMORIAL DE CÁLCULO DIDÁTICO REFORMULADO --- */
     .math-step {
@@ -769,9 +766,8 @@
     <div class="state-card">
         <h2><i class="fas fa-play-circle"></i> <span id="stateHeaderInitial" class="lang-text" data-pt-br="Estado Inicial (1)" data-en="Initial State (1)" data-es="Estado Inicial (1)">Estado Inicial (1)</span></h2>
 
-        <div class="data-row">
-            <span class="data-label lang-text" data-pt-br="Fase:" data-en="Phase:" data-es="Fase:">Fase:</span>
-            <span class="data-value">
+        <div class="data-row" data-tour-pt-br="Indica se a substância está como líquido comprimido, vapor superaquecido ou numa mistura líquido-vapor (saturação) nesse estado." data-tour-en="Indicates whether the substance is a compressed liquid, superheated vapor, or a liquid-vapor mixture (saturation) at this state." data-tour-es="Indica si la sustancia está como líquido comprimido, vapor sobrecalentado o en una mezcla líquido-vapor (saturación) en este estado.">
+            <span class="data-label lang-text" data-pt-br="Fase:" data-en="Phase:" data-es="Fase:">Fase:</span>            <span class="data-value">
                 {% if fase == 1 %}
                     <span class="lang-text" data-pt-br="Líquido Comprimido" data-en="Compressed Liquid" data-es="Líquido Comprimido">Líquido Comprimido</span>
                 {% elif fase == 2 %}
@@ -781,22 +777,21 @@
                 {% endif %}
             </span>
         </div>
-        <div class="data-row"><span class="data-label lang-text" data-pt-br="Massa (m):" data-en="Mass (m):" data-es="Masa (m):">Massa (m):</span> <span class="data-value"><span class="format-num">1,0</span> kg</span></div>
-        <div class="data-row"><span class="data-label lang-text" data-pt-br="Temperatura (T):" data-en="Temperature (T):" data-es="Temperatura (T):">Temperatura (T):</span> <span class="data-value"><span class="format-num">{{ temperatura }}</span> K</span></div>
-        <div class="data-row"><span class="data-label lang-text" data-pt-br="Pressão (p):" data-en="Pressure (p):" data-es="Presión (p):">Pressão (p):</span> <span class="data-value"><span class="format-num">{{ pressao }}</span> kPa</span></div>
-        <div class="data-row"><span class="data-label lang-text" data-pt-br="Volume específico (v):" data-en="Specific Volume (v):" data-es="Volumen específico (v):">Volume específico (v):</span> <span class="data-value"><span class="format-num">{{ volume_especifico|floatformat:6 }}</span> m³/kg</span></div>
-        <div class="data-row"><span class="data-label lang-text" data-pt-br="Energia Interna (u):" data-en="Internal Energy (u):" data-es="Energía Interna (u):">Energia Interna (u):</span> <span class="data-value"><span class="format-num">{{ energia_interna }}</span> kJ/kg</span></div>
-        <div class="data-row"><span class="data-label lang-text" data-pt-br="Entalpia (h):" data-en="Enthalpy (h):" data-es="Entalpía (h):">Entalpia (h):</span> <span class="data-value"><span class="format-num">{{ entalpia_especifica }}</span> kJ/kg</span></div>
-        <div class="data-row"><span class="data-label lang-text" data-pt-br="Entropia (s):" data-en="Entropy (s):" data-es="Entropía (s):">Entropia (s):</span> <span class="data-value"><span class="format-num">{{ entropia_especifica }}</span> kJ/kg.K</span></div>
+        <div class="data-row" data-tour-pt-br="Quantidade de massa da substância considerada no sistema, usada em todos os cálculos de calor, trabalho e entropia." data-tour-en="Amount of mass of the substance considered in the system, used in all heat, work and entropy calculations." data-tour-es="Cantidad de masa de la sustancia considerada en el sistema, usada en todos los cálculos de calor, trabajo y entropía."><span class="data-label lang-text" data-pt-br="Massa (m):" data-en="Mass (m):" data-es="Masa (m):">Massa (m):</span><span class="data-value"><span class="format-num">1,0</span> kg</span></div>
+        <div class="data-row" data-tour-pt-br="Temperatura da substância nesse estado, em graus Celsius." data-tour-en="Temperature of the substance at this state, in degrees Celsius." data-tour-es="Temperatura de la sustancia en este estado, en grados Celsius."><span class="data-label lang-text" data-pt-br="Temperatura (T):" data-en="Temperature (T):" data-es="Temperatura (T):">Temperatura (T):</span><span class="data-value"><span class="format-num">{{ temperatura }}</span> K</span></div>
+        <div class="data-row" data-tour-pt-br="Pressão absoluta da substância nesse estado, em quilopascal (kPa)." data-tour-en="Absolute pressure of the substance at this state, in kilopascals (kPa)." data-tour-es="Presión absoluta de la sustancia en este estado, en kilopascales (kPa)."><span class="data-label lang-text" data-pt-br="Pressão (p):" data-en="Pressure (p):" data-es="Presión (p):">Pressão (p):</span><span class="data-value"><span class="format-num">{{ pressao }}</span> kPa</span></div>
+        <div class="data-row" data-tour-pt-br="Volume ocupado por unidade de massa da substância (v = V/m), em m³/kg." data-tour-en="Volume occupied per unit of mass of the substance (v = V/m), in m³/kg." data-tour-es="Volumen ocupado por unidad de masa de la sustancia (v = V/m), en m³/kg."><span class="data-label lang-text" data-pt-br="Volume específico (v):" data-en="Specific Volume (v):" data-es="Volumen específico (v):">Volume específico (v):</span><span class="data-value"><span class="format-num">{{ volume_especifico|floatformat:6 }}</span> m³/kg</span></div>
+        <div class="data-row" data-tour-pt-br="Energia associada ao movimento e às interações das moléculas da substância, em kJ/kg." data-tour-en="Energy associated with the motion and interactions of the substance's molecules, in kJ/kg." data-tour-es="Energía asociada al movimiento e interacciones de las moléculas de la sustancia, en kJ/kg."><span class="data-label lang-text" data-pt-br="Energia Interna (u):" data-en="Internal Energy (u):" data-es="Energía Interna (u):">Energia Interna (u):</span><span class="data-value"><span class="format-num">{{ energia_interna }}</span> kJ/kg</span></div>
+        <div class="data-row" data-tour-pt-br="Propriedade definida como h = u + P·v, muito usada em balanços de energia de sistemas abertos, em kJ/kg." data-tour-en="Property defined as h = u + P·v, widely used in energy balances of open systems, in kJ/kg." data-tour-es="Propiedad definida como h = u + P·v, muy usada en balances de energía de sistemas abiertos, en kJ/kg."><span class="data-label lang-text" data-pt-br="Entalpia (h):" data-en="Enthalpy (h):" data-es="Entalpía (h):">Entalpia (h):</span><span class="data-value"><span class="format-num">{{ entalpia_especifica }}</span> kJ/kg</span></div>
+        <div class="data-row" data-tour-pt-br="Medida do grau de desordem molecular da substância, usada para avaliar a reversibilidade do processo, em kJ/kg.K." data-tour-en="Measure of the substance's molecular disorder, used to assess the reversibility of the process, in kJ/kg.K." data-tour-es="Medida del grado de desorden molecular de la sustancia, usada para evaluar la reversibilidad del proceso, en kJ/kg.K."><span class="data-label lang-text" data-pt-br="Entropia (s):" data-en="Entropy (s):" data-es="Entropía (s):">Entropia (s):</span><span class="data-value"><span class="format-num">{{ entropia_especifica }}</span> kJ/kg.K</span></div>
         {% if fase == 3 %}
-        <div class="data-row"><span class="data-label lang-text" data-pt-br="Título (x):" data-en="Quality (x):" data-es="Calidad (x):">Título (x):</span> <span class="data-value"><span class="format-num">{{ titulo }}</span> %</span></div>
+        <div class="data-row" data-tour-pt-br="Fração em massa de vapor presente numa mistura saturada líquido-vapor (0% = só líquido, 100% = só vapor). Só aparece na região de saturação." data-tour-en="Mass fraction of vapor present in a saturated liquid-vapor mixture (0% = only liquid, 100% = only vapor). Only shown in the saturation region." data-tour-es="Fracción en masa de vapor presente en una mezcla saturada líquido-vapor (0% = solo líquido, 100% = solo vapor). Solo aparece en la región de saturación."><span class="data-label lang-text" data-pt-br="Título (x):" data-en="Quality (x):" data-es="Calidad (x):">Título (x):</span><span class="data-value"><span class="format-num">{{ titulo }}</span> %</span></div>
         {% endif %}
     </div>
 
     <div class="center-column">
-        <div class="slider-mini-container">
-            <h4 id="volumeSliderLabel">
-                <i class="fas fa-eye"></i>
+        <div class="slider-mini-container" data-tour-pt-br="Arraste para visualizar como o pistão e o volume do cilindro mudam entre o estado inicial e o estado final do processo." data-tour-en="Drag to see how the piston and cylinder volume change between the initial and final states of the process." data-tour-es="Arrastre para visualizar cómo cambian el pistón y el volumen del cilindro entre el estado inicial y el estado final del proceso." data-tour-label-pt-br="Controle do pistão" data-tour-label-en="Piston control" data-tour-label-es="Control del pistón">
+            <h4 id="volumeSliderLabel">                <i class="fas fa-eye"></i>
                 <span class="lang-text" data-pt-br="Visualizando:" data-en="Viewing:" data-es="Viendo:">Visualizando:</span>
                 <span id="volumeValue" style="color: var(--secondary-color);" class="lang-text" data-pt-br="Estado Inicial" data-en="Initial State" data-es="Estado Inicial">Estado Inicial</span>
             </h4>
@@ -821,9 +816,8 @@
     <div class="state-card final-state">
         <h2><i class="fas fa-stop-circle"></i> <span id="stateHeaderFinal" class="lang-text" data-pt-br="Estado Final (2)" data-en="Final State (2)" data-es="Estado Final (2)">Estado Final (2)</span></h2>
 
-        <div class="data-row">
-            <span class="data-label lang-text" data-pt-br="Fase:" data-en="Phase:" data-es="Fase:">Fase:</span>
-            <span class="data-value">
+        <div class="data-row" data-tour-pt-br="Indica se a substância está como líquido comprimido, vapor superaquecido ou numa mistura líquido-vapor (saturação) nesse estado." data-tour-en="Indicates whether the substance is a compressed liquid, superheated vapor, or a liquid-vapor mixture (saturation) at this state." data-tour-es="Indica si la sustancia está como líquido comprimido, vapor sobrecalentado o en una mezcla líquido-vapor (saturación) en este estado.">
+            <span class="data-label lang-text" data-pt-br="Fase:" data-en="Phase:" data-es="Fase:">Fase:</span>            <span class="data-value">
                 {% if fase2 == 1 %}
                     <span class="lang-text" data-pt-br="Líquido Comprimido" data-en="Compressed Liquid" data-es="Líquido Comprimido">Líquido Comprimido</span>
                 {% elif fase2 == 2 %}
@@ -833,27 +827,27 @@
                 {% endif %}
             </span>
         </div>
-        <div class="data-row"><span class="data-label lang-text" data-pt-br="Massa (m):" data-en="Mass (m):" data-es="Masa (m):">Massa (m):</span> <span class="data-value"><span class="format-num">1,0</span> kg</span></div>
-        <div class="data-row"><span class="data-label lang-text" data-pt-br="Temperatura (T):" data-en="Temperature (T):" data-es="Temperatura (T):">Temperatura (T):</span> <span class="data-value"><span class="format-num">{{ temperatura2 }}</span> K</span></div>
-        <div class="data-row"><span class="data-label lang-text" data-pt-br="Pressão (p):" data-en="Pressure (p):" data-es="Presión (p):">Pressão (p):</span> <span class="data-value"><span class="format-num">{{ pressao2 }}</span> kPa</span></div>
-        <div class="data-row"><span class="data-label lang-text" data-pt-br="Volume específico (v):" data-en="Specific Volume (v):" data-es="Volumen específico (v):">Volume específico (v):</span> <span class="data-value"><span class="format-num">{{ volume_especifico2|floatformat:6 }}</span> m³/kg</span></div>
-        <div class="data-row"><span class="data-label lang-text" data-pt-br="Energia Interna (u):" data-en="Internal Energy (u):" data-es="Energía Interna (u):">Energia Interna (u):</span> <span class="data-value"><span class="format-num">{{ energia_interna2 }}</span> kJ/kg</span></div>
-        <div class="data-row"><span class="data-label lang-text" data-pt-br="Entalpia (h):" data-en="Enthalpy (h):" data-es="Entalpía (h):">Entalpia (h):</span> <span class="data-value"><span class="format-num">{{ entalpia_especifica2 }}</span> kJ/kg</span></div>
-        <div class="data-row"><span class="data-label lang-text" data-pt-br="Entropia (s):" data-en="Entropy (s):" data-es="Entropía (s):">Entropia (s):</span> <span class="data-value"><span class="format-num">{{ entropia_especifica2 }}</span> kJ/kg.K</span></div>
+        <div class="data-row" data-tour-pt-br="Quantidade de massa da substância considerada no sistema, usada em todos os cálculos de calor, trabalho e entropia." data-tour-en="Amount of mass of the substance considered in the system, used in all heat, work and entropy calculations." data-tour-es="Cantidad de masa de la sustancia considerada en el sistema, usada en todos los cálculos de calor, trabajo y entropía."><span class="data-label lang-text" data-pt-br="Massa (m):" data-en="Mass (m):" data-es="Masa (m):">Massa (m):</span><span class="data-value"><span class="format-num">1,0</span> kg</span></div>
+        <div class="data-row" data-tour-pt-br="Temperatura da substância nesse estado, em graus Celsius." data-tour-en="Temperature of the substance at this state, in degrees Celsius." data-tour-es="Temperatura de la sustancia en este estado, en grados Celsius."><span class="data-label lang-text" data-pt-br="Temperatura (T):" data-en="Temperature (T):" data-es="Temperatura (T):">Temperatura (T):</span><span class="data-value"><span class="format-num">{{ temperatura2 }}</span> K</span></div>
+        <div class="data-row" data-tour-pt-br="Pressão absoluta da substância nesse estado, em quilopascal (kPa)." data-tour-en="Absolute pressure of the substance at this state, in kilopascals (kPa)." data-tour-es="Presión absoluta de la sustancia en este estado, en kilopascales (kPa)."><span class="data-label lang-text" data-pt-br="Pressão (p):" data-en="Pressure (p):" data-es="Presión (p):">Pressão (p):</span><span class="data-value"><span class="format-num">{{ pressao2 }}</span> kPa</span></div>
+        <div class="data-row" data-tour-pt-br="Volume ocupado por unidade de massa da substância (v = V/m), em m³/kg." data-tour-en="Volume occupied per unit of mass of the substance (v = V/m), in m³/kg." data-tour-es="Volumen ocupado por unidad de masa de la sustancia (v = V/m), en m³/kg."><span class="data-label lang-text" data-pt-br="Volume específico (v):" data-en="Specific Volume (v):" data-es="Volumen específico (v):">Volume específico (v):</span><span class="data-value"><span class="format-num">{{ volume_especifico2|floatformat:6 }}</span> m³/kg</span></div>
+        <div class="data-row" data-tour-pt-br="Energia associada ao movimento e às interações das moléculas da substância, em kJ/kg." data-tour-en="Energy associated with the motion and interactions of the substance's molecules, in kJ/kg." data-tour-es="Energía asociada al movimiento e interacciones de las moléculas de la sustancia, en kJ/kg."><span class="data-label lang-text" data-pt-br="Energia Interna (u):" data-en="Internal Energy (u):" data-es="Energía Interna (u):">Energia Interna (u):</span><span class="data-value"><span class="format-num">{{ energia_interna2 }}</span> kJ/kg</span></div>
+        <div class="data-row" data-tour-pt-br="Propriedade definida como h = u + P·v, muito usada em balanços de energia de sistemas abertos, em kJ/kg." data-tour-en="Property defined as h = u + P·v, widely used in energy balances of open systems, in kJ/kg." data-tour-es="Propiedad definida como h = u + P·v, muy usada en balances de energía de sistemas abiertos, en kJ/kg."><span class="data-label lang-text" data-pt-br="Entalpia (h):" data-en="Enthalpy (h):" data-es="Entalpía (h):">Entalpia (h):</span><span class="data-value"><span class="format-num">{{ entalpia_especifica2 }}</span> kJ/kg</span></div>
+        <div class="data-row" data-tour-pt-br="Medida do grau de desordem molecular da substância, usada para avaliar a reversibilidade do processo, em kJ/kg.K." data-tour-en="Measure of the substance's molecular disorder, used to assess the reversibility of the process, in kJ/kg.K." data-tour-es="Medida del grado de desorden molecular de la sustancia, usada para evaluar la reversibilidad del proceso, en kJ/kg.K."><span class="data-label lang-text" data-pt-br="Entropia (s):" data-en="Entropy (s):" data-es="Entropía (s):">Entropia (s):</span><span class="data-value"><span class="format-num">{{ entropia_especifica2 }}</span> kJ/kg.K</span></div>
         {% if fase2 == 3 %}
-        <div class="data-row"><span class="data-label lang-text" data-pt-br="Título (x):" data-en="Quality (x):" data-es="Calidad (x):">Título (x):</span> <span class="data-value"><span class="format-num">{{ titulo2 }}</span> %</span></div>
+        <div class="data-row" data-tour-pt-br="Fração em massa de vapor presente numa mistura saturada líquido-vapor (0% = só líquido, 100% = só vapor). Só aparece na região de saturação." data-tour-en="Mass fraction of vapor present in a saturated liquid-vapor mixture (0% = only liquid, 100% = only vapor). Only shown in the saturation region." data-tour-es="Fracción en masa de vapor presente en una mezcla saturada líquido-vapor (0% = solo líquido, 100% = solo vapor). Solo aparece en la región de saturación."><span class="data-label lang-text" data-pt-br="Título (x):" data-en="Quality (x):" data-es="Calidad (x):">Título (x):</span><span class="data-value"><span class="format-num">{{ titulo2 }}</span> %</span></div>
         {% endif %}
     </div>
 </div>
 
 <div class="bottom-row">
-    <h3><i class="fas fa-chart-line"></i> <span class="lang-text" data-pt-br="Resultados do Processo" data-en="Process Results" data-es="Resultados del Proceso">Resultados do Processo</span></h3>
+    <h3><i class="fas fa-chart-line"></i> <span class="lang-text" data-pt-br="Resultados do Processo — Metano" data-en="Process Results — Methane" data-es="Resultados del Proceso — Metano">Resultados do Processo — Metano</span></h3>
 
     <div class="process-results">
-        <div class="process-item"><span class="lang-text" data-pt-br="Temperatura da Vizinhança" data-en="Surroundings Temp" data-es="Temp. del Entorno">Temperatura da Vizinhança</span><strong><span class="format-num">{{ TempViz }}</span> K</strong></div>
-        <div class="process-item"><span class="lang-text" data-pt-br="Calor (Q)" data-en="Heat (Q)" data-es="Calor (Q)">Calor (Q)</span><strong><span class="format-num">{{ Calor }}</span> kJ</strong></div>
-        <div class="process-item"><span class="lang-text" data-pt-br="Trabalho (W)" data-en="Work (W)" data-es="Trabajo (W)">Trabalho (W)</span><strong><span class="format-num">{{ Trabalho }}</span> kJ</strong></div>
-        <div class="process-item"><span>Sger</span><strong><span class="format-num">{{ Sger }}</span> kJ/K</strong></div>
+        <div class="process-item" data-tour-pt-br="Temperatura do ambiente externo com o qual o sistema troca calor, usada no cálculo da entropia gerada." data-tour-en="Temperature of the external environment with which the system exchanges heat, used to calculate the entropy generated." data-tour-es="Temperatura del ambiente externo con el que el sistema intercambia calor, usada para calcular la entropía generada."><span class="lang-text" data-pt-br="Temperatura da Vizinhança" data-en="Surroundings Temp" data-es="Temp. del Entorno">Temperatura da Vizinhança</span><strong><span class="format-num">{{ TempViz }}</span> K</strong></div>
+        <div class="process-item" data-tour-pt-br="Quantidade de calor trocado entre o sistema e a vizinhança durante o processo (positivo = calor recebido)." data-tour-en="Amount of heat exchanged between the system and the surroundings during the process (positive = heat received)." data-tour-es="Cantidad de calor intercambiado entre el sistema y el entorno durante el proceso (positivo = calor recibido)."><span class="lang-text" data-pt-br="Calor (Q)" data-en="Heat (Q)" data-es="Calor (Q)">Calor (Q)</span><strong><span class="format-num">{{ Calor }}</span> kJ</strong></div>
+        <div class="process-item" data-tour-pt-br="Trabalho realizado pelo (ou sobre o) sistema durante o processo, calculado pela área sob a curva P-v." data-tour-en="Work done by (or on) the system during the process, calculated as the area under the P-v curve." data-tour-es="Trabajo realizado por (o sobre) el sistema durante el proceso, calculado como el área bajo la curva P-v."><span class="lang-text" data-pt-br="Trabalho (W)" data-en="Work (W)" data-es="Trabajo (W)">Trabalho (W)</span><strong><span class="format-num">{{ Trabalho }}</span> kJ</strong></div>
+        <div class="process-item" data-tour-pt-br="Entropia total gerada no processo. Se for negativa, o processo é fisicamente impossível (viola a 2ª Lei da Termodinâmica)." data-tour-en="Total entropy generated in the process. If negative, the process is physically impossible (violates the 2nd Law of Thermodynamics)." data-tour-es="Entropía total generada en el proceso. Si es negativa, el proceso es físicamente imposible (viola la 2ª Ley de la Termodinámica)."><span>Sger</span><strong><span class="format-num">{{ Sger }}</span> kJ/K</strong></div>
 
         {% if Sger < 0 %}
         <div class="process-impossible lang-text" data-pt-br="PROCESSO IMPOSSÍVEL!" data-en="IMPOSSIBLE PROCESS!" data-es="¡PROCESO IMPOSIBLE!">PROCESSO IMPOSSÍVEL!</div>
@@ -891,12 +885,12 @@
 
 <div id="didacticModal" class="modal">
     <div class="modal-content" style="text-align: left; max-width: 900px; border-radius: 15px; border: none; background: #f4f6f9; padding: 25px;">
-        <span class="close-btn" id="closeDidacticBtn" style="font-size: 30px; color: white; right: 20px; top: 15px;">&times;</span>
+        <span class="close-btn" id="closeDidacticBtn" title="Fechar" role="button" tabindex="0" style="font-size: 30px; color: white; right: 20px; top: 15px;">&times;</span>
 
         <div style="background: var(--primary-color); color: white; padding: 20px; margin: -25px -25px 25px -25px; border-radius: 15px 15px 0 0; text-align: center;">
             <h2 style="margin: 0; font-size: 1.6em; text-transform: uppercase; letter-spacing: 1px;">
                 <i class="fas fa-book-open" style="margin-right: 10px;"></i>
-                <span class="lang-text" data-pt-br="Memorial de Cálculo Passo-a-Passo" data-en="Step-by-Step Calculation Memorial" data-es="Memoria de Cálculo Paso a Paso">Memorial de Cálculo Passo-a-Passo</span>
+                <span class="lang-text" data-pt-br="Memorial de Cálculo Passo-a-Passo — Metano" data-en="Step-by-Step Calculation Memorial — Methane" data-es="Memoria de Cálculo Paso a Paso — Metano">Memorial de Cálculo Passo-a-Passo — Metano</span>
             </h2>
         </div>
 
@@ -1059,7 +1053,7 @@
 
 <div id="processModal" class="modal">
     <div class="modal-content">
-        <span class="close-btn" id="closeProcessBtn">&times;</span>
+        <span class="close-btn" id="closeProcessBtn" title="Fechar" role="button" tabindex="0">&times;</span>
         <h3 style="color: var(--primary-color);" class="lang-text" data-pt-br="Continuar Processo" data-en="Continue Process" data-es="Continuar Proceso">Continuar Processo</h3>
         <p class="lang-text" data-pt-br="Selecione o próximo passo:" data-en="Select the next step:" data-es="Seleccione el siguiente paso:">Selecione o próximo passo:</p>
 
@@ -1115,7 +1109,7 @@
             <div>
                 <h2 style="margin: 0; font-size: 1.3em; letter-spacing: 0.5px;">
                     <i class="fas fa-file-alt" style="margin-right: 10px;"></i>
-                    <span class="lang-text" data-pt-br="Relatório Final do Processo Termodinâmico" data-en="Thermodynamic Process Final Report" data-es="Informe Final del Proceso Termodinámico">Relatório Final do Processo Termodinâmico</span>
+                    <span class="lang-text" data-pt-br="Relatório Final do Processo Termodinâmico — Metano" data-en="Thermodynamic Process Final Report — Methane" data-es="Informe Final del Proceso Termodinámico — Metano">Relatório Final do Processo Termodinâmico — Metano</span>
                 </h2>
                 <div id="reportTimestamp" style="font-size: 0.78em; opacity: 0.75; margin-top: 3px;"></div>
             </div>
@@ -1124,7 +1118,7 @@
                     <i class="fas fa-print" style="margin-right: 6px;"></i>
                     <span class="lang-text" data-pt-br="Imprimir" data-en="Print" data-es="Imprimir">Imprimir</span>
                 </button>
-                <span id="closeReportBtn" style="cursor: pointer; font-size: 28px; line-height: 1; color: white; padding: 0 4px; opacity: 0.85;">&times;</span>
+                <span id="closeReportBtn" style="cursor: pointer; font-size: 28px; line-height: 1; color: white; padding: 0 4px; opacity: 0.85;" title="Fechar" role="button" tabindex="0">&times;</span>
             </div>
         </div>
 
@@ -1146,7 +1140,7 @@
             <div class="report-section">
                 <div class="report-section-title">
                     <i class="fas fa-chart-bar"></i>
-                    <span class="lang-text" data-pt-br="Resultados do Processo" data-en="Process Results" data-es="Resultados del Proceso">Resultados do Processo</span>
+                    <span class="lang-text" data-pt-br="Resultados do Processo — Metano" data-en="Process Results — Methane" data-es="Resultados del Proceso — Metano">Resultados do Processo — Metano</span>
                 </div>
                 <div id="reportMetrics"></div>
             </div>
@@ -1253,11 +1247,12 @@
 
 <div id="diagramModal" class="modal">
     <div class="modal-content modal-chart">
-        <span class="close-btn" id="closeDiagramBtn">&times;</span>
-        <h3 style="color: var(--primary-color); margin-top: 0; margin-bottom: 5px;" class="lang-text" data-pt-br="Diagramas Termodinâmicos Interativos" data-en="Interactive Thermodynamic Diagrams" data-es="Diagramas Termodinámicos Interactivos">Diagramas Termodinâmicos Interativos</h3>
-        <p class="zoom-tip"><i class="fas fa-search"></i> <span class="lang-text" data-pt-br="Dica: Use o scroll do mouse para dar Zoom e clique para arrastar o gráfico." data-en="Tip: Use mouse scroll to Zoom and click to drag the chart." data-es="Consejo: Use la rueda del ratón para hacer Zoom y haga clic para arrastrar el gráfico.">Dica: Use o scroll do mouse para dar Zoom e clique para arrastar o gráfico.</span></p>
+        <span class="close-btn" id="closeDiagramBtn" title="Fechar" role="button" tabindex="0">&times;</span>
+        <h3 style="color: var(--primary-color); margin-top: 0; margin-bottom: 5px;" class="lang-text" data-pt-br="Diagramas Termodinâmicos Interativos — Metano" data-en="Interactive Thermodynamic Diagrams — Methane" data-es="Diagramas Termodinámicos Interactivos — Metano">Diagramas Termodinâmicos Interativos — Metano</h3>
 
-        <div class="chart-controls">
+        <div class="chart-controls" data-tour-pt-br="Escolha em qual par de propriedades (por exemplo, Pressão x Volume ou Temperatura x Entropia) deseja visualizar o processo." data-tour-en="Choose which pair of properties (e.g. Pressure x Volume or Temperature x Entropy) you want to visualize the process in." data-tour-es="Elija en qué par de propiedades (por ejemplo, Presión x Volumen o Temperatura x Entropía) desea visualizar el proceso." data-tour-label-pt-br="Tipo de diagrama" data-tour-label-en="Diagram type" data-tour-label-es="Tipo de diagrama">
+            
+            
             <select id="chartTypeSelector" aria-label="Selecionar tipo de diagrama termodinâmico">
                 <option value="Pv" class="lang-text" data-pt-br="Diagrama P-v (Pressão x Volume)" data-en="P-v Diagram (Pressure x Volume)" data-es="Diagrama P-v (Presión x Volumen)">Diagrama P-v (Pressão x Volume)</option>
                 <option value="Ts" class="lang-text" data-pt-br="Diagrama T-s (Temperatura x Entropia)" data-en="T-s Diagram (Temperature x Entropy)" data-es="Diagrama T-s (Temperatura x Entropía)">Diagrama T-s (Temperatura x Entropia)</option>
@@ -1274,9 +1269,6 @@
                 <i class="fas fa-layer-group" style="margin-right: 6px;"></i>
                 <span id="toggleText" class="lang-text" data-pt-br="Ver todos processos" data-en="View All Processes" data-es="Ver todos los procesos">Ver todos processos</span>
             </button>
-            <button id="btnResetZoom" class="btn btn-outline">
-                <i class="fas fa-expand" style="margin-right: 5px;"></i> <span class="lang-text" data-pt-br="Resetar Zoom" data-en="Reset Zoom" data-es="Restablecer Zoom">Resetar Zoom</span>
-            </button>
         </div>
 
         <div class="chart-canvas-wrapper">
@@ -1286,7 +1278,7 @@
 </div>
 <div id="historyModal" class="modal">
     <div class="modal-content" style="max-width: min(1500px, 96vw); max-height: 90vh; overflow-y: auto; border-radius: 15px; background: #f4f6f9;">
-        <span class="close-btn" id="closeHistoryBtn">&times;</span>
+        <span class="close-btn" id="closeHistoryBtn" title="Fechar" role="button" tabindex="0">&times;</span>
         <h2 style="color: var(--primary-color); margin-top:0;">
             <i class="fas fa-history" style="margin-right:8px;"></i>
             <span class="lang-text" data-pt-br="Histórico de Cálculos" data-en="Calculation History" data-es="Historial de Cálculos">Histórico de Cálculos</span>
@@ -1423,7 +1415,7 @@
         console.error("Erro ao ler histórico de processos:", e);
     }
 
-    // --- LÓGICA DO CHART.JS COM ZOOM ---
+    // --- LÓGICA DO CHART.JS ---
     let thermoChartInstance = null;
     const ctxChart = document.getElementById('thermoChart').getContext('2d');
     const chartTypeSelector = document.getElementById('chartTypeSelector');
@@ -1435,7 +1427,6 @@
 
     document.getElementById('btnCurrentDiagram').onclick = () => openDiagramModal(false);
     document.getElementById('closeDiagramBtn').onclick = () => document.getElementById('diagramModal').style.display = "none";
-    document.getElementById('btnResetZoom').onclick = () => { if (thermoChartInstance) thermoChartInstance.resetZoom(); };
 
     document.getElementById('btnToggleFullCycle').onclick = function() {
         showingAll = !showingAll;
@@ -1656,8 +1647,8 @@
 
         // --- Folga extra nos eixos para os pontos de estado nunca ficarem colados no canto do gráfico ---
         const allPlottedPts = datasetsToRender.flatMap(ds => ds.data);
-        const allXVals = allPlottedPts.map(p => p.x).filter(v => isFinite(v) && v > 0);
-        const allYVals = allPlottedPts.map(p => p.y).filter(v => isFinite(v) && v > 0);
+        const allXVals = allPlottedPts.map(p => p.x).filter(v => isFinite(v) && (!conf.xLog || v > 0));
+        const allYVals = allPlottedPts.map(p => p.y).filter(v => isFinite(v) && (!conf.yLog || v > 0));
         const xDataMin = Math.min(...allXVals), xDataMax = Math.max(...allXVals);
         const yDataMin = Math.min(...allYVals), yDataMax = Math.max(...allYVals);
         const xBounds = conf.xLog
@@ -1729,19 +1720,7 @@
                             }
                         }
                     },
-                    zoom: {
-                        pan: { enabled: true, mode: 'xy' },
-                        zoom: {
-                            wheel: { enabled: true },
-                            pinch: { enabled: true },
-                            mode: 'xy'
-                        },
-                        // TRAVA O ZOOM OUT NO TAMANHO ORIGINAL DO GRÁFICO
-                        limits: {
-                            x: { min: 'original', max: 'original' },
-                            y: { min: 'original', max: 'original' }
-                        }
-                    }
+                    
                 }
             },
             plugins: [
@@ -2563,10 +2542,7 @@
                             }
                         },
                         tooltip: { enabled: false },
-                        zoom: {
-                            pan: { enabled: false },
-                            zoom: { wheel: { enabled: false }, pinch: { enabled: false } }
-                        }
+                        
                     }
                 },
                 plugins: [{

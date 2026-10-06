@@ -577,8 +577,8 @@
             </span>
         </div>
         <div class="footer-center">
-            <span class="lang-text" data-pt-br="Última atualização: 23/09/2026" data-en="Last updated: 09/23/2026" data-es="Última actualización: 23/09/2026">
-                Última atualização: 23/09/2026
+            <span class="lang-text" data-pt-br="Última atualização: 05/10/2026" data-en="Last updated: 10/05/2026" data-es="Última actualización: 05/10/2026">
+                Última atualização: 05/10/2026
             </span>
         </div>
         <div class="footer-right">
@@ -696,10 +696,18 @@
                 'btnFinalReport': { 'pt-br': 'Gera um relatório final com os resultados, pronto para exportar como imagem.', 'en': 'Generates a final report with the results, ready to export as an image.', 'es': 'Genera un informe final con los resultados, listo para exportar como imagen.' },
                 'btnHistory': { 'pt-br': 'Mostra o histórico dos cálculos feitos nesta sessão, para comparar resultados.', 'en': 'Shows the history of calculations made in this session, to compare results.', 'es': 'Muestra el historial de los cálculos hechos en esta sesión, para comparar resultados.' },
                 'openModalBtn': { 'pt-br': 'Avança para a próxima etapa, informando o segundo estado do processo.', 'en': 'Moves to the next step, entering the second state of the process.', 'es': 'Avanza a la siguiente etapa, ingresando el segundo estado del proceso.' },
-                'page-help-btn': { 'pt-br': 'Abre a ajuda contextual desta página.', 'en': 'Opens the contextual help for this page.', 'es': 'Abre la ayuda contextual de esta página.' }
+                'page-help-btn': { 'pt-br': 'Abre a ajuda contextual desta página.', 'en': 'Opens the contextual help for this page.', 'es': 'Abre la ayuda contextual de esta página.' },
+                'btnToggleFullCycle': { 'pt-br': 'Alterna entre ver só este processo e ver todos os processos do ciclo juntos no diagrama.', 'en': 'Switches between showing only this process and all the cycle processes together on the diagram.', 'es': 'Alterna entre ver solo este proceso y todos los procesos del ciclo juntos en el diagrama.' },
+                'btnCompareSelected': { 'pt-br': 'Compara lado a lado os cálculos marcados no histórico.', 'en': 'Compares side by side the calculations ticked in the history.', 'es': 'Compara lado a lado los cálculos marcados en el historial.' },
+                'btnClearHistory': { 'pt-br': 'Apaga todos os cálculos guardados no histórico desta sessão.', 'en': "Deletes all calculations stored in this session's history.", 'es': 'Borra todos los cálculos guardados en el historial de esta sesión.' },
+                'btnStateDiagram': { 'pt-br': 'Abre o diagrama termodinâmico do estado calculado.', 'en': 'Opens the thermodynamic diagram of the calculated state.', 'es': 'Abre el diagrama termodinámico del estado calculado.' },
+                'volumeSlider': { 'pt-br': 'Arraste para ver como o pistão e o volume do cilindro mudam entre o estado inicial e o final.', 'en': 'Drag to see how the piston and cylinder volume change between the initial and final states.', 'es': 'Arrastre para ver cómo cambian el pistón y el volumen del cilindro entre el estado inicial y el final.' },
+                'chartTypeSelector': { 'pt-br': 'Escolhe o par de propriedades (P-v, T-s, h-s…) em que o processo é desenhado.', 'en': 'Chooses the property pair (P-v, T-s, h-s…) in which the process is drawn.', 'es': 'Elige el par de propiedades (P-v, T-s, h-s…) en que se dibuja el proceso.' }
             };
 
             var descByLabel = {
+                'imprimir': { 'pt-br': 'Imprime (ou salva em PDF) a tela de resultados.', 'en': 'Prints (or saves as PDF) the results screen.', 'es': 'Imprime (o guarda en PDF) la pantalla de resultados.' },
+                'print': { 'pt-br': 'Imprime (ou salva em PDF) a tela de resultados.', 'en': 'Prints (or saves as PDF) the results screen.', 'es': 'Imprime (o guarda en PDF) la pantalla de resultados.' },
                 'voltar': { 'pt-br': 'Volta para a etapa anterior, sem perder os dados já informados.', 'en': 'Goes back to the previous step, without losing the data already entered.', 'es': 'Vuelve a la etapa anterior, sin perder los datos ya ingresados.' },
                 'go back': { 'pt-br': 'Volta para a etapa anterior, sem perder os dados já informados.', 'en': 'Goes back to the previous step, without losing the data already entered.', 'es': 'Vuelve a la etapa anterior, sin perder los datos ya ingresados.' },
                 'volver': { 'pt-br': 'Volta para a etapa anterior, sem perder os dados já informados.', 'en': 'Goes back to the previous step, without losing the data already entered.', 'es': 'Vuelve a la etapa anterior, sin perder los datos ya ingresados.' },
@@ -772,6 +780,8 @@
 
             function getDescription(el, label) {
                 var lang = localStorage.getItem('preferredLang') || 'pt-br';
+                var own = el.getAttribute('data-tour-' + lang) || el.getAttribute('data-tour-pt-br');
+                if (own) return own;
                 var byId = el.id && descById[el.id];
                 if (byId) return byId[lang] || byId['pt-br'];
                 var byLabel = descByLabel[label.trim().toLowerCase()];
@@ -782,6 +792,9 @@
             // Extrai um rótulo/texto legível de um botão da tela (tooltip do ícone,
             // texto visível, aria-label ou title, nessa ordem de preferência).
             function getLabel(el) {
+                var lang0 = localStorage.getItem('preferredLang') || 'pt-br';
+                var custom = el.getAttribute('data-tour-label-' + lang0) || el.getAttribute('data-tour-label-pt-br');
+                if (custom) return custom;
                 var tooltip = el.querySelector('.icon-tooltip');
                 if (tooltip && tooltip.textContent.trim()) return tooltip.textContent.trim();
                 var clone = el.cloneNode(true);
@@ -811,7 +824,7 @@
                 steps = [];
                 var candidates = document.querySelectorAll(
                     '.icon-btn, .btn, .process-button, .tab-btn, .btn-submit, #page-help-btn, ' +
-                    '.option-card, #value_input_field, ' +
+                    '.option-card, #value_input_field, [data-tour-label-pt-br], ' +
                     '.results-card .data-row, .state-card .data-row, .process-results .process-item'
                 );
                 candidates.forEach(function (el) {

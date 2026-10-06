@@ -1,12 +1,10 @@
 {% extends 'base2.html' %}
 
-{% block title %}TERMO-CP{% endblock %}
+{% block title %}TERMO-CP – Gás Ideal{% endblock %}
 
 {% block extra_head %}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/hammerjs@2.0.8"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@2.0.1/dist/chartjs-plugin-zoom.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 {% endblock %}
 
@@ -186,11 +184,12 @@
     a.icon-btn { text-decoration: none; }
 
     .chart-controls { display: flex; justify-content: center; align-items: center; margin-bottom: 15px; gap: 15px; flex-wrap: wrap; }
+    .micro-toggle { display: inline-flex; align-items: center; gap: 6px; font-size: 0.9em; color: var(--primary-color); font-weight: bold; cursor: pointer; user-select: none; }
+    .micro-toggle input { width: 16px; height: 16px; cursor: pointer; accent-color: var(--secondary-color); }
     .chart-controls select {
         padding: 8px 12px; border-radius: 6px; border: 2px solid var(--primary-color);
         font-family: inherit; color: var(--primary-color); font-weight: bold; outline: none; cursor: pointer;
     }
-    .zoom-tip { font-size: 0.8em; color: #666; font-style: italic; margin-bottom: 10px; }
 
     /* --- ESTILOS DO MEMORIAL DE CÁLCULO DIDÁTICO REFORMULADO --- */
     .math-step {
@@ -755,10 +754,10 @@
     <div class="side-column" style="display: flex; flex-direction: column; gap: 15px; flex: 1; min-height: 0;">
         <div class="state-card" style="flex: 1;">
             <h2><i class="fas fa-play-circle"></i> <span id="stateHeaderInitial" class="lang-text" data-pt-br="Estado Inicial (1)" data-en="Initial State (1)" data-es="Estado Inicial (1)">Estado Inicial (1)</span></h2>
-            <div class="data-row"><span class="data-label lang-text" data-pt-br="Temperatura (T):" data-en="Temperature (T):" data-es="Temperatura (T):">Temperatura (T):</span> <span class="data-value"><span class="format-num">{{ T1 }}</span> °C</span></div>
-            <div class="data-row"><span class="data-label lang-text" data-pt-br="Volume específico (v):" data-en="Specific Volume (v):" data-es="Volumen específico (v):">Volume específico (v):</span> <span class="data-value"><span class="format-num">{{ V }}</span> m³/kg</span></div>
-            <div class="data-row"><span class="data-label lang-text" data-pt-br="Pressão (p):" data-en="Pressure (p):" data-es="Presión (p):">Pressão (p):</span> <span class="data-value"><span class="format-num">{{ p1 }}</span> kPa</span></div>
-            <div class="data-row"><span class="data-label lang-text" data-pt-br="Massa (m):" data-en="Mass (m):" data-es="Masa (m):">Massa (m):</span> <span class="data-value"><span class="format-num">1.0</span> kg</span></div>
+            <div class="data-row" data-tour-pt-br="Temperatura da substância nesse estado, em graus Celsius." data-tour-en="Temperature of the substance at this state, in degrees Celsius." data-tour-es="Temperatura de la sustancia en este estado, en grados Celsius."><span class="data-label lang-text" data-pt-br="Temperatura (T):" data-en="Temperature (T):" data-es="Temperatura (T):">Temperatura (T):</span><span class="data-value"><span class="format-num">{{ T1 }}</span> °C</span></div>
+            <div class="data-row" data-tour-pt-br="Volume ocupado por unidade de massa da substância (v = V/m), em m³/kg." data-tour-en="Volume occupied per unit of mass of the substance (v = V/m), in m³/kg." data-tour-es="Volumen ocupado por unidad de masa de la sustancia (v = V/m), en m³/kg."><span class="data-label lang-text" data-pt-br="Volume específico (v):" data-en="Specific Volume (v):" data-es="Volumen específico (v):">Volume específico (v):</span><span class="data-value"><span class="format-num">{{ V }}</span> m³/kg</span></div>
+            <div class="data-row" data-tour-pt-br="Pressão absoluta da substância nesse estado, em quilopascal (kPa)." data-tour-en="Absolute pressure of the substance at this state, in kilopascals (kPa)." data-tour-es="Presión absoluta de la sustancia en este estado, en kilopascales (kPa)."><span class="data-label lang-text" data-pt-br="Pressão (p):" data-en="Pressure (p):" data-es="Presión (p):">Pressão (p):</span><span class="data-value"><span class="format-num">{{ p1 }}</span> kPa</span></div>
+            <div class="data-row" data-tour-pt-br="Quantidade de massa da substância considerada no sistema, usada em todos os cálculos de calor, trabalho e entropia." data-tour-en="Amount of mass of the substance considered in the system, used in all heat, work and entropy calculations." data-tour-es="Cantidad de masa de la sustancia considerada en el sistema, usada en todos los cálculos de calor, trabajo y entropía."><span class="data-label lang-text" data-pt-br="Massa (m):" data-en="Mass (m):" data-es="Masa (m):">Massa (m):</span><span class="data-value"><span class="format-num">1.0</span> kg</span></div>
         </div>
 
         <div class="state-card constants-card" style="flex: 0 0 auto;">
@@ -770,9 +769,8 @@
 
     <!-- COLUNA CENTRAL (GRÁFICO) -->
     <div class="center-column">
-        <div class="slider-mini-container">
-            <h4 id="volumeSliderLabel">
-                <i class="fas fa-eye"></i>
+        <div class="slider-mini-container" data-tour-pt-br="Arraste para visualizar como o pistão e o volume do cilindro mudam entre o estado inicial e o estado final do processo." data-tour-en="Drag to see how the piston and cylinder volume change between the initial and final states of the process." data-tour-es="Arrastre para visualizar cómo cambian el pistón y el volumen del cilindro entre el estado inicial y el estado final del proceso." data-tour-label-pt-br="Controle do pistão" data-tour-label-en="Piston control" data-tour-label-es="Control del pistón">
+            <h4 id="volumeSliderLabel">                <i class="fas fa-eye"></i>
                 <span class="lang-text" data-pt-br="Visualizando:" data-en="Viewing:" data-es="Viendo:">Visualizando:</span>
                 <span id="volumeValue" style="color: var(--secondary-color);" class="lang-text" data-pt-br="Estado Inicial" data-en="Initial State" data-es="Estado Inicial">Estado Inicial</span>
             </h4>
@@ -797,27 +795,27 @@
     <div class="side-column" style="display: flex; flex-direction: column; gap: 15px; flex: 1; min-height: 0;">
         <div class="state-card final-state" style="flex: 1;">
             <h2><i class="fas fa-stop-circle"></i> <span id="stateHeaderFinal" class="lang-text" data-pt-br="Estado Final (2)" data-en="Final State (2)" data-es="Estado Final (2)">Estado Final (2)</span></h2>
-            <div class="data-row"><span class="data-label lang-text" data-pt-br="Temperatura (T):" data-en="Temperature (T):" data-es="Temperatura (T):">Temperatura (T):</span> <span class="data-value"><span class="format-num">{{ T2 }}</span> °C</span></div>
-            <div class="data-row"><span class="data-label lang-text" data-pt-br="Volume específico (v):" data-en="Specific Volume (v):" data-es="Volumen específico (v):">Volume específico (v):</span> <span class="data-value"><span class="format-num">{{ V }}</span> m³/kg</span></div>
-            <div class="data-row"><span class="data-label lang-text" data-pt-br="Pressão (p):" data-en="Pressure (p):" data-es="Presión (p):">Pressão (p):</span> <span class="data-value"><span class="format-num">{{ p2 }}</span> kPa</span></div>
-            <div class="data-row"><span class="data-label lang-text" data-pt-br="Massa (m):" data-en="Mass (m):" data-es="Masa (m):">Massa (m):</span> <span class="data-value"><span class="format-num">1.0</span> kg</span></div>
+            <div class="data-row" data-tour-pt-br="Temperatura da substância nesse estado, em graus Celsius." data-tour-en="Temperature of the substance at this state, in degrees Celsius." data-tour-es="Temperatura de la sustancia en este estado, en grados Celsius."><span class="data-label lang-text" data-pt-br="Temperatura (T):" data-en="Temperature (T):" data-es="Temperatura (T):">Temperatura (T):</span><span class="data-value"><span class="format-num">{{ T2 }}</span> °C</span></div>
+            <div class="data-row" data-tour-pt-br="Volume ocupado por unidade de massa da substância (v = V/m), em m³/kg." data-tour-en="Volume occupied per unit of mass of the substance (v = V/m), in m³/kg." data-tour-es="Volumen ocupado por unidad de masa de la sustancia (v = V/m), en m³/kg."><span class="data-label lang-text" data-pt-br="Volume específico (v):" data-en="Specific Volume (v):" data-es="Volumen específico (v):">Volume específico (v):</span><span class="data-value"><span class="format-num">{{ V }}</span> m³/kg</span></div>
+            <div class="data-row" data-tour-pt-br="Pressão absoluta da substância nesse estado, em quilopascal (kPa)." data-tour-en="Absolute pressure of the substance at this state, in kilopascals (kPa)." data-tour-es="Presión absoluta de la sustancia en este estado, en kilopascales (kPa)."><span class="data-label lang-text" data-pt-br="Pressão (p):" data-en="Pressure (p):" data-es="Presión (p):">Pressão (p):</span><span class="data-value"><span class="format-num">{{ p2 }}</span> kPa</span></div>
+            <div class="data-row" data-tour-pt-br="Quantidade de massa da substância considerada no sistema, usada em todos os cálculos de calor, trabalho e entropia." data-tour-en="Amount of mass of the substance considered in the system, used in all heat, work and entropy calculations." data-tour-es="Cantidad de masa de la sustancia considerada en el sistema, usada en todos los cálculos de calor, trabajo y entropía."><span class="data-label lang-text" data-pt-br="Massa (m):" data-en="Mass (m):" data-es="Masa (m):">Massa (m):</span><span class="data-value"><span class="format-num">1.0</span> kg</span></div>
         </div>
 
         <div class="state-card constants-card final-state" style="flex: 0 0 auto;">
             <h2 style="font-size: 1.05em; margin-bottom: 5px; color: var(--secondary-color);"><i class="fas fa-superscript"></i> <span class="lang-text" data-pt-br="Constantes do Gás" data-en="Gas Constants" data-es="Constantes del Gas">Constantes do Gás</span></h2>
-            <div class="data-row"><span class="data-label lang-text" data-pt-br="Constante R:" data-en="R Constant:" data-es="Constante R:">Constante R:</span> <span class="data-value"><span class="format-num">{{ R }}</span> kJ/kg·K</span></div>
-            <div class="data-row"><span class="data-label lang-text" data-pt-br="Razão (k):" data-en="Ratio (k):" data-es="Razón (k):">Razão (k):</span> <span class="data-value"><span class="format-num">{{ K }}</span></span></div>
+            <div class="data-row" data-tour-pt-br="Constante particular do gás (R = R̄/M), usada na equação de estado dos gases ideais P·v = R·T." data-tour-en="Particular gas constant (R = R̄/M), used in the ideal-gas equation of state P·v = R·T." data-tour-es="Constante particular del gas (R = R̄/M), usada en la ecuación de estado de los gases ideales P·v = R·T."><span class="data-label lang-text" data-pt-br="Constante R:" data-en="R Constant:" data-es="Constante R:">Constante R:</span><span class="data-value"><span class="format-num">{{ R }}</span> kJ/kg·K</span></div>
+            <div class="data-row" data-tour-pt-br="Razão entre os calores específicos (k = cp/cv) do gás, usada em processos isentrópicos (adiabáticos e reversíveis)." data-tour-en="Ratio of specific heats (k = cp/cv) of the gas, used in isentropic (adiabatic and reversible) processes." data-tour-es="Razón entre los calores específicos (k = cp/cv) del gas, usada en procesos isentrópicos (adiabáticos y reversibles)."><span class="data-label lang-text" data-pt-br="Razão (k):" data-en="Ratio (k):" data-es="Razón (k):">Razão (k):</span><span class="data-value"><span class="format-num">{{ K }}</span></span></div>
         </div>
     </div>
 </div>
 
 <div class="bottom-row">
-    <h3><i class="fas fa-chart-line"></i> <span class="lang-text" data-pt-br="Resultados do Processo" data-en="Process Results" data-es="Resultados del Proceso">Resultados do Processo</span></h3>
+    <h3><i class="fas fa-chart-line"></i> <span class="lang-text" data-pt-br="Resultados do Processo — Gás Ideal" data-en="Process Results — Ideal Gas" data-es="Resultados del Proceso — Gas Ideal">Resultados do Processo — Gás Ideal</span></h3>
 
     <div class="process-results">
-        <div class="process-item"><span class="lang-text" data-pt-br="Calor (Q)" data-en="Heat (Q)" data-es="Calor (Q)">Calor (Q)</span><strong><span class="format-num abs-num">{{ Q12 }}</span> kJ</strong></div>
+        <div class="process-item" data-tour-pt-br="Quantidade de calor trocado entre o sistema e a vizinhança durante o processo (positivo = calor recebido)." data-tour-en="Amount of heat exchanged between the system and the surroundings during the process (positive = heat received)." data-tour-es="Cantidad de calor intercambiado entre el sistema y el entorno durante el proceso (positivo = calor recibido)."><span class="lang-text" data-pt-br="Calor (Q)" data-en="Heat (Q)" data-es="Calor (Q)">Calor (Q)</span><strong><span class="format-num abs-num">{{ Q12 }}</span> kJ</strong></div>
         <div class="process-item"><span class="lang-text" data-pt-br="Entropia Gerada (Sger)" data-en="Generated Entropy (Sger)" data-es="Entropía Generada (Sger)">Entropia Gerada (S<sub>ger</sub>)</span><strong><span class="format-num abs-num">{{ Sger }}</span> kJ/K</strong></div>
-        <div class="process-item"><span class="lang-text" data-pt-br="Temp. da Vizinhança" data-en="Surroundings Temp" data-es="Temp. del Entorno">Temp. da Vizinhança</span><strong><span class="format-num">{{ Tviz }}</span> °C</strong></div>
+        <div class="process-item" data-tour-pt-br="Temperatura do ambiente externo com o qual o sistema troca calor, usada no cálculo da entropia gerada." data-tour-en="Temperature of the external environment with which the system exchanges heat, used to calculate the entropy generated." data-tour-es="Temperatura del ambiente externo con el que el sistema intercambia calor, usada para calcular la entropía generada."><span class="lang-text" data-pt-br="Temp. da Vizinhança" data-en="Surroundings Temp" data-es="Temp. del Entorno">Temp. da Vizinhança</span><strong><span class="format-num">{{ Tviz }}</span> °C</strong></div>
 
         {% if Sger != None and Sger < 0 %}
         <div class="process-impossible">
@@ -858,7 +856,7 @@
 
 <div id="processModal" class="modal">
     <div class="modal-content">
-        <span class="close-btn" id="closeProcessBtn">&times;</span>
+        <span class="close-btn" id="closeProcessBtn" title="Fechar" role="button" tabindex="0">&times;</span>
         <h3 style="color: var(--primary-color);" class="lang-text" data-pt-br="Próximo Processo" data-en="Next Process" data-es="Próximo Proceso">Próximo Processo</h3>
         <p class="lang-text" data-pt-br="Selecione uma opção para continuar:" data-en="Select an option to continue:" data-es="Seleccione una opción para continuar:">Selecione uma opção para continuar:</p>
 
@@ -880,12 +878,12 @@
 
 <div id="didacticModal" class="modal">
     <div class="modal-content" style="text-align: left; max-width: 900px; border-radius: 15px; border: none; background: #f4f6f9; padding: 25px;">
-        <span class="close-btn" id="closeDidacticBtn" style="font-size: 30px; color: white; right: 20px; top: 15px;">&times;</span>
+        <span class="close-btn" id="closeDidacticBtn" title="Fechar" role="button" tabindex="0" style="font-size: 30px; color: white; right: 20px; top: 15px;">&times;</span>
 
         <div style="background: var(--primary-color); color: white; padding: 20px; margin: -25px -25px 25px -25px; border-radius: 15px 15px 0 0; text-align: center;">
             <h2 style="margin: 0; font-size: 1.6em; text-transform: uppercase; letter-spacing: 1px;">
                 <i class="fas fa-book-open" style="margin-right: 10px;"></i>
-                <span class="lang-text" data-pt-br="Memorial de Cálculo Passo-a-Passo" data-en="Step-by-Step Calculation Memorial" data-es="Memoria de Cálculo Paso a Paso">Memorial de Cálculo Passo-a-Passo</span>
+                <span class="lang-text" data-pt-br="Memorial de Cálculo Passo-a-Passo — Gás Ideal" data-en="Step-by-Step Calculation Memorial — Ideal Gas" data-es="Memoria de Cálculo Paso a Paso — Gas Ideal">Memorial de Cálculo Passo-a-Passo — Gás Ideal</span>
             </h2>
         </div>
 
@@ -1057,7 +1055,7 @@
             <div>
                 <h2 style="margin: 0; font-size: 1.3em; letter-spacing: 0.5px;">
                     <i class="fas fa-file-alt" style="margin-right: 10px;"></i>
-                    <span class="lang-text" data-pt-br="Relatório Final do Processo Termodinâmico" data-en="Thermodynamic Process Final Report" data-es="Informe Final del Proceso Termodinámico">Relatório Final do Processo Termodinâmico</span>
+                    <span class="lang-text" data-pt-br="Relatório Final do Processo Termodinâmico — Gás Ideal" data-en="Thermodynamic Process Final Report — Ideal Gas" data-es="Informe Final del Proceso Termodinámico — Gas Ideal">Relatório Final do Processo Termodinâmico — Gás Ideal</span>
                 </h2>
                 <div id="reportTimestamp" style="font-size: 0.78em; opacity: 0.75; margin-top: 3px;"></div>
             </div>
@@ -1066,7 +1064,7 @@
                     <i class="fas fa-print" style="margin-right: 6px;"></i>
                     <span class="lang-text" data-pt-br="Imprimir" data-en="Print" data-es="Imprimir">Imprimir</span>
                 </button>
-                <span id="closeReportBtn" style="cursor: pointer; font-size: 28px; line-height: 1; color: white; padding: 0 4px; opacity: 0.85;">&times;</span>
+                <span id="closeReportBtn" style="cursor: pointer; font-size: 28px; line-height: 1; color: white; padding: 0 4px; opacity: 0.85;" title="Fechar" role="button" tabindex="0">&times;</span>
             </div>
         </div>
 
@@ -1088,7 +1086,7 @@
             <div class="report-section">
                 <div class="report-section-title">
                     <i class="fas fa-chart-bar"></i>
-                    <span class="lang-text" data-pt-br="Resultados do Processo" data-en="Process Results" data-es="Resultados del Proceso">Resultados do Processo</span>
+                    <span class="lang-text" data-pt-br="Resultados do Processo — Gás Ideal" data-en="Process Results — Ideal Gas" data-es="Resultados del Proceso — Gas Ideal">Resultados do Processo — Gás Ideal</span>
                 </div>
                 <div id="reportMetrics"></div>
             </div>
@@ -1204,11 +1202,12 @@
 
 <div id="diagramModal" class="modal">
     <div class="modal-content modal-chart">
-        <span class="close-btn" id="closeDiagramBtn">&times;</span>
+        <span class="close-btn" id="closeDiagramBtn" title="Fechar" role="button" tabindex="0">&times;</span>
         <h3 style="color: var(--primary-color); margin-top: 0; margin-bottom: 5px;" class="lang-text" data-pt-br="Diagramas Termodinâmicos do Gás Ideal" data-en="Ideal Gas Thermodynamic Diagrams" data-es="Diagramas Termodinámicos del Gas Ideal">Diagramas Termodinâmicos do Gás Ideal</h3>
-        <p class="zoom-tip"><i class="fas fa-search"></i> <span class="lang-text" data-pt-br="Dica: Use o scroll do mouse para dar Zoom e clique para arrastar o gráfico." data-en="Tip: Use mouse scroll to Zoom and click to drag the chart." data-es="Consejo: Use la rueda del ratón para hacer Zoom y haga clic para arrastrar el gráfico.">Dica: Use o scroll do mouse para dar Zoom e clique para arrastar o gráfico.</span></p>
 
-        <div class="chart-controls">
+        <div class="chart-controls" data-tour-pt-br="Escolha em qual par de propriedades (por exemplo, Pressão x Volume ou Temperatura x Entropia) deseja visualizar o processo." data-tour-en="Choose which pair of properties (e.g. Pressure x Volume or Temperature x Entropy) you want to visualize the process in." data-tour-es="Elija en qué par de propiedades (por ejemplo, Presión x Volumen o Temperatura x Entropía) desea visualizar el proceso." data-tour-label-pt-br="Tipo de diagrama" data-tour-label-en="Diagram type" data-tour-label-es="Tipo de diagrama">
+            
+            
             <select id="chartTypeSelector" aria-label="Selecionar tipo de diagrama termodinâmico">
                 <option value="Pv" class="lang-text" data-pt-br="Diagrama P-v (Pressão x Volume)" data-en="P-v Diagram (Pressure x Volume)" data-es="Diagrama P-v (Presión x Volumen)">Diagrama P-v (Pressão x Volume)</option>
                 <option value="Ts" class="lang-text" data-pt-br="Diagrama T-s (Temperatura x Entropia)" data-en="T-s Diagram (Temperature x Entropy)" data-es="Diagrama T-s (Temperatura x Entropía)">Diagrama T-s (Temperatura x Entropia)</option>
@@ -1221,12 +1220,13 @@
                 <option value="Tu" class="lang-text" data-pt-br="Diagrama T-u (Temperatura x Energia Interna)" data-en="T-u Diagram (Temperature x Internal Energy)" data-es="Diagrama T-u (Temperatura x Energía Interna)">Diagrama T-u (Temperatura x Energia Interna)</option>
                 <option value="Th" class="lang-text" data-pt-br="Diagrama T-h (Temperatura x Entalpia)" data-en="T-h Diagram (Temperature x Enthalpy)" data-es="Diagrama T-h (Temperatura x Entalpía)">Diagrama T-h (Temperatura x Entalpia)</option>
             </select>
+            <label class="micro-toggle" id="microToggleLabel">
+                <input type="checkbox" id="toggleMicro" checked>
+                <span class="lang-text" data-pt-br="Mostrar microprocessos" data-en="Show micro-processes" data-es="Mostrar microprocesos">Mostrar microprocessos</span>
+            </label>
             <button id="btnToggleFullCycle" class="btn btn-secondary" style="display: none;">
                 <i class="fas fa-layer-group" style="margin-right: 6px;"></i>
                 <span id="toggleText" class="lang-text" data-pt-br="Ver todos processos" data-en="View All Processes" data-es="Ver todos los procesos">Ver todos processos</span>
-            </button>
-            <button id="btnResetZoom" class="btn btn-outline">
-                <i class="fas fa-expand" style="margin-right: 5px;"></i> <span class="lang-text" data-pt-br="Resetar Zoom" data-en="Reset Zoom" data-es="Restablecer Zoom">Resetar Zoom</span>
             </button>
         </div>
 
@@ -1248,7 +1248,7 @@
 
 <div id="historyModal" class="modal">
     <div class="modal-content" style="max-width: min(1500px, 96vw); max-height: 90vh; overflow-y: auto; border-radius: 15px; background: #f4f6f9;">
-        <span class="close-btn" id="closeHistoryBtn">&times;</span>
+        <span class="close-btn" id="closeHistoryBtn" title="Fechar" role="button" tabindex="0">&times;</span>
         <h2 style="color: var(--primary-color); margin-top:0;">
             <i class="fas fa-history" style="margin-right:8px;"></i>
             <span class="lang-text" data-pt-br="Histórico de Cálculos" data-en="Calculation History" data-es="Historial de Cálculos">Histórico de Cálculos</span>
@@ -1384,7 +1384,7 @@
         console.error("Erro ao ler histórico de processos:", e);
     }
 
-    // --- LÓGICA DO CHART.JS COM ZOOM ---
+    // --- LÓGICA DO CHART.JS ---
     let thermoChartInstance = null;
     const ctxChart = document.getElementById('thermoChart').getContext('2d');
     const chartTypeSelector = document.getElementById('chartTypeSelector');
@@ -1396,7 +1396,6 @@
 
     document.getElementById('btnCurrentDiagram').onclick = () => openDiagramModal(false);
     document.getElementById('closeDiagramBtn').onclick = () => document.getElementById('diagramModal').style.display = "none";
-    document.getElementById('btnResetZoom').onclick = () => { if (thermoChartInstance) thermoChartInstance.resetZoom(); };
 
     document.getElementById('btnToggleFullCycle').onclick = function() {
         showingAll = !showingAll;
@@ -1478,6 +1477,12 @@
         }
     };
 
+    // Microprocessos: quantidade aproximada de marcadores visíveis por processo
+    const MICRO_MARKERS = 15;
+    const toggleMicro = document.getElementById('toggleMicro');
+    let currentMicroIdx = 0;
+    if (toggleMicro) toggleMicro.addEventListener('change', () => renderChart(showingAll));
+
     function renderChart(showAll) {
         if (!pontosGrafico || pontosGrafico.length === 0) return;
 
@@ -1487,6 +1492,9 @@
 
         const lEstados = t('Estados', 'States', 'Estados');
         const lProcesso = t('Processo', 'Process', 'Proceso');
+        const lMicro = t('Microprocessos', 'Micro-processes', 'Microprocesos');
+        const lMicroAtual = t('Microestado atual', 'Current micro-state', 'Microestado actual');
+        const showMicro = !toggleMicro || toggleMicro.checked;
 
         let startIndex = showAll ? 0 : Math.max(0, pontosGrafico.length - 1);
         let stateMarkers = [];
@@ -1510,6 +1518,44 @@
                 pointHoverRadius: 6,
                 order: 1
             });
+
+            // --- Microprocessos: cada ponto intermediário calculado entre o estado inicial e o final ---
+            if (showMicro && ramo.length > 2) {
+                const totalMicro = ramo.length - 2;               // exclui estados inicial e final
+                const stepMicro = Math.max(1, Math.round(totalMicro / MICRO_MARKERS));
+                const microIdx = [];
+                for (let k = stepMicro; k < ramo.length - 1; k += stepMicro) microIdx.push(k);
+                datasetsToRender.push({
+                    label: `${lMicro} ${i+1} → ${i+2}`,
+                    data: microIdx.map(k => ({ x: dataPoints[k].x, y: dataPoints[k].y })),
+                    microIdx: microIdx,
+                    microTotal: ramo.length - 1,
+                    pointStyle: 'circle',
+                    pointRadius: 4,
+                    pointHoverRadius: 7,
+                    pointBackgroundColor: '#FFFFFF',
+                    pointBorderColor: color,
+                    pointBorderWidth: 2,
+                    showLine: false,
+                    order: 0
+                });
+                // Microestado atualmente selecionado no controle do pistão (último processo)
+                if (i === pontosGrafico.length - 1 && currentMicroIdx > 0 && currentMicroIdx < ramo.length - 1) {
+                    datasetsToRender.push({
+                        label: lMicroAtual,
+                        data: [{ x: dataPoints[currentMicroIdx].x, y: dataPoints[currentMicroIdx].y }],
+                        microIdx: [currentMicroIdx],
+                        microTotal: ramo.length - 1,
+                        pointStyle: 'rectRot',
+                        pointRadius: 9,
+                        pointBackgroundColor: color,
+                        pointBorderColor: '#FFFFFF',
+                        pointBorderWidth: 2,
+                        showLine: false,
+                        order: 0
+                    });
+                }
+            }
 
             if (i === startIndex) stateMarkers.push({ val: i + 1, x: dataPoints[0].x, y: dataPoints[0].y });
             stateMarkers.push({ val: i + 2, x: dataPoints[dataPoints.length - 1].x, y: dataPoints[dataPoints.length - 1].y });
@@ -1561,7 +1607,7 @@
                 plugins: {
                     legend: {
                         position: 'top',
-                        labels: { usePointStyle: true, filter: (item) => item.text !== lEstados, font: { size: 13 } }
+                        labels: { usePointStyle: true, filter: (item) => item.text !== lEstados && !item.text.startsWith(lMicro) && item.text !== lMicroAtual, font: { size: 13 } }
                     },
                     tooltip: {
                         backgroundColor: 'rgba(32, 55, 107, 0.95)',
@@ -1573,6 +1619,8 @@
                                 const dsIdx = items[0].datasetIndex;
                                 const idx = items[0].dataIndex;
                                 if (datasetsToRender[dsIdx].label === lEstados) return `${t('Estado', 'State', 'Estado')} ${stateMarkers[idx].val}`;
+                                const dsMicro = datasetsToRender[dsIdx];
+                                if (dsMicro.microIdx) return `${dsMicro.label} — ${t('Microestado', 'Micro-state', 'Microestado')} ${dsMicro.microIdx[idx]} / ${dsMicro.microTotal}`;
                                 return items[0].dataset.label;
                             },
                             label: (context) => {
@@ -1582,11 +1630,7 @@
                             }
                         }
                     },
-                    zoom: {
-                        pan: { enabled: true, mode: 'xy' },
-                        zoom: { wheel: { enabled: true }, pinch: { enabled: true }, mode: 'xy' },
-                        limits: { x: { min: 'original', max: 'original' }, y: { min: 'original', max: 'original' } }
-                    }
+                    
                 }
             },
             plugins: [
@@ -1690,6 +1734,7 @@
             }
 
             currentDataVolume = point.v;
+            currentMicroIdx = idx;
         } else {
             if (slider.value === "1") {
                 valText.setAttribute('data-pt-br', 'Estado Inicial');
@@ -2241,6 +2286,17 @@
                 data: dataPoints, borderColor: color, backgroundColor: color,
                 borderWidth: 3, fill: false, pointRadius: 0, tension: 0, order: 1
             });
+            if (ramo.length > 2) {
+                const stepM = Math.max(1, Math.round((ramo.length - 2) / MICRO_MARKERS));
+                const mp = [];
+                for (let k = stepM; k < ramo.length - 1; k += stepM) mp.push({ x: dataPoints[k].x, y: dataPoints[k].y });
+                datasets.push({
+                    label: `${t('Microprocessos','Micro-processes','Microprocesos')} ${i+1} → ${i+2}`,
+                    data: mp, pointStyle: 'circle', pointRadius: 3,
+                    pointBackgroundColor: '#FFFFFF', pointBorderColor: color,
+                    pointBorderWidth: 2, showLine: false, order: 0
+                });
+            }
             if (i === 0) stateMarkers.push({ val: 1, x: dataPoints[0].x, y: dataPoints[0].y });
             stateMarkers.push({ val: i+2, x: dataPoints[dataPoints.length-1].x, y: dataPoints[dataPoints.length-1].y });
         }
@@ -2298,7 +2354,7 @@
                             labels: { usePointStyle: true, filter: item => item.text !== lEstados, font: { size: 11 }, boxWidth: 20 }
                         },
                         tooltip: { enabled: false },
-                        zoom: { pan: { enabled: false }, zoom: { wheel: { enabled: false }, pinch: { enabled: false } } }
+                        
                     }
                 },
                 plugins: [{
