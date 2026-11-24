@@ -1,11 +1,41 @@
+# -*- coding: utf-8 -*-
+from django.conf import settings
 from django.contrib import admin
-from django.urls import include, path
+from django.urls import include, path, re_path
 from django.views.generic import RedirectView
+from django.views.static import serve
+
+from myapp.views_unified import (
+    api_calculate_state_view,
+    ask_mass_view,
+    parameterized_process_results_view,
+    parameterized_process_step_view,
+    parameterized_state_results_view,
+    parameterized_state_step_view,
+)
 
 urlpatterns = [
-    path('', include('myapp.agua_urls')),  # Inclui as URLs do aplicativo myapp
+    # Favicon oficial do TERMO-CP (logo do README)
+    path('favicon.ico', RedirectView.as_view(url='/static/myapp/img/favicon.png', permanent=False)),
+    path('favicon.png', RedirectView.as_view(url='/static/myapp/img/favicon.png', permanent=False)),
+
+    # Fallback para servir arquivos estáticos mesmo quando DEBUG=False localmente
+    re_path(r'^static/(?P<path>.*)$', serve, {'document_root': settings.BASE_DIR / 'myapp' / 'static'}),
+
+    # Página dedicada de entrada de Massa do sistema (kg)
+    path('massa/<str:flow_key>/', ask_mass_view, name='ask_mass'),
+
+    # Rotas Parametrizadas e Unificadas (Item 2)
+    path('calc/<slug:substance>/<slug:mode>/<int:step>/', parameterized_state_step_view, name='param_state_step'),
+    path('calc/<slug:substance>/<slug:mode>/resultados/', parameterized_state_results_view, name='param_state_results'),
+    path('calc/<slug:substance>/processo/<slug:process_type>/<int:step>/', parameterized_process_step_view, name='param_process_step'),
+    path('calc/<slug:substance>/processo/<slug:process_type>/resultados/', parameterized_process_results_view, name='param_process_results'),
+    path('api/v1/estado/', api_calculate_state_view, name='api_calculate_state'),
+
+    # Rotas Legadas (Mantidas para 100% de retrocompatibilidade)
+    path('', include('myapp.agua_urls')),
     path('admin/', admin.site.urls),
-    path('agua/', include('myapp.agua_urls')),  # Inclui as URLs específicas para "agua/"
+    path('agua/', include('myapp.agua_urls')),
     path('gas/', include('myapp.gas_urls')),
     path('amonia/', include('myapp.amonia_urls')),
     path('co2/', include('myapp.co2_urls')),
@@ -17,9 +47,4 @@ urlpatterns = [
     path('', include('myapp.processos_urls')),
     path('', include('myapp.contato_urls')),
     path('', include('myapp.ajuda_urls')),
-]
-
-# Redirecionamentos para as páginas iniciais
-urlpatterns += [
-    path('', RedirectView.as_view(url='/agua/')),  # Redireciona a página inicial para "agua/"
 ]

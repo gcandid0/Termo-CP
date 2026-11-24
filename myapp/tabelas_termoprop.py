@@ -1,8 +1,20 @@
+# -*- coding: utf-8 -*-
 class tabelas_cls:
-    """TABELAS"""
+    """TABELAS TERMODINÂMICAS (Singleton em memória para alta performance)"""
 
     classe = 'Tabelas'
+    _instance = None
+    _initialized = False
+
+    def __new__(cls):
+        if cls._instance is None:
+            cls._instance = super().__new__(cls)
+        return cls._instance
+
     def __init__(self):
+        if self.__class__._initialized:
+            return
+        self.__class__._initialized = True
 
 
 # TABELA A.2 - CONSTANTES CRÍTICAS
@@ -16,7 +28,7 @@ class tabelas_cls:
                ['VOLUME ESPECÍFICO', 'm³/kg', 0.00426, 0.00188, 0.000796, 0.00212, 0.00333, 0.00175, 0.00174, 0.0143, 0.0323, 0.00109, 0.00206, 0.00192, 0.0032, 0.00365, 0.00221, 0.00229, 0.00191, 0.00317, 0.000902, 0.00433, 0.00332, 0.00439, 0.0023, 0.00191, 0.00215, 0.00182, 0.00272, 0.00236, 0.00493, 0.00363, 0.00465, 0.00431, 0.00429, 0.00615, 0.00368, 0.00431, 0.00176, 0.00421, 0.00454, 0.0043, 0.00218, 0.00197]
                ]
 
-# TABELA A.3 - PRPRIEDADES DE ALGUNS SÓLIDOS A 25°C
+# TABELA A.3 - PROPRIEDADES DE ALGUNS SÓLIDOS A 25°C
 
         self.A_3 = [
                ['SÓLIDO', ' ', 'Acrílico', 'Areia_(seca)', 'Asfalto', 'Borracha_(macia)', 'Carbono_diamante', 'Carbono_grafite', 'Carvão', 'Concreto', 'Gelo_(0°C)', 'Granito', 'Lã', 'Lã_de_vidro', 'Madeira_dura', 'Madeira_mole_(pinho)', 'Neve_firme', 'Papel', 'Poliestireno', 'PVC', 'Sal_rocha', 'Silício', 'Tijolo_(comum)', 'Vidro', 'Aço(AISI304)', 'Alumínio', 'Chumbo', 'Cobre_comercial', 'Estanho', 'Ferro_fundido', 'Latão_60-40', 'Magnésio_2%_Mn', 'Níquel_10%_Cr', 'Ouro', 'Prata_99.9%_Ag', 'Sódio', 'Tungstênio', 'Zinco'],
@@ -24,7 +36,7 @@ class tabelas_cls:
                ['Cp', 'kJ/kg.K', 1.44, 0.8, 0.92, 1.67, 0.51, 0.61, 1.26, 0.88, 2.04, 0.89, 1.72, 0.66, 1.26, 1.38, 2.1, 1.2, 2.3, 0.96, 0.92, 0.7, 0.84, 0.8, 0.46, 0.9, 0.13, 0.42, 0.22, 0.42, 0.38, 1.0, 0.44, 0.13, 0.24, 1.21, 0.13, 0.39]
                ]
 
-# TABELA A.4 - PRPRIEDADES DE ALGUNS LÍQUIDOS A 25°C
+# TABELA A.4 - PROPRIEDADES DE ALGUNS LÍQUIDOS A 25°C
 
         self.A_4 = [
                ['LÍQUIDO', ' ', 'Água', 'Amônia', 'Benzeno', 'Butano', 'CCL4', 'CO2', 'Etanol', 'Gasolina', 'Glicerina', 'Metanol', 'n-Octano', 'Óleo_(leve)', 'Óleo_de_motor', 'Propano', 'Querosene', 'R-12', 'R-125', 'R-134a', 'R-22', 'R-32', 'R-410a', 'Bismuto_Bi', 'Chumbo_Pb', 'Estanho_Sn', 'Mercúrio_Hg', 'Na_K_(56/44)', 'Potássio_K', 'Sódio_Na', 'Zinco_Zn'],
@@ -32,7 +44,7 @@ class tabelas_cls:
                ['Cp', 'kJ/kg.K', 4.18, 4.84, 1.72, 2.47, 0.83, 2.9, 2.46, 2.08, 2.42, 2.55, 2.23, 1.8, 1.9, 2.54, 2.0, 0.97, 1.41, 1.43, 1.26, 1.94, 1.69, 0.14, 0.16, 0.24, 0.14, 1.13, 0.81, 1.38, 0.5]
                ]
 
-# TABELA A.5 - PRPRIEDADES DE VÁRIOS GASES IDEAIS A 25°C E 100 kPa
+# TABELA A.5 - PROPRIEDADES DE VÁRIOS GASES IDEAIS A 25°C E 100 kPa
 
         self.A_5 = [
                ['GÁS', ' ', 'Acetileno', 'Água_(vapor)', 'Ar', 'Amônia', 'Argônio', 'Butano', 'Dióxido_de_Carbono', 'Monóxido_de_Carbono', 'Etano', 'Etanol', 'Etileno', 'Hélio', 'Hidrogênio', 'Metano', 'Metanol', 'Neônio', 'Nitrogênio', 'Óxido_nítrico', 'Óxido_nitroso', 'n-Octano', 'Oxigênio', 'Propano', 'R-12', 'R-22', 'R-32', 'R-125', 'R-134a', 'R-410a', 'Dióxido_de_enxofre', 'Trióxido_de_enxofre'],
@@ -408,3 +420,35 @@ class tabelas_cls:
             }
 
 tabelas = tabelas_cls()
+
+_TABLE_MAP = {
+    1: (tabelas.B_1_1, tabelas.B_1_3, tabelas.B_1_4),
+    2: (tabelas.B_2_1, tabelas.B_2_2, None),
+    3: (tabelas.B_3_1, tabelas.B_3_2, None),
+    4: (tabelas.B_4_1, tabelas.B_4_2, None),
+    5: (tabelas.B_5_1, tabelas.B_5_2, None),
+    6: (tabelas.B_6_1, tabelas.B_6_2, None),
+    7: (tabelas.B_7_1, tabelas.B_7_2, None),
+}
+
+def _compute_boundaries(opt):
+    tabela, vap_sup, liq_comp = _TABLE_MAP[opt]
+    b = [[0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 100]]
+    b[0][0] = min(tabela[0][2], vap_sup[0][3][0][2])
+    b[0][1] = vap_sup[-1][3][0][-1]
+    b[1][0] = min(tabela[1][2], vap_sup[0][2])
+    b[1][1] = liq_comp[-1][2] if opt == 1 else max(tabela[1][-1], vap_sup[-1][2])
+    b[2][0] = liq_comp[-1][3][1][2] if opt == 1 else tabela[2][2]
+    b[2][1] = max(tabela[3][2], vap_sup[0][3][1][-1])
+    b[3][0] = tabela[4][2]
+    b[3][1] = max(max(vap_sup[i][3][2][2:]) for i in range(len(vap_sup)))
+    b[4][0] = tabela[6][2]
+    b[4][1] = max(max(vap_sup[i][3][3][2:]) for i in range(len(vap_sup)))
+    b[5][0] = tabela[8][2]
+    b[5][1] = vap_sup[0][3][4][-1]
+    return b
+
+_BOUNDARIES_CACHE = {opt: _compute_boundaries(opt) for opt in _TABLE_MAP}
+
+def get_cached_boundaries(opt):
+    return [list(pair) for pair in _BOUNDARIES_CACHE[opt]]

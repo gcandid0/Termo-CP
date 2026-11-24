@@ -1,0 +1,42 @@
+name: TERMO-CP CI & Test Suite
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  test:
+    name: Lint & Run Django Tests (Python 3.12)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt ruff
+
+      - name: Static Analysis (Ruff)
+        run: ruff check myapp termocp
+
+      - name: Django System Check
+        env:
+          SECRET_KEY: ci-termo-cp-secret-key-12345
+          DEBUG: 'True'
+        run: python manage.py check
+
+      - name: Run Automated Test Suite
+        env:
+          SECRET_KEY: ci-termo-cp-secret-key-12345
+          DEBUG: 'True'
+        run: python manage.py test myapp -v 2

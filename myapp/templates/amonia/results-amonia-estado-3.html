@@ -1,4 +1,5 @@
 {% extends 'base2.html' %}
+{% load static %}
 
 {% block title %}TERMO-CP – Amônia{% endblock %}
 {% block extra_head %}
@@ -6,196 +7,10 @@
 {% endblock %}
 
 {% block extra_css %}
+<link rel="stylesheet" href="{% static 'myapp/css/results_estado.css' %}?v=2">
 <style>
-    /* Wrapper do Dashboard - Travado na altura da tela */
-    .results-dashboard {
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        align-items: stretch; /* Faz os filhos esticarem até o limite */
-        padding: 20px;
-        gap: 30px;
-        width: 100%;
-        max-width: 1400px;
-        margin: 0 auto;
-        height: 100%; /* Preenche o espaço exato da main-content do base.html */
-        max-height: calc(100vh - 120px); /* Desconta header e footer */
-        overflow: hidden; /* Remove a rolagem geral da página */
-    }
-
-    /* Cartão de Resultados (Esquerda) */
-    .results-card {
-        flex: 1;
-        max-width: 450px;
-        background: var(--card-bg, white);
-        border-radius: 10px;
-        box-shadow: var(--shadow);
-        padding: 25px 30px;
-        min-width: 300px;
-        display: flex;
-        flex-direction: column;
-        overflow-y: auto; /* Se a tela for pequena, SÓ o cartão rola */
-    }
-
-    /* Scrollbar customizada para o cartão ficar elegante */
-    .results-card::-webkit-scrollbar { width: 6px; }
-    .results-card::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 10px; }
-    .results-card::-webkit-scrollbar-thumb { background: #ccc; border-radius: 10px; }
-    .results-card::-webkit-scrollbar-thumb:hover { background: var(--primary-color); }
-
-    .results-card h2 {
-        color: var(--primary-color);
-        font-size: 1.6em;
-        border-bottom: 2px solid #eee;
-        padding-bottom: 12px;
-        margin-top: 0;
-        margin-bottom: 15px;
-        flex-shrink: 0;
-    }
-
-    /* Estilização dos Parágrafos de Dados */
-    .data-row {
-        display: flex;
-        justify-content: space-between;
-        padding: 8px 0;
-        border-bottom: 1px solid #f0f0f0;
-        font-size: 1em;
-    }
-
-    .data-row:last-child { border-bottom: none; }
-    .data-label { font-weight: bold; color: #555; }
-    .data-value { font-weight: bold; color: var(--primary-color); text-align: right; }
-
-    /* Container do Canvas (Direita) */
-    .visualization-container {
-        flex: 2;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        position: relative;
-        background: #000;
-        border-radius: 10px;
-        box-shadow: var(--shadow);
-        overflow: hidden;
-        height: 100%; /* Preenche dinamicamente o espaço sem quebrar a tela */
-        width: 100%;
-    }
-
-    /* Canvas tem resolução lógica fixa (400x560); o CSS escala a exibição
-       para caber no container mantendo a proporção, sem cortar o cilindro. */
-    .visualization-container canvas {
-        width: 100% !important;
-        height: 100% !important;
-        object-fit: contain;
-        display: block;
-    }
-
-    /* --- Estilos da Legenda do Cilindro --- */
-    .legend-container {
-        position: absolute;
-        bottom: 20px;
-        right: 20px;
-        background-color: rgba(15, 15, 15, 0.85);
-        padding: 15px 20px;
-        border-radius: 12px;
-        color: white;
-        font-family: 'Arial', sans-serif;
-        font-size: 13px;
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        pointer-events: none;
-        z-index: 20;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-    }
-
-    .legend-item { display: flex; align-items: center; gap: 10px; font-weight: bold; }
-    .legend-color { width: 20px; height: 14px; display: inline-block; border-radius: 2px; }
-
-    .legend-cilindro { background-color: transparent; border: 1px solid #888; }
-    .legend-pistao { background-color: #a2a2a2; }
     .legend-vapor { background-color: rgba(229, 57, 53, 0.7); border: 1px solid #333; }
     .legend-liquido { background-color: #B71C1C; }
-
-    /* Botões (Travados no fim do cartão) */
-    .button-group {
-        display: flex;
-        gap: 10px;
-        margin-top: auto; /* Empurra os botões sempre para o final */
-        padding-top: 20px;
-        justify-content: center;
-        flex-shrink: 0;
-    }
-
-    .btn {
-        padding: 12px 15px;
-        border-radius: 6px;
-        font-size: 0.95em;
-        cursor: pointer;
-        text-decoration: none;
-        transition: var(--hover-transition);
-        border: none;
-        display: inline-flex;
-        align-items: center;
-        font-weight: bold;
-        justify-content: center;
-        flex: 1;
-        text-align: center;
-    }
-
-    .btn-secondary { background-color: #6c757d; color: white; }
-    .btn-secondary:hover { background-color: #5a6268; transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
-
-    .btn-primary { background-color: var(--secondary-color); color: white; }
-    .btn-primary:hover { background-color: var(--primary-color); transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
-
-    .btn-outline { background-color: transparent; border: 2px solid var(--primary-color); color: var(--primary-color); }
-    .btn-outline:hover { background-color: var(--primary-color); color: white; }
-
-    .chart-controls { display: flex; justify-content: center; align-items: center; margin-bottom: 15px; gap: 15px; flex-wrap: wrap; }
-    .chart-controls select {
-        padding: 8px 12px; border-radius: 6px; border: 1px solid #ccc;
-        font-size: 0.95em; background: white; cursor: pointer;
-    }
-
-    /* Labels da Escala do P5 */
-    .scale-label {
-        position: absolute;
-        color: white;
-        font-size: 12px;
-        font-family: 'Arial', sans-serif;
-        pointer-events: none;
-        text-align: right;
-        width: 60px;
-        z-index: 10;
-    }
-
-    /* Responsividade */
-    @media (max-width: 992px) {
-        .results-dashboard {
-            flex-direction: column;
-            align-items: center;
-            max-height: none; /* Em mobile, permite rolar a página inteira */
-            overflow: visible;
-            padding: 12px;
-            gap: 20px;
-        }
-        .results-card { width: 100%; max-width: 800px; height: auto; }
-        .visualization-container { width: 100%; max-width: 800px; height: 420px; min-height: 420px; }
-        .button-group { flex-direction: column; }
-        .btn { width: 100%; }
-    }
-
-    @media (max-width: 480px) {
-        .results-card { padding: 18px 16px; }
-        .results-card h2 { font-size: 1.3em; }
-        .data-row { font-size: 0.9em; padding: 6px 0; }
-        .visualization-container { height: 360px; min-height: 360px; }
-        .legend-container { font-size: 9px; padding: 6px 8px; bottom: 8px; right: 8px; gap: 3px; }
-        .legend-item { gap: 5px; }
-        .legend-color { width: 11px; height: 8px; }
-        .scale-label { font-size: 9px; width: 42px; }
-    }
 </style>
 {% endblock %}
 
@@ -243,7 +58,7 @@
         </div>
 
         <div class="data-row" data-tour-pt-br="Quantidade de massa da substância considerada no sistema, usada em todos os cálculos de calor, trabalho e entropia." data-tour-en="Amount of mass of the substance considered in the system, used in all heat, work and entropy calculations." data-tour-es="Cantidad de masa de la sustancia considerada en el sistema, usada en todos los cálculos de calor, trabajo y entropía.">
-            <span class="data-label lang-text" data-pt-br="Massa (m):" data-en="Mass (m):" data-es="Masa (m):">Massa (m):</span>            <span class="data-value">1,0 kg</span>
+            <span class="data-label lang-text" data-pt-br="Massa (m):" data-en="Mass (m):" data-es="Masa (m):">Massa (m):</span>            <span class="data-value">{{ massa|default:"1,0" }} kg</span>
         </div>
 
         <div class="data-row" data-tour-pt-br="Temperatura da substância nesse estado, em graus Celsius." data-tour-en="Temperature of the substance at this state, in degrees Celsius." data-tour-es="Temperatura de la sustancia en este estado, en grados Celsius.">
@@ -272,7 +87,7 @@
 
         {% if fase == 3 %}
         <div class="data-row" data-tour-pt-br="Fração em massa de vapor presente numa mistura saturada líquido-vapor (0% = só líquido, 100% = só vapor). Só aparece na região de saturação." data-tour-en="Mass fraction of vapor present in a saturated liquid-vapor mixture (0% = only liquid, 100% = only vapor). Only shown in the saturation region." data-tour-es="Fracción en masa de vapor presente en una mezcla saturada líquido-vapor (0% = solo líquido, 100% = solo vapor). Solo aparece en la región de saturación.">
-            <span class="data-label lang-text" data-pt-br="Título (x):" data-en="Quality (x):" data-es="Calidad (x):">Título (x):</span>            <span class="data-value">{{ titulo }} %</span>
+            <span class="data-label lang-text" data-pt-br="Título (x):" data-en="Quality (x):" data-es="Calidad (x):">Título (x):</span>            <span class="data-value">{{ titulo }} % {% if titulo_fracao %}<small style="opacity:0.75;font-weight:normal;">(x = {{ titulo_fracao }})</small>{% endif %}</span>
         </div>
         <div class="data-row" data-tour-pt-br="Volume total ocupado pela fração líquida da mistura saturada, em m³." data-tour-en="Total volume occupied by the liquid fraction of the saturated mixture, in m³." data-tour-es="Volumen total ocupado por la fracción líquida de la mezcla saturada, en m³.">
             <span class="data-label lang-text" data-pt-br="Volume líquido (Vl):" data-en="Liquid volume (Vl):" data-es="Volumen líquido (Vl):">Volume líquido (Vl):</span>            <span class="data-value">{{ VolumeL }} m³</span>
@@ -301,7 +116,7 @@
                 <i class="fas fa-arrow-left" style="margin-right: 5px;"></i>
                 <span class="lang-text" data-pt-br="Voltar" data-en="Go Back" data-es="Volver">Voltar</span>
             </a>
-            <a href="{% url 'ask_known1_13' %}" class="btn btn-primary">
+            <a href="{% url 'ask_mass' flow_key='amonia_estado' %}" class="btn btn-primary">
                 <i class="fas fa-redo" style="margin-right: 5px;"></i>
                 <span class="lang-text" data-pt-br="Novo Cálculo" data-en="New Calculation" data-es="Nuevo Cálculo">Novo Cálculo</span>
             </a>
@@ -627,7 +442,7 @@
     // Tratamento de variáveis Django para JS
     var volumeEspecifico = "{{ volume_especifico|default:'0' }}".replace(',', '.');
     var fase = "{{ fase|default:'0' }}";
-    var volumeL = "{{ VolumeL|default:'0' }}".replace(',', '.');
+    var volumeL = "{{ VolumeL_esp|default:'0' }}".replace(',', '.');
 
     let dataVolume = parseFloat(volumeEspecifico).toFixed(10);
     let dataFase = parseInt(fase, 10);
@@ -723,7 +538,13 @@
             scaleContainer.appendChild(label);
         }
 
-        let strVolume = {
+        const massaSistema = parseFloat("{{ massa_float|default:'1.0' }}".replace(',', '.')) || 1.0;
+        const isMassDiffOne = Math.abs(massaSistema - 1.0) > 1e-9;
+        let strVolume = isMassDiffOne ? {
+            'pt-br': 'Volume esp. [m³/kg]',
+            'en': 'Spec. Volume [m³/kg]',
+            'es': 'Volumen esp. [m³/kg]'
+        } : {
             'pt-br': 'Volume [m³]',
             'en': 'Volume [m³]',
             'es': 'Volumen [m³]'
@@ -735,9 +556,11 @@
         titleLabel.className = 'scale-label';
         titleLabel.innerText = strVolume[currentLang];
         titleLabel.style.top = (canvasCenterY + (yTranslatedTitle * scaleY) - (55 * scaleY)) + 'px';
-        titleLabel.style.left = (canvasCenterX - (112 * scaleX) - 75) + 'px';
+        titleLabel.style.left = (canvasCenterX - (112 * scaleX) - (isMassDiffOne ? 95 : 75)) + 'px';
         titleLabel.style.fontWeight = 'bold';
-        titleLabel.style.width = '80px';
+        titleLabel.style.width = isMassDiffOne ? '105px' : '80px';
+        titleLabel.style.textAlign = 'center';
+        titleLabel.style.lineHeight = '1.25';
         titleLabel.style.fontSize = '14px';
 
         scaleContainer.appendChild(titleLabel);

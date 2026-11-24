@@ -125,7 +125,7 @@
         </p>
 
         <div class="button-container">
-            <a href="{% url 'ask_known1_3' %}" class="process-button">
+            <a href="{% url 'ask_mass' flow_key='agua_pcte' %}" class="process-button">
                 <i class="fas fa-tachometer-alt icon-left"></i>
                 <span class="lang-text"
                       data-pt-br="Aquecimento/Resfriamento à pressão constante"
@@ -135,7 +135,7 @@
                 </span>
             </a>
 
-            <a href="{% url 'ask_known1_5' %}" class="process-button">
+            <a href="{% url 'ask_mass' flow_key='agua_vcte' %}" class="process-button">
                 <i class="fas fa-box icon-left"></i>
                 <span class="lang-text"
                       data-pt-br="Aquecimento/Resfriamento a volume constante"
@@ -145,7 +145,7 @@
                 </span>
             </a>
 
-            <a href="{% url 'ask_known1_4' %}" class="process-button">
+            <a href="{% url 'ask_mass' flow_key='agua_scte' %}" class="process-button">
                 <i class="fas fa-expand-arrows-alt icon-left"></i>
                 <span class="lang-text"
                       data-pt-br="Compressão/Expansão adiabática e reversível"

@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}TERMO-CP – {{ name_pt }}{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'myapp/css/wizard_group_3.css' %}">
+{% endblock %}
+
+{% block help_title %}
+<span class="lang-text" data-pt-br="Ajuda &ndash; Massa do sistema" data-en="Help &ndash; System mass" data-es="Ayuda &ndash; Masa del sistema">Ajuda &ndash; Massa do sistema</span>
+{% endblock %}
+
+{% block help_content %}
+<p class="lang-text"
+   data-pt-br="Informe a massa da substância contida no conjunto cilindro-pistão (em kg). Quando a massa informada for diferente de 1 kg, a régua do cilindro passará a indicar o volume específico (m³/kg) e as grandezas extensivas (calor, trabalho, geração de entropia e volumes de fase) serão calculadas para a massa total."
+   data-en="Enter the mass of the substance contained in the cylinder-piston assembly (in kg). When the entered mass differs from 1 kg, the cylinder scale will display specific volume (m³/kg) and extensive quantities (heat, work, entropy generation, and phase volumes) will be calculated for the total mass."
+   data-es="Ingrese la masa de la sustancia contenida en el conjunto cilindro-pistón (en kg). Cuando la masa ingresada sea diferente de 1 kg, la escala del cilindro indicará el volumen específico (m³/kg) y las magnitudes extensivas (calor, trabajo, generación de entropía y volúmenes de fase) se calcularán para la masa total.">
+    Informe a massa da substância contida no conjunto cilindro-pistão (em kg). Quando a massa informada for diferente de 1 kg, a régua do cilindro passará a indicar o volume específico (m³/kg) e as grandezas extensivas (calor, trabalho, geração de entropia e volumes de fase) serão calculadas para a massa total.
+</p>
+<div class="help-tip">
+    <i class="fas fa-lightbulb"></i>
+    <span class="lang-text"
+          data-pt-br="Dica: o valor padrão é 1,0 kg (análise por unidade de massa)."
+          data-en="Tip: the default value is 1.0 kg (per-unit-mass analysis)."
+          data-es="Consejo: el valor predeterminado es 1,0 kg (análisis por unidad de masa).">
+        Dica: o valor padrão é 1,0 kg (análise por unidade de massa).
+    </span>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="form-wrapper">
+    <div class="container">
+        <i class="fas fa-weight-hanging" style="font-size: 2.5em; color: #00A8FF; margin-bottom: 15px;"></i>
+
+        <h2 class="lang-text"
+            data-pt-br="{{ name_pt }} — Massa do sistema"
+            data-en="{{ name_en }} — System mass"
+            data-es="{{ name_es }} — Masa del sistema">
+            {{ name_pt }} — Massa do sistema
+        </h2>
+
+        <form method="post">
+            {% csrf_token %}
+
+            <div id="value_input_field">
+                <label for="value_input">
+                    <i class="fas fa-balance-scale" style="margin-right: 5px;"></i>
+                    <span class="lang-text"
+                          data-pt-br="Digite o valor da Massa do sistema (kg):"
+                          data-en="Enter the System Mass value (kg):"
+                          data-es="Introduzca el valor de la Masa del sistema (kg):">
+                        Digite o valor da Massa do sistema (kg):
+                    </span>
+                </label>
+                <input type="number" id="value_input" name="mass_input" step="any" min="0.0001" max="500000" value="1.0" required placeholder="Digite o valor">
+            </div>
+
+            <div class="button-container">
+                <button type="button" class="btn btn-secondary" onclick="history.back()">
+                    <i class="fas fa-arrow-left" style="margin-right: 8px;"></i>
+                    <span class="lang-text" data-pt-br="Voltar" data-en="Go Back" data-es="Volver">Voltar</span>
+                </button>
+
+                {% if is_final_step %}
+                <button type="submit" class="btn btn-primary">
+                    <span class="lang-text" data-pt-br="Calcular" data-en="Calculate" data-es="Calcular">Calcular</span>
+                    <i class="fas fa-calculator" style="margin-left: 8px;"></i>
+                </button>
+                {% else %}
+                <button type="submit" class="btn btn-primary">
+                    <span class="lang-text" data-pt-br="Continuar" data-en="Continue" data-es="Continuar">Continuar</span>
+                    <i class="fas fa-arrow-right" style="margin-left: 8px;"></i>
+                </button>
+                {% endif %}
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'myapp/js/wizard_script_2.js' %}"></script>
+{% endblock %}

@@ -133,7 +133,7 @@
         <div class="button-container">
 
             {% if lista_estados %}
-                <a href="{% url 'ask_known1_30' %}" class="process-button">
+                <a href="{% url 'ask_mass' flow_key='r134a_pcte' %}" class="process-button">
                     <i class="fas fa-tachometer-alt icon-left"></i>
                     <span class="lang-text"
                           data-pt-br="Aquecimento/Resfriamento à pressão constante"
@@ -143,7 +143,7 @@
                     </span>
                 </a>
             {% else %}
-                <a href="{% url 'ask_known1_30' %}" class="process-button">
+                <a href="{% url 'ask_mass' flow_key='r134a_pcte' %}" class="process-button">
                     <i class="fas fa-tachometer-alt icon-left"></i>
                     <span class="lang-text"
                           data-pt-br="Aquecimento/Resfriamento à pressão constante"
@@ -154,7 +154,7 @@
                 </a>
             {% endif %}
 
-            <a href="{% url 'ask_known1_32' %}" class="process-button">
+            <a href="{% url 'ask_mass' flow_key='r134a_vcte' %}" class="process-button">
                 <i class="fas fa-box icon-left"></i>
                 <span class="lang-text"
                       data-pt-br="Aquecimento/Resfriamento a volume constante"
@@ -164,7 +164,7 @@
                 </span>
             </a>
 
-            <a href="{% url 'ask_known1_31' %}" class="process-button">
+            <a href="{% url 'ask_mass' flow_key='r134a_scte' %}" class="process-button">
                 <i class="fas fa-expand-arrows-alt icon-left"></i>
                 <span class="lang-text"
                       data-pt-br="Compressão/Expansão adiabática e reversível"

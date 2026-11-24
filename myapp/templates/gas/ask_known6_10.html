@@ -1,99 +1,10 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}TERMO-CP – Gás Ideal{% endblock %}
 
 {% block extra_css %}
-<style>
-    /* Container Compacto */
-    .container {
-        max-width: 600px;
-        width: 100%;
-        background: var(--card-bg, white);
-        border-radius: 10px;
-        box-shadow: var(--shadow);
-        padding: 30px 25px;
-        text-align: center;
-        margin: auto;
-    }
-
-    h2 {
-        color: var(--primary-color);
-        font-size: 1.5em;
-        margin-bottom: 20px;
-        border-bottom: 1px solid #eee;
-        padding-bottom: 10px;
-    }
-
-    /* --- INPUT DE VALOR --- */
-    #value_input_field {
-        margin-top: 10px;
-        width: 100%;
-        background-color: #f9f9f9;
-        padding: 25px;
-        border-radius: 8px;
-        border: 1px solid #ddd;
-    }
-
-    label {
-        font-weight: bold;
-        color: var(--primary-color);
-        display: block;
-        margin-bottom: 15px;
-        font-size: 1.1em;
-    }
-
-    input[type="number"] {
-        padding: 12px;
-        width: 100%;
-        max-width: 250px;
-        font-size: 1.1em;
-        border: 2px solid #ccc;
-        border-radius: 6px;
-        text-align: center;
-        outline: none;
-        transition: border-color 0.3s ease;
-    }
-
-    input[type="number"]:focus {
-        border-color: var(--secondary-color);
-    }
-
-    /* Botões de Ação */
-    .button-container {
-        display: flex;
-        justify-content: center;
-        gap: 15px;
-        margin-top: 30px;
-        width: 100%;
-    }
-
-    .btn {
-        padding: 10px 20px;
-        border-radius: 6px;
-        font-size: 1em;
-        cursor: pointer;
-        text-decoration: none;
-        transition: var(--hover-transition);
-        border: none;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: bold;
-        min-width: 130px;
-    }
-
-    .btn-primary { background-color: var(--primary-color); color: white; }
-    .btn-primary:hover { background-color: var(--secondary-color); transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
-
-    .btn-secondary { background-color: #6c757d; color: white; }
-    .btn-secondary:hover { background-color: #5a6268; transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
-
-    /* Mobile */
-    @media (max-width: 768px) {
-        .button-container { flex-direction: column; }
-        .btn { width: 100%; }
-    }
-</style>
+<link rel="stylesheet" href="{% static 'myapp/css/wizard_group_12.css' %}">
 {% endblock %}
 
 {% block help_content %}
@@ -145,33 +56,5 @@
 {% endblock %}
 
 {% block extra_js %}
-<script>
-    function updatePlaceholder() {
-        var input = document.getElementById('Tviz_value_input');
-        var lang = localStorage.getItem('preferredLang') || 'pt-br';
-        
-        var placeholders = {
-            'pt-br': 'Digite o valor',
-            'en': 'Enter the value',
-            'es': 'Ingrese el valor'
-        };
-        
-        if(input) {
-            input.placeholder = placeholders[lang];
-        }
-    }
-
-    document.addEventListener('DOMContentLoaded', function() {
-        // Inicializa o placeholder com a linguagem correta
-        updatePlaceholder();
-
-        // Atualiza o placeholder automaticamente se o usuário trocar de idioma pelo header
-        var langOptions = document.querySelectorAll('.lang-option');
-        langOptions.forEach(function(btn) {
-            btn.addEventListener('click', function() {
-                setTimeout(updatePlaceholder, 50); // Dá um tempinho pro localStorage atualizar no script do base.html
-            });
-        });
-    });
-</script>
+<script src="{% static 'myapp/js/wizard_script_15.js' %}"></script>
 {% endblock %}  

@@ -1,199 +1,36 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}TERMO-CP – Gás Ideal{% endblock %}
 
 {% block extra_css %}
+<link rel="stylesheet" href="{% static 'myapp/css/results_estado.css' %}?v=2">
 <style>
     :root {
         --accent-gas: #53B366; /* Verde Gás Ideal */
     }
-
-    /* Wrapper do Dashboard - Travado na altura da tela */
-    .results-dashboard {
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        align-items: stretch; /* Faz os filhos esticarem até o limite */
-        padding: 20px;
-        gap: 30px;
-        width: 100%;
-        max-width: 1400px;
-        margin: 0 auto;
-        height: 100%; /* Preenche o espaço exato da main-content do base.html */
-        max-height: calc(100vh - 120px); /* Desconta header e footer */
-        overflow: hidden; /* Remove a rolagem geral da página */
-    }
-
-    /* Cartão de Resultados (Esquerda) */
-    .results-card {
-        flex: 1;
-        max-width: 450px;
-        background: var(--card-bg, white);
-        border-radius: 10px;
-        box-shadow: var(--shadow);
-        padding: 25px 30px;
-        min-width: 300px;
-        display: flex;
-        flex-direction: column;
-        overflow-y: auto; /* Se a tela for pequena, SÓ o cartão rola */
-    }
-
-    /* Scrollbar customizada (Em tons de Verde) */
-    .results-card::-webkit-scrollbar { width: 6px; }
-    .results-card::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 10px; }
-    .results-card::-webkit-scrollbar-thumb { background: #ccc; border-radius: 10px; }
     .results-card::-webkit-scrollbar-thumb:hover { background: var(--accent-gas); }
-
-    /* Título modificado para Verde (Gás Ideal) */
     .gas-title {
         color: var(--accent-gas) !important;
-        font-size: 1.6em;
-        border-bottom: 2px solid #eee;
+        font-size: 1.45em;
+        font-weight: 700;
+        letter-spacing: -0.01em;
+        border-bottom: 1px solid #e8eef5;
         padding-bottom: 12px;
         margin-top: 0;
-        margin-bottom: 15px;
+        margin-bottom: 12px;
         text-align: center;
         flex-shrink: 0;
-    }
-
-    /* Estilização dos Parágrafos de Dados */
-    .data-row {
         display: flex;
-        justify-content: space-between;
-        padding: 10px 0;
-        border-bottom: 1px solid #f0f0f0;
-        font-size: 1.05em;
-    }
-
-    .data-row:last-child { border-bottom: none; }
-    .data-label { font-weight: bold; color: #555; }
-
-    /* Valores em Verde */
-    .gas-value { font-weight: bold; color: var(--accent-gas) !important; text-align: right; }
-
-    /* Container do Canvas (Direita) */
-    .visualization-container {
-        flex: 2;
-        display: flex;
-        justify-content: center;
         align-items: center;
-        position: relative;
-        background: #000;
-        border-radius: 10px;
-        box-shadow: var(--shadow);
-        overflow: hidden;
-        height: 100%; /* Preenche dinamicamente o espaço sem quebrar a tela */
-        width: 100%;
-    }
-
-    /* Canvas tem resolução lógica fixa (400x560); o CSS escala a exibição
-       para caber no container mantendo a proporção, sem cortar o cilindro. */
-    .visualization-container canvas {
-        width: 100% !important;
-        height: 100% !important;
-        object-fit: contain;
-        display: block;
-    }
-
-    /* --- Estilos da Legenda do estado --- */
-    .legend-container {
-        position: absolute;
-        bottom: 20px;
-        right: 20px;
-        background-color: rgba(15, 15, 15, 0.85);
-        padding: 15px 20px;
-        border-radius: 12px;
-        color: white;
-        font-family: 'Arial', sans-serif;
-        font-size: 13px;
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        pointer-events: none;
-        z-index: 20;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-    }
-
-    .legend-item { display: flex; align-items: center; gap: 10px; font-weight: bold; }
-    .legend-color { width: 20px; height: 14px; display: inline-block; border-radius: 2px; }
-
-    .legend-estado { background-color: transparent; border: 1px solid #888; }
-    .legend-pistao { background-color: #a2a2a2; }
-
-    /* Cores restritas à legenda desta página (Verde) */
-    .legend-gas { background-color: rgba(83, 179, 102, 0.7); border: 1px solid #333; }
-
-    /* Botões (Travados no fim do cartão) */
-    .button-group {
-        display: flex;
-        gap: 10px;
-        margin-top: auto; /* Empurra os botões sempre para o final */
-        padding-top: 20px;
         justify-content: center;
-        flex-shrink: 0;
+        gap: 10px;
     }
-
-    .btn {
-        padding: 12px 15px;
-        border-radius: 6px;
-        font-size: 0.95em;
-        cursor: pointer;
-        text-decoration: none;
-        transition: var(--hover-transition);
-        border: none;
-        display: inline-flex;
-        align-items: center;
-        font-weight: bold;
-        justify-content: center;
-        flex: 1;
-        text-align: center;
-    }
-
-    .btn-secondary { background-color: #6c757d; color: white; }
-    .btn-secondary:hover { background-color: #5a6268; transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
-
-    /* Botão Primário Verde */
+    .gas-value { font-weight: 700; color: var(--accent-gas) !important; font-variant-numeric: tabular-nums; text-align: right; }
+    .legend-estado { background-color: transparent; border: 1px solid #94a3b8; }
+    .legend-gas { background-color: rgba(83, 179, 102, 0.75); border: 1px solid #334155; }
     .gas-btn { background-color: var(--accent-gas) !important; color: white !important; }
-    .gas-btn:hover { background-color: #3a9d51 !important; transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
-
-    /* Labels da Escala do P5 */
-    .scale-label {
-        position: absolute;
-        color: white;
-        font-size: 12px;
-        font-family: 'Arial', sans-serif;
-        pointer-events: none;
-        text-align: right;
-        width: 60px;
-        z-index: 10;
-    }
-
-    /* Responsividade */
-    @media (max-width: 992px) {
-        .results-dashboard {
-            flex-direction: column;
-            align-items: center;
-            max-height: none; /* Em mobile, permite rolar a página inteira */
-            overflow: visible;
-            padding: 12px;
-            gap: 20px;
-        }
-        .results-card { width: 100%; max-width: 800px; height: auto; }
-        .visualization-container { width: 100%; max-width: 800px; height: 420px; min-height: 420px; }
-        .button-group { flex-direction: column; }
-        .btn { width: 100%; }
-    }
-
-    @media (max-width: 480px) {
-        .results-card { padding: 18px 16px; }
-        .gas-title { font-size: 1.3em; }
-        .data-row { font-size: 0.9em; padding: 6px 0; }
-        .visualization-container { height: 360px; min-height: 360px; }
-        .legend-container { font-size: 9px; padding: 6px 8px; bottom: 8px; right: 8px; gap: 3px; }
-        .legend-item { gap: 5px; }
-        .legend-color { width: 11px; height: 8px; }
-        .scale-label { font-size: 9px; width: 42px; }
-    }
+    .gas-btn:hover { background-color: #3a9d51 !important; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(58, 157, 81, 0.3); }
 </style>
 {% endblock %}
 
@@ -220,7 +57,7 @@
 
         <div class="data-row">
             <span class="data-label lang-text" data-pt-br="Massa (m):" data-en="Mass (m):" data-es="Masa (m):">Massa (m):</span>
-            <span class="gas-value">1,0 Kg</span>
+            <span class="gas-value">{{ massa|default:"1,0" }} kg</span>
         </div>
 
         <div class="data-row">
@@ -258,7 +95,7 @@
                 <i class="fas fa-arrow-left" style="margin-right: 5px;"></i>
                 <span class="lang-text" data-pt-br="Voltar" data-en="Go Back" data-es="Volver">Voltar</span>
             </a>
-            <a href="{% url 'ask_known3_7' %}" class="btn gas-btn">
+            <a href="{% url 'ask_mass' flow_key='gas_cilindro' %}" class="btn gas-btn">
                 <i class="fas fa-redo" style="margin-right: 5px;"></i>
                 <span class="lang-text" data-pt-br="Novo Cálculo" data-en="New Calculation" data-es="Nuevo Cálculo">Novo Cálculo</span>
             </a>
@@ -304,7 +141,7 @@
     // Tratamento de variáveis Django para JS
     var volumeEspecifico = "{{ volume|default:'0' }}".replace(',', '.');
     var fase = 2; // Forçado para gás
-    var volumeL = "{{ VolumeL|default:'0' }}".replace(',', '.');
+    var volumeL = "{{ VolumeL_esp|default:'0' }}".replace(',', '.');
 
     let dataVolume = parseFloat(volumeEspecifico).toFixed(10);
     let dataFase = parseInt(fase, 10);
@@ -395,7 +232,13 @@
             scaleContainer.appendChild(label);
         }
 
-        let strVolume = {
+        const massaSistema = parseFloat("{{ massa_float|default:'1.0' }}".replace(',', '.')) || 1.0;
+        const isMassDiffOne = Math.abs(massaSistema - 1.0) > 1e-9;
+        let strVolume = isMassDiffOne ? {
+            'pt-br': 'Volume esp. [m³/kg]',
+            'en': 'Spec. Volume [m³/kg]',
+            'es': 'Volumen esp. [m³/kg]'
+        } : {
             'pt-br': 'Volume [m³]',
             'en': 'Volume [m³]',
             'es': 'Volumen [m³]'
@@ -407,9 +250,11 @@
         titleLabel.className = 'scale-label';
         titleLabel.innerText = strVolume[currentLang];
         titleLabel.style.top = (canvasCenterY + (yTranslatedTitle * scaleY) - (55 * scaleY)) + 'px';
-        titleLabel.style.left = (canvasCenterX - (r2 * scaleX) - 85) + 'px';
+        titleLabel.style.left = (canvasCenterX - (r2 * scaleX) - (isMassDiffOne ? 105 : 85)) + 'px';
         titleLabel.style.fontWeight = 'bold';
-        titleLabel.style.width = '80px';
+        titleLabel.style.width = isMassDiffOne ? '105px' : '80px';
+        titleLabel.style.textAlign = 'center';
+        titleLabel.style.lineHeight = '1.25';
         titleLabel.style.fontSize = '14px';
 
         scaleContainer.appendChild(titleLabel);

@@ -120,6 +120,8 @@
         <div class="message-box">
             {% if error_message %}
                 <p>{{ error_message }}</p>
+            {% elif message %}
+                <p>{{ message }}</p>
             {% else %}
                 <p class="lang-text" 
                    data-pt-br="Não foi possível processar sua solicitação com os dados informados." 

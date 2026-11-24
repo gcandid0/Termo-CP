@@ -4,20 +4,11 @@ from math import log
 import json
 from . import estados as std
 
-# Inicializa instância de gas
-if not hasattr(std, 'instancia_gas'):
-    std.instancia_gas = std.gas_cls()
-
-gas = std.instancia_gas
-
-# Garante lista_gas
-if not hasattr(gas, 'lista_gas') or gas.lista_gas is None:
-    gas.lista_gas = []
-
 from .forms import (
     ConstantesVCte9, ConstantesVCte9_2,
     Prop1VCte9, Prop1VCte9_2, Prop2VCte9, TvizGasIdeal9
 )
+from .thermo_engine import format_mass_display
 
 # Funções Auxiliares
 def to_kelvin(T): return T + 273.15 if T is not None else None
@@ -29,24 +20,8 @@ def rd(x): return round(x, 4) if x is not None else None
 ###############################################################################
 
 def ask_known1_view9(request):
-    try:
-        gas.limpar_gas()
-    except Exception:
-        gas.lista_gas = []
-
-    request.session['lista_gas'] = json.dumps(gas.lista_gas, default=str)
-
-    # ==========================================================
-    # GARANTIA DE LIMPEZA DO GRÁFICO AO INICIAR NOVO CICLO
-    # ==========================================================
-    request.session['pontos_grafico'] = []
-    request.session['historico_processos'] = []
-    if 'dados_processo' in request.session:
-        del request.session['dados_processo']
-    if hasattr(gas, 'pontos_grafico_gas'):
-        gas.pontos_grafico_gas.clear()
-    # ==========================================================
-
+    gas = std.get_gas_session(request)
+    gas.limpar_gas()
     if request.method == 'POST':
         form = ConstantesVCte9(request.POST)
         if form.is_valid():
@@ -106,6 +81,8 @@ def ask_known3_view9(request):
         if form.is_valid():
             request.session['state1_property_choice_1'] = str(form.cleaned_data['property_choice'])
             request.session['state1_value_input_1'] = float(form.cleaned_data['value_input'])
+            if 'mass_input' in request.POST and form.cleaned_data.get('mass_input') is not None:
+                request.session['mass_input'] = float(form.cleaned_data['mass_input'])
             return redirect('ask_known4_9')
     else:
         form = Prop1VCte9()
@@ -153,22 +130,7 @@ def ask_known6_view9(request):
 
 def process_values_view9(request):
     try:
-        # =============================
-        # 0️⃣ Ressincroniza a lista de estados com a SESSÃO do usuário atual
-        # =============================
-        # IMPORTANTE: `gas` é uma instância única compartilhada no módulo (via
-        # `std.instancia_gas`), reaproveitada por TODOS os processos de gás e
-        # TODAS as requisições. Sem este passo, `gas.lista_gas` pode conter o
-        # estado deixado por outro usuário ou por outro tipo de processo
-        # (isobárico, politrópico, etc.), fazendo o cálculo usar um "estado
-        # anterior" que não é deste usuário/processo.
-        if 'lista_gas' not in request.session:
-            request.session['lista_gas'] = json.dumps([])
-        try:
-            gas.lista_gas = json.loads(request.session['lista_gas'])
-        except Exception:
-            gas.lista_gas = []
-
+        gas = std.get_gas_session(request)
         # =============================
         # 1️⃣ Recupera dados da sessão
         # =============================
@@ -257,6 +219,9 @@ def process_values_view9(request):
         # =============================
 
         v2 = v1  # 🔥 Volume sempre constante
+        m = float(request.session.get('mass_input', 1.0) or 1.0)
+        if m <= 0:
+            m = 1.0
 
         if prop2_idx == 0:  # T fornecido
             T2 = to_kelvin(prop2_val)
@@ -268,7 +233,7 @@ def process_values_view9(request):
 
         elif prop2_idx == 8:  # Q fornecido
             Q12_input = prop2_val
-            T2 = T1 + (Q12_input / Cv0)
+            T2 = T1 + (Q12_input / (m * Cv0))
             p2 = (R * T2) / v2
 
         else:
@@ -283,14 +248,14 @@ def process_values_view9(request):
         # =============================
 
         W12 = 0  # isocórico
-        Q12 = Cv0 * (T2 - T1)
+        Q12 = m * Cv0 * (T2 - T1)
 
         Tviz_K = to_kelvin(Tviz_input)
 
         try:
-            delta_S = Cv0 * log(T2 / T1)
+            delta_S = m * Cv0 * log(T2 / T1)
             Sger = delta_S - (Q12 / Tviz_K)
-        except:
+        except (ValueError, ZeroDivisionError, TypeError):
             Sger = None
 
         # ==========================================================
@@ -398,6 +363,8 @@ def process_values_view9(request):
             'W12': rd(W12),
             'Sger': rd(Sger),
             'Tviz': rd(Tviz_input),
+            'massa': format_mass_display(m),
+            'massa_float': m,
             'teste': gas.lista_gas,
             'pontos_grafico_json': json.dumps(pontos_grafico), # Envia para o Chart.js
             'historico_processos_json': json.dumps(historico_processos) # Histórico p/ Relatório Final

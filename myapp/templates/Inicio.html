@@ -286,14 +286,14 @@
             </div>
 
             <div id="grid-estados" class="substance-grid">
-                <a href="{% url 'ask_known3_7' %}" class="sub-card bg-gas"><i class="fas fa-wind"></i> <span class="lang-text" data-pt-br="Gás Ideal" data-en="Ideal Gas" data-es="Gas Ideal">Gás Ideal</span></a>
-                <a href="{% url 'ask_known1' %}" class="sub-card bg-water"><i class="fas fa-tint"></i> <span class="lang-text" data-pt-br="Água" data-en="Water" data-es="Agua">Água</span></a>
-                <a href="{% url 'ask_known1_13' %}" class="sub-card bg-ammonia"><i class="fas fa-flask"></i> <span class="lang-text" data-pt-br="Amônia" data-en="Ammonia" data-es="Amoníaco">Amônia</span></a>
-                <a href="{% url 'ask_known1_18' %}" class="sub-card bg-co2"><i class="fas fa-cloud"></i> CO₂</a>
-                <a href="{% url 'ask_known1_23' %}" class="sub-card bg-r410a"><i class="fas fa-snowflake"></i> R-410a</a>
-                <a href="{% url 'ask_known1_28' %}" class="sub-card bg-r134a"><i class="fas fa-snowflake"></i> R-134a</a>
-                <a href="{% url 'ask_known1_33' %}" class="sub-card bg-nitrogen"><i class="fas fa-burn"></i> <span class="lang-text" data-pt-br="Nitrogênio" data-en="Nitrogen" data-es="Nitrógeno">Nitrogênio</span></a>
-                <a href="{% url 'ask_known1_38' %}" class="sub-card bg-methane"><i class="fas fa-fire"></i> <span class="lang-text" data-pt-br="Metano" data-en="Methane" data-es="Metano">Metano</span></a>
+                <a href="{% url 'ask_mass' flow_key='gas_cilindro' %}" class="sub-card bg-gas"><i class="fas fa-wind"></i> <span class="lang-text" data-pt-br="Gás Ideal" data-en="Ideal Gas" data-es="Gas Ideal">Gás Ideal</span></a>
+                <a href="{% url 'ask_mass' flow_key='agua_estado' %}" class="sub-card bg-water"><i class="fas fa-tint"></i> <span class="lang-text" data-pt-br="Água" data-en="Water" data-es="Agua">Água</span></a>
+                <a href="{% url 'ask_mass' flow_key='amonia_estado' %}" class="sub-card bg-ammonia"><i class="fas fa-flask"></i> <span class="lang-text" data-pt-br="Amônia" data-en="Ammonia" data-es="Amoníaco">Amônia</span></a>
+                <a href="{% url 'ask_mass' flow_key='co2_estado' %}" class="sub-card bg-co2"><i class="fas fa-cloud"></i> CO₂</a>
+                <a href="{% url 'ask_mass' flow_key='r410a_estado' %}" class="sub-card bg-r410a"><i class="fas fa-snowflake"></i> R-410a</a>
+                <a href="{% url 'ask_mass' flow_key='r134a_estado' %}" class="sub-card bg-r134a"><i class="fas fa-snowflake"></i> R-134a</a>
+                <a href="{% url 'ask_mass' flow_key='nitrogenio_estado' %}" class="sub-card bg-nitrogen"><i class="fas fa-burn"></i> <span class="lang-text" data-pt-br="Nitrogênio" data-en="Nitrogen" data-es="Nitrógeno">Nitrogênio</span></a>
+                <a href="{% url 'ask_mass' flow_key='metano_estado' %}" class="sub-card bg-methane"><i class="fas fa-fire"></i> <span class="lang-text" data-pt-br="Metano" data-en="Methane" data-es="Metano">Metano</span></a>
             </div>
 
             <div id="grid-processos" class="substance-grid hidden">

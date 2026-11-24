@@ -1,17 +1,9 @@
 from django.shortcuts import render, redirect
 from django.core.exceptions import ValidationError
 from math import log, isfinite, exp
+from .thermo_engine import format_mass_display
 import json
 from . import estados as std
-
-# Inicialização da estrutura de dados
-if not hasattr(std, 'instancia_gas'):
-    std.instancia_gas = std.gas_cls()
-
-gas = std.instancia_gas
-
-if not hasattr(gas, 'lista_gas') or gas.lista_gas is None:
-    gas.lista_gas = []
 
 from .forms import (
     ConstantesPoli11, ConstantesPoli11_2,
@@ -32,24 +24,8 @@ def rd(x, ndigits=4):
 # Passo 1 – Escolha da primeira constante
 ###############################################################################
 def ask_known1_view11(request):
-    # Limpa a lista de processos no início de um novo ciclo
-    try:
-        gas.limpar_gas()
-    except Exception:
-        gas.lista_gas = []
-    request.session['lista_gas'] = json.dumps(gas.lista_gas, default=str)
-
-    # ==========================================================
-    # GARANTIA DE LIMPEZA DO GRÁFICO AO INICIAR NOVO CICLO
-    # ==========================================================
-    request.session['pontos_grafico'] = []
-    request.session['historico_processos'] = []
-    if 'dados_processo' in request.session:
-        del request.session['dados_processo']
-    if hasattr(gas, 'pontos_grafico_gas'):
-        gas.pontos_grafico_gas.clear()
-    # ==========================================================
-
+    gas = std.get_gas_session(request)
+    gas.limpar_gas()
     if request.method == 'POST':
         form = ConstantesPoli11(request.POST)
         if form.is_valid():
@@ -120,6 +96,8 @@ def ask_known3_view11(request):
         if form.is_valid():
             request.session['poli_state1_prop_1'] = str(form.cleaned_data['property_choice'])
             request.session['poli_state1_val_1'] = float(form.cleaned_data['value_input'])
+            if 'mass_input' in request.POST and form.cleaned_data.get('mass_input') is not None:
+                request.session['mass_input'] = float(form.cleaned_data['mass_input'])
             return redirect('ask_known4_11')
     else:
         form = Prop1Poli11()
@@ -193,17 +171,8 @@ def ask_known7_view11(request):
 def process_values_view11(request):
 
     try:
-
-        # =====================================
-        # 0️⃣ LISTA DE ESTADOS
-        # =====================================
-        if 'lista_gas' not in request.session:
-            request.session['lista_gas'] = json.dumps([])
-
-        try:
-            gas.lista_gas = json.loads(request.session['lista_gas'])
-        except:
-            gas.lista_gas = []
+        # Instância stateless de gas isolada na sessão do usuário
+        gas = std.get_gas_session(request)
 
         # =====================================
         # 1️⃣ CONSTANTES
@@ -306,12 +275,16 @@ def process_values_view11(request):
         # 5️⃣ CÁLCULO DO ESTADO 2
         # =====================================
 
+        m = float(request.session.get('mass_input', 1.0) or 1.0)
+        if m <= 0:
+            m = 1.0
+
         if Q_user is not None:
 
             if abs(n - 1.0) > 1e-12:
 
                 fator = Cv + R/(1 - n)
-                T2 = T1 + Q_user / fator
+                T2 = T1 + Q_user / (m * fator)
 
                 v2 = v1 * (T1 / T2)**(1/(n - 1))
                 p2 = R * T2 / v2
@@ -319,7 +292,7 @@ def process_values_view11(request):
             else:
                 # isotérmico
                 T2 = T1
-                v2 = v1 * exp(Q_user/(R*T1))
+                v2 = v1 * exp(Q_user/(m*R*T1))
                 p2 = R*T2/v2
 
         else:
@@ -353,19 +326,19 @@ def process_values_view11(request):
         # 6️⃣ TRABALHO
         # =====================================
         if abs(n - 1.0) > 1e-12:
-            W = (p2*v2 - p1*v1)/(1 - n)
+            W = m * (p2*v2 - p1*v1)/(1 - n)
         else:
-            W = R*T1*log(v2/v1)
+            W = m * R*T1*log(v2/v1)
 
         # =====================================
         # 7️⃣ CALOR REAL
         # =====================================
-        Q = Q_user if Q_user is not None else Cv*(T2-T1) + W
+        Q = Q_user if Q_user is not None else m * Cv*(T2-T1) + W
 
         # =====================================
         # 8️⃣ ENTROPIA
         # =====================================
-        delta_s = Cp*log(T2/T1) - R*log(p2/p1)
+        delta_s = m * (Cp*log(T2/T1) - R*log(p2/p1))
         Sger = delta_s - Q/Tviz
 
         processo_impossivel = Sger < 0
@@ -484,6 +457,8 @@ def process_values_view11(request):
             'processo_impossivel': processo_impossivel,
             'teste': gas.lista_gas,
             'Tviz': rd(Tviz-273.15),
+            'massa': format_mass_display(m),
+            'massa_float': m,
             'pontos_grafico_json': json.dumps(pontos_grafico), # Envia para o Chart.js
             'historico_processos_json': json.dumps(historico_processos) # Histórico p/ Relatório Final
         }

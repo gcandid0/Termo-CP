@@ -1,17 +1,9 @@
 from django.shortcuts import render, redirect
 from django.core.exceptions import ValidationError
 from math import log, isfinite
+from .thermo_engine import format_mass_display
 import json
 from . import estados as std # Necessário para a continuidade de estado
-
-# Inicialização da estrutura de dados
-if not hasattr(std, 'instancia_gas'):
-    std.instancia_gas = std.gas_cls()
-
-gas = std.instancia_gas
-
-if not hasattr(gas, 'lista_gas') or gas.lista_gas is None:
-    gas.lista_gas = []
 
 from .forms import (
     ConstantesPoli12, ConstantesPoli12_2,
@@ -45,24 +37,8 @@ def safe_float(request, key, default=None):
 # ETAPAS DE COLETA DAS CONSTANTES E ESTADOS
 ###############################################################################
 def ask_known1_view12(request):
-    # Limpa a lista de processos no início de um novo ciclo
-    try:
-        gas.limpar_gas()
-    except Exception:
-        gas.lista_gas = []
-    request.session['lista_gas'] = json.dumps(gas.lista_gas, default=str)
-
-    # ==========================================================
-    # GARANTIA DE LIMPEZA DO GRÁFICO AO INICIAR NOVO CICLO
-    # ==========================================================
-    request.session['pontos_grafico'] = []
-    request.session['historico_processos'] = []
-    if 'dados_processo' in request.session:
-        del request.session['dados_processo']
-    if hasattr(gas, 'pontos_grafico_gas'):
-        gas.pontos_grafico_gas.clear()
-    # ==========================================================
-
+    gas = std.get_gas_session(request)
+    gas.limpar_gas()
     if request.method == 'POST':
         form = ConstantesPoli12(request.POST)
         if form.is_valid():
@@ -140,6 +116,8 @@ def ask_known3_view12(request):
         if form.is_valid():
             request.session['isen_state1_prop_1'] = str(form.cleaned_data['property_choice'])
             request.session['isen_state1_val_1'] = float(form.cleaned_data['value_input'])
+            if 'mass_input' in request.POST and form.cleaned_data.get('mass_input') is not None:
+                request.session['mass_input'] = float(form.cleaned_data['mass_input'])
             return redirect('ask_known4_12')
     else:
         form = Prop1_12()
@@ -178,16 +156,8 @@ def ask_known5_view12(request):
 ###############################################################################
 def process_values_view12(request):
     try:
-        # =====================================
-        # 1️⃣ LISTA DE ESTADOS
-        # =====================================
-        if 'lista_gas' not in request.session:
-            request.session['lista_gas'] = json.dumps([])
-
-        try:
-            gas.lista_gas = json.loads(request.session['lista_gas'])
-        except:
-            gas.lista_gas = []
+        # Instância stateless de gas isolada na sessão do usuário
+        gas = std.get_gas_session(request)
 
         # =====================================
         # 2️⃣ CONSTANTES
@@ -288,6 +258,9 @@ def process_values_view12(request):
             })
 
         T2 = p2 = v2 = None
+        m = float(request.session.get('mass_input', 1.0) or 1.0)
+        if m <= 0:
+            m = 1.0
 
         if s2p == 0:    # Temperatura (Celsius -> Kelvin)
             T2 = to_kelvin(s2v)
@@ -297,8 +270,8 @@ def process_values_view12(request):
             v2 = s2v
         elif s2p == 9:  # Trabalho (W12)
             W12_input = s2v
-            # W12 = Cv * (T1 - T2)  ->  T2 = T1 - (W12 / Cv)
-            T2 = T1 - (W12_input / Cv)
+            # W12 = m * Cv * (T1 - T2)  ->  T2 = T1 - (W12 / (m * Cv))
+            T2 = T1 - (W12_input / (m * Cv))
         elif s2p == 8:  # Calor (Q)
             return render(request, 'gas/results_12.html', {'mensagem': 'O calor (Q) em processo isentrópico é zero. Por favor, escolha outra variável.'})
         else:
@@ -335,7 +308,7 @@ def process_values_view12(request):
         # (internamente reversível, Δs = 0). Por isso essas variáveis não são
         # calculadas nem exibidas — só o trabalho (W) é relevante aqui.
         # W12 = \int p dv. Isentrópico: W = Cv * (T1 - T2)
-        W12 = Cv * (T1 - T2)
+        W12 = m * Cv * (T1 - T2)
 
         # ==========================================================
         # GERAÇÃO DE MICROPROCESSOS PARA O DIAGRAMA (ISENTRÓPICO)
@@ -443,6 +416,8 @@ def process_values_view12(request):
             'v1': rd(v1),
             'v2': rd(v2),
             'W12': rd(W12),
+            'massa': format_mass_display(m),
+            'massa_float': m,
             'mensagem': "Processo isentrópico (s=constante) calculado com sucesso!",
             'teste': gas.lista_gas,
             'pontos_grafico_json': json.dumps(pontos_grafico), # Dados do Gráfico Interativo

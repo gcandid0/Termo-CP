@@ -1,4 +1,5 @@
 {% extends 'base2.html' %}
+{% load static %}
 
 {% block title %}TERMO-CP – Água{% endblock %}
 
@@ -9,733 +10,10 @@
 {% endblock %}
 
 {% block extra_css %}
+<link rel="stylesheet" href="{% static 'myapp/css/results_pcte.css' %}?v=6">
 <style>
-    /* --- Layout Específico da Página de Resultados --- */
-    .top-row { display: flex; flex-direction: row; justify-content: space-between; gap: 15px; flex: 1; min-height: 0; }
-
-    .state-card {
-        flex: 1; background: var(--card-bg);
-        border-radius: 10px; box-shadow: var(--shadow);
-        padding: 15px; display: flex; flex-direction: column;
-        border-top: 4px solid var(--primary-color);
-        overflow-y: auto;
-    }
-    .state-card.final-state { border-top-color: var(--secondary-color); }
-
-    .state-card h2 {
-        color: var(--primary-color); font-size: 1.2em;
-        border-bottom: 2px solid #eee; padding-bottom: 8px;
-        margin-top: 0; margin-bottom: 10px; text-align: center;
-    }
-
-    .data-row {
-        display: flex; justify-content: space-between;
-        padding: 8px 0; border-bottom: 1px solid #eee; font-size: 0.9em;
-    }
-    .data-row:last-child { border-bottom: none; }
-    .data-label { font-weight: bold; color: #555; }
-    .data-value { font-weight: bold; color: var(--primary-color); }
-
-    .center-column { flex: 1.5; display: flex; flex-direction: column; gap: 10px; min-height: 0; }
-
-    /* --- Acessibilidade: link para pular navegação --- */
-    .skip-link {
-        position: absolute; left: -9999px; top: 0; z-index: 1000;
-        background: #20376B; color: #fff; padding: 10px 18px;
-        border-radius: 0 0 8px 0; font-weight: bold; text-decoration: none;
-    }
-    .skip-link:focus { left: 0; }
-
-    /* --- Acessibilidade dos modais: foco visível --- */
-    .modal-content:focus { outline: 3px solid #2980b9; outline-offset: -3px; }
-    .close-btn:focus, [id^="close"]:focus { outline: 3px solid #2980b9; outline-offset: 2px; }
-    .modal-btn:focus, .icon-btn:focus { outline: 3px solid #2980b9; outline-offset: 2px; }
-
-    /* --- SLIDER STYLES MELHORADOS --- */
-    .slider-mini-container {
-        text-align: center; background-color: #f0f8ff;
-        padding: 10px 15px; border-radius: 8px;
-        border: 1px solid #dbeafe; box-shadow: var(--shadow);
-    }
-    .slider-mini-container h4 { margin: 0 0 10px 0; font-size: 0.95em; color: var(--primary-color); }
-
-    input[type="range"] {
-        -webkit-appearance: none;
-        width: 80%;
-        background: transparent;
-        margin: 10px 0;
-    }
-    input[type="range"]:focus { outline: none; }
-    input[type="range"]::-webkit-slider-runnable-track {
-        width: 100%; height: 8px; cursor: pointer;
-        background: #cfd8dc; border-radius: 4px;
-        box-shadow: inset 0 1px 3px rgba(0,0,0,0.2);
-    }
-    input[type="range"]::-webkit-slider-thumb {
-        -webkit-appearance: none;
-        height: 22px; width: 22px; border-radius: 50%;
-        background: var(--secondary-color, #e67e22);
-        cursor: pointer; margin-top: -7px;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.4);
-        transition: transform 0.1s;
-    }
-    input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.15); }
-
-    .visualization-container {
-        flex: 1; background: #000; border-radius: 10px;
-        position: relative; display: flex; justify-content: center; align-items: center;
-        overflow: hidden; box-shadow: var(--shadow);
-    }
-    .visualization-container canvas { width: 100% !important; height: 100% !important; object-fit: contain; display: block; }
-
-    .scale-label {
-        position: absolute; color: white; font-size: 11px;
-        font-family: 'Arial', sans-serif; pointer-events: none;
-        text-align: right; width: 60px; z-index: 10;
-    }
-
-    .legend-container {
-        position: absolute; bottom: 20px; right: 20px;
-        background-color: rgba(15, 15, 15, 0.85);
-        padding: 15px 20px; border-radius: 12px; color: white;
-        font-size: 14px; display: flex; flex-direction: column;
-        gap: 12px; pointer-events: none; z-index: 20;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-    }
-
-    .legend-item { display: flex; align-items: center; gap: 12px; font-weight: bold; }
-    .legend-color { width: 24px; height: 16px; display: inline-block; border-radius: 2px; }
-    .legend-cilindro { background-color: transparent; border: 1px solid #888; }
-    .legend-pistao { background-color: #a2a2a2; }
     .legend-vapor { background-color: rgba(29, 115, 188, 0.7); border: 1px solid #333; }
     .legend-liquido { background-color: #1d73bc; }
-
-    /* --- Barra de Resultados --- */
-    .bottom-row {
-        background-color: #FFF9C4; border-radius: 10px;
-        padding: 10px 20px; display: flex; align-items: center;
-        justify-content: space-between; border-left: 4px solid var(--accent-gas);
-        box-shadow: var(--shadow); flex-shrink: 0;
-    }
-
-    .bottom-row h3 { margin: 0; color: var(--secondary-color); font-size: 1.1em; margin-right: 20px; }
-
-    .process-results { display: flex; flex-direction: row; gap: 25px; flex: 1; justify-content: center; align-items: center; }
-    .process-item { display: flex; flex-direction: column; align-items: center; font-size: 0.9em; }
-
-    /* Aplica o estilo cinza e menor APENAS ao texto do rótulo, não aos números */
-    .process-item > span:first-child { color: #666; font-size: 0.8em; }
-
-    .process-item strong { color: var(--primary-color); font-size: 1.1em; }
-
-    /* Garante que a classe de formatação respeite o negrito e a cor azul do strong */
-    .process-item strong .format-num { color: inherit; font-size: inherit; font-weight: inherit; }
-
-    .process-impossible { color: red; font-weight: bold; text-align: center; padding: 5px 15px; border: 2px solid red; border-radius: 5px; }
-
-    .button-group { display: flex; gap: 10px; flex-wrap: wrap; justify-content: flex-end;}
-
-    /* --- BOTÕES SOMENTE-ÍCONE (Barra de Resultados) --- */
-    .icon-btn {
-        position: relative;
-        width: 46px; height: 46px;
-        border-radius: 50%;
-        display: inline-flex; align-items: center; justify-content: center;
-        font-size: 1.05em;
-        padding: 0; border: none; cursor: pointer;
-        flex-shrink: 0;
-        transition: transform 0.15s ease, box-shadow 0.15s ease;
-    }
-    .icon-btn:hover, .icon-btn:focus-visible { transform: translateY(-3px); }
-    .icon-btn:active { transform: translateY(0) scale(0.96); }
-
-    .icon-btn .icon-tooltip {
-        position: absolute;
-        bottom: calc(100% + 10px);
-        left: 50%;
-        transform: translateX(-50%);
-        background: #20376B;
-        color: #fff;
-        padding: 6px 11px;
-        border-radius: 6px;
-        font-size: 0.72em;
-        font-weight: bold;
-        white-space: nowrap;
-        opacity: 0;
-        visibility: hidden;
-        pointer-events: none;
-        transition: opacity 0.15s ease, transform 0.15s ease;
-        box-shadow: 0 3px 10px rgba(0,0,0,0.25);
-        z-index: 30;
-    }
-    .icon-btn .icon-tooltip::after {
-        content: '';
-        position: absolute;
-        top: 100%; left: 50%;
-        transform: translateX(-50%);
-        border: 5px solid transparent;
-        border-top-color: #20376B;
-    }
-    .icon-btn:hover .icon-tooltip,
-    .icon-btn:focus-visible .icon-tooltip {
-        opacity: 1; visibility: visible;
-        transform: translateX(-50%) translateY(-4px);
-    }
-    /* Link "Voltar" reaproveita o mesmo estilo de botão-ícone */
-    a.icon-btn { text-decoration: none; }
-
-    .chart-controls { display: flex; justify-content: center; align-items: center; margin-bottom: 15px; gap: 15px; flex-wrap: wrap; }
-    .chart-controls select {
-        padding: 8px 12px; border-radius: 6px; border: 2px solid var(--primary-color);
-        font-family: inherit; color: var(--primary-color); font-weight: bold; outline: none; cursor: pointer;
-    }
-
-    /* --- ESTILOS DO MEMORIAL DE CÁLCULO DIDÁTICO REFORMULADO --- */
-    .math-step {
-        background: #ffffff;
-        border-radius: 12px;
-        padding: 25px 20px 20px 30px;
-        margin-bottom: 25px;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-        border-left: 5px solid;
-        position: relative;
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-    .math-step:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(0,0,0,0.1);
-    }
-
-    /* Indicador Numérico do Passo */
-    .step-number {
-        position: absolute;
-        top: -12px;
-        left: -18px;
-        width: 36px;
-        height: 36px;
-        border-radius: 50%;
-        color: white;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: bold;
-        font-size: 1.2em;
-        box-shadow: 0 3px 8px rgba(0,0,0,0.2);
-    }
-
-    .step-1 { border-color: #3498db; } .step-1 .step-number { background: #3498db; }
-    .step-2 { border-color: #e67e22; } .step-2 .step-number { background: #e67e22; }
-    .step-3 { border-color: #e74c3c; } .step-3 .step-number { background: #e74c3c; }
-    .step-4 { border-color: #2ecc71; } .step-4 .step-number { background: #2ecc71; }
-
-    .step-header {
-        font-size: 1.2em;
-        font-weight: bold;
-        margin-bottom: 12px;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-    }
-    .step-1 .step-header { color: #3498db; }
-    .step-2 .step-header { color: #e67e22; }
-    .step-3 .step-header { color: #e74c3c; }
-    .step-4 .step-header { color: #2ecc71; }
-
-    /* Caixa de Explicação Teórica */
-    .step-description {
-        font-size: 0.95em;
-        color: #555;
-        margin-bottom: 15px;
-        line-height: 1.5;
-        background: #f8f9fa;
-        padding: 10px 15px;
-        border-radius: 8px;
-        border-left: 3px solid #ccc;
-    }
-
-    /* Caixa da Fórmula - Estilo Livro de Exatas */
-    .formula-box {
-        background: #fdfefe;
-        color: #2c3e50;
-        padding: 12px 25px;
-        border-radius: 8px;
-        font-size: 1.3em;
-        text-align: center;
-        margin: 10px auto 15px auto;
-        letter-spacing: 1px;
-        font-weight: bold;
-        width: fit-content;
-        border: 2px solid #ebedef;
-        font-family: 'Courier New', Courier, monospace;
-    }
-    .formula-box span.math-op { color: #7f8c8d; padding: 0 5px; }
-
-    .step-calc {
-        text-align: center;
-        color: #555;
-        margin-bottom: 15px;
-        font-size: 1.1em;
-        line-height: 1.8;
-    }
-
-    .val-badge {
-        background: #f1f2f6;
-        padding: 3px 8px;
-        border-radius: 6px;
-        font-weight: bold;
-        color: #2f3542;
-        border: 1px solid #dfe4ea;
-        font-size: 1em;
-    }
-
-    .step-result {
-        text-align: center; font-size: 1.25em; font-weight: bold;
-        padding: 12px; border-radius: 8px; border: 2px dashed; margin-top: 15px;
-    }
-    .step-2 .step-result { color: #d35400; border-color: #e67e22; background: #fff4e6; }
-    .step-3 .step-result { color: #c0392b; border-color: #e74c3c; background: #fdf2f0; }
-
-    .state-boxes { display: flex; gap: 15px; justify-content: center; }
-    .state-box {
-        flex: 1; background: #fdfefe; border: 1px solid #dee2e6; border-radius: 8px;
-        padding: 15px; text-align: center; color: #333; font-size: 1.05em; line-height: 1.6;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.02);
-    }
-    .state-box strong { display: block; margin-bottom: 8px; color: #2c3e50; border-bottom: 1px solid #eee; padding-bottom: 5px; }
-
-    /* --- ESTILOS DO RELATÓRIO FINAL --- */
-    #reportModal .modal-content {
-        max-width: 1100px; max-height: 90vh;
-        overflow-y: auto; border-radius: 15px;
-        padding: 0; background: #f4f6f9;
-    }
-    .report-section {
-        background: white; border-radius: 12px;
-        padding: 20px 25px; margin-bottom: 20px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-        border-left: 4px solid var(--primary-color);
-    }
-    .report-section-title {
-        color: var(--primary-color); font-size: 1.1em; font-weight: bold;
-        border-bottom: 1px solid #eee; padding-bottom: 10px;
-        margin-bottom: 15px; display: flex; align-items: center; gap: 10px;
-    }
-    .report-metric-card {
-        background: #f8f9ff; border: 1px solid #e0e7ff;
-        border-radius: 10px; padding: 14px; text-align: center;
-    }
-    .report-metric-label { font-size: 0.75em; color: #666; margin-bottom: 6px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; }
-    .report-metric-value { font-size: 1.4em; font-weight: bold; color: var(--primary-color); }
-    .report-state-table { width: 100%; border-collapse: collapse; font-size: 0.88em; }
-    .report-state-table th { padding: 10px 14px; text-align: left; color: white; }
-    .report-state-table td { padding: 8px 14px; border-bottom: 1px solid #f0f0f0; }
-    .report-state-table tr:hover td { background: #f8f9ff; }
-    .report-state-table .prop-label { font-weight: bold; color: #555; width: 48%; }
-    .report-state-table .prop-value { color: var(--primary-color); font-weight: bold; }
-
-    /* --- Comparação / Variação entre Estados --- */
-    .comparison-table { width: 100%; border-collapse: collapse; font-size: 0.9em; }
-    .comparison-table th, .comparison-table td { padding: 9px 12px; text-align: center; border-bottom: 1px solid #f0f0f0; }
-    .comparison-table thead th { background: #eef1f6; color: #444; font-weight: bold; }
-    .comparison-table td.prop-label { text-align: left; font-weight: bold; color: #555; }
-    .comparison-table .delta-up { color: #c0392b; font-weight: bold; }
-    .comparison-table .delta-down { color: #2980b9; font-weight: bold; }
-    .comparison-table .delta-flat { color: #7f8c8d; font-weight: bold; }
-    .comparison-table .delta-icon { margin-right: 4px; }
-    .comparison-block + .comparison-block { margin-top: 18px; }
-    .comparison-block-title { font-weight: bold; color: var(--primary-color); margin-bottom: 8px; font-size: 0.92em; }
-
-    /* --- Histórico de Cálculos --- */
-    .history-item {
-        display: flex; align-items: center; gap: 12px;
-        background: #fff; border: 1px solid #e0e4ea; border-radius: 10px;
-        padding: 12px 16px; margin-bottom: 10px; transition: box-shadow 0.15s;
-    }
-    .history-item:hover { box-shadow: 0 3px 10px rgba(0,0,0,0.08); }
-    .history-item.selected { border-color: #16a085; background: #f0fdf9; }
-    .history-item-check { flex: 0 0 auto; display: flex; flex-direction: column; align-items: center; gap: 4px; }
-    .history-item-check input { width: 18px; height: 18px; cursor: pointer; }
-    .history-order-badge {
-        display: inline-flex; align-items: center; justify-content: center;
-        width: 20px; height: 20px; border-radius: 50%;
-        background: var(--secondary-color); color: #fff;
-        font-size: 0.72em; font-weight: bold; line-height: 1;
-    }
-    .history-item-main { flex: 1; min-width: 0; }
-    .history-item-label {
-        font-weight: bold; color: var(--primary-color); font-size: 1em;
-        border: none; background: transparent; padding: 2px 4px; border-radius: 4px;
-        width: 100%; cursor: text;
-    }
-    .history-item-label:focus { outline: 2px solid #16a085; background: #fff; }
-    .history-item-meta { font-size: 0.78em; color: #888; margin-top: 2px; }
-    .history-item-summary { font-size: 0.85em; color: #444; margin-top: 4px; display: flex; gap: 14px; flex-wrap: wrap; }
-    .history-item-summary span strong { color: var(--primary-color); }
-    .history-item-actions { flex: 0 0 auto; display: flex; gap: 8px; }
-    .history-item-actions button {
-        border: none; background: #eef1f6; color: #555; width: 34px; height: 34px;
-        border-radius: 8px; cursor: pointer; font-size: 0.9em;
-    }
-    .history-item-actions button:hover { background: #dfe4ea; }
-    .history-item-actions button.danger:hover { background: #fdecea; color: #c0392b; }
-    .history-empty { text-align: center; color: #888; padding: 30px 10px; }
-    .history-badge {
-        display: inline-block; font-size: 0.72em; font-weight: bold; color: white;
-        padding: 2px 8px; border-radius: 10px; margin-left: 6px; vertical-align: middle;
-    }
-
-    .compare-scroll-wrap { width: 100%; overflow-x: auto; overflow-y: hidden; padding-bottom: 6px; }
-    .compare-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-        gap: 16px; align-items: start;
-    }
-    /* Com 3 ou 4 itens, cada card recebe uma largura mínima confortável e,
-       se não couberem lado a lado, o wrapper acima rola horizontalmente
-       em vez de espremer o conteúdo ou estourar a página. */
-    .compare-grid[data-count="3"] { grid-template-columns: repeat(3, minmax(230px, 1fr)); }
-    .compare-grid[data-count="4"] { grid-template-columns: repeat(4, minmax(210px, 1fr)); }
-    @media (max-width: 900px) {
-        .compare-grid[data-count="3"], .compare-grid[data-count="4"] { grid-template-columns: repeat(2, minmax(230px, 1fr)); }
-        .report-cylinder-grid { grid-template-columns: 1fr; }
-    }
-    @media (max-width: 560px) {
-        .compare-grid, .compare-grid[data-count="3"], .compare-grid[data-count="4"] { grid-template-columns: 1fr; }
-    }
-
-    /* ===== Otimização Mobile (layout principal) ===== */
-    @media (max-width: 900px) {
-        .top-row { flex-direction: column; }
-        .state-card, .center-column { width: 100%; max-width: none; flex: none; overflow-y: visible; }
-        .state-card { max-height: none; }
-        .visualization-container { flex: none; height: 460px; min-height: 460px; }
-        .slider-mini-container { order: 1; }
-        .visualization-container { order: 2; }
-    }
-    @media (max-width: 768px) {
-        .button-group { flex-direction: column; }
-        .btn { width: 100%; }
-        /* O grupo de botões-ícone da barra de processo deve continuar deitado */
-        .bottom-row .button-group { flex-direction: row; flex-wrap: wrap; }
-        .bottom-row { flex-direction: column; gap: 15px; text-align: center; }
-        .process-results { flex-wrap: wrap; gap: 15px; row-gap: 12px; }
-        .bottom-row h3 { margin-right: 0; }
-        .modal-content.modal-chart { padding: 15px; width: 95%; }
-        .icon-btn { width: 42px; height: 42px; font-size: 0.95em; }
-        .icon-btn .icon-tooltip { display: none; }
-        .report-diagram-grid { grid-template-columns: 1fr !important; }
-        .legend-container { font-size: 9px; padding: 6px 8px; bottom: 8px; right: 8px; gap: 4px; }
-        .legend-item { gap: 5px; }
-        .legend-color { width: 12px; height: 8px; }
-        .scale-label { font-size: 9px; width: 44px; }
-        input[type="range"] { width: 92%; }
-    }
-    @media (max-width: 480px) {
-        .visualization-container { height: 400px; min-height: 400px; }
-        .state-card h2 { font-size: 1.05em; }
-        .data-row { font-size: 0.85em; }
-    }
-    .compare-card {
-        background: #fff; border-radius: 12px; padding: 16px;
-        border-top: 4px solid var(--primary-color); box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-        min-width: 0; overflow: hidden;
-    }
-    .compare-card-header {
-        margin: 0 0 12px 0; padding-bottom: 10px; border-bottom: 1px solid #eef1f6;
-        display: flex; flex-direction: column; gap: 6px;
-    }
-    .compare-card-badge {
-        display: inline-flex; align-self: flex-start; font-size: 0.7em; font-weight: bold; color: white;
-        padding: 3px 10px; border-radius: 10px; white-space: nowrap;
-    }
-    .compare-card-title {
-        margin: 0; color: var(--primary-color); font-size: 0.98em; line-height: 1.35;
-        word-break: break-word; font-weight: bold;
-    }
-    .compare-card-title i { margin-right: 6px; }
-    .compare-card-date { font-size: 0.76em; color: #999; }
-    .compare-card .report-metric-card { padding: 10px 4px; min-width: 0; }
-    .compare-card .report-metric-label { font-size: 0.65em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .compare-card .report-metric-value { font-size: 1.0em; word-break: break-word; }
-    .compare-card .report-state-table { font-size: 0.82em; table-layout: fixed; width: 100%; }
-    .compare-card .report-state-table .prop-label { width: 54%; padding-right: 6px; }
-    .compare-card .report-state-table .prop-value { word-break: break-word; }
-    .compare-card .report-state-table th, .compare-card .report-state-table td { padding: 7px 8px; }
-    .report-cylinder-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
-    .report-cylinder-item { background: #000; border-radius: 10px; overflow: hidden; text-align: center; }
-    .report-cylinder-label { padding: 10px; font-size: 0.9em; font-weight: bold; color: white; background: rgba(32,55,107,0.9); }
-    /* Caixa de tamanho fixo (não muda) — a imagem cabe dentro dela mantendo a
-       proporção real do cilindro, sem esticar (letterbox se sobrar espaço). */
-    .report-cylinder-frame {
-        width: 100%; height: 300px; background: #000;
-        display: flex; align-items: center; justify-content: center; overflow: hidden;
-    }
-    .report-cylinder-frame img { max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; display: block; margin: 0 auto; }
-    /* ===== DIAGRAMAS - IMPRESSÃO TÉCNICA ===== */
-
-    .report-diagram-grid{
-        display:grid !important;
-        grid-template-columns: repeat(2, 1fr) !important;
-        gap:12px !important;
-        align-items:start !important;
-    }
-
-    .report-diagram-item,
-    .report-diagram-item.full-width{
-        width:100% !important;
-        margin:0 !important;
-        grid-column: span 1 !important;
-
-        break-inside:avoid !important;
-        page-break-inside:avoid !important;
-
-        border:1px solid #c8ccd4 !important;
-        border-radius:8px !important;
-        background:#fff !important;
-        overflow:hidden !important;
-    }
-
-    .report-diagram-label{
-        padding:8px 12px !important;
-        font-size:0.82em !important;
-        font-weight:bold !important;
-    }
-
-    .report-diagram-canvas-wrap,
-    .report-diagram-item.full-width .report-diagram-canvas-wrap{
-        width:100% !important;
-        height:250px !important;
-
-        display:flex !important;
-        justify-content:center !important;
-        align-items:center !important;
-    }
-
-    .report-diagram-canvas-wrap canvas{
-        width:100% !important;
-        height:250px !important;
-        max-width:100% !important;
-        max-height:250px !important;
-    }
-    @media print {
-        /* === Configuração da página A4 === */
-        @page {
-            size: A4 portrait;
-            margin: 12mm 10mm 14mm 10mm;
-        }
-
-        /* === Força impressão colorida em todos os elementos === */
-        * {
-            -webkit-print-color-adjust: exact !important;
-            print-color-adjust: exact !important;
-            color-adjust: exact !important;
-        }
-
-        /* === Mostra apenas o modal do Relatório Final === */
-        body * { visibility: hidden !important; }
-        #reportModal, #reportModal * { visibility: visible !important; }
-
-        /* === Reset de layout geral === */
-        html, body {
-            margin: 0 !important;
-            padding: 0 !important;
-            background: white !important;
-        }
-
-        /* === Posiciona o modal para preencher a folha === */
-        #reportModal {
-            display: block !important;
-            position: absolute !important;
-            top: 0 !important; left: 0 !important; width: 100% !important;
-            background: transparent !important;
-            overflow: visible !important;
-        }
-
-        /* === Container principal do relatório === */
-        #reportModal .modal-content {
-            max-height: none !important;
-            height: auto !important;
-            overflow: visible !important;
-            box-shadow: none !important;
-            border-radius: 0 !important;
-            margin: 0 !important;
-            padding: 0 !important;
-            background: white !important;
-            width: 100% !important;
-        }
-
-        /* === Oculta elementos não imprimíveis === */
-        .no-print, #closeReportBtn, #reportLoading {
-            display: none !important;
-            visibility: hidden !important;
-        }
-
-        /* === Cabeçalho: remove sticky, ajusta padding === */
-        #reportModal .modal-content > div:first-child {
-            position: static !important;
-            border-radius: 0 !important;
-            box-shadow: none !important;
-            padding: 10px 18px !important;
-        }
-        #reportTimestamp { font-size: 0.72em !important; }
-
-        /* === Corpo do relatório === */
-        #reportBody {
-            padding: 8px 14px 12px !important;
-        }
-
-        /* === Seções: compactas e sem sombras === */
-        .report-section {
-            break-inside: avoid;
-            page-break-inside: avoid;
-            margin-bottom: 10px !important;
-            padding: 10px 14px !important;
-            box-shadow: none !important;
-            border: 1px solid #d0d0d0 !important;
-            border-left-width: 4px !important;
-            border-radius: 6px !important;
-            background: white !important;
-        }
-        .report-section-title {
-            font-size: 0.88em !important;
-            padding-bottom: 6px !important;
-            margin-bottom: 8px !important;
-        }
-
-        /* === Seção 1: Cards de resultado === */
-        .report-metric-card {
-            padding: 7px 9px !important;
-            border-radius: 5px !important;
-        }
-        .report-metric-label {
-            font-size: 0.62em !important;
-            margin-bottom: 3px !important;
-        }
-        .report-metric-value { font-size: 1.0em !important; }
-
-        /* === Seção 2: Tabelas de propriedades === */
-        #reportStatesGrid { gap: 10px !important; }
-        .report-state-table { font-size: 0.76em !important; }
-        .report-state-table th { padding: 6px 10px !important; }
-        .report-state-table td { padding: 4px 10px !important; }
-        .report-state-table tr:hover td { background: inherit; }
-
-        /* === Seção 3: Cilindros – nova página === */
-        #reportBody > .report-section:nth-child(3) {
-            page-break-before: always;
-        }
-        .report-cylinder-grid {
-            grid-template-columns: repeat(2, 1fr) !important;
-            gap: 8px !important;
-        }
-        .report-cylinder-item {
-            break-inside: avoid;
-            page-break-inside: avoid;
-        }
-        .report-cylinder-frame {
-            height: 255px !important;
-        }
-        .report-cylinder-frame img {
-            max-height: 100% !important;
-            max-width: 100% !important;
-            width: auto !important;
-            height: auto !important;
-            object-fit: contain !important;
-        }
-        .report-cylinder-label {
-            padding: 7px 10px !important;
-            font-size: 0.82em !important;
-        }
-
-        /* === Seção 4: Diagramas termodinâmicos – nova página === */
-        #reportBody > .report-section:nth-child(4) {
-            page-break-before: always;
-            padding: 10px 14px 14px !important;
-        }
-
-        /* Coluna única: cada diagrama ocupa a largura total — sem cortes */
-        .report-diagram-grid {
-            display: flex !important;
-            flex-direction: column !important;
-            align-items: center !important;
-            gap: 18px !important;
-        }
-
-        .report-diagram-item {
-            break-inside: avoid !important;
-            page-break-inside: avoid !important;
-            box-shadow: none !important;
-            border: 1px solid #c8ccd4 !important;
-            border-radius: 8px !important;
-            overflow: hidden !important;
-            background: white !important;
-
-            width: 92% !important;
-            margin: 0 auto !important;
-        }
-
-        .report-diagram-label {
-            padding: 8px 12px !important;
-            font-size: 0.82em !important;
-            font-weight: bold !important;
-            background: #eef2fb !important;
-            border-bottom: 1px solid #d0d8ee !important;
-            color: var(--primary-color) !important;
-        }
-
-        /* Canvas mais alto: diagramas ocupam largura total, merecem altura generosa */
-        .report-diagram-canvas-wrap {
-            position: relative !important;
-            width: 100% !important;
-            height: 320px !important;
-
-            display: flex !important;
-            justify-content: center !important;
-            align-items: center !important;
-
-            background: white !important;
-        }
-
-        .report-diagram-canvas-wrap canvas,
-        .report-diagram-canvas-wrap img {
-            width: 100% !important;
-            height: 100% !important;
-            object-fit: contain !important;
-        }
-
-        /* Mollier não precisa de span 2 em coluna única — mesma altura dos demais */
-        .report-diagram-item.full-width {
-            width: 92% !important;
-            margin: 0 auto !important;
-        }
-
-        .report-diagram-item.full-width .report-diagram-canvas-wrap {
-            height: 320px !important;
-        }
-
-
-        /* === Ajustes extras de impressão === */
-        .report-section, .report-cylinder-item, .report-diagram-item, table, tr, td, th {
-            break-inside: avoid !important;
-            page-break-inside: avoid !important;
-        }
-        canvas, img {
-            max-width: 100% !important;
-            height: auto !important;
-        }
-        .report-state-table {
-            table-layout: fixed !important;
-            width: 100% !important;
-        }
-        #reportBody {
-            zoom: 0.95;
-        }
-
-        /* Cada diagrama em página própria para garantir legibilidade máxima */
-        .report-diagram-item + .report-diagram-item {
-            page-break-before: auto;
-        }
-    }
 </style>
 {% endblock %}
 
@@ -777,7 +55,7 @@
                 {% endif %}
             </span>
         </div>
-        <div class="data-row" data-tour-pt-br="Quantidade de massa da substância considerada no sistema, usada em todos os cálculos de calor, trabalho e entropia." data-tour-en="Amount of mass of the substance considered in the system, used in all heat, work and entropy calculations." data-tour-es="Cantidad de masa de la sustancia considerada en el sistema, usada en todos los cálculos de calor, trabajo y entropía."><span class="data-label lang-text" data-pt-br="Massa (m):" data-en="Mass (m):" data-es="Masa (m):">Massa (m):</span><span class="data-value"><span class="format-num">1,0</span> kg</span></div>
+        <div class="data-row" data-tour-pt-br="Quantidade de massa da substância considerada no sistema, usada em todos os cálculos de calor, trabalho e entropia." data-tour-en="Amount of mass of the substance considered in the system, used in all heat, work and entropy calculations." data-tour-es="Cantidad de masa de la sustancia considerada en el sistema, usada en todos los cálculos de calor, trabajo y entropía."><span class="data-label lang-text" data-pt-br="Massa (m):" data-en="Mass (m):" data-es="Masa (m):">Massa (m):</span><span class="data-value"><span class="format-num">{{ massa|default:"1,0" }}</span> kg</span></div>
         <div class="data-row" data-tour-pt-br="Temperatura da substância nesse estado, em graus Celsius." data-tour-en="Temperature of the substance at this state, in degrees Celsius." data-tour-es="Temperatura de la sustancia en este estado, en grados Celsius."><span class="data-label lang-text" data-pt-br="Temperatura (T):" data-en="Temperature (T):" data-es="Temperatura (T):">Temperatura (T):</span><span class="data-value"><span class="format-num">{{ temperatura }}</span> °C</span></div>
         <div class="data-row" data-tour-pt-br="Pressão absoluta da substância nesse estado, em quilopascal (kPa)." data-tour-en="Absolute pressure of the substance at this state, in kilopascals (kPa)." data-tour-es="Presión absoluta de la sustancia en este estado, en kilopascales (kPa)."><span class="data-label lang-text" data-pt-br="Pressão (p):" data-en="Pressure (p):" data-es="Presión (p):">Pressão (p):</span><span class="data-value"><span class="format-num">{{ pressao }}</span> kPa</span></div>
         <div class="data-row" data-tour-pt-br="Volume ocupado por unidade de massa da substância (v = V/m), em m³/kg." data-tour-en="Volume occupied per unit of mass of the substance (v = V/m), in m³/kg." data-tour-es="Volumen ocupado por unidad de masa de la sustancia (v = V/m), en m³/kg."><span class="data-label lang-text" data-pt-br="Volume específico (v):" data-en="Specific Volume (v):" data-es="Volumen específico (v):">Volume específico (v):</span><span class="data-value"><span class="format-num">{{ volume_especifico|floatformat:6 }}</span> m³/kg</span></div>
@@ -785,7 +63,7 @@
         <div class="data-row" data-tour-pt-br="Propriedade definida como h = u + P·v, muito usada em balanços de energia de sistemas abertos, em kJ/kg." data-tour-en="Property defined as h = u + P·v, widely used in energy balances of open systems, in kJ/kg." data-tour-es="Propiedad definida como h = u + P·v, muy usada en balances de energía de sistemas abiertos, en kJ/kg."><span class="data-label lang-text" data-pt-br="Entalpia (h):" data-en="Enthalpy (h):" data-es="Entalpía (h):">Entalpia (h):</span><span class="data-value"><span class="format-num">{{ entalpia_especifica }}</span> kJ/kg</span></div>
         <div class="data-row" data-tour-pt-br="Medida do grau de desordem molecular da substância, usada para avaliar a reversibilidade do processo, em kJ/kg.K." data-tour-en="Measure of the substance's molecular disorder, used to assess the reversibility of the process, in kJ/kg.K." data-tour-es="Medida del grado de desorden molecular de la sustancia, usada para evaluar la reversibilidad del proceso, en kJ/kg.K."><span class="data-label lang-text" data-pt-br="Entropia (s):" data-en="Entropy (s):" data-es="Entropía (s):">Entropia (s):</span><span class="data-value"><span class="format-num">{{ entropia_especifica }}</span> kJ/kg.K</span></div>
         {% if fase == 3 %}
-        <div class="data-row" data-tour-pt-br="Fração em massa de vapor presente numa mistura saturada líquido-vapor (0% = só líquido, 100% = só vapor). Só aparece na região de saturação." data-tour-en="Mass fraction of vapor present in a saturated liquid-vapor mixture (0% = only liquid, 100% = only vapor). Only shown in the saturation region." data-tour-es="Fracción en masa de vapor presente en una mezcla saturada líquido-vapor (0% = solo líquido, 100% = solo vapor). Solo aparece en la región de saturación."><span class="data-label lang-text" data-pt-br="Título (x):" data-en="Quality (x):" data-es="Calidad (x):">Título (x):</span><span class="data-value"><span class="format-num">{{ titulo }}</span> %</span></div>
+        <div class="data-row" data-tour-pt-br="Fração em massa de vapor presente numa mistura saturada líquido-vapor (0% = só líquido, 100% = só vapor). Só aparece na região de saturação." data-tour-en="Mass fraction of vapor present in a saturated liquid-vapor mixture (0% = only liquid, 100% = only vapor). Only shown in the saturation region." data-tour-es="Fracción en masa de vapor presente en una mezcla saturada líquido-vapor (0% = solo líquido, 100% = solo vapor). Solo aparece en la región de saturación."><span class="data-label lang-text" data-pt-br="Título (x):" data-en="Quality (x):" data-es="Calidad (x):">Título (x):</span><span class="data-value"><span class="format-num">{{ titulo }}</span> % {% if titulo_fracao %}<small style="opacity:0.75;font-weight:normal;">(x = <span class="format-num">{{ titulo_fracao }}</span>)</small>{% endif %}</span></div>
         {% endif %}
     </div>
 
@@ -827,7 +105,7 @@
                 {% endif %}
             </span>
         </div>
-        <div class="data-row" data-tour-pt-br="Quantidade de massa da substância considerada no sistema, usada em todos os cálculos de calor, trabalho e entropia." data-tour-en="Amount of mass of the substance considered in the system, used in all heat, work and entropy calculations." data-tour-es="Cantidad de masa de la sustancia considerada en el sistema, usada en todos los cálculos de calor, trabajo y entropía."><span class="data-label lang-text" data-pt-br="Massa (m):" data-en="Mass (m):" data-es="Masa (m):">Massa (m):</span><span class="data-value"><span class="format-num">1,0</span> kg</span></div>
+        <div class="data-row" data-tour-pt-br="Quantidade de massa da substância considerada no sistema, usada em todos os cálculos de calor, trabalho e entropia." data-tour-en="Amount of mass of the substance considered in the system, used in all heat, work and entropy calculations." data-tour-es="Cantidad de masa de la sustancia considerada en el sistema, usada en todos los cálculos de calor, trabajo y entropía."><span class="data-label lang-text" data-pt-br="Massa (m):" data-en="Mass (m):" data-es="Masa (m):">Massa (m):</span><span class="data-value"><span class="format-num">{{ massa|default:"1,0" }}</span> kg</span></div>
         <div class="data-row" data-tour-pt-br="Temperatura da substância nesse estado, em graus Celsius." data-tour-en="Temperature of the substance at this state, in degrees Celsius." data-tour-es="Temperatura de la sustancia en este estado, en grados Celsius."><span class="data-label lang-text" data-pt-br="Temperatura (T):" data-en="Temperature (T):" data-es="Temperatura (T):">Temperatura (T):</span><span class="data-value"><span class="format-num">{{ temperatura2 }}</span> °C</span></div>
         <div class="data-row" data-tour-pt-br="Pressão absoluta da substância nesse estado, em quilopascal (kPa)." data-tour-en="Absolute pressure of the substance at this state, in kilopascals (kPa)." data-tour-es="Presión absoluta de la sustancia en este estado, en kilopascales (kPa)."><span class="data-label lang-text" data-pt-br="Pressão (p):" data-en="Pressure (p):" data-es="Presión (p):">Pressão (p):</span><span class="data-value"><span class="format-num">{{ pressao2 }}</span> kPa</span></div>
         <div class="data-row" data-tour-pt-br="Volume ocupado por unidade de massa da substância (v = V/m), em m³/kg." data-tour-en="Volume occupied per unit of mass of the substance (v = V/m), in m³/kg." data-tour-es="Volumen ocupado por unidad de masa de la sustancia (v = V/m), en m³/kg."><span class="data-label lang-text" data-pt-br="Volume específico (v):" data-en="Specific Volume (v):" data-es="Volumen específico (v):">Volume específico (v):</span><span class="data-value"><span class="format-num">{{ volume_especifico2|floatformat:6 }}</span> m³/kg</span></div>
@@ -835,7 +113,7 @@
         <div class="data-row" data-tour-pt-br="Propriedade definida como h = u + P·v, muito usada em balanços de energia de sistemas abertos, em kJ/kg." data-tour-en="Property defined as h = u + P·v, widely used in energy balances of open systems, in kJ/kg." data-tour-es="Propiedad definida como h = u + P·v, muy usada en balances de energía de sistemas abiertos, en kJ/kg."><span class="data-label lang-text" data-pt-br="Entalpia (h):" data-en="Enthalpy (h):" data-es="Entalpía (h):">Entalpia (h):</span><span class="data-value"><span class="format-num">{{ entalpia_especifica2 }}</span> kJ/kg</span></div>
         <div class="data-row" data-tour-pt-br="Medida do grau de desordem molecular da substância, usada para avaliar a reversibilidade do processo, em kJ/kg.K." data-tour-en="Measure of the substance's molecular disorder, used to assess the reversibility of the process, in kJ/kg.K." data-tour-es="Medida del grado de desorden molecular de la sustancia, usada para evaluar la reversibilidad del proceso, en kJ/kg.K."><span class="data-label lang-text" data-pt-br="Entropia (s):" data-en="Entropy (s):" data-es="Entropía (s):">Entropia (s):</span><span class="data-value"><span class="format-num">{{ entropia_especifica2 }}</span> kJ/kg.K</span></div>
         {% if fase2 == 3 %}
-        <div class="data-row" data-tour-pt-br="Fração em massa de vapor presente numa mistura saturada líquido-vapor (0% = só líquido, 100% = só vapor). Só aparece na região de saturação." data-tour-en="Mass fraction of vapor present in a saturated liquid-vapor mixture (0% = only liquid, 100% = only vapor). Only shown in the saturation region." data-tour-es="Fracción en masa de vapor presente en una mezcla saturada líquido-vapor (0% = solo líquido, 100% = solo vapor). Solo aparece en la región de saturación."><span class="data-label lang-text" data-pt-br="Título (x):" data-en="Quality (x):" data-es="Calidad (x):">Título (x):</span><span class="data-value"><span class="format-num">{{ titulo2 }}</span> %</span></div>
+        <div class="data-row" data-tour-pt-br="Fração em massa de vapor presente numa mistura saturada líquido-vapor (0% = só líquido, 100% = só vapor). Só aparece na região de saturação." data-tour-en="Mass fraction of vapor present in a saturated liquid-vapor mixture (0% = only liquid, 100% = only vapor). Only shown in the saturation region." data-tour-es="Fracción en masa de vapor presente en una mezcla saturada líquido-vapor (0% = solo líquido, 100% = solo vapor). Solo aparece en la región de saturación."><span class="data-label lang-text" data-pt-br="Título (x):" data-en="Quality (x):" data-es="Calidad (x):">Título (x):</span><span class="data-value"><span class="format-num">{{ titulo2 }}</span> % {% if titulo2_fracao %}<small style="opacity:0.75;font-weight:normal;">(x = <span class="format-num">{{ titulo2_fracao }}</span>)</small>{% endif %}</span></div>
         {% endif %}
     </div>
 </div>
@@ -943,7 +221,7 @@
                 W = m <span class="math-op">&times;</span> P <span class="math-op">&times;</span> (v<sub>2</sub> <span class="math-op">-</span> v<sub>1</sub>)
             </div>
             <div class="step-calc">
-                W = <span class="val-badge format-num">1</span> &times; <span class="val-badge format-num">{{ pressao }}</span> &times; ( <span class="val-badge format-num">{{ volume_especifico2|floatformat:6 }}</span> - <span class="val-badge format-num">{{ volume_especifico|floatformat:6 }}</span> )
+                W = <span class="val-badge format-num">{{ massa|default:"1,0" }}</span> &times; <span class="val-badge format-num">{{ pressao }}</span> &times; ( <span class="val-badge format-num">{{ volume_especifico2|floatformat:6 }}</span> - <span class="val-badge format-num">{{ volume_especifico|floatformat:6 }}</span> )
             </div>
             <div class="step-result">
                 W = <span class="format-num">{{ Trabalho }}</span> kJ
@@ -991,7 +269,7 @@
                 h<sub>2</sub> = h<sub>1</sub> <span class="math-op">+</span> ( Q <span class="math-op">/</span> m )
             </div>
             <div class="step-calc">
-                h<sub>2</sub> = <span class="val-badge format-num">{{ entalpia_especifica }}</span> + ( <span class="val-badge format-num">{{ Calor }}</span> / <span class="val-badge format-num">1</span> )
+                h<sub>2</sub> = <span class="val-badge format-num">{{ entalpia_especifica }}</span> + ( <span class="val-badge format-num">{{ Calor }}</span> / <span class="val-badge format-num">{{ massa|default:"1,0" }}</span> )
             </div>
             <div class="step-result">
                 h<sub>2</sub> = <span class="format-num">{{ entalpia_especifica2 }}</span> kJ/kg
@@ -1001,7 +279,7 @@
                 Q = m <span class="math-op">&times;</span> (h<sub>2</sub> <span class="math-op">-</span> h<sub>1</sub>)
             </div>
             <div class="step-calc">
-                Q = <span class="val-badge format-num">1</span> &times; ( <span class="val-badge format-num">{{ entalpia_especifica2 }}</span> - <span class="val-badge format-num">{{ entalpia_especifica }}</span> )
+                Q = <span class="val-badge format-num">{{ massa|default:"1,0" }}</span> &times; ( <span class="val-badge format-num">{{ entalpia_especifica2 }}</span> - <span class="val-badge format-num">{{ entalpia_especifica }}</span> )
             </div>
             <div class="step-result">
                 Q = <span class="format-num">{{ Calor }}</span> kJ
@@ -1034,7 +312,7 @@
                 S<sub>ger</sub> = m <span class="math-op">&times;</span> (s<sub>2</sub> <span class="math-op">-</span> s<sub>1</sub>) <span class="math-op">-</span> [ Q <span class="math-op">/</span> (T<sub>viz</sub> <span class="math-op">+</span> <span class="format-num">273.15</span>) ]
             </div>
             <div class="step-calc">
-                S<sub>ger</sub> = <span class="val-badge format-num">1</span> &times; (<span class="val-badge format-num">{{ entropia_especifica2 }}</span> - <span class="val-badge format-num">{{ entropia_especifica }}</span>) - [ <span class="val-badge format-num">{{ Calor }}</span> / (<span class="val-badge format-num">{{ TempViz }}</span> + <span class="format-num">273.15</span>) ]
+                S<sub>ger</sub> = <span class="val-badge format-num">{{ massa|default:"1,0" }}</span> &times; (<span class="val-badge format-num">{{ entropia_especifica2 }}</span> - <span class="val-badge format-num">{{ entropia_especifica }}</span>) - [ <span class="val-badge format-num">{{ Calor }}</span> / (<span class="val-badge format-num">{{ TempViz }}</span> + <span class="format-num">273.15</span>) ]
             </div>
             <div class="step-result" style="background: {% if Sger < 0 %}#ffebee{% else %}#e8f5e9{% endif %}; border-color: {% if Sger < 0 %}#ef9a9a{% else %}#a5d6a7{% endif %}; color: {% if Sger < 0 %}#c62828{% else %}#2e7d32{% endif %};">
                 <i class="fas {% if Sger < 0 %}fa-times-circle{% else %}fa-check-circle{% endif %}"></i>
@@ -1791,12 +1069,12 @@
     const state1_3D = {
         rawFase: parseInt("{{ fase }}") || 1,
         rawVol: parseFloat("{{ volume_especifico }}".replace(',', '.')) || 0.001,
-        rawVL: parseFloat("{{ VolumeL }}".replace(',', '.')) || 0.001
+        rawVL: parseFloat("{{ VolumeL_esp|default:'0' }}".replace(',', '.')) || 0.001
     };
     const state2_3D = {
         rawFase: parseInt("{{ fase2 }}") || 2,
         rawVol: parseFloat("{{ volume_especifico2 }}".replace(',', '.')) || 0.1,
-        rawVL: parseFloat("{{ VolumeL2 }}".replace(',', '.')) || 0.001
+        rawVL: parseFloat("{{ VolumeL2_esp|default:'0' }}".replace(',', '.')) || 0.001
     };
 
     let currentDataFase = state1_3D.rawFase;
@@ -1974,11 +1252,17 @@
         let yTranslatedTitle = yPosP5_1000 + 100;
         let titleLabel = document.createElement('div');
         titleLabel.className = 'scale-label';
-        titleLabel.innerText = t('Volume [m³]', 'Volume [m³]', 'Volumen [m³]');
+        const massaSistema = parseFloat("{{ massa_float|default:'1.0' }}".replace(',', '.')) || 1.0;
+        const isMassDiffOne = Math.abs(massaSistema - 1.0) > 1e-9;
+        titleLabel.innerText = isMassDiffOne
+            ? t('Volume esp. [m³/kg]', 'Spec. Volume [m³/kg]', 'Volumen esp. [m³/kg]')
+            : t('Volume [m³]', 'Volume [m³]', 'Volumen [m³]');
         titleLabel.style.top = (canvasCenterY + (yTranslatedTitle * scaleY) - (55 * scaleY)) + 'px';
-        titleLabel.style.left = (canvasCenterX - (112 * scaleX) - 75) + 'px';
+        titleLabel.style.left = (canvasCenterX - (112 * scaleX) - (isMassDiffOne ? 95 : 75)) + 'px';
         titleLabel.style.fontWeight = 'bold';
-        titleLabel.style.width = '80px';
+        titleLabel.style.width = isMassDiffOne ? '105px' : '80px';
+        titleLabel.style.textAlign = 'center';
+        titleLabel.style.lineHeight = '1.25';
         titleLabel.style.fontSize = '14px';
         scaleContainer.appendChild(titleLabel);
     }
@@ -2303,6 +1587,55 @@
             </div>`;
         });
 
+        if (multiplos) {
+            let wLiq = 0, qH = 0, qL = 0, sgerTot = 0;
+            processos.forEach(p => {
+                const q = parseFloat(String(p.Q || '0').replace(',', '.')) || 0;
+                const w = parseFloat(String(p.W || '0').replace(',', '.')) || 0;
+                const sg = parseFloat(String(p.Sger || '0').replace(',', '.')) || 0;
+                wLiq += w;
+                if (q > 0) qH += q;
+                else if (q < 0) qL += Math.abs(q);
+                sgerTot += sg;
+            });
+            const isCycleImposs = sgerTot < -1e-6;
+            const perfCard = (wLiq > 0 && qH > 0)
+                ? `<div class="report-metric-card" style="border-color:#2980b9; background:#eef7fd;">
+                       <div class="report-metric-label"><i class="fas fa-bolt"></i> ${t('Rendimento Térmico (η)','Thermal Efficiency (η)','Rendimiento Térmico (η)')}</div>
+                       <div class="report-metric-value" style="color:#1c5d8a;">${fmtReportNum(((wLiq / qH) * 100).toFixed(2))} %</div>
+                   </div>`
+                : (wLiq < 0 && qH > 0)
+                ? `<div class="report-metric-card" style="border-color:#2980b9; background:#eef7fd;">
+                       <div class="report-metric-label"><i class="fas fa-snowflake"></i> ${t('COP (Refrigeração)','COP (Refrigeration)','COP (Refrigeración)')}</div>
+                       <div class="report-metric-value" style="color:#1c5d8a;">${fmtReportNum((qH / Math.abs(wLiq)).toFixed(3))}</div>
+                   </div>`
+                : `<div class="report-metric-card" style="border-color:${isCycleImposs ? '#e74c3c' : '#2ecc71'}; background:${isCycleImposs ? '#fff5f5' : '#f0fff4'};">
+                       <div class="report-metric-label"><i class="fas fa-balance-scale"></i> ${t('Sger Total','Total Sgen','Sgen Total')}</div>
+                       <div class="report-metric-value" style="color:${isCycleImposs ? '#e74c3c' : '#27ae60'};">${fmtReportNum(sgerTot.toFixed(4))} kJ/K</div>
+                   </div>`;
+
+            html += `<div style="margin-top:22px; padding-top:16px; border-top:2px dashed #cbd5e1;">
+                <div style="font-weight:bold; color: var(--primary-color); margin-bottom:10px; font-size:1em;">
+                    <i class="fas fa-sync-alt" style="margin-right:6px; color:var(--secondary-color);"></i>${t('Balanço Global do Ciclo / Encadeamento','Global Cycle / Chain Balance','Balance Global del Ciclo / Encadenamiento')}
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px;">
+                    <div class="report-metric-card" style="border-color:var(--primary-color); background:#f8fbff;">
+                        <div class="report-metric-label"><i class="fas fa-cogs"></i> ${t('Trabalho Líquido (W_líq)','Net Work (W_net)','Trabajo Neto (W_neto)')}</div>
+                        <div class="report-metric-value">${fmtReportNum(wLiq.toFixed(3))} kJ</div>
+                    </div>
+                    <div class="report-metric-card" style="border-color:#e67e22; background:#fffaf4;">
+                        <div class="report-metric-label"><i class="fas fa-fire"></i> ${t('Calor Fornecido (Q_H)','Heat Supplied (Q_H)','Calor Suministrado (Q_H)')}</div>
+                        <div class="report-metric-value">${fmtReportNum(qH.toFixed(3))} kJ</div>
+                    </div>
+                    <div class="report-metric-card" style="border-color:#3498db; background:#f4faff;">
+                        <div class="report-metric-label"><i class="fas fa-temperature-low"></i> ${t('Calor Rejeitado (Q_L)','Heat Rejected (Q_L)','Calor Rechazado (Q_L)')}</div>
+                        <div class="report-metric-value">${fmtReportNum(qL.toFixed(3))} kJ</div>
+                    </div>
+                    ${perfCard}
+                </div>
+            </div>`;
+        }
+
         document.getElementById('reportMetrics').innerHTML = html;
     }
 
@@ -2335,7 +1668,7 @@
                 </th></tr></thead>
                 <tbody>
                     <tr><td class="prop-label">${t('Fase:','Phase:','Fase:')}</td><td class="prop-value">${faseLabel}</td></tr>
-                    <tr><td class="prop-label">${t('Massa (m):','Mass (m):','Masa (m):')}</td><td class="prop-value">1,0 kg</td></tr>
+                    <tr><td class="prop-label">${t('Massa (m):','Mass (m):','Masa (m):')}</td><td class="prop-value">${fmtReportNum("{{ massa|default:'1,0' }}")} kg</td></tr>
                     <tr><td class="prop-label">${t('Temperatura (T):','Temperature (T):','Temperatura (T):')}</td><td class="prop-value">${fmtReportNum(state.T)} °C</td></tr>
                     <tr><td class="prop-label">${t('Pressão (p):','Pressure (p):','Presión (p):')}</td><td class="prop-value">${fmtReportNum(state.P)} kPa</td></tr>
                     <tr><td class="prop-label">${t('Volume específico (v):','Specific Volume (v):','Volumen específico (v):')}</td><td class="prop-value">${fmtReportNum(state.v)} m³/kg</td></tr>

@@ -143,7 +143,7 @@
         <div class="button-container">
 
             {% if lista_estados %}
-                <a href="{% url 'ask_known1_8' %}" class="process-button">
+                <a href="{% url 'ask_mass' flow_key='gas_pcte' %}" class="process-button">
                     <i class="fas fa-tachometer-alt icon-left"></i>
                     <span class="lang-text"
                           data-pt-br="Aquecimento/Resfriamento a pressão constante"
@@ -153,7 +153,7 @@
                     </span>
                 </a>
             {% else %}
-                <a href="{% url 'ask_known1_8' %}" class="process-button">
+                <a href="{% url 'ask_mass' flow_key='gas_pcte' %}" class="process-button">
                     <i class="fas fa-tachometer-alt icon-left"></i>
                     <span class="lang-text"
                           data-pt-br="Aquecimento/Resfriamento a pressão constante"
@@ -164,7 +164,7 @@
                 </a>
             {% endif %}
 
-            <a href="{% url 'ask_known1_9' %}" class="process-button">
+            <a href="{% url 'ask_mass' flow_key='gas_vcte' %}" class="process-button">
                 <i class="fas fa-box icon-left"></i>
                 <span class="lang-text"
                       data-pt-br="Aquecimento/Resfriamento a volume constante"
@@ -174,7 +174,7 @@
                 </span>
             </a>
 
-            <a href="{% url 'ask_known1_10' %}" class="process-button">
+            <a href="{% url 'ask_mass' flow_key='gas_tcte' %}" class="process-button">
                 <i class="fa-solid fa-temperature-high icon-left"></i>
                 <span class="lang-text"
                       data-pt-br="Compressão/Expansão a temperatura constante"
@@ -184,7 +184,7 @@
                 </span>
             </a>
 
-            <a href="{% url 'ask_known1_11' %}" class="process-button">
+            <a href="{% url 'ask_mass' flow_key='gas_poli' %}" class="process-button">
                 <i class="fas fa-chart-line icon-left"></i>
                 <span>
                     <span class="lang-text"
@@ -197,7 +197,7 @@
                 </span>
             </a>
 
-            <a href="{% url 'ask_known1_12' %}" class="process-button">
+            <a href="{% url 'ask_mass' flow_key='gas_scte' %}" class="process-button">
                 <i class="fas fa-expand-arrows-alt icon-left"></i>
                 <span class="lang-text"
                       data-pt-br="Compressão/Expansão adiabática e reversível"
