@@ -527,6 +527,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 var convertedMax = conv ? conv.fromBase(maxNum) : maxNum;
                 input.setAttribute('max', cleanNum(convertedMax));
             }
+            // Descarta imediatamente as mutações geradas por nós mesmos antes do microtask disparar
+            if (input._attrObserver) {
+                input._attrObserver.takeRecords();
+            }
         } finally {
             input._isConvertingBounds = false;
         }
@@ -643,6 +647,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                 if (ni._baseMax !== null && ni._baseMax !== undefined) ni.setAttribute('max', ni._baseMax);
                                 ni.value = String(parseFloat(conv.toBase(v).toPrecision(8)));
                                 ni._unitSelect.value = '0';
+                                if (ni._attrObserver) ni._attrObserver.takeRecords();
                                 ni._isConvertingBounds = false;
                             }
                         }
@@ -661,6 +666,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 updateInputHelper(input);
             });
             observer.observe(input, { attributes: true, attributeFilter: ['min', 'max'] });
+            input._attrObserver = observer;
 
             // Observa alterações de texto no label associado (ex: troca de rádio ou idioma)
             var lbl = findAssociatedLabel(input);

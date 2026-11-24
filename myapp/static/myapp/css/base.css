@@ -473,7 +473,8 @@
             align-items: center;
             justify-content: center;
             gap: 6px;
-            margin-top: 8px;
+            max-width: 360px;
+            margin: 10px auto 0;
             font-size: 0.85em;
             color: #4a607a;
             background: #eef5fc;
@@ -503,14 +504,20 @@
         .unit-input-wrap {
             display: flex;
             align-items: stretch;
+            justify-content: center;
             gap: 8px;
             width: 100%;
+            max-width: 360px;
+            margin: 0 auto;
         }
 
         .unit-input-wrap input[type="number"] {
             flex: 1;
             min-width: 0;
+            width: auto !important;
+            max-width: none !important;
             margin: 0 !important;
+            text-align: center;
         }
 
         .unit-converter-select {
