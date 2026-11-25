@@ -56,3 +56,33 @@ class SimulacaoCompartilhada(models.Model):
 
     def __str__(self):
         return f"[{self.codigo}] {self.titulo}"
+
+
+def _generate_poe_code():
+    alphabet = string.ascii_uppercase + string.digits
+    return 'POE-' + ''.join(secrets.choice(alphabet) for _ in range(6))
+
+
+class TentativaExercicio(models.Model):
+    """Registro de resolução no Modo Exercício (POE) para auditoria docente e pesquisa educacional."""
+    codigo = models.CharField('Código', max_length=16, unique=True, default=_generate_poe_code, db_index=True)
+    nome_aluno = models.CharField('Estudante', max_length=120, blank=True, default='Anônimo')
+    substancia = models.CharField('Substância', max_length=60, db_index=True)
+    tipo = models.CharField('Tipo', max_length=40, db_index=True)
+    nivel = models.CharField('Nível', max_length=30, default='basic')
+    pontuacao = models.FloatField('Pontuação (%)', default=0.0)
+    poe_acertos = models.PositiveSmallIntegerField('Acertos POE (0-3)', default=0)
+    tentativas = models.PositiveSmallIntegerField('Tentativas', default=1)
+    tempo_segundos = models.PositiveIntegerField('Tempo (s)', default=0)
+    usou_dica = models.BooleanField('Usou dica', default=False)
+    justificativa = models.TextField('Justificativa escrita', blank=True, default='')
+    idioma = models.CharField('Idioma', max_length=10, default='pt-br')
+    criado_em = models.DateTimeField('Concluído em', auto_now_add=True, db_index=True)
+
+    class Meta:
+        ordering = ['-criado_em']
+        verbose_name = 'Resolução de Exercício (POE)'
+        verbose_name_plural = 'Resoluções de Exercícios (POE)'
+
+    def __str__(self):
+        return f"[{self.codigo}] {self.nome_aluno} · {self.substancia} ({self.pontuacao:.0f}%)"

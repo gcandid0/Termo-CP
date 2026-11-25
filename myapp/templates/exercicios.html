@@ -1,24 +1,24 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}TERMO-CP — Modo Exercício (POE){% endblock %}
+{% block title %}TERMO-CP — Modo Exercício e Avaliação (POE){% endblock %}
 
 {% block extra_css %}
 <style>
     .poe-wrapper {
-        max-width: 1060px;
+        max-width: 1080px;
         width: 100%;
         margin: 0 auto;
-        padding: 18px 24px 34px;
+        padding: 16px 24px 34px;
         display: flex;
         flex-direction: column;
-        gap: 16px;
+        gap: 14px;
     }
     .poe-hero {
         background: linear-gradient(135deg, #1b3668 0%, #0d6ab0 100%);
         color: #ffffff;
         border-radius: 16px;
-        padding: 20px 26px;
+        padding: 18px 24px;
         box-shadow: 0 10px 26px rgba(27, 54, 104, 0.16);
         display: flex;
         justify-content: space-between;
@@ -26,8 +26,8 @@
         gap: 16px;
         flex-wrap: wrap;
     }
-    .poe-hero h2 { margin: 0 0 6px 0; font-size: 1.38em; display: flex; align-items: center; gap: 10px; }
-    .poe-hero p { margin: 0; font-size: 0.91em; opacity: 0.92; max-width: 720px; }
+    .poe-hero h2 { margin: 0 0 5px 0; font-size: 1.34em; display: flex; align-items: center; gap: 10px; }
+    .poe-hero p { margin: 0; font-size: 0.9em; opacity: 0.92; max-width: 720px; }
 
     .poe-stats-bar {
         display: grid;
@@ -38,19 +38,70 @@
         background: #ffffff;
         border: 1px solid #e2e8f0;
         border-radius: 12px;
-        padding: 12px 16px;
+        padding: 11px 15px;
         display: flex;
         align-items: center;
         gap: 12px;
         box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
     }
     .poe-stat-icon {
-        width: 38px; height: 38px; border-radius: 10px;
+        width: 36px; height: 36px; border-radius: 10px;
         display: flex; align-items: center; justify-content: center;
-        font-size: 1.05em; flex-shrink: 0;
+        font-size: 1em; flex-shrink: 0;
     }
-    .poe-stat-pill .st-lbl { display: block; font-size: 0.76em; color: #64748b; font-weight: 700; text-transform: uppercase; }
-    .poe-stat-pill .st-val { font-size: 1.18em; font-weight: 800; color: #0f172a; }
+    .poe-stat-pill .st-lbl { display: block; font-size: 0.74em; color: #64748b; font-weight: 700; text-transform: uppercase; }
+    .poe-stat-pill .st-val { font-size: 1.14em; font-weight: 800; color: #0f172a; }
+
+    .poe-mode-tabs {
+        display: inline-flex;
+        background: #e2e8f0;
+        padding: 4px;
+        border-radius: 12px;
+        gap: 4px;
+        align-self: flex-start;
+    }
+    .poe-mode-tab {
+        padding: 8px 16px;
+        border-radius: 9px;
+        border: none;
+        background: transparent;
+        color: #334155;
+        font-weight: 700;
+        font-size: 0.88em;
+        cursor: pointer;
+        font-family: inherit;
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        transition: background 0.15s ease, color 0.15s ease;
+    }
+    .poe-mode-tab.active {
+        background: #ffffff;
+        color: #1b3668;
+        box-shadow: 0 2px 6px rgba(15, 23, 42, 0.08);
+    }
+
+    .poe-exam-progress {
+        display: none;
+        background: #eff6ff;
+        border: 1px solid #bfdbfe;
+        border-radius: 12px;
+        padding: 12px 18px;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+        flex-wrap: wrap;
+        color: #1e3a8a;
+        font-weight: 700;
+        font-size: 0.92em;
+    }
+    .poe-exam-dots { display: flex; gap: 8px; }
+    .poe-exam-dot {
+        padding: 4px 12px; border-radius: 999px; font-size: 0.84em;
+        background: #ffffff; border: 1.5px solid #cbd5e1; color: #64748b;
+    }
+    .poe-exam-dot.current { border-color: #0d6ab0; color: #0d6ab0; background: #e0f2fe; }
+    .poe-exam-dot.done { border-color: #16a34a; color: #166534; background: #dcfce7; }
 
     .poe-card {
         background: #ffffff;
@@ -60,7 +111,7 @@
         box-shadow: 0 4px 14px rgba(15, 23, 42, 0.05);
     }
     .poe-card h3 {
-        margin: 0 0 12px 0; color: #1b3668; font-size: 1.06em;
+        margin: 0 0 12px 0; color: #1b3668; font-size: 1.05em;
         display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap;
     }
     .poe-config-grid {
@@ -71,18 +122,18 @@
     }
     .poe-field label { display: block; font-size: 0.84em; font-weight: 700; color: #334155; margin-bottom: 5px; }
     .poe-field select, .poe-field input, .poe-field textarea {
-        width: 100%; padding: 9px 12px; border-radius: 9px;
+        width: 100%; padding: 8px 12px; border-radius: 9px;
         border: 1.5px solid #cbd5e1; background: #f8fafc; color: #0f172a;
-        font-family: inherit; font-size: 0.92em; box-sizing: border-box;
+        font-family: inherit; font-size: 0.91em; box-sizing: border-box;
     }
     .poe-field select:focus, .poe-field input:focus, .poe-field textarea:focus {
         outline: none; border-color: #0d6ab0; background: #ffffff;
         box-shadow: 0 0 0 3px rgba(13, 106, 176, 0.14);
     }
     .poe-btn {
-        display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-        padding: 9px 16px; border-radius: 10px; border: none; font-weight: 700;
-        font-size: 0.91em; cursor: pointer; font-family: inherit;
+        display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+        padding: 9px 15px; border-radius: 10px; border: none; font-weight: 700;
+        font-size: 0.9em; cursor: pointer; font-family: inherit;
         transition: transform 0.15s ease, box-shadow 0.15s ease;
     }
     .poe-btn-primary { background: linear-gradient(135deg, #1b3668 0%, #0d6ab0 100%); color: #fff; box-shadow: 0 4px 12px rgba(27,54,104,0.22); }
@@ -92,40 +143,62 @@
     .poe-btn-outline:hover { background: #eff6ff; border-color: #93c5fd; }
     .poe-btn-pdf { background: linear-gradient(135deg, #b91c1c 0%, #dc2626 100%); color: #fff; box-shadow: 0 4px 12px rgba(185,28,28,0.22); }
 
-    .poe-given-list { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+    .poe-statement {
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 10px;
+        padding: 12px 15px;
+        color: #1e293b;
+        font-size: 0.95em;
+        line-height: 1.55;
+        margin-bottom: 10px;
+    }
+    .poe-timer-badge {
+        background: #f1f5f9; border: 1px solid #cbd5e1; color: #1b3668;
+        border-radius: 999px; padding: 4px 11px; font-size: 0.82em; font-weight: 700;
+        font-family: Consolas, monospace;
+    }
+    .poe-given-list { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
     .poe-given-pill {
         background: #eff6ff; border: 1px solid #cbdcf0; color: #1b3668;
-        border-radius: 9px; padding: 7px 12px; font-weight: 600; font-size: 0.91em;
+        border-radius: 9px; padding: 6px 11px; font-weight: 600; font-size: 0.9em;
     }
-    .poe-hint-box {
+    .poe-hint-box, .poe-conv-box {
         display: none; margin-top: 12px; background: #f0f9ff; border: 1px solid #bae6fd;
-        border-radius: 10px; padding: 10px 14px; color: #0c4a6e; font-size: 0.9em;
+        border-radius: 10px; padding: 11px 14px; color: #0c4a6e; font-size: 0.89em;
     }
+    .poe-conv-grid {
+        display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 10px; margin-top: 8px;
+    }
+    .poe-conv-item {
+        background: #ffffff; border: 1px solid #bae6fd; border-radius: 8px; padding: 8px 10px;
+        display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+    }
+    .poe-conv-item input { width: 92px; padding: 5px 8px; border-radius: 6px; border: 1px solid #cbd5e1; font-size: 0.9em; }
+
     .poe-lock-banner {
         background: #fffbeb; border: 1px solid #fde68a; color: #92400e;
-        border-radius: 10px; padding: 10px 14px; font-size: 0.87em;
+        border-radius: 10px; padding: 9px 14px; font-size: 0.86em;
         display: flex; align-items: center; gap: 10px; margin-bottom: 14px;
     }
     .poe-lock-banner.ready { background: #f0fdf4; border-color: #bbf7d0; color: #166534; }
     .poe-inputs-grid {
-        display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+        display: grid; grid-template-columns: repeat(auto-fit, minmax(185px, 1fr));
         gap: 12px; margin-bottom: 14px;
     }
     .poe-alert { border-radius: 10px; padding: 11px 14px; font-size: 0.91em; margin-top: 12px; display: none; }
     .poe-alert.err { background: #fef2f2; border: 1px solid #fecaca; color: #991b1b; }
     .poe-alert.ok { background: #f0fdf4; border: 1px solid #bbf7d0; color: #166534; }
 
-    .poe-score-bar {
-        height: 10px; background: #e2e8f0; border-radius: 999px; overflow: hidden; margin-top: 8px;
-    }
+    .poe-score-bar { height: 9px; background: #e2e8f0; border-radius: 999px; overflow: hidden; margin-top: 8px; }
     .poe-score-fill { height: 100%; border-radius: 999px; transition: width 0.35s ease; }
 
     .poe-fb-grid {
-        display: grid; grid-template-columns: repeat(auto-fit, minmax(215px, 1fr));
+        display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
         gap: 10px; margin-top: 12px;
     }
     .poe-fb-item {
-        border-radius: 10px; padding: 10px 13px; font-size: 0.88em;
+        border-radius: 10px; padding: 9px 12px; font-size: 0.87em;
         border: 1px solid #e2e8f0; background: #f8fafc;
     }
     .poe-fb-item.ok { background: #f0fdf4; border-color: #86efac; color: #166534; }
@@ -135,11 +208,18 @@
         margin-top: 16px; background: #f8fbff; border: 1px solid #cbdcf0;
         border-radius: 12px; padding: 16px 20px;
     }
-    .poe-steps-box h4 { margin: 0 0 10px 0; color: #1b3668; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
-    .poe-steps-box p { margin: 6px 0; font-size: 0.93em; color: #1e293b; }
-    .poe-cmp-table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 0.9em; background: #fff; border-radius: 8px; overflow: hidden; border: 1px solid #dbe7f5; }
-    .poe-cmp-table th { background: #eff6ff; color: #1b3668; padding: 8px 10px; text-align: left; }
-    .poe-cmp-table td { padding: 7px 10px; border-top: 1px solid #f1f5f9; }
+    .poe-steps-box h4 {
+        margin: 0 0 10px 0; color: #1b3668; display: flex; justify-content: space-between;
+        align-items: center; flex-wrap: wrap; gap: 10px;
+    }
+    .poe-receipt-badge {
+        background: #eff6ff; border: 1px solid #93c5fd; color: #1e40af;
+        border-radius: 8px; padding: 4px 10px; font-family: Consolas, monospace; font-size: 0.84em; font-weight: 700;
+    }
+    .poe-steps-box p { margin: 6px 0; font-size: 0.92em; color: #1e293b; }
+    .poe-cmp-table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 0.89em; background: #fff; border-radius: 8px; overflow: hidden; border: 1px solid #dbe7f5; }
+    .poe-cmp-table th { background: #eff6ff; color: #1b3668; padding: 7px 10px; text-align: left; }
+    .poe-cmp-table td { padding: 6px 10px; border-top: 1px solid #f1f5f9; }
 </style>
 {% endblock %}
 
@@ -150,19 +230,19 @@
             <h2>
                 <i class="fas fa-graduation-cap"></i>
                 <span class="lang-text"
-                      data-pt-br="Modo Exercício e Autoavaliação (POE)"
-                      data-en="Exercise & Self-Assessment Mode (POE)"
-                      data-es="Modo Ejercicio y Autoevaluación (POE)"
-                      data-fr="Mode Exercice et Auto-évaluation (POE)"
-                      data-zh="练习与自我评估模式 (POE)">Modo Exercício e Autoavaliação (POE)</span>
+                      data-pt-br="Modo Exercício e Avaliação (POE)"
+                      data-en="Exercise & Assessment Mode (POE)"
+                      data-es="Modo Ejercicio y Evaluación (POE)"
+                      data-fr="Mode Exercice et Évaluation (POE)"
+                      data-zh="练习与测评模式 (POE)">Modo Exercício e Avaliação (POE)</span>
             </h2>
             <p class="lang-text"
-               data-pt-br="Prever, Calcular e Explicar: resolva no caderno usando tabelas ou equações. O memorial passo a passo só é desbloqueado após esforço real (trava anti-burla ativa) e pode ser exportado em PDF para entrega."
-               data-en="Predict, Calculate, and Explain: solve on paper using tables or equations. The step-by-step memorial unlocks only after genuine effort (anti-cheating lock active) and can be exported as PDF."
-               data-es="Predecir, Calcular y Explicar: resuelve en cuaderno usando tablas o ecuaciones. La memoria paso a paso solo se desbloquea tras un esfuerzo real y puede exportarse en PDF."
-               data-fr="Prédire, Calculer et Expliquer : résolvez sur papier à l'aide des tables ou équations. Le mémorial ne se débloque qu'après un effort réel et peut être exporté en PDF."
-               data-zh="预测、计算与解释：先在纸上使用性质表或公式求解。仅在完成真实作答后才会解锁分步解答（防作弊锁已启用），并支持导出 PDF 提交作业。">
-                Prever, Calcular e Explicar: resolva no caderno usando tabelas ou equações. O memorial passo a passo só é desbloqueado após esforço real (trava anti-burla ativa) e pode ser exportado em PDF para entrega.
+               data-pt-br="Resolva exercícios avulsos ou uma Mini-Prova de 3 questões com trava anti-burla, cronômetro, código de autenticidade no servidor e comprovante em PDF pronto para entrega ao professor."
+               data-en="Solve individual exercises or a 3-question Mini-Exam with anti-cheating lock, live timer, server authenticity code, and a PDF receipt ready for submission."
+               data-es="Resuelve ejercicios individuales o un Mini-Examen de 3 preguntas con bloqueo didáctico, cronómetro, código de autenticidad y comprobante en PDF."
+               data-fr="Résolvez des exercices individuels ou un Mini-Examen de 3 questions avec verrou pédagogique, chronomètre, code d'authenticité et justificatif PDF."
+               data-zh="支持单题练习或 3 题小测验，配备防作弊锁、实时计时器、服务器防伪验证码及可提交的 PDF 成绩单。">
+                Resolva exercícios avulsos ou uma Mini-Prova de 3 questões com trava anti-burla, cronômetro, código de autenticidade no servidor e comprovante em PDF pronto para entrega ao professor.
             </p>
         </div>
         <a href="/" class="poe-btn" style="background: rgba(255,255,255,0.18); color: #fff; text-decoration: none;">
@@ -187,10 +267,32 @@
         </div>
     </div>
 
-    <!-- Configuração e Geração -->
-    <div class="poe-card">
+    <!-- Alternador de Modo: Avulso vs Mini-Prova (3 Questões) -->
+    <div class="poe-mode-tabs">
+        <button type="button" id="tabModeSingle" class="poe-mode-tab active">
+            <i class="fas fa-dumbbell"></i>
+            <span class="lang-text" data-pt-br="Exercício Avulso" data-en="Single Exercise" data-es="Ejercicio Individual" data-fr="Exercice Libre" data-zh="单题练习">Exercício Avulso</span>
+        </button>
+        <button type="button" id="tabModeExam" class="poe-mode-tab">
+            <i class="fas fa-award"></i>
+            <span class="lang-text" data-pt-br="Mini-Prova (3 Questões)" data-en="Mini-Exam (3 Questions)" data-es="Mini-Examen (3 Preguntas)" data-fr="Mini-Examen (3 Questions)" data-zh="小测验 (3 题)">Mini-Prova (3 Questões)</span>
+        </button>
+    </div>
+
+    <!-- Barra de Progresso da Mini-Prova -->
+    <div id="poeExamProgress" class="poe-exam-progress">
+        <span id="poeExamTitle"><i class="fas fa-award"></i> Mini-Prova POE — 3 Questões</span>
+        <div class="poe-exam-dots">
+            <span id="examDot0" class="poe-exam-dot">Q1 · Estado</span>
+            <span id="examDot1" class="poe-exam-dot">Q2 · Processo</span>
+            <span id="examDot2" class="poe-exam-dot">Q3 · 2ª Lei</span>
+        </div>
+    </div>
+
+    <!-- Configuração -->
+    <div class="poe-card" id="poeConfigCard">
         <h3>
-            <span><i class="fas fa-sliders-h"></i> <span class="lang-text" data-pt-br="Configurar Novo Exercício" data-en="Configure New Exercise" data-es="Configurar Nuevo Ejercicio" data-fr="Configurer un Nouvel Exercice" data-zh="配置新练习题">Configurar Novo Exercício</span></span>
+            <span><i class="fas fa-sliders-h"></i> <span class="lang-text" data-pt-br="Configurar Exercício" data-en="Configure Exercise" data-es="Configurar Ejercicio" data-fr="Configurer l'Exercice" data-zh="配置练习题">Configurar Exercício</span></span>
         </h3>
         <div class="poe-config-grid">
             <div class="poe-field">
@@ -206,7 +308,7 @@
                     <option value="gas">Gás Ideal</option>
                 </select>
             </div>
-            <div class="poe-field">
+            <div class="poe-field" id="fieldProcWrap">
                 <label class="lang-text" data-pt-br="Tipo de Exercício" data-en="Exercise Type" data-es="Tipo de Ejercicio" data-fr="Type d'Exercice" data-zh="题目类型">Tipo de Exercício</label>
                 <select id="poeProcess">
                     <option value="estado" class="lang-text" data-pt-br="Determinação de Estado" data-en="State Determination" data-es="Determinación de Estado" data-fr="Détermination d'État" data-zh="状态计算">Determinação de Estado</option>
@@ -217,7 +319,7 @@
                     <option value="poli" class="lang-text" data-pt-br="Politrópico (Gás Ideal)" data-en="Polytropic (Ideal Gas)" data-es="Politrópico (Gas Ideal)" data-fr="Polytropique (Gaz Idéal)" data-zh="多变过程 (理想气体)">Politrópico (Gás Ideal)</option>
                 </select>
             </div>
-            <div class="poe-field">
+            <div class="poe-field" id="fieldDiffWrap">
                 <label class="lang-text" data-pt-br="Nível" data-en="Difficulty" data-es="Nivel" data-fr="Niveau" data-zh="难度">Nível</label>
                 <select id="poeDifficulty">
                     <option value="basic" class="lang-text" data-pt-br="Básico (m = 1,0 kg)" data-en="Basic (m = 1.0 kg)" data-es="Básico (m = 1,0 kg)" data-fr="Basique (m = 1,0 kg)" data-zh="基础 (m = 1.0 kg)">Básico (m = 1,0 kg)</option>
@@ -228,24 +330,43 @@
             <div>
                 <button type="button" id="btnGeneratePoe" class="poe-btn poe-btn-primary" style="width: 100%;">
                     <i class="fas fa-random"></i>
-                    <span class="lang-text" data-pt-br="Gerar Exercício" data-en="Generate Exercise" data-es="Generar Ejercicio" data-fr="Générer un Exercice" data-zh="生成练习题">Gerar Exercício</span>
+                    <span id="btnGenLabel" class="lang-text" data-pt-br="Gerar Exercício" data-en="Generate Exercise" data-es="Generar Ejercicio" data-fr="Générer un Exercice" data-zh="生成练习题">Gerar Exercício</span>
                 </button>
             </div>
         </div>
     </div>
 
     <!-- Área do Problema Gerado -->
-    <div id="poeProblemArea" style="display: none; flex-direction: column; gap: 16px;">
+    <div id="poeProblemArea" style="display: none; flex-direction: column; gap: 14px;">
         <div class="poe-card">
             <h3>
                 <span><i class="fas fa-clipboard-list"></i> <span class="lang-text" data-pt-br="Enunciado e Dados Conhecidos" data-en="Problem Statement & Given Data" data-es="Enunciado y Datos Conocidos" data-fr="Énoncé et Données Connues" data-zh="题目描述与已知条件">Enunciado e Dados Conhecidos</span></span>
-                <button type="button" id="btnShowFormulaHint" class="poe-btn poe-btn-outline" style="padding: 6px 12px; font-size: 0.84em;">
-                    <i class="fas fa-lightbulb"></i>
-                    <span class="lang-text" data-pt-br="Pedir Dica de Fórmula" data-en="Formula Hint" data-es="Pista de Fórmula" data-fr="Indice de Formule" data-zh="公式提示">Pedir Dica de Fórmula</span>
-                </button>
+                <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+                    <span class="poe-timer-badge" id="poeStopwatch"><i class="fas fa-clock"></i> 00:00</span>
+                    <button type="button" id="btnToggleConv" class="poe-btn poe-btn-outline" style="padding: 5px 11px; font-size: 0.82em;">
+                        <i class="fas fa-exchange-alt"></i>
+                        <span class="lang-text" data-pt-br="Conversor Rápido" data-en="Quick Converter" data-es="Conversor Rápido" data-fr="Convertisseur" data-zh="单位换算">Conversor Rápido</span>
+                    </button>
+                    <button type="button" id="btnShowFormulaHint" class="poe-btn poe-btn-outline" style="padding: 5px 11px; font-size: 0.82em;">
+                        <i class="fas fa-lightbulb"></i>
+                        <span class="lang-text" data-pt-br="Dica de Fórmula" data-en="Formula Hint" data-es="Pista de Fórmula" data-fr="Indice Formule" data-zh="公式提示">Dica de Fórmula</span>
+                    </button>
+                </div>
             </h3>
+            <div id="poeStatementText" class="poe-statement"></div>
             <div id="poeGivenList" class="poe-given-list"></div>
             <div id="poeFormulaHintBox" class="poe-hint-box"></div>
+            <div id="poeQuickConvBox" class="poe-conv-box">
+                <strong><i class="fas fa-exchange-alt"></i> Conversor Rápido de Unidades</strong>
+                <div class="poe-conv-grid">
+                    <div class="poe-conv-item">
+                        <input type="number" step="any" id="convC" placeholder="°C"> <span>°C =</span> <strong id="convKOut">— K</strong>
+                    </div>
+                    <div class="poe-conv-item">
+                        <input type="number" step="any" id="convKpa" placeholder="kPa"> <span>kPa =</span> <strong id="convBarOut">— bar / — MPa</strong>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div class="poe-card">
@@ -301,11 +422,11 @@
                 </div>
                 <div class="poe-field">
                     <label class="lang-text"
-                           data-pt-br="Seu Nome (opcional, para PDF):"
-                           data-en="Your Name (optional, for PDF):"
-                           data-es="Tu Nombre (opcional, para PDF):"
-                           data-fr="Votre Nom (optionnel, pour PDF) :"
-                           data-zh="姓名（可选，用于 PDF 报告）：">Seu Nome (opcional, para PDF):</label>
+                           data-pt-br="Seu Nome (para comprovante PDF):"
+                           data-en="Your Name (for PDF receipt):"
+                           data-es="Tu Nombre (para comprobante PDF):"
+                           data-fr="Votre Nom (pour justificatif PDF) :"
+                           data-zh="姓名（用于 PDF 成绩单）：">Seu Nome (para comprovante PDF):</label>
                     <input type="text" id="poeStudentName" placeholder="Ex.: Maria Silva">
                 </div>
             </div>
@@ -315,6 +436,10 @@
                     <i class="fas fa-check-circle"></i>
                     <span class="lang-text" data-pt-br="Corrigir Respostas" data-en="Check Answers" data-es="Corregir Respuestas" data-fr="Corriger les Réponses" data-zh="提交批改">Corrigir Respostas</span>
                 </button>
+                <button type="button" id="btnNextExamQ" class="poe-btn poe-btn-primary" style="display:none;">
+                    <i class="fas fa-arrow-right"></i>
+                    <span class="lang-text" data-pt-br="Próxima Questão da Mini-Prova" data-en="Next Mini-Exam Question" data-es="Siguiente Pregunta" data-fr="Question Suivante" data-zh="下一题">Próxima Questão da Mini-Prova</span>
+                </button>
             </div>
 
             <div id="poeAlert" class="poe-alert"></div>
@@ -322,6 +447,9 @@
             <div id="poeMemorialUnlock"></div>
         </div>
     </div>
+
+    <!-- Resumo Final da Mini-Prova (3 Questões) -->
+    <div id="poeExamSummary" class="poe-card" style="display:none;"></div>
 </div>
 {% endblock %}
 
@@ -329,8 +457,21 @@
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     var timerId = null;
+    var watchId = null;
+    var elapsedSec = 0;
     var currentPrompt = null;
     var scoredThisExercise = false;
+    var usedHintThisExercise = false;
+
+    // Mini-Prova state
+    var examMode = false;
+    var examIndex = 0;
+    var examPlan = [
+        { process: 'estado', difficulty: 'basic' },
+        { process: 'pcte', difficulty: 'intermediate' },
+        { process: 'vcte', difficulty: 'challenge' }
+    ];
+    var examResults = [];
 
     var FIELD_LABELS = {
         'T2': 'T₂',
@@ -343,6 +484,12 @@ document.addEventListener('DOMContentLoaded', function () {
         'Q': 'Q (kJ)',
         'Sger': 'Sger (kJ/K)'
     };
+
+    function fmtTime(s) {
+        var mm = String(Math.floor(s / 60)).padStart(2, '0');
+        var ss = String(s % 60).padStart(2, '0');
+        return mm + ':' + ss;
+    }
 
     function loadStats() {
         var st = { solved: 0, sumScore: 0, streak: 0 };
@@ -369,8 +516,59 @@ document.addEventListener('DOMContentLoaded', function () {
 
     loadStats();
 
-    function startCountdown(seconds) {
+    // Quick converter
+    document.getElementById('btnToggleConv').addEventListener('click', function () {
+        var box = document.getElementById('poeQuickConvBox');
+        box.style.display = box.style.display === 'block' ? 'none' : 'block';
+    });
+    document.getElementById('convC').addEventListener('input', function () {
+        var v = parseFloat(this.value);
+        document.getElementById('convKOut').textContent = isNaN(v) ? '— K' : (v + 273.15).toFixed(2) + ' K';
+    });
+    document.getElementById('convKpa').addEventListener('input', function () {
+        var v = parseFloat(this.value);
+        document.getElementById('convBarOut').textContent = isNaN(v) ? '— bar / — MPa' : (v / 100).toFixed(3) + ' bar / ' + (v / 1000).toFixed(4) + ' MPa';
+    });
+
+    // Mode tabs
+    function setMode(isExam) {
+        examMode = isExam;
+        document.getElementById('tabModeSingle').classList.toggle('active', !isExam);
+        document.getElementById('tabModeExam').classList.toggle('active', isExam);
+        document.getElementById('fieldProcWrap').style.display = isExam ? 'none' : 'block';
+        document.getElementById('fieldDiffWrap').style.display = isExam ? 'none' : 'block';
+        document.getElementById('poeExamProgress').style.display = isExam ? 'flex' : 'none';
+        document.getElementById('poeExamSummary').style.display = 'none';
+        document.getElementById('btnGenLabel').textContent = isExam ? 'Iniciar Mini-Prova (3 Questões)' : 'Gerar Exercício';
+        if (isExam) {
+            examIndex = 0;
+            examResults = [];
+            updateExamDots();
+        }
+    }
+
+    function updateExamDots() {
+        for (var i = 0; i < 3; i++) {
+            var dot = document.getElementById('examDot' + i);
+            dot.classList.remove('current', 'done');
+            if (i < examResults.length) dot.classList.add('done');
+            else if (i === examIndex && currentPrompt) dot.classList.add('current');
+        }
+    }
+
+    document.getElementById('tabModeSingle').addEventListener('click', function () { setMode(false); });
+    document.getElementById('tabModeExam').addEventListener('click', function () { setMode(true); });
+
+    function startTimers(seconds) {
         if (timerId) clearInterval(timerId);
+        if (watchId) clearInterval(watchId);
+        elapsedSec = 0;
+        document.getElementById('poeStopwatch').innerHTML = '<i class="fas fa-clock"></i> 00:00';
+        watchId = setInterval(function () {
+            elapsedSec++;
+            document.getElementById('poeStopwatch').innerHTML = '<i class="fas fa-clock"></i> ' + fmtTime(elapsedSec);
+        }, 1000);
+
         var rem = seconds;
         var banner = document.getElementById('poeLockBanner');
         var txt = document.getElementById('poeLockText');
@@ -391,32 +589,40 @@ document.addEventListener('DOMContentLoaded', function () {
 
     document.getElementById('btnShowFormulaHint').addEventListener('click', function () {
         if (!currentPrompt || !currentPrompt.formula_hint) return;
+        usedHintThisExercise = true;
         var box = document.getElementById('poeFormulaHintBox');
         box.innerHTML = '<i class="fas fa-lightbulb"></i> <strong>Dica:</strong> ' + currentPrompt.formula_hint;
         box.style.display = 'block';
     });
 
-    document.getElementById('btnGeneratePoe').addEventListener('click', function () {
-        var btn = this;
+    function generateExercise(procOverride, diffOverride) {
+        var btn = document.getElementById('btnGeneratePoe');
         btn.disabled = true;
+        var procVal = procOverride || document.getElementById('poeProcess').value;
+        var diffVal = diffOverride || document.getElementById('poeDifficulty').value;
+
         fetch('/api/exercicios/gerar/', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 substance: document.getElementById('poeSubstance').value,
-                process: document.getElementById('poeProcess').value,
-                difficulty: document.getElementById('poeDifficulty').value
+                process: procVal,
+                difficulty: diffVal
             })
         }).then(function (r) { return r.json(); }).then(function (data) {
             btn.disabled = false;
             if (!data.ok) return;
             currentPrompt = data.prompt;
             scoredThisExercise = false;
+            usedHintThisExercise = false;
 
             document.getElementById('poeProblemArea').style.display = 'flex';
+            document.getElementById('poeExamSummary').style.display = 'none';
+            document.getElementById('btnNextExamQ').style.display = 'none';
             document.getElementById('poeFormulaHintBox').style.display = 'none';
             document.getElementById('poePredRow').style.display = data.prompt.is_state ? 'none' : 'grid';
 
+            document.getElementById('poeStatementText').textContent = data.prompt.statement || '';
             document.getElementById('poeGivenList').innerHTML = data.prompt.given.map(function (g) {
                 return '<span class="poe-given-pill">' + g + '</span>';
             }).join('');
@@ -436,12 +642,30 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('poeFeedbackArea').innerHTML = '';
             document.getElementById('poeMemorialUnlock').innerHTML = '';
 
-            startCountdown(data.min_seconds || 25);
+            if (examMode) updateExamDots();
+            startTimers(data.min_seconds || 25);
         }).catch(function () { btn.disabled = false; });
+    }
+
+    document.getElementById('btnGeneratePoe').addEventListener('click', function () {
+        if (examMode) {
+            examIndex = 0;
+            examResults = [];
+            generateExercise(examPlan[0].process, examPlan[0].difficulty);
+        } else {
+            generateExercise();
+        }
+    });
+
+    document.getElementById('btnNextExamQ').addEventListener('click', function () {
+        examIndex++;
+        if (examIndex < examPlan.length) {
+            generateExercise(examPlan[examIndex].process, examPlan[examIndex].difficulty);
+        }
     });
 
     function exportPoePdf(data) {
-        var student = document.getElementById('poeStudentName').value.trim();
+        var student = document.getElementById('poeStudentName').value.trim() || 'Não informado';
         var justif = document.getElementById('poeJustification').value.trim();
         var win = window.open('', '_blank', 'width=940,height=780');
         if (!win) { window.print(); return; }
@@ -452,20 +676,33 @@ document.addEventListener('DOMContentLoaded', function () {
         }).join('');
         var stepsHtml = data.solution.steps.map(function (s) { return '<p>' + s + '</p>'; }).join('');
         win.document.open();
-        win.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><title>TERMO-CP — Resolução POE</title>'
+        win.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><title>TERMO-CP — Comprovante POE</title>'
             + '<style>@page{size:A4;margin:14mm;}body{font-family:"Segoe UI",Arial,sans-serif;color:#1e293b;font-size:11.5px;line-height:1.5;}'
             + '.hdr{background:linear-gradient(135deg,#1b3668,#0d6ab0);color:#fff;padding:15px 20px;border-radius:10px;margin-bottom:14px;display:flex;justify-content:space-between;}'
             + '.hdr h1{margin:0;font-size:15px;}.card{border:1px solid #cbd5e1;border-radius:10px;padding:13px 16px;margin-bottom:12px;}'
             + 'h3{margin:0 0 8px 0;color:#1b3668;font-size:13px;}table{width:100%;border-collapse:collapse;font-size:11px;}'
             + 'th{background:#eff6ff;color:#1b3668;padding:6px 9px;text-align:left;border-bottom:1px solid #cbdcf0;}td{padding:6px 9px;border-bottom:1px solid #f1f5f9;}'
+            + '.code{font-family:Consolas,monospace;font-weight:700;background:rgba(255,255,255,0.2);padding:2px 8px;border-radius:5px;display:inline-block;margin-top:4px;}'
             + '</style></head><body>'
-            + '<div class="hdr"><div><h1>TERMO-CP — Comprovante de Exercício (POE)</h1>' + (student ? '<div>Estudante: ' + student + '</div>' : '') + '</div><div>' + new Date().toLocaleString() + '<br>Nota: ' + data.score_pct + '% (' + data.attempts + ' tentativa(s))</div></div>'
-            + '<div class="card"><h3>Dados do Enunciado</h3><p>' + currentPrompt.given.join(' &nbsp;|&nbsp; ') + '</p></div>'
+            + '<div class="hdr"><div><h1>TERMO-CP — Comprovante de Avaliação (POE)</h1><div>Estudante: ' + student + '</div><div class="code">Autenticidade: ' + (data.receipt_code || '—') + '</div></div>'
+            + '<div style="text-align:right;">' + new Date().toLocaleString() + '<br><strong>Nota: ' + data.score_pct + '%</strong> (' + data.attempts + ' tentativa(s))<br>Tempo: ' + fmtTime(data.elapsed_seconds || elapsedSec) + ' · Dica: ' + (usedHintThisExercise ? 'Sim' : 'Não') + '</div></div>'
+            + '<div class="card"><h3>Enunciado e Dados</h3><p>' + (currentPrompt.statement || '') + '</p><p><strong>' + currentPrompt.given.join(' &nbsp;|&nbsp; ') + '</strong></p></div>'
             + '<div class="card"><h3>Justificativa do Estudante</h3><p>' + justif + '</p></div>'
             + '<div class="card"><h3>Comparação: Sua Resposta × Gabarito</h3><table><thead><tr><th>Grandeza</th><th>Sua Resposta</th><th>Gabarito</th><th>Erro (%)</th><th>Status</th></tr></thead><tbody>' + rowsHtml + '</tbody></table></div>'
             + '<div class="card"><h3>Memorial de Cálculo Passo a Passo</h3>' + stepsHtml + '</div>'
             + '<script>window.onload=function(){setTimeout(function(){window.focus();window.print();},300);};<\/script></body></html>');
         win.document.close();
+    }
+
+    function showExamSummary() {
+        var box = document.getElementById('poeExamSummary');
+        var avg = Math.round(examResults.reduce(function (a, b) { return a + b.score; }, 0) / examResults.length);
+        var rows = examResults.map(function (r, idx) {
+            return '<tr><td><strong>Q' + (idx + 1) + '</strong></td><td>' + r.substance + ' (' + r.process + ')</td><td>' + r.score + '%</td><td>' + fmtTime(r.time) + '</td><td><code>' + (r.code || '—') + '</code></td></tr>';
+        }).join('');
+        box.innerHTML = '<h3><span><i class="fas fa-trophy" style="color:#d97706;"></i> Mini-Prova Concluída — Média Final: ' + avg + '%</span></h3>'
+            + '<table class="poe-cmp-table"><thead><tr><th>Questão</th><th>Tema</th><th>Nota</th><th>Tempo</th><th>Código</th></tr></thead><tbody>' + rows + '</tbody></table>';
+        box.style.display = 'block';
     }
 
     document.getElementById('btnCheckPoe').addEventListener('click', function () {
@@ -483,6 +720,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 pred_heat: document.getElementById('predHeat').value,
                 pred_law2: document.getElementById('predLaw2').value,
                 justification: document.getElementById('poeJustification').value,
+                student_name: document.getElementById('poeStudentName').value.trim(),
+                used_hint: usedHintThisExercise,
                 answers: answers,
                 idioma: localStorage.getItem('preferredLang') || 'pt-br'
             })
@@ -498,7 +737,7 @@ document.addEventListener('DOMContentLoaded', function () {
             alertBox.className = 'poe-alert ' + (data.score_pct >= 75 ? 'ok' : 'err');
             alertBox.style.display = 'block';
             alertBox.innerHTML = '<strong>Tentativa #' + data.attempts + ' — Desempenho: ' + data.score_pct + '%</strong>'
-                + (data.unlocked ? ' · Memorial passo a passo desbloqueado!' : ' · Use as dicas abaixo e faça uma 2ª tentativa revisada para desbloquear o Memorial.')
+                + (data.unlocked ? ' · Memorial desbloqueado!' : ' · Use as dicas abaixo e faça uma 2ª tentativa revisada para desbloquear o Memorial.')
                 + '<div class="poe-score-bar"><div class="poe-score-fill" style="width:' + data.score_pct + '%;background:' + barColor + ';"></div></div>';
 
             var fbHtml = '<div class="poe-fb-grid">';
@@ -516,13 +755,32 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('poeFeedbackArea').innerHTML = fbHtml;
 
             if (data.unlocked && data.solution) {
+                if (watchId) clearInterval(watchId);
                 recordStat(data.score_pct);
+
+                if (examMode && examResults.length === examIndex) {
+                    examResults.push({
+                        substance: currentPrompt.substance,
+                        process: currentPrompt.process,
+                        score: data.score_pct,
+                        time: data.elapsed_seconds || elapsedSec,
+                        code: data.receipt_code
+                    });
+                    updateExamDots();
+                    if (examIndex < examPlan.length - 1) {
+                        document.getElementById('btnNextExamQ').style.display = 'inline-flex';
+                    } else {
+                        showExamSummary();
+                    }
+                }
+
                 var cmpRows = Object.keys(data.field_feedback).map(function (f) {
                     var it = data.field_feedback[f];
                     return '<tr><td><strong>' + f + '</strong></td><td>' + it.user_val + '</td><td><strong>' + data.solution.values[f] + '</strong></td><td>' + it.rel_err + '%</td><td>' + (it.correct ? '✓' : '✗') + '</td></tr>';
                 }).join('');
-                var stepsHtml = '<div class="poe-steps-box"><h4><span><i class="fas fa-book-open"></i> Memorial Passo a Passo Desbloqueado</span>'
-                    + '<button type="button" id="btnExportPoePdf" class="poe-btn poe-btn-pdf" style="padding:7px 14px;font-size:0.84em;"><i class="fas fa-file-pdf"></i> Exportar Resolução (PDF)</button></h4>'
+                var stepsHtml = '<div class="poe-steps-box"><h4><span><i class="fas fa-book-open"></i> Memorial Passo a Passo Desbloqueado '
+                    + (data.receipt_code ? '<span class="poe-receipt-badge">' + data.receipt_code + '</span>' : '') + '</span>'
+                    + '<button type="button" id="btnExportPoePdf" class="poe-btn poe-btn-pdf" style="padding:7px 14px;font-size:0.84em;"><i class="fas fa-file-pdf"></i> Exportar Comprovante (PDF)</button></h4>'
                     + '<table class="poe-cmp-table"><thead><tr><th>Grandeza</th><th>Sua Resposta</th><th>Gabarito</th><th>Erro (%)</th><th>OK</th></tr></thead><tbody>' + cmpRows + '</tbody></table>';
                 data.solution.steps.forEach(function (s) {
                     stepsHtml += '<p>' + s + '</p>';

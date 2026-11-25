@@ -643,3 +643,6 @@ class ExtrasFeaturesTests(TestCase):
         self.assertTrue(odata['unlocked'])
         self.assertEqual(odata['score_pct'], 100.0)
         self.assertIn('steps', odata['solution'])
+        self.assertTrue(str(odata.get('receipt_code', '')).startswith('POE-'))
+        from myapp.models import TentativaExercicio
+        self.assertEqual(TentativaExercicio.objects.filter(codigo=odata['receipt_code']).count(), 1)

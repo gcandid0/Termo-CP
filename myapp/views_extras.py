@@ -9,7 +9,7 @@ from django.shortcuts import get_object_or_404, render
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_GET, require_POST
 
-from .models import SimulacaoCompartilhada, UsoSimulacao
+from .models import SimulacaoCompartilhada, TentativaExercicio, UsoSimulacao
 from .thermo_engine import (
     compute_pcte_process_context,
     compute_scte_process_context,
@@ -596,13 +596,31 @@ def api_exercicio_gerar_view(request):
             opt = 1
         prompt, solution = _generate_pure_problem(opt, proc_type, mass, challenge=challenge)
 
+    proc_names = {
+        'estado': 'determinação de estado termodinâmico',
+        'pcte': 'processo isobárico (pressão constante)',
+        'vcte': 'processo isocórico (volume constante)',
+        'scte': 'processo isentrópico (adiabático e reversível)',
+        'tcte': 'processo isotérmico (temperatura constante)',
+        'poli': 'processo politrópico (pvⁿ = constante)',
+    }
+    ask_str = ', '.join(prompt['ask_fields'])
+    prompt['statement'] = (
+        f"Considere um sistema fechado do tipo cilindro-pistão contendo {mass} kg de {prompt['substance']}, "
+        f"submetido a um(a) {proc_names.get(proc_type, proc_type)}. "
+        f"A partir dos dados fornecidos abaixo, realize suas previsões físicas (POE) e determine: {ask_str}."
+    )
+    prompt['difficulty'] = difficulty
+
     request.session['poe_exercise'] = {
         'prompt': prompt,
         'solution': solution,
+        'difficulty': difficulty,
         'created_at': time.time(),
         'attempts': 0,
         'last_answers': None,
         'unlocked': False,
+        'receipt_code': None,
     }
     request.session.modified = True
 
@@ -742,24 +760,47 @@ def api_exercicio_corrigir_view(request):
 
     unlocked = (score_pct >= 75.0) or (ex['attempts'] >= 2)
     ex['unlocked'] = unlocked
-    request.session['poe_exercise'] = ex
-    request.session.modified = True
 
-    if unlocked:
+    receipt_code = ex.get('receipt_code')
+    elapsed_sec = max(0, int(round(elapsed)))
+    if unlocked and not receipt_code:
         idioma = str(body.get('idioma', 'pt-br')).strip()[:10] or 'pt-br'
+        student_name = str(body.get('student_name', '')).strip()[:120] or 'Anônimo'
+        used_hint = bool(body.get('used_hint', False))
+        poe_hits = sum(1 for v in (poe_feedback or {}).values() if v)
         UsoSimulacao.objects.create(
             substancia=ex['prompt']['substance'][:50],
             tipo='Exercício POE',
             idioma=idioma,
         )
+        rec = TentativaExercicio.objects.create(
+            nome_aluno=student_name,
+            substancia=ex['prompt']['substance'][:60],
+            tipo=ex['prompt']['process'],
+            nivel=ex.get('difficulty', 'basic'),
+            pontuacao=score_pct,
+            poe_acertos=poe_hits,
+            tentativas=ex['attempts'],
+            tempo_segundos=elapsed_sec,
+            usou_dica=used_hint,
+            justificativa=justification[:1000],
+            idioma=idioma,
+        )
+        receipt_code = rec.codigo
+        ex['receipt_code'] = receipt_code
+
+    request.session['poe_exercise'] = ex
+    request.session.modified = True
 
     resp = {
         'ok': True,
         'score_pct': score_pct,
         'attempts': ex['attempts'],
+        'elapsed_seconds': elapsed_sec,
         'field_feedback': field_feedback,
         'poe_feedback': poe_feedback,
         'unlocked': unlocked,
+        'receipt_code': receipt_code,
     }
     if unlocked:
         resp['solution'] = {
