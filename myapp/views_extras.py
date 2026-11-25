@@ -217,11 +217,11 @@ def _generate_ideal_gas_problem(proc_type, mass, challenge=False):
         Sger = mass * ds - (Q / Tviz_K)
         prompt = {
             'substance': g_name, 'process': 'pcte', 'mass': mass, 'unit_t': '°C',
-            'formula_hint': 'Isobárico (Gás Ideal): W = m·P·(v₂ − v₁) = m·R·(T₂ − T₁); Q = m·Cp0·(T₂ − T₁); Sger = m·Cp0·ln(T₂/T₁) − Q/T_viz(K).',
+            'formula_hint': 'Isobárico (Gás Ideal): W = m·P·(v₂ − v₁) = m·R·(T₂ − T₁); Q = m·Cp0·(T₂ − T₁); Sger = m·Cp0·ln(T₂/T₁) − Q/T<sub>viz</sub>(K).',
             'given': [
                 f'R = {R} kJ/kg·K', f'Cp0 = {cp0} kJ/kg·K', f'Cv0 = {cv0} kJ/kg·K',
                 f'm = {mass} kg', f'P₁ = {P1} kPa', f'T₁ = {T1_C} °C',
-                f'T₂ = {T2_C} °C (P = constante)', f'T_viz = {Tviz_C} °C',
+                f'T₂ = {T2_C} °C (P = constante)', f'T<sub>viz</sub> = {Tviz_C} °C',
             ],
             'ask_fields': ['W', 'Q', 'Sger'],
             'is_state': False,
@@ -236,7 +236,7 @@ def _generate_ideal_gas_problem(proc_type, mass, challenge=False):
                 f'2) Estado 2: T₂ = {T2_K:.2f} K, P₂ = {P2:.1f} kPa, v₂ = R·T₂/P₂ = {v2:.5f} m³/kg.',
                 f'3) Trabalho isobárico: W = m·P·(v₂ − v₁) = {mass} × {P1} × ({v2:.5f} − {v1:.5f}) = {W:.2f} kJ.',
                 f'4) Calor (1ª Lei): Q = m·Cp0·(T₂ − T₁) = {mass} × {cp0} × ({T2_K:.2f} − {T1_K:.2f}) = {Q:.2f} kJ.',
-                f'5) Entropia gerada (2ª Lei): Sger = m·[Cp0·ln(T₂/T₁) − R·ln(P₂/P₁)] − Q/T_viz = {Sger:.4f} kJ/K.',
+                f'5) Entropia gerada (2ª Lei): Sger = m·[Cp0·ln(T₂/T₁) − R·ln(P₂/P₁)] − Q/T<sub>viz</sub> = {Sger:.4f} kJ/K.',
             ],
         }
     elif proc_type == 'vcte':
@@ -252,11 +252,11 @@ def _generate_ideal_gas_problem(proc_type, mass, challenge=False):
         Sger = mass * ds - (Q / Tviz_K)
         prompt = {
             'substance': g_name, 'process': 'vcte', 'mass': mass, 'unit_t': '°C',
-            'formula_hint': 'Isocórico (Gás Ideal): P₂/T₂ = P₁/T₁; W = 0; Q = m·Cv0·(T₂ − T₁); Sger = m·Cv0·ln(T₂/T₁) − Q/T_viz(K).',
+            'formula_hint': 'Isocórico (Gás Ideal): P₂/T₂ = P₁/T₁; W = 0; Q = m·Cv0·(T₂ − T₁); Sger = m·Cv0·ln(T₂/T₁) − Q/T<sub>viz</sub>(K).',
             'given': [
                 f'R = {R} kJ/kg·K', f'Cp0 = {cp0} kJ/kg·K', f'Cv0 = {cv0} kJ/kg·K',
                 f'm = {mass} kg', f'P₁ = {P1} kPa', f'T₁ = {T1_C} °C',
-                f'T₂ = {T2_C} °C (v = constante)', f'T_viz = {Tviz_C} °C',
+                f'T₂ = {T2_C} °C (v = constante)', f'T<sub>viz</sub> = {Tviz_C} °C',
             ],
             'ask_fields': ['P2', 'W', 'Q', 'Sger'],
             'is_state': False,
@@ -271,7 +271,7 @@ def _generate_ideal_gas_problem(proc_type, mass, challenge=False):
                 f'2) Estado 2 (v₂ = v₁): P₂ = P₁·(T₂/T₁) = {P1} × ({T2_K:.2f}/{T1_K:.2f}) = {P2:.2f} kPa.',
                 '3) Trabalho isocórico: fronteira fixa (dV = 0) ⇒ W = 0,00 kJ.',
                 f'4) Calor (1ª Lei): Q = m·Cv0·(T₂ − T₁) = {mass} × {cv0} × ({T2_K:.2f} − {T1_K:.2f}) = {Q:.2f} kJ.',
-                f'5) Entropia gerada (2ª Lei): Sger = m·Cv0·ln(T₂/T₁) − Q/T_viz = {Sger:.4f} kJ/K.',
+                f'5) Entropia gerada (2ª Lei): Sger = m·Cv0·ln(T₂/T₁) − Q/T<sub>viz</sub> = {Sger:.4f} kJ/K.',
             ],
         }
     elif proc_type == 'tcte':
@@ -286,11 +286,11 @@ def _generate_ideal_gas_problem(proc_type, mass, challenge=False):
         Sger = mass * ds - (Q / Tviz_K)
         prompt = {
             'substance': g_name, 'process': 'tcte', 'mass': mass, 'unit_t': '°C',
-            'formula_hint': 'Isotérmico (Gás Ideal): ΔU = 0 ⇒ Q = W = m·R·T·ln(v₂/v₁) = m·R·T·ln(P₁/P₂); Sger = −m·R·ln(P₂/P₁) − Q/T_viz(K).',
+            'formula_hint': 'Isotérmico (Gás Ideal): ΔU = 0 ⇒ Q = W = m·R·T·ln(v₂/v₁) = m·R·T·ln(P₁/P₂); Sger = −m·R·ln(P₂/P₁) − Q/T<sub>viz</sub>(K).',
             'given': [
                 f'R = {R} kJ/kg·K', f'm = {mass} kg',
                 f'P₁ = {P1} kPa', f'T₁ = T₂ = {T1_C} °C (isotérmico)',
-                f'P₂ = {P2} kPa', f'T_viz = {Tviz_C} °C',
+                f'P₂ = {P2} kPa', f'T<sub>viz</sub> = {Tviz_C} °C',
             ],
             'ask_fields': ['W', 'Q', 'Sger'],
             'is_state': False,
@@ -304,7 +304,7 @@ def _generate_ideal_gas_problem(proc_type, mass, challenge=False):
                 f'1) Temperatura absoluta constante: T = {T1_K:.2f} K; v₁ = {v1:.5f} m³/kg, v₂ = {v2:.5f} m³/kg.',
                 f'2) Trabalho isotérmico: W = m·R·T·ln(P₁/P₂) = {mass} × {R} × {T1_K:.2f} × ln({P1}/{P2}) = {W:.2f} kJ.',
                 f'3) Como T = cte para gás ideal, ΔU = 0 ⇒ Q = W = {Q:.2f} kJ.',
-                f'4) Entropia gerada (2ª Lei): Sger = −m·R·ln(P₂/P₁) − Q/T_viz(K) = {Sger:.4f} kJ/K.',
+                f'4) Entropia gerada (2ª Lei): Sger = −m·R·ln(P₂/P₁) − Q/T<sub>viz</sub>(K) = {Sger:.4f} kJ/K.',
             ],
         }
     elif proc_type == 'poli':
@@ -326,7 +326,7 @@ def _generate_ideal_gas_problem(proc_type, mass, challenge=False):
             'given': [
                 f'R = {R} kJ/kg·K', f'Cp0 = {cp0} kJ/kg·K', f'Cv0 = {cv0} kJ/kg·K',
                 f'm = {mass} kg', f'P₁ = {P1} kPa', f'T₁ = {T1_C} °C',
-                f'P₂ = {P2} kPa', f'Expoente politrópico n = {n}', f'T_viz = {Tviz_C} °C',
+                f'P₂ = {P2} kPa', f'Expoente politrópico n = {n}', f'T<sub>viz</sub> = {Tviz_C} °C',
             ],
             'ask_fields': ['T2', 'W', 'Q', 'Sger'],
             'is_state': False,
@@ -340,7 +340,7 @@ def _generate_ideal_gas_problem(proc_type, mass, challenge=False):
                 f'1) T₁ = {T1_K:.2f} K; T₂ = T₁·(P₂/P₁)^((n−1)/n) = {T2_K:.2f} K ({T2_C:.2f} °C).',
                 f'2) Trabalho politrópico: W = m·R·(T₂ − T₁)/(1 − n) = {W:.2f} kJ.',
                 f'3) Calor (1ª Lei): Q = m·Cv0·(T₂ − T₁) + W = {dU:.2f} + ({W:.2f}) = {Q:.2f} kJ.',
-                f'4) Entropia gerada (2ª Lei): Sger = m·[Cp0·ln(T₂/T₁) − R·ln(P₂/P₁)] − Q/T_viz(K) = {Sger:.4f} kJ/K.',
+                f'4) Entropia gerada (2ª Lei): Sger = m·[Cp0·ln(T₂/T₁) − R·ln(P₂/P₁)] − Q/T<sub>viz</sub>(K) = {Sger:.4f} kJ/K.',
             ],
         }
     else:  # scte
@@ -457,12 +457,12 @@ def _generate_pure_problem(opt, proc_type, mass, challenge=False):
                 s2 = float(ctx['entropia_especifica2'])
                 prompt = {
                     'substance': cfg['name'], 'process': 'pcte', 'mass': mass, 'unit_t': unit_t,
-                    'formula_hint': 'Isobárico (P = cte): W = m·P·(v₂ − v₁); Q = m·(h₂ − h₁); Sger = m·(s₂ − s₁) − Q/T_viz(K).',
+                    'formula_hint': 'Isobárico (P = cte): W = m·P·(v₂ − v₁); Q = m·(h₂ − h₁); Sger = m·(s₂ − s₁) − Q/T<sub>viz</sub>(K).',
                     'given': [
                         f'Substância: {cfg["name"]}', f'm = {mass} kg',
                         f'P₁ = {P1} kPa', f'T₁ = {T1} {unit_t}',
                         f'T₂ = {T2_in} {unit_t} (P = constante)',
-                        f'T_viz = {Tviz} {unit_t}',
+                        f'T<sub>viz</sub> = {Tviz} {unit_t}',
                     ],
                     'ask_fields': ['W', 'Q', 'Sger'],
                     'is_state': False,
@@ -477,7 +477,7 @@ def _generate_pure_problem(opt, proc_type, mass, challenge=False):
                         f'2) Estado 2 (P₂={P1} kPa, T₂={T2_in} {unit_t}): v₂ = {v2:.6f} m³/kg, h₂ = {h2:.2f} kJ/kg, s₂ = {s2:.4f} kJ/kg·K.',
                         f'3) Trabalho isobárico: W = m·P·(v₂ − v₁) = {mass} × {P1} × ({v2:.6f} − {v1:.6f}) = {W:.2f} kJ.',
                         f'4) Calor (1ª Lei): Q = m·(h₂ − h₁) = {mass} × ({h2:.2f} − {h1:.2f}) = {Q:.2f} kJ.',
-                        f'5) Entropia gerada (2ª Lei): Sger = m·(s₂ − s₁) − Q/T_viz(K) = {Sger:.4f} kJ/K.',
+                        f'5) Entropia gerada (2ª Lei): Sger = m·(s₂ − s₁) − Q/T<sub>viz</sub>(K) = {Sger:.4f} kJ/K.',
                     ],
                 }
                 return prompt, solution
@@ -495,12 +495,12 @@ def _generate_pure_problem(opt, proc_type, mass, challenge=False):
                 s2 = float(ctx['entropia_especifica2'])
                 prompt = {
                     'substance': cfg['name'], 'process': 'vcte', 'mass': mass, 'unit_t': unit_t,
-                    'formula_hint': 'Isocórico (v = cte): W = 0; Q = m·(u₂ − u₁); Sger = m·(s₂ − s₁) − Q/T_viz(K).',
+                    'formula_hint': 'Isocórico (v = cte): W = 0; Q = m·(u₂ − u₁); Sger = m·(s₂ − s₁) − Q/T<sub>viz</sub>(K).',
                     'given': [
                         f'Substância: {cfg["name"]}', f'm = {mass} kg',
                         f'P₁ = {P1} kPa', f'T₁ = {T1} {unit_t}',
                         f'T₂ = {T2_in} {unit_t} (v = constante)',
-                        f'T_viz = {Tviz} {unit_t}',
+                        f'T<sub>viz</sub> = {Tviz} {unit_t}',
                     ],
                     'ask_fields': ['P2', 'W', 'Q', 'Sger'],
                     'is_state': False,
@@ -515,7 +515,7 @@ def _generate_pure_problem(opt, proc_type, mass, challenge=False):
                         f'2) Estado 2 (v₂ = v₁, T₂ = {T2_in} {unit_t}): P₂ = {P2:.2f} kPa, u₂ = {u2:.2f} kJ/kg, s₂ = {s2:.4f} kJ/kg·K.',
                         '3) Trabalho isocórico: volume constante ⇒ W = 0,00 kJ.',
                         f'4) Calor (1ª Lei): Q = m·(u₂ − u₁) = {mass} × ({u2:.2f} − {u1:.2f}) = {Q:.2f} kJ.',
-                        f'5) Entropia gerada (2ª Lei): Sger = m·(s₂ − s₁) − Q/T_viz(K) = {Sger:.4f} kJ/K.',
+                        f'5) Entropia gerada (2ª Lei): Sger = m·(s₂ − s₁) − Q/T<sub>viz</sub>(K) = {Sger:.4f} kJ/K.',
                     ],
                 }
                 return prompt, solution

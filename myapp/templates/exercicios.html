@@ -315,8 +315,8 @@
                     <option value="pcte" selected class="lang-text" data-pt-br="Isobárico (P = cte)" data-en="Isobaric (P = const)" data-es="Isobárico (P = cte)" data-fr="Isobare (P = cte)" data-zh="等压过程 (P = 常数)">Isobárico (P = cte)</option>
                     <option value="vcte" class="lang-text" data-pt-br="Isocórico (v = cte)" data-en="Isochoric (v = const)" data-es="Isocórico (v = cte)" data-fr="Isochore (v = cte)" data-zh="等容过程 (v = 常数)">Isocórico (v = cte)</option>
                     <option value="scte" class="lang-text" data-pt-br="Isentrópico (s = cte)" data-en="Isentropic (s = const)" data-es="Isentrópico (s = cte)" data-fr="Isentropique (s = cte)" data-zh="等熵过程 (s = 常数)">Isentrópico (s = cte)</option>
-                    <option value="tcte" class="lang-text" data-pt-br="Isotérmico (Gás Ideal)" data-en="Isothermal (Ideal Gas)" data-es="Isotérmico (Gas Ideal)" data-fr="Isotherme (Gaz Idéal)" data-zh="等温过程 (理想气体)">Isotérmico (Gás Ideal)</option>
-                    <option value="poli" class="lang-text" data-pt-br="Politrópico (Gás Ideal)" data-en="Polytropic (Ideal Gas)" data-es="Politrópico (Gas Ideal)" data-fr="Polytropique (Gaz Idéal)" data-zh="多变过程 (理想气体)">Politrópico (Gás Ideal)</option>
+                    <option value="tcte" data-gas-only="1" class="lang-text" data-pt-br="Isotérmico (T = cte)" data-en="Isothermal (T = const)" data-es="Isotérmico (T = cte)" data-fr="Isotherme (T = cte)" data-zh="等温过程 (T = 常数)">Isotérmico (T = cte)</option>
+                    <option value="poli" data-gas-only="1" class="lang-text" data-pt-br="Politrópico (pvⁿ = cte)" data-en="Polytropic (pvⁿ = const)" data-es="Politrópico (pvⁿ = cte)" data-fr="Polytropique (pvⁿ = cte)" data-zh="多变过程 (pvⁿ = 常数)">Politrópico (pvⁿ = cte)</option>
                 </select>
             </div>
             <div class="poe-field" id="fieldDiffWrap">
@@ -515,6 +515,24 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     loadStats();
+
+    // Libera apenas os tipos de exercício compatíveis com a substância selecionada
+    function syncProcessOptionsBySubstance() {
+        var subSel = document.getElementById('poeSubstance');
+        var procSel = document.getElementById('poeProcess');
+        var isGas = subSel.value === 'gas';
+        Array.prototype.forEach.call(procSel.options, function (opt) {
+            if (opt.getAttribute('data-gas-only') === '1') {
+                opt.hidden = !isGas;
+                opt.disabled = !isGas;
+            }
+        });
+        if (!isGas && (procSel.value === 'tcte' || procSel.value === 'poli')) {
+            procSel.value = 'pcte';
+        }
+    }
+    document.getElementById('poeSubstance').addEventListener('change', syncProcessOptionsBySubstance);
+    syncProcessOptionsBySubstance();
 
     // Quick converter
     document.getElementById('btnToggleConv').addEventListener('click', function () {
