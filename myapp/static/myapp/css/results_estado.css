@@ -205,3 +205,318 @@
         .legend-color { width: 11px; height: 8px; }
         .scale-label { font-size: 9px; width: 42px; }
     }
+
+/* ============================================================================
+   UPGRADE MODERNO: DIAGRAMAS, RELATÓRIO FINAL E HISTÓRICO DE CÁLCULOS (v10)
+   ============================================================================ */
+
+/* --- MODAL DE DIAGRAMAS INTERATIVOS (#diagramModal) --- */
+#diagramModal .modal-content.modal-chart {
+    max-width: 1020px !important;
+    max-height: 92vh !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    background: #f5f8fc !important;
+    border-radius: 18px !important;
+    padding: 0 26px 24px 26px !important;
+    border: 1px solid rgba(15, 23, 42, 0.08) !important;
+    box-shadow: 0 24px 60px rgba(15, 23, 42, 0.22) !important;
+    text-align: left !important;
+}
+#diagramModal #closeDiagramBtn {
+    position: absolute;
+    right: 18px !important;
+    top: 16px !important;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.16);
+    color: #ffffff !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px !important;
+    line-height: 1;
+    transition: background 0.2s ease, transform 0.2s ease;
+    z-index: 5;
+}
+#diagramModal #closeDiagramBtn:hover {
+    background: rgba(255, 255, 255, 0.28);
+    transform: scale(1.06);
+}
+#diagramModal .modal-content.modal-chart > h3 {
+    background: linear-gradient(135deg, #1b3668 0%, #0d6ab0 100%) !important;
+    color: #ffffff !important;
+    margin: 0 -26px 20px -26px !important;
+    padding: 20px 58px 20px 26px !important;
+    border-radius: 18px 18px 0 0 !important;
+    font-size: 1.28em !important;
+    font-weight: 700 !important;
+    text-align: center;
+    box-shadow: 0 4px 16px rgba(27, 54, 104, 0.16);
+}
+#diagramModal .chart-controls {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 12px 16px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    flex-wrap: wrap;
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+}
+#diagramModal .chart-controls select {
+    flex: 1;
+    min-width: 240px;
+    padding: 9px 14px;
+    border-radius: 9px;
+    border: 1.5px solid #cbd5e1;
+    background: #f8fafc;
+    color: #1b3668;
+    font-weight: 600;
+    font-size: 0.94em;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+#diagramModal .chart-controls select:focus {
+    border-color: #0d6ab0;
+    box-shadow: 0 0 0 3px rgba(13, 106, 176, 0.14);
+}
+#diagramModal .chart-canvas-wrapper {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    padding: 16px;
+    box-shadow: 0 4px 14px rgba(15, 23, 42, 0.045);
+}
+.diagram-didactic-note {
+    margin-top: 14px;
+    background: #f0f9ff;
+    border: 1px solid #bae6fd;
+    border-radius: 12px;
+    padding: 11px 16px;
+    color: #0c4a6e;
+    font-size: 0.91em;
+    line-height: 1.5;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+}
+.diagram-didactic-note i {
+    color: #0284c7;
+    margin-top: 3px;
+    flex-shrink: 0;
+}
+.diagram-export-group {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+.modal-mini-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    border-radius: 9px;
+    font-size: 0.86em;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1px solid #cbd5e1;
+    background: #ffffff;
+    color: #1b3668;
+    transition: transform 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+    font-family: inherit;
+}
+.modal-mini-btn:hover {
+    background: #f1f5f9;
+    transform: translateY(-1px);
+}
+.modal-mini-btn.btn-pdf-red {
+    background: linear-gradient(135deg, #b91c1c 0%, #dc2626 100%);
+    color: #ffffff;
+    border-color: transparent;
+    box-shadow: 0 3px 10px rgba(185, 28, 28, 0.22);
+}
+.modal-mini-btn.btn-pdf-red:hover {
+    box-shadow: 0 5px 14px rgba(185, 28, 28, 0.3);
+}
+.modal-mini-btn.btn-csv-green {
+    background: linear-gradient(135deg, #15803d 0%, #16a34a 100%);
+    color: #ffffff;
+    border-color: transparent;
+    box-shadow: 0 3px 10px rgba(21, 128, 61, 0.22);
+}
+.modal-mini-btn.btn-csv-green:hover {
+    box-shadow: 0 5px 14px rgba(21, 128, 61, 0.3);
+}
+.modal-mini-btn.btn-png-blue {
+    background: linear-gradient(135deg, #1b3668 0%, #0d6ab0 100%);
+    color: #ffffff;
+    border-color: transparent;
+    box-shadow: 0 3px 10px rgba(27, 54, 104, 0.2);
+}
+
+/* --- MODAL DE RELATÓRIO FINAL (#reportModal) --- */
+#reportModal .modal-content {
+    max-width: 1120px !important;
+    max-height: 92vh !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    border-radius: 18px !important;
+    background: #f5f8fc !important;
+    border: 1px solid rgba(15, 23, 42, 0.08) !important;
+    box-shadow: 0 24px 60px rgba(15, 23, 42, 0.24) !important;
+}
+#reportModal .modal-content > div:first-child {
+    background: linear-gradient(135deg, #1b3668 0%, #0d6ab0 100%) !important;
+    border-radius: 18px 18px 0 0 !important;
+    padding: 18px 26px !important;
+    box-shadow: 0 4px 16px rgba(27, 54, 104, 0.18) !important;
+}
+#reportModal .report-section {
+    background: #ffffff;
+    border: 1px solid #e2e8f0 !important;
+    border-left: 1px solid #e2e8f0 !important;
+    border-radius: 14px !important;
+    padding: 20px 22px !important;
+    margin-bottom: 18px !important;
+    box-shadow: 0 4px 14px rgba(15, 23, 42, 0.045) !important;
+}
+#reportModal .report-section-title {
+    color: #1b3668 !important;
+    font-weight: 700 !important;
+    font-size: 1.08em !important;
+    border-bottom: 1px solid #e2e8f0 !important;
+    padding-bottom: 10px !important;
+    margin-bottom: 14px !important;
+}
+#reportModal .report-diagram-item {
+    background: #f8fafc !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 12px !important;
+    padding: 12px !important;
+}
+#reportModal .report-diagram-label {
+    color: #1b3668 !important;
+    font-weight: 700 !important;
+    font-size: 0.9em !important;
+}
+
+/* --- MODAL DE HISTÓRICO DE CÁLCULOS (#historyModal) --- */
+#historyModal .modal-content {
+    max-width: min(1420px, 95vw) !important;
+    max-height: 92vh !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    border-radius: 18px !important;
+    background: #f5f8fc !important;
+    padding: 0 26px 26px 26px !important;
+    border: 1px solid rgba(15, 23, 42, 0.08) !important;
+    box-shadow: 0 24px 60px rgba(15, 23, 42, 0.22) !important;
+    text-align: left !important;
+}
+#historyModal #closeHistoryBtn {
+    position: absolute;
+    right: 18px !important;
+    top: 16px !important;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.16);
+    color: #ffffff !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px !important;
+    line-height: 1;
+    transition: background 0.2s ease, transform 0.2s ease;
+    z-index: 5;
+}
+#historyModal #closeHistoryBtn:hover {
+    background: rgba(255, 255, 255, 0.28);
+    transform: scale(1.06);
+}
+#historyModal .modal-content > h2 {
+    background: linear-gradient(135deg, #1b3668 0%, #0d6ab0 100%) !important;
+    color: #ffffff !important;
+    margin: 0 -26px 18px -26px !important;
+    padding: 20px 58px 20px 26px !important;
+    border-radius: 18px 18px 0 0 !important;
+    font-size: 1.32em !important;
+    font-weight: 700 !important;
+    box-shadow: 0 4px 16px rgba(27, 54, 104, 0.16);
+}
+#historyModal .modal-content > p {
+    color: #475569 !important;
+    margin: 0 0 14px 0 !important;
+    font-size: 0.94em !important;
+}
+#historyModal #historyToolbar {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 12px 14px;
+    margin-bottom: 16px !important;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+}
+.history-search-input {
+    flex: 1;
+    min-width: 200px;
+    padding: 8px 12px;
+    border-radius: 9px;
+    border: 1.5px solid #cbd5e1;
+    background: #f8fafc;
+    color: #0f172a;
+    font-size: 0.9em;
+    font-family: inherit;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.history-search-input:focus {
+    border-color: #0d6ab0;
+    background: #ffffff;
+    box-shadow: 0 0 0 3px rgba(13, 106, 176, 0.14);
+}
+.history-count-badge {
+    background: #eff6ff;
+    color: #1b3668;
+    border: 1px solid #cbdcf0;
+    border-radius: 999px;
+    padding: 5px 12px;
+    font-size: 0.82em;
+    font-weight: 700;
+}
+#historyModal .history-item,
+#historyModal .history-card {
+    background: #ffffff !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 12px !important;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
+}
+#historyModal .history-item:hover,
+#historyModal .history-card:hover {
+    border-color: #93c5fd !important;
+    box-shadow: 0 6px 16px rgba(15, 23, 42, 0.07) !important;
+}
+
+@media (max-width: 720px) {
+    #diagramModal .modal-content.modal-chart,
+    #historyModal .modal-content {
+        padding: 0 14px 18px 14px !important;
+    }
+    #diagramModal .modal-content.modal-chart > h3,
+    #historyModal .modal-content > h2 {
+        margin: 0 -14px 16px -14px !important;
+        padding: 16px 48px 16px 16px !important;
+    }
+    #reportStatesGrid {
+        grid-template-columns: 1fr !important;
+    }
+}

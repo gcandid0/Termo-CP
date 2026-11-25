@@ -1342,3 +1342,471 @@ document.addEventListener('DOMContentLoaded', function () {
         setTimeout(renderEnhancements, 80);
     });
 });
+
+
+// ============ APRIMORAMENTO DOS MODAIS: DIAGRAMAS, RELATÓRIO FINAL E HISTÓRICO (v10) ============
+document.addEventListener('DOMContentLoaded', function () {
+    var I18N_MODALS = {
+        'pt-br': {
+            dlPng: 'Baixar PNG',
+            dlPdf: 'Salvar PDF',
+            dlCsv: 'Exportar CSV',
+            searchPh: 'Filtrar cálculos por nome, substância ou processo...',
+            savedItems: 'salvos',
+            exportCmpPdf: 'Exportar Comparação (PDF)',
+            notes: {
+                Pv: 'Diagrama P-v: a área sob a curva de um processo quase-estático representa o trabalho de fronteira (W = ∫ P dV). Linhas horizontais indicam processos isobáricos e verticais indicam processos isocóricos.',
+                Ts: 'Diagrama T-s: em processos internamente reversíveis, a área sob a curva representa o calor transferido (Q = ∫ T dS). Linhas verticais representam processos isentrópicos (s = constante).',
+                Tv: 'Diagrama T-v: evidencia a mudança de fase a temperatura constante dentro do domo de saturação durante o aquecimento ou resfriamento isobárico.',
+                Ph: 'Diagrama P-h: amplamente utilizado na análise de sistemas de refrigeração e bombas de calor, relacionando diretamente a pressão às variações de entalpia (calor trocado).',
+                hs: 'Diagrama h-s (Mollier): muito empregado no estudo de turbinas, compressores e processos isentrópicos (linhas verticais), facilitando a leitura direta de Δh.',
+                PT: 'Diagrama P-T (Fases): mostra a curva de saturação líquido-vapor e o ponto crítico, separando claramente as regiões de líquido comprimido e vapor superaquecido.',
+                Ps: 'Diagrama P-s: combina a variação de pressão com a entropia específica, destacando processos isobáricos (horizontais) e isentrópicos (verticais).',
+                Pu: 'Diagrama P-u: relaciona pressão e energia interna específica, útil na análise de processos com variação de energia interna em sistemas fechados.',
+                Tu: 'Diagrama T-u: mostra a dependência entre temperatura e energia interna específica (em gases ideais, u depende apenas de T).',
+                Th: 'Diagrama T-h: evidencia a variação de entalpia específica com a temperatura, incluindo o patamar isotérmico do calor latente na região de saturação.'
+            }
+        },
+        'en': {
+            dlPng: 'Download PNG',
+            dlPdf: 'Save PDF',
+            dlCsv: 'Export CSV',
+            searchPh: 'Filter calculations by name, substance, or process...',
+            savedItems: 'saved',
+            exportCmpPdf: 'Export Comparison (PDF)',
+            notes: {
+                Pv: 'P-v Diagram: the area under a quasi-equilibrium process curve represents boundary work (W = ∫ P dV). Horizontal lines indicate isobaric processes; vertical lines indicate isochoric processes.',
+                Ts: 'T-s Diagram: for internally reversible processes, the area under the curve represents heat transfer (Q = ∫ T dS). Vertical lines represent isentropic processes (s = constant).',
+                Tv: 'T-v Diagram: highlights constant-temperature phase change inside the saturation dome during isobaric heating or cooling.',
+                Ph: 'P-h Diagram: widely used in refrigeration and heat-pump analysis, directly relating pressure to enthalpy changes (heat exchange).',
+                hs: 'h-s Diagram (Mollier): extensively used for turbines, compressors, and isentropic processes (vertical lines), allowing direct reading of Δh.',
+                PT: 'P-T Phase Diagram: shows the liquid-vapor saturation curve and critical point, clearly separating compressed liquid and superheated vapor regions.',
+                Ps: 'P-s Diagram: combines pressure with specific entropy, highlighting isobaric (horizontal) and isentropic (vertical) processes.',
+                Pu: 'P-u Diagram: relates pressure and specific internal energy, useful for analyzing internal energy changes in closed systems.',
+                Tu: 'T-u Diagram: shows the relationship between temperature and specific internal energy (for ideal gases, u depends solely on T).',
+                Th: 'T-h Diagram: illustrates specific enthalpy variation with temperature, including the isothermal latent-heat plateau inside the saturation region.'
+            }
+        },
+        'es': {
+            dlPng: 'Descargar PNG',
+            dlPdf: 'Guardar PDF',
+            dlCsv: 'Exportar CSV',
+            searchPh: 'Filtrar cálculos por nombre, sustancia o proceso...',
+            savedItems: 'guardados',
+            exportCmpPdf: 'Exportar Comparación (PDF)',
+            notes: {
+                Pv: 'Diagrama P-v: el área bajo la curva de un proceso cuasi-estático representa el trabajo de frontera (W = ∫ P dV). Las líneas horizontales son isobáricas y las verticales isocóricas.',
+                Ts: 'Diagrama T-s: en procesos internamente reversibles, el área bajo la curva representa el calor transferido (Q = ∫ T dS). Las líneas verticales son isentrópicas.',
+                Tv: 'Diagrama T-v: muestra el cambio de fase a temperatura constante dentro del domo de saturación durante procesos isobáricos.',
+                Ph: 'Diagrama P-h: muy utilizado en sistemas de refrigeración y bombas de calor, relacionando la presión directamente con la variación de entalpía.',
+                hs: 'Diagrama h-s (Mollier): empleado en turbinas, compresores y procesos isentrópicos (líneas verticales), facilitando la lectura directa de Δh.',
+                PT: 'Diagrama P-T (Fases): muestra la curva de saturación líquido-vapor y el punto crítico, separando líquido comprimido y vapor sobrecalentado.',
+                Ps: 'Diagrama P-s: combina presión y entropía específica, destacando procesos isobáricos (horizontales) e isentrópicos (verticales).',
+                Pu: 'Diagrama P-u: relaciona presión y energía interna específica en sistemas cerrados.',
+                Tu: 'Diagrama T-u: muestra la relación entre temperatura y energía interna específica (en gases ideales, u depende solo de T).',
+                Th: 'Diagrama T-h: ilustra la variación de entalpía con la temperatura, incluyendo el calor latente en la región de saturación.'
+            }
+        },
+        'fr': {
+            dlPng: 'Télécharger PNG',
+            dlPdf: 'Enregistrer PDF',
+            dlCsv: 'Exporter CSV',
+            searchPh: 'Filtrer les calculs par nom, substance ou processus...',
+            savedItems: 'enregistrés',
+            exportCmpPdf: 'Exporter Comparaison (PDF)',
+            notes: {
+                Pv: 'Diagramme P-v : l\'aire sous la courbe d\'un processus quasi-statique représente le travail de frontière (W = ∫ P dV). Horizontales = isobares ; verticales = isochores.',
+                Ts: 'Diagramme T-s : pour les processus réversibles, l\'aire sous la courbe représente la chaleur échangée (Q = ∫ T dS). Les lignes verticales sont isentropiques.',
+                Tv: 'Diagramme T-v : met en évidence le changement de phase à température constante dans le dôme de saturation.',
+                Ph: 'Diagramme P-h : largement utilisé en réfrigération et pompes à chaleur pour relier pression et variation d\'enthalpie.',
+                hs: 'Diagramme h-s (Mollier) : utilisé pour les turbines, compresseurs et processus isentropiques (lignes verticales), permettant une lecture directe de Δh.',
+                PT: 'Diagramme P-T (Phases) : présente la courbe de saturation liquide-vapeur et le point critique.',
+                Ps: 'Diagramme P-s : associe pression et entropie spécifique (isobares horizontales, isentropiques verticales).',
+                Pu: 'Diagramme P-u : relie pression et énergie interne spécifique en système fermé.',
+                Tu: 'Diagramme T-u : montre la dépendance entre température et énergie interne (pour un gaz idéal, u ne dépend que de T).',
+                Th: 'Diagramme T-h : illustre la variation d\'enthalpie avec la température, y compris le palier de chaleur latente.'
+            }
+        },
+        'zh': {
+            dlPng: '下载 PNG',
+            dlPdf: '保存 PDF',
+            dlCsv: '导出 CSV',
+            searchPh: '按名称、物质或过程筛选计算记录...',
+            savedItems: '条记录',
+            exportCmpPdf: '导出对比结果 (PDF)',
+            notes: {
+                Pv: 'P-v 图：准静态过程曲线下方的面积代表边界功 (W = ∫ P dV)。水平线表示等压过程，垂直线表示等容过程。',
+                Ts: 'T-s 图：在内部可逆过程中，曲线下方的面积代表传递的热量 (Q = ∫ T dS)。垂直线表示等熵过程 (s = 常数)。',
+                Tv: 'T-v 图：直观展示等压加热或冷却过程中饱和穹顶内的定温相变过程。',
+                Ph: 'P-h 图：广泛用于制冷和热泵循环分析，直接将压力与焓变（换热量）关联。',
+                hs: 'h-s 莫里尔图：常用于汽轮机、压缩机及等熵过程（垂直线）分析，便于直接读取 Δh。',
+                PT: 'P-T 相图：展示气液饱和曲线和临界点，清晰区分压缩液体区与过热蒸汽区。',
+                Ps: 'P-s 图：结合压力与比熵，突出显示等压过程（水平线）和等熵过程（垂直线）。',
+                Pu: 'P-u 图：关联压力与比内能，有助于分析闭口系统的内能变化。',
+                Tu: 'T-u 图：展示温度与比内能的关系（理想气体的内能 u 仅是温度 T 的函数）。',
+                Th: 'T-h 图：展示比焓随温度的变化，包括饱和区内的等温汽化潜热平台。'
+            }
+        }
+    };
+
+    function getDict() {
+        var lang = localStorage.getItem('preferredLang') || 'pt-br';
+        return I18N_MODALS[lang] || I18N_MODALS['pt-br'];
+    }
+
+    function downloadCsv(filename, rows) {
+        var csv = '\uFEFF' + rows.map(function (r) {
+            return r.map(function (cell) {
+                var s = String(cell === null || cell === undefined ? '' : cell).replace(/"/g, '""');
+                return '"' + s + '"';
+            }).join(';');
+        }).join('\r\n');
+        var blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        var url = URL.createObjectURL(blob);
+        var a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        a.click();
+        setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+    }
+
+    // -------------------------------------------------------------------------
+    // 1. DIAGRAM MODAL ENHANCER (#diagramModal)
+    // -------------------------------------------------------------------------
+    var diagModal = document.getElementById('diagramModal');
+    if (diagModal) {
+        var controls = diagModal.querySelector('.chart-controls');
+        var selector = diagModal.querySelector('#chartTypeSelector');
+        var canvasWrap = diagModal.querySelector('.chart-canvas-wrapper');
+
+        function renderDiagramExtras() {
+            var dict = getDict();
+            // Export buttons inside chart-controls
+            if (controls) {
+                var oldGrp = controls.querySelector('.diagram-export-group');
+                if (oldGrp) oldGrp.remove();
+
+                var grp = document.createElement('div');
+                grp.className = 'diagram-export-group';
+
+                var btnPng = document.createElement('button');
+                btnPng.type = 'button';
+                btnPng.className = 'modal-mini-btn btn-png-blue';
+                btnPng.innerHTML = '<i class="fas fa-image"></i> ' + dict.dlPng;
+                btnPng.addEventListener('click', function () {
+                    var canvas = diagModal.querySelector('canvas');
+                    if (!canvas) return;
+                    // Draw on white background so PNG is not transparent
+                    var tmp = document.createElement('canvas');
+                    tmp.width = canvas.width;
+                    tmp.height = canvas.height;
+                    var ctx = tmp.getContext('2d');
+                    ctx.fillStyle = '#ffffff';
+                    ctx.fillRect(0, 0, tmp.width, tmp.height);
+                    ctx.drawImage(canvas, 0, 0);
+                    var chartCode = selector ? selector.value : 'diagram';
+                    var a = document.createElement('a');
+                    a.download = 'TERMO-CP_Diagrama_' + chartCode + '.png';
+                    a.href = tmp.toDataURL('image/png');
+                    a.click();
+                });
+
+                var btnPdf = document.createElement('button');
+                btnPdf.type = 'button';
+                btnPdf.className = 'modal-mini-btn btn-pdf-red';
+                btnPdf.innerHTML = '<i class="fas fa-file-pdf"></i> ' + dict.dlPdf;
+                btnPdf.addEventListener('click', function () {
+                    var canvas = diagModal.querySelector('canvas');
+                    if (!canvas) return;
+                    var tmp = document.createElement('canvas');
+                    tmp.width = canvas.width;
+                    tmp.height = canvas.height;
+                    var ctx = tmp.getContext('2d');
+                    ctx.fillStyle = '#ffffff';
+                    ctx.fillRect(0, 0, tmp.width, tmp.height);
+                    ctx.drawImage(canvas, 0, 0);
+                    var dataUrl = tmp.toDataURL('image/png');
+                    var titleEl = diagModal.querySelector('h3');
+                    var titleTxt = titleEl ? titleEl.textContent.trim() : 'TERMO-CP';
+                    var chartLabel = selector && selector.options[selector.selectedIndex] ? selector.options[selector.selectedIndex].textContent.trim() : '';
+                    var noteEl = diagModal.querySelector('.diagram-didactic-note span');
+                    var noteTxt = noteEl ? noteEl.textContent.trim() : '';
+                    var win = window.open('', '_blank', 'width=1000,height=740');
+                    if (!win) { window.print(); return; }
+                    win.document.open();
+                    win.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><title>' + titleTxt + '</title>'
+                        + '<style>@page{size:A4 landscape;margin:14mm;}body{font-family:"Segoe UI",Arial,sans-serif;color:#1e293b;margin:0;}'
+                        + '.hdr{background:linear-gradient(135deg,#1b3668,#0d6ab0);color:#fff;padding:14px 20px;border-radius:10px;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center;}'
+                        + '.hdr h1{margin:0;font-size:15px;}.sub{font-size:11px;opacity:.9;}'
+                        + '.img-box{border:1px solid #cbd5e1;border-radius:10px;padding:12px;text-align:center;background:#fff;}'
+                        + '.img-box img{max-width:100%;max-height:132mm;object-fit:contain;}'
+                        + '.note{margin-top:12px;background:#f0f9ff;border:1px solid #bae6fd;border-radius:8px;padding:10px 14px;font-size:11.5px;color:#0c4a6e;}'
+                        + '</style></head><body>'
+                        + '<div class="hdr"><h1>' + titleTxt + (chartLabel ? ' — ' + chartLabel : '') + '</h1><div class="sub">TERMO-CP · ' + new Date().toLocaleDateString() + '</div></div>'
+                        + '<div class="img-box"><img src="' + dataUrl + '"></div>'
+                        + (noteTxt ? '<div class="note">' + noteTxt + '</div>' : '')
+                        + '<script>window.onload=function(){setTimeout(function(){window.focus();window.print();},300);};<\/script></body></html>');
+                    win.document.close();
+                });
+
+                grp.appendChild(btnPng);
+                grp.appendChild(btnPdf);
+                controls.appendChild(grp);
+            }
+
+            // Didactic note below canvas
+            if (canvasWrap && selector) {
+                var oldNote = diagModal.querySelector('.diagram-didactic-note');
+                if (oldNote) oldNote.remove();
+                var code = selector.value || 'Pv';
+                var noteMsg = dict.notes[code] || dict.notes.Pv;
+                var noteDiv = document.createElement('div');
+                noteDiv.className = 'diagram-didactic-note';
+                noteDiv.innerHTML = '<i class="fas fa-lightbulb"></i><span>' + noteMsg + '</span>';
+                canvasWrap.insertAdjacentElement('afterend', noteDiv);
+            }
+        }
+
+        renderDiagramExtras();
+        if (selector) {
+            selector.addEventListener('change', renderDiagramExtras);
+        }
+        document.addEventListener('languageChanged', function () {
+            setTimeout(renderDiagramExtras, 80);
+        });
+    }
+
+    // -------------------------------------------------------------------------
+    // 2. FINAL REPORT MODAL ENHANCER (#reportModal) — Clean A4 PDF + CSV Export
+    // -------------------------------------------------------------------------
+    var reportModal = document.getElementById('reportModal');
+    if (reportModal) {
+        function renderReportExtras() {
+            var dict = getDict();
+            var headerBar = reportModal.querySelector('.modal-content > div:first-child');
+            if (!headerBar) return;
+            var rightBox = headerBar.children[1];
+            if (!rightBox) return;
+
+            // Replace raw window.print() button with dedicated clean PDF button + CSV button
+            var origPrint = rightBox.querySelector('button[onclick*="print"]');
+            if (origPrint) origPrint.style.display = 'none';
+
+            rightBox.querySelectorAll('.report-extra-btn').forEach(function (b) { b.remove(); });
+            var closeEl = rightBox.querySelector('#closeReportBtn');
+
+            var btnCsv = document.createElement('button');
+            btnCsv.type = 'button';
+            btnCsv.className = 'modal-mini-btn btn-csv-green report-extra-btn';
+            btnCsv.innerHTML = '<i class="fas fa-file-csv"></i> ' + dict.dlCsv;
+            btnCsv.addEventListener('click', function () {
+                var rows = [['Section', 'Property / Metric', 'State 1 / Value', 'State 2', 'Change']];
+                // Metrics
+                reportModal.querySelectorAll('#reportMetrics .report-metric-card, #reportMetrics .cycle-balance-item').forEach(function (card) {
+                    var txt = card.textContent.replace(/\s+/g, ' ').trim();
+                    if (txt) rows.push(['Process', txt, '', '', '']);
+                });
+                // Comparison table
+                reportModal.querySelectorAll('#reportComparison table tr').forEach(function (tr) {
+                    var cells = Array.prototype.map.call(tr.querySelectorAll('th, td'), function (td) {
+                        return td.textContent.replace(/\s+/g, ' ').trim();
+                    });
+                    if (cells.length) rows.push(['Comparison'].concat(cells));
+                });
+                downloadCsv('TERMO-CP_Relatorio.csv', rows);
+            });
+
+            var btnPdf = document.createElement('button');
+            btnPdf.type = 'button';
+            btnPdf.className = 'modal-mini-btn btn-pdf-red report-extra-btn';
+            btnPdf.innerHTML = '<i class="fas fa-file-pdf"></i> ' + dict.dlPdf;
+            btnPdf.addEventListener('click', function () {
+                var body = reportModal.querySelector('#reportBody');
+                if (!body || body.style.display === 'none') {
+                    window.print();
+                    return;
+                }
+                var clone = body.cloneNode(true);
+                // Convert every <canvas> inside reportBody to an <img> so print window shows all diagrams!
+                var origCanvases = body.querySelectorAll('canvas');
+                var cloneCanvases = clone.querySelectorAll('canvas');
+                for (var i = 0; i < origCanvases.length; i++) {
+                    if (!cloneCanvases[i]) continue;
+                    try {
+                        var img = document.createElement('img');
+                        img.src = origCanvases[i].toDataURL('image/png');
+                        img.style.width = '100%';
+                        img.style.height = 'auto';
+                        img.style.display = 'block';
+                        cloneCanvases[i].parentNode.replaceChild(img, cloneCanvases[i]);
+                    } catch (e) {}
+                }
+                var titleTxt = (headerBar.querySelector('h2') && headerBar.querySelector('h2').textContent.trim()) || 'TERMO-CP — Relatório Final';
+                var tsTxt = (reportModal.querySelector('#reportTimestamp') && reportModal.querySelector('#reportTimestamp').textContent.trim()) || new Date().toLocaleString();
+                var win = window.open('', '_blank', 'width=1050,height=820');
+                if (!win) { window.print(); return; }
+                win.document.open();
+                win.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><title>' + titleTxt + '</title>'
+                    + '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">'
+                    + '<style>'
+                    + '@page{size:A4;margin:12mm;}*{box-sizing:border-box;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;}'
+                    + 'body{font-family:"Segoe UI",Arial,sans-serif;color:#1e293b;margin:0;font-size:11px;line-height:1.45;background:#fff;}'
+                    + '.hdr{background:linear-gradient(135deg,#1b3668,#0d6ab0);color:#fff;padding:14px 20px;border-radius:10px;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center;}'
+                    + '.hdr h1{margin:0;font-size:15px;}.hdr .ts{font-size:10px;opacity:.9;text-align:right;}'
+                    + '.report-section{border:1px solid #cbd5e1;border-radius:10px;padding:12px 15px;margin-bottom:12px;break-inside:avoid;page-break-inside:avoid;}'
+                    + '.report-section-title{font-weight:700;color:#1b3668;font-size:12.5px;border-bottom:1px solid #e2e8f0;padding-bottom:6px;margin-bottom:10px;}'
+                    + '#reportMetrics{display:flex;flex-wrap:wrap;gap:8px;}'
+                    + '.report-metric-card{flex:1;min-width:110px;border:1px solid #e2e8f0;border-radius:8px;padding:8px 10px;background:#f8fafc;text-align:center;}'
+                    + '#reportStatesGrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}'
+                    + '.report-state-box{border:1px solid #dbe7f5;border-radius:8px;padding:10px;background:#f8fbff;}'
+                    + 'table{width:100%;border-collapse:collapse;font-size:10.5px;}th{background:#eff6ff;color:#1b3668;padding:6px 8px;text-align:left;border-bottom:1px solid #cbdcf0;}td{padding:5px 8px;border-bottom:1px solid #f1f5f9;}'
+                    + '.report-cylinder-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;text-align:center;}'
+                    + '.report-cylinder-grid img{max-width:100%;max-height:220px;object-fit:contain;border-radius:8px;}'
+                    + '.report-diagram-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}'
+                    + '.report-diagram-item{border:1px solid #e2e8f0;border-radius:8px;padding:8px;break-inside:avoid;page-break-inside:avoid;}'
+                    + '.report-diagram-label{font-weight:700;color:#1b3668;font-size:10.5px;margin-bottom:6px;}'
+                    + '.cycle-balance-box{width:100%;margin-top:8px;border:1px solid #cbdcf0;border-radius:8px;padding:10px;background:#f0f9ff;}'
+                    + '.cycle-balance-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:6px;}'
+                    + '.cycle-balance-item{background:#fff;border:1px solid #bae6fd;border-radius:6px;padding:6px 8px;}'
+                    + '</style></head><body>'
+                    + '<div class="hdr"><h1>' + titleTxt + '</h1><div class="ts">TERMO-CP<br>' + tsTxt + '</div></div>'
+                    + clone.innerHTML
+                    + '<script>window.onload=function(){setTimeout(function(){window.focus();window.print();},400);};<\/script></body></html>');
+                win.document.close();
+            });
+
+            if (closeEl) {
+                rightBox.insertBefore(btnCsv, closeEl);
+                rightBox.insertBefore(btnPdf, closeEl);
+            } else {
+                rightBox.appendChild(btnCsv);
+                rightBox.appendChild(btnPdf);
+            }
+        }
+
+        renderReportExtras();
+        document.addEventListener('languageChanged', function () {
+            setTimeout(renderReportExtras, 80);
+        });
+    }
+
+    // -------------------------------------------------------------------------
+    // 3. HISTORY MODAL ENHANCER (#historyModal) — Search, Count Badge, CSV & Compare PDF
+    // -------------------------------------------------------------------------
+    var historyModal = document.getElementById('historyModal');
+    if (historyModal) {
+        var hToolbar = historyModal.querySelector('#historyToolbar');
+        var hList = historyModal.querySelector('#historyList');
+        var hCompare = historyModal.querySelector('#historyCompare');
+
+        function applyHistoryFilter() {
+            var inp = historyModal.querySelector('.history-search-input');
+            var q = inp ? inp.value.trim().toLowerCase() : '';
+            if (!hList) return;
+            var items = hList.querySelectorAll('.history-item, .history-card, [data-calc-id]');
+            var visible = 0;
+            items.forEach(function (it) {
+                var match = !q || (it.textContent || '').toLowerCase().indexOf(q) !== -1;
+                it.style.display = match ? '' : 'none';
+                if (match) visible++;
+            });
+            var badge = historyModal.querySelector('.history-count-badge');
+            if (badge) {
+                badge.textContent = visible + ' ' + getDict().savedItems;
+            }
+        }
+
+        function renderHistoryExtras() {
+            var dict = getDict();
+            if (!hToolbar) return;
+
+            var inp = hToolbar.querySelector('.history-search-input');
+            if (!inp) {
+                inp = document.createElement('input');
+                inp.type = 'search';
+                inp.className = 'history-search-input';
+                inp.addEventListener('input', applyHistoryFilter);
+                hToolbar.insertBefore(inp, hToolbar.firstChild);
+            }
+            inp.placeholder = dict.searchPh;
+
+            var badge = hToolbar.querySelector('.history-count-badge');
+            if (!badge) {
+                badge = document.createElement('span');
+                badge.className = 'history-count-badge';
+                hToolbar.appendChild(badge);
+            }
+
+            var oldCsv = hToolbar.querySelector('.history-csv-btn');
+            if (oldCsv) oldCsv.remove();
+            var btnCsv = document.createElement('button');
+            btnCsv.type = 'button';
+            btnCsv.className = 'modal-mini-btn btn-csv-green history-csv-btn';
+            btnCsv.innerHTML = '<i class="fas fa-file-csv"></i> ' + dict.dlCsv;
+            btnCsv.addEventListener('click', function () {
+                var raw = localStorage.getItem('thermoCalcHistory_v1');
+                var arr = [];
+                try { arr = JSON.parse(raw || '[]'); } catch (e) {}
+                var rows = [['Name', 'Substance', 'Process', 'Date', 'Q (kJ)', 'W (kJ)', 'Sger (kJ/K)']];
+                arr.forEach(function (it) {
+                    rows.push([
+                        it.name || it.label || '',
+                        it.substance || '',
+                        it.process || it.type || '',
+                        it.timestamp || it.date || '',
+                        it.Q !== undefined ? it.Q : '',
+                        it.W !== undefined ? it.W : '',
+                        it.Sger !== undefined ? it.Sger : ''
+                    ]);
+                });
+                downloadCsv('TERMO-CP_Historico.csv', rows);
+            });
+            hToolbar.appendChild(btnCsv);
+
+            applyHistoryFilter();
+        }
+
+        // Observe historyList & historyCompare mutations to update count badge and add Compare PDF button
+        if (hList) {
+            new MutationObserver(function () {
+                applyHistoryFilter();
+            }).observe(hList, { childList: true, subtree: true });
+        }
+        if (hCompare) {
+            new MutationObserver(function () {
+                if (!hCompare.querySelector('table')) return;
+                if (hCompare.querySelector('.compare-pdf-btn')) return;
+                var dict = getDict();
+                var wrap = document.createElement('div');
+                wrap.style.cssText = 'display:flex;justify-content:flex-end;margin-top:12px;';
+                var btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'modal-mini-btn btn-pdf-red compare-pdf-btn';
+                btn.innerHTML = '<i class="fas fa-file-pdf"></i> ' + dict.exportCmpPdf;
+                btn.addEventListener('click', function () {
+                    var tbl = hCompare.querySelector('table');
+                    if (!tbl) return;
+                    var win = window.open('', '_blank', 'width=1000,height=700');
+                    if (!win) { window.print(); return; }
+                    win.document.open();
+                    win.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><title>TERMO-CP</title>'
+                        + '<style>@page{size:A4 landscape;margin:14mm;}body{font-family:"Segoe UI",Arial,sans-serif;color:#1e293b;font-size:11px;}'
+                        + 'h2{color:#1b3668;margin-top:0;}table{width:100%;border-collapse:collapse;}'
+                        + 'th{background:#eff6ff;color:#1b3668;padding:7px 9px;border:1px solid #cbdcf0;text-align:left;}'
+                        + 'td{padding:6px 9px;border:1px solid #e2e8f0;}</style></head><body>'
+                        + '<h2>TERMO-CP — ' + dict.exportCmpPdf + ' (' + new Date().toLocaleDateString() + ')</h2>'
+                        + tbl.outerHTML
+                        + '<script>window.onload=function(){setTimeout(function(){window.focus();window.print();},300);};<\/script></body></html>');
+                    win.document.close();
+                });
+                wrap.appendChild(btn);
+                hCompare.appendChild(wrap);
+            }).observe(hCompare, { childList: true });
+        }
+
+        renderHistoryExtras();
+        document.addEventListener('languageChanged', function () {
+            setTimeout(renderHistoryExtras, 80);
+        });
+    }
+});
