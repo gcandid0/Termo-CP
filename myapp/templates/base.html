@@ -19,13 +19,13 @@
     <header>
         <h1>TERMO-CP</h1>
         <nav>
-            <a href="/" class="{% if request.path == '/' %}active{% endif %} lang-text" data-pt-br="Início" data-en="Home" data-es="Inicio">Início</a>
+            <a href="/" class="{% if request.path == '/' %}active{% endif %} lang-text" data-pt-br="Início" data-en="Home" data-es="Inicio" data-fr="Accueil">Início</a>
 
-            <a href="{% url 'estado' %}" class="{% if '/estado' in request.path or 'gasideal1' in request.path or 'gasideal2' in request.path or 'gasideal3' in request.path or 'gasideal4' in request.path or 'gasideal-cilindro' in request.path or 'massa/' in request.path and 'estado' in request.path or 'massa/gas_' in request.path and 'cilindro' in request.path or 'massa/gas_prop' in request.path %}active{% endif %} lang-text" data-pt-br="Estados" data-en="States" data-es="Estados">Estados</a>
+            <a href="{% url 'estado' %}" class="{% if '/estado' in request.path or 'gasideal1' in request.path or 'gasideal2' in request.path or 'gasideal3' in request.path or 'gasideal4' in request.path or 'gasideal-cilindro' in request.path or 'massa/' in request.path and 'estado' in request.path or 'massa/gas_' in request.path and 'cilindro' in request.path or 'massa/gas_prop' in request.path %}active{% endif %} lang-text" data-pt-br="Estados" data-en="States" data-es="Estados" data-fr="États">Estados</a>
 
-            <a href="{% url 'processo' %}" class="{% if '/process' in request.path or 'pcte' in request.path or 'vcte' in request.path or 'scte' in request.path or 'tcte' in request.path or 'poli' in request.path or 'massa/' in request.path and 'estado' not in request.path and 'cilindro' not in request.path and 'gas_prop' not in request.path %}active{% endif %} lang-text" data-pt-br="Processos" data-en="Processes" data-es="Procesos">Processos</a>
+            <a href="{% url 'processo' %}" class="{% if '/process' in request.path or 'pcte' in request.path or 'vcte' in request.path or 'scte' in request.path or 'tcte' in request.path or 'poli' in request.path or 'massa/' in request.path and 'estado' not in request.path and 'cilindro' not in request.path and 'gas_prop' not in request.path %}active{% endif %} lang-text" data-pt-br="Processos" data-en="Processes" data-es="Procesos" data-fr="Processus">Processos</a>
 
-            <a href="{% url 'contato' %}" class="{% if '/contato' in request.path %}active{% endif %} lang-text" data-pt-br="Contato" data-en="Contact" data-es="Contacto">Contato</a>
+            <a href="{% url 'contato' %}" class="{% if '/contato' in request.path %}active{% endif %} lang-text" data-pt-br="Contato" data-en="Contact" data-es="Contacto" data-fr="Contact">Contato</a>
         </nav>
 
         <div class="header-actions">
@@ -40,6 +40,9 @@
                 </div>
                 <div class="lang-option" onclick="changeLanguage(2, 'es')" title="Español">
                     <span class="fi fi-es flag-circle"></span>
+                </div>
+                <div class="lang-option" onclick="changeLanguage(3, 'fr')" title="Français">
+                    <span class="fi fi-fr flag-circle"></span>
                 </div>
             </div>
 
@@ -61,7 +64,7 @@
                 <h3 id="page-help-modal-title">
                     <i class="fas fa-circle-question"></i>
                     {% block help_title %}
-                    <span class="lang-text" data-pt-br="Ajuda" data-en="Help" data-es="Ayuda">Ajuda</span>
+                    <span class="lang-text" data-pt-br="Ajuda" data-en="Help" data-es="Ayuda" data-fr="Aide">Ajuda</span>
                     {% endblock %}
                 </h3>
                 <button type="button" id="page-help-close" aria-label="Fechar">
@@ -73,7 +76,7 @@
                 <p class="lang-text"
                    data-pt-br="Ainda não há uma ajuda específica para esta página."
                    data-en="There is no specific help for this page yet."
-                   data-es="Aún não hay una ayuda específica para esta página.">
+                   data-es="Aún no hay una ayuda específica para esta página." data-fr="Il n'y a pas encore d'aide spécifique pour cette page.">
                     Ainda não há uma ajuda específica para esta página.
                 </p>
                 {% endblock %}
@@ -85,7 +88,7 @@
                 </button>
                 <a href="{% url 'ajuda' %}">
                     <i class="fas fa-book"></i>
-                    <span class="lang-text" data-pt-br="Ver tutorial completo" data-en="View full tutorial" data-es="Ver tutorial completo">Ver tutorial completo</span>
+                    <span class="lang-text" data-pt-br="Ver tutorial completo" data-en="View full tutorial" data-es="Ver tutorial completo" data-fr="Voir le tutoriel complet">Ver tutorial completo</span>
                 </a>
             </div>
         </div>
@@ -109,10 +112,10 @@
                 <span class="tour-step-count" id="tour-step-count"></span>
                 <div class="tour-nav-buttons">
                     <button type="button" id="tour-prev-btn">
-                        <span class="lang-text" data-pt-br="Anterior" data-en="Previous" data-es="Anterior">Anterior</span>
+                        <span class="lang-text" data-pt-br="Anterior" data-en="Previous" data-es="Anterior" data-fr="Précédent">Anterior</span>
                     </button>
                     <button type="button" id="tour-next-btn" class="tour-primary">
-                        <span class="lang-text" data-pt-br="Próximo" data-en="Next" data-es="Siguiente">Próximo</span>
+                        <span class="lang-text" data-pt-br="Próximo" data-en="Next" data-es="Siguiente" data-fr="Suivant">Próximo</span>
                     </button>
                 </div>
             </div>
@@ -121,12 +124,12 @@
 
     <footer>
         <div class="footer-left">
-            <span class="lang-text" data-pt-br="TERMO-CP &ndash; Responsáveis: Gabriel Candido e Fábio Fonseca" data-en="TERMO-CP &ndash; Creators: Gabriel Candido and Fábio Fonseca" data-es="TERMO-CP &ndash; Responsables: Gabriel Candido y Fábio Fonseca">
+            <span class="lang-text" data-pt-br="TERMO-CP &ndash; Responsáveis: Gabriel Candido e Fábio Fonseca" data-en="TERMO-CP &ndash; Creators: Gabriel Candido and Fábio Fonseca" data-es="TERMO-CP &ndash; Responsables: Gabriel Candido y Fábio Fonseca" data-fr="TERMO-CP &ndash; Responsables : Gabriel Candido et Fábio Fonseca">
                 TERMO-CP &ndash; Responsáveis: Gabriel Candido e Fábio Fonseca
             </span>
         </div>
         <div class="footer-center">
-            <span class="lang-text" data-pt-br="Última atualização: 23/11/2026" data-en="Last updated: 11/23/2026" data-es="Última actualización: 23/11/2026">
+            <span class="lang-text" data-pt-br="Última atualização: 23/11/2026" data-en="Last updated: 11/23/2026" data-es="Última actualización: 23/11/2026" data-fr="Dernière mise à jour : 23/11/2026">
                 Última atualização: 23/11/2026
             </span>
         </div>
@@ -135,7 +138,7 @@
         </div>
     </footer>
 
-    <script src="{% static 'myapp/js/base_ui.js' %}?v=4"></script>
+    <script src="{% static 'myapp/js/base_ui.js' %}?v=5"></script>
     {% block extra_js %}{% endblock %}
 </body>
 </html>

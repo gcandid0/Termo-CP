@@ -258,7 +258,7 @@
     <div class="content-wrapper">
         <div class="hero-section">
             <i class="fas fa-microscope hero-icon"></i>
-            <h2 class="lang-text" data-pt-br="Explore a Termodinâmica" data-en="Explore Thermodynamics" data-es="Explora la Termodinámica">Explore a Termodinâmica</h2>
+            <h2 class="lang-text" data-pt-br="Explore a Termodinâmica" data-en="Explore Thermodynamics" data-es="Explora la Termodinámica" data-fr="Explorez la Thermodynamique">Explore a Termodinâmica</h2>
             <p class="lang-text"
                data-pt-br="A Termodinâmica estuda as trocas de energia entre um sistema e sua vizinhança, sendo fundamental para a compreensão de diversos fenômenos físicos e aplicações de engenharia."
                data-en="Thermodynamics studies energy exchanges between a system and its surroundings, being fundamental for understanding various physical phenomena and engineering applications."
@@ -286,25 +286,25 @@
             </div>
 
             <div id="grid-estados" class="substance-grid">
-                <a href="{% url 'ask_mass' flow_key='gas_cilindro' %}" class="sub-card bg-gas"><i class="fas fa-wind"></i> <span class="lang-text" data-pt-br="Gás Ideal" data-en="Ideal Gas" data-es="Gas Ideal">Gás Ideal</span></a>
-                <a href="{% url 'ask_mass' flow_key='agua_estado' %}" class="sub-card bg-water"><i class="fas fa-tint"></i> <span class="lang-text" data-pt-br="Água" data-en="Water" data-es="Agua">Água</span></a>
-                <a href="{% url 'ask_mass' flow_key='amonia_estado' %}" class="sub-card bg-ammonia"><i class="fas fa-flask"></i> <span class="lang-text" data-pt-br="Amônia" data-en="Ammonia" data-es="Amoníaco">Amônia</span></a>
+                <a href="{% url 'ask_mass' flow_key='gas_cilindro' %}" class="sub-card bg-gas"><i class="fas fa-wind"></i> <span class="lang-text" data-pt-br="Gás Ideal" data-en="Ideal Gas" data-es="Gas Ideal" data-fr="Gaz Idéal">Gás Ideal</span></a>
+                <a href="{% url 'ask_mass' flow_key='agua_estado' %}" class="sub-card bg-water"><i class="fas fa-tint"></i> <span class="lang-text" data-pt-br="Água" data-en="Water" data-es="Agua" data-fr="Eau">Água</span></a>
+                <a href="{% url 'ask_mass' flow_key='amonia_estado' %}" class="sub-card bg-ammonia"><i class="fas fa-flask"></i> <span class="lang-text" data-pt-br="Amônia" data-en="Ammonia" data-es="Amoníaco" data-fr="Ammoniac">Amônia</span></a>
                 <a href="{% url 'ask_mass' flow_key='co2_estado' %}" class="sub-card bg-co2"><i class="fas fa-cloud"></i> CO₂</a>
                 <a href="{% url 'ask_mass' flow_key='r410a_estado' %}" class="sub-card bg-r410a"><i class="fas fa-snowflake"></i> R-410a</a>
                 <a href="{% url 'ask_mass' flow_key='r134a_estado' %}" class="sub-card bg-r134a"><i class="fas fa-snowflake"></i> R-134a</a>
-                <a href="{% url 'ask_mass' flow_key='nitrogenio_estado' %}" class="sub-card bg-nitrogen"><i class="fas fa-burn"></i> <span class="lang-text" data-pt-br="Nitrogênio" data-en="Nitrogen" data-es="Nitrógeno">Nitrogênio</span></a>
-                <a href="{% url 'ask_mass' flow_key='metano_estado' %}" class="sub-card bg-methane"><i class="fas fa-fire"></i> <span class="lang-text" data-pt-br="Metano" data-en="Methane" data-es="Metano">Metano</span></a>
+                <a href="{% url 'ask_mass' flow_key='nitrogenio_estado' %}" class="sub-card bg-nitrogen"><i class="fas fa-burn"></i> <span class="lang-text" data-pt-br="Nitrogênio" data-en="Nitrogen" data-es="Nitrógeno" data-fr="Azote">Nitrogênio</span></a>
+                <a href="{% url 'ask_mass' flow_key='metano_estado' %}" class="sub-card bg-methane"><i class="fas fa-fire"></i> <span class="lang-text" data-pt-br="Metano" data-en="Methane" data-es="Metano" data-fr="Méthane">Metano</span></a>
             </div>
 
             <div id="grid-processos" class="substance-grid hidden">
-                <a href="{% url 'processos2' %}" class="sub-card bg-gas"><i class="fas fa-wind"></i> <span class="lang-text" data-pt-br="Gás Ideal" data-en="Ideal Gas" data-es="Gas Ideal">Gás Ideal</span></a>
-                <a href="{% url 'processos' %}" class="sub-card bg-water"><i class="fas fa-tint"></i> <span class="lang-text" data-pt-br="Água" data-en="Water" data-es="Agua">Água</span></a>
-                <a href="{% url 'processos3' %}" class="sub-card bg-ammonia"><i class="fas fa-flask"></i> <span class="lang-text" data-pt-br="Amônia" data-en="Ammonia" data-es="Amoníaco">Amônia</span></a>
+                <a href="{% url 'processos2' %}" class="sub-card bg-gas"><i class="fas fa-wind"></i> <span class="lang-text" data-pt-br="Gás Ideal" data-en="Ideal Gas" data-es="Gas Ideal" data-fr="Gaz Idéal">Gás Ideal</span></a>
+                <a href="{% url 'processos' %}" class="sub-card bg-water"><i class="fas fa-tint"></i> <span class="lang-text" data-pt-br="Água" data-en="Water" data-es="Agua" data-fr="Eau">Água</span></a>
+                <a href="{% url 'processos3' %}" class="sub-card bg-ammonia"><i class="fas fa-flask"></i> <span class="lang-text" data-pt-br="Amônia" data-en="Ammonia" data-es="Amoníaco" data-fr="Ammoniac">Amônia</span></a>
                 <a href="{% url 'processos4' %}" class="sub-card bg-co2"><i class="fas fa-cloud"></i> CO₂</a>
                 <a href="{% url 'processos5' %}" class="sub-card bg-r410a"><i class="fas fa-snowflake"></i> R-410a</a>
                 <a href="{% url 'processos6' %}" class="sub-card bg-r134a"><i class="fas fa-snowflake"></i> R-134a</a>
-                <a href="{% url 'processos7' %}" class="sub-card bg-nitrogen"><i class="fas fa-burn"></i> <span class="lang-text" data-pt-br="Nitrogênio" data-en="Nitrogen" data-es="Nitrógeno">Nitrogênio</span></a>
-                <a href="{% url 'processos8' %}" class="sub-card bg-methane"><i class="fas fa-fire"></i> <span class="lang-text" data-pt-br="Metano" data-en="Methane" data-es="Metano">Metano</span></a>
+                <a href="{% url 'processos7' %}" class="sub-card bg-nitrogen"><i class="fas fa-burn"></i> <span class="lang-text" data-pt-br="Nitrogênio" data-en="Nitrogen" data-es="Nitrógeno" data-fr="Azote">Nitrogênio</span></a>
+                <a href="{% url 'processos8' %}" class="sub-card bg-methane"><i class="fas fa-fire"></i> <span class="lang-text" data-pt-br="Metano" data-en="Methane" data-es="Metano" data-fr="Méthane">Metano</span></a>
             </div>
         </div>
     </div>

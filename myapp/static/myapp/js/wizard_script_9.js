@@ -14,7 +14,8 @@ function updateLabel() {
         let phStr = {
             'pt-br': 'Digite o valor',
             'en': 'Enter the value',
-            'es': 'Introduzca el valor'
+            'es': 'Introduzca el valor',
+            'fr': 'Entrez la valeur'
         };
 
         // Lógica de Label e Limites, injetando as classes .lang-text para funcionar com o seu base.html
@@ -28,7 +29,7 @@ function updateLabel() {
 
             numberInput.setAttribute('min', '-50');
             numberInput.setAttribute('max', '320');
-            numberInput.placeholder = phStr[currentLang];
+            numberInput.placeholder = (phStr[currentLang] || phStr['en'] || phStr['pt-br']);
 
         } else if (selectedValue == '1') {
             label.innerHTML = '<i class="fas fa-tachometer-alt"></i> ' +
@@ -40,7 +41,7 @@ function updateLabel() {
 
             numberInput.setAttribute('min', '400');
             numberInput.setAttribute('max', '10000');
-            numberInput.placeholder = phStr[currentLang];
+            numberInput.placeholder = (phStr[currentLang] || phStr['en'] || phStr['pt-br']);
         }
 
         inputField.style.display = 'block';
@@ -50,7 +51,7 @@ function updateLabel() {
              // Reutiliza os nós do lang-text e traduz sem mover o slider (pq ja está no lugar)
              const elements = document.querySelectorAll('.lang-text');
              elements.forEach(el => {
-                 const newText = el.getAttribute('data-' + currentLang);
+                 const newText = el.getAttribute('data-' + currentLang) || (currentLang === 'fr' ? el.getAttribute('data-en') : null);
                  if (newText) el.textContent = newText;
              });
         }

@@ -80,22 +80,25 @@ def contato_view(request):
     if request.method == 'POST':
         nome = request.POST.get('nome', '').strip()
         email = request.POST.get('email', '').strip()
+        assunto_tipo = request.POST.get('assunto', '').strip()
         mensagem = request.POST.get('mensagem', '').strip()
 
         if not nome or not email or not mensagem:
             messages.error(request, 'Por favor, preencha todos os campos.')
             return redirect('contato')
 
+        mensagem_completa = f'[{assunto_tipo}] {mensagem}' if assunto_tipo else mensagem
+
         from .models import MensagemContato
         registro = MensagemContato.objects.create(
             nome=nome,
             email=email,
-            mensagem=mensagem,
+            mensagem=mensagem_completa,
             enviado_por_email=False,
         )
 
-        assunto = f'[TERMO-CP] Nova mensagem de {nome}'
-        corpo = f'Nome: {nome}\nE-mail: {email}\n\nMensagem:\n{mensagem}'
+        assunto = f'[TERMO-CP] {assunto_tipo + " - " if assunto_tipo else ""}Nova mensagem de {nome}'
+        corpo = f'Nome: {nome}\nE-mail: {email}\nAssunto: {assunto_tipo or "Geral"}\n\nMensagem:\n{mensagem}'
 
         if settings.EMAIL_HOST_USER and settings.CONTACT_EMAIL_DESTINATION:
             try:

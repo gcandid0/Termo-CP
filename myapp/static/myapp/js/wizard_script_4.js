@@ -25,15 +25,16 @@ function updateLabel() {
         var dict = {
             'pt-br': { label: 'Digite o valor de', placeholder: 'Digite o valor' },
             'en': { label: 'Enter the value for', placeholder: 'Enter the value' },
-            'es': { label: 'Ingrese el valor de', placeholder: 'Ingrese el valor' }
+            'es': { label: 'Ingrese el valor de', placeholder: 'Ingrese el valor' },
+            'fr': { label: 'Entrez la valeur de', placeholder: 'Entrez la valeur' }
         };
 
         if (info[selectedValue]) {
             // Atualiza o texto mesclando o dicionário de idioma com o nome da constante
-            label.innerHTML = `<i class="${info[selectedValue].icon}"></i> ${dict[lang].label} ${info[selectedValue].text}`;
+            label.innerHTML = `<i class="${info[selectedValue].icon}"></i> ${(dict[lang] || dict['en'] || dict['pt-br']).label} ${info[selectedValue].text}`;
             numberInput.setAttribute('min', info[selectedValue].min);
             numberInput.setAttribute('max', info[selectedValue].max);
-            numberInput.placeholder = dict[lang].placeholder;
+            numberInput.placeholder = (dict[lang] || dict['en'] || dict['pt-br']).placeholder;
             inputField.style.display = 'block';
         }
     }

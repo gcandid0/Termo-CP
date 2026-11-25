@@ -23,6 +23,7 @@ try {
             let index = 0;
             if (savedLang === 'en') index = 1;
             if (savedLang === 'es') index = 2;
+            if (savedLang === 'fr') index = 3;
 
             // Aplica a tradução e posiciona a bolinha imediatamente
             changeLanguage(index, savedLang);
@@ -44,7 +45,7 @@ try {
 
             // 4. Para cada elemento, pega o texto correspondente ao idioma e substitui
             elements.forEach(el => {
-                const newText = el.getAttribute('data-' + langCode);
+                const newText = el.getAttribute('data-' + langCode) || (langCode === 'fr' ? el.getAttribute('data-en') : null);
                 if (newText) {
                     el.textContent = newText;
                 }
@@ -57,7 +58,7 @@ try {
             // que substitui o conteúdo via innerHTML em vez de texto puro
             const htmlElements = document.querySelectorAll('.lang-html');
             htmlElements.forEach(el => {
-                const newHtml = el.getAttribute('data-' + langCode);
+                const newHtml = el.getAttribute('data-' + langCode) || (langCode === 'fr' ? el.getAttribute('data-en') : null);
                 if (newHtml) {
                     el.innerHTML = newHtml;
                 }
@@ -281,7 +282,7 @@ try {
                 var stepDesc = getDescription(target, steps[currentStep].label);
                 if (steps[currentStep].isResult && steps[currentStep].value) {
                     var savedLangVal = localStorage.getItem('preferredLang') || 'pt-br';
-                    var calcValueLabel = { 'pt-br': 'Valor calculado', 'en': 'Calculated value', 'es': 'Valor calculado' };
+                    var calcValueLabel = { 'pt-br': 'Valor calculado', 'en': 'Calculated value', 'es': 'Valor calculado', 'fr': 'Valeur calculée' };
                     var calcValueText = calcValueLabel[savedLangVal] || calcValueLabel['pt-br'];
                     stepDesc = (stepDesc ? stepDesc + ' ' : '') + '\u2192 ' + calcValueText + ': ' + steps[currentStep].value;
                 }
@@ -294,10 +295,12 @@ try {
                     nextLabelSpan.setAttribute('data-pt-br', 'Concluir');
                     nextLabelSpan.setAttribute('data-en', 'Finish');
                     nextLabelSpan.setAttribute('data-es', 'Finalizar');
+                    nextLabelSpan.setAttribute('data-fr', 'Terminer');
                 } else {
                     nextLabelSpan.setAttribute('data-pt-br', 'Próximo');
                     nextLabelSpan.setAttribute('data-en', 'Next');
                     nextLabelSpan.setAttribute('data-es', 'Siguiente');
+                    nextLabelSpan.setAttribute('data-fr', 'Suivant');
                 }
                 var savedLang = localStorage.getItem('preferredLang') || 'pt-br';
                 var newText = nextLabelSpan.getAttribute('data-' + savedLang);
@@ -449,14 +452,17 @@ document.addEventListener('DOMContentLoaded', function () {
         if (hasMin && hasMax) {
             if (lang === 'en') msg = 'Valid range: ' + minStr + ' to ' + maxStr + unit;
             else if (lang === 'es') msg = 'Rango válido: ' + minStr + ' a ' + maxStr + unit;
+            else if (lang === 'fr') msg = 'Plage valide : ' + minStr + ' à ' + maxStr + unit;
             else msg = 'Faixa válida: ' + minStr + ' a ' + maxStr + unit;
         } else if (hasMin) {
             if (lang === 'en') msg = 'Minimum value: ' + minStr + unit;
             else if (lang === 'es') msg = 'Valor mínimo: ' + minStr + unit;
+            else if (lang === 'fr') msg = 'Valeur minimale : ' + minStr + unit;
             else msg = 'Valor mínimo: ' + minStr + unit;
         } else if (hasMax) {
             if (lang === 'en') msg = 'Maximum value: ' + maxStr + unit;
             else if (lang === 'es') msg = 'Valor máximo: ' + maxStr + unit;
+            else if (lang === 'fr') msg = 'Valeur maximale : ' + maxStr + unit;
             else msg = 'Valor máximo: ' + maxStr + unit;
         }
 

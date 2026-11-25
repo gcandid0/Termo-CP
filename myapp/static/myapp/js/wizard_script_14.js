@@ -19,11 +19,13 @@ function updateLabel() {
             '0': { icon: 'fas fa-temperature-high', min: -250, max: 3000,
                    'pt-br': 'Digite o valor da Temperatura (°C):',
                    'en': 'Enter the Temperature value (°C):',
-                   'es': 'Ingrese el valor de la Temperatura (°C):' },
+                   'es': 'Ingrese el valor de la Temperatura (°C):',
+                   'fr': 'Entrez la valeur de la Température (°C) :' },
             '1': { icon: 'fas fa-tachometer-alt', min: 0.1, max: 50000,
                    'pt-br': 'Digite o valor da Pressão (kPa):',
                    'en': 'Enter the Pressure value (kPa):',
-                   'es': 'Ingrese el valor de la Presión (kPa):' },
+                   'es': 'Ingrese el valor de la Presión (kPa):',
+                   'fr': 'Entrez la valeur de la Pression (kPa) :' },
             '2': { icon: 'fas fa-cube', min: 0.0001, max: 1000,
                    'pt-br': 'Digite o valor do Volume Específico (m³/kg):',
                    'en': 'Enter the Specific Volume value (m³/kg):',
@@ -69,13 +71,14 @@ function updateLabel() {
         var placeholders = {
             'pt-br': 'Digite o valor',
             'en': 'Enter the value',
-            'es': 'Ingrese el valor'
+            'es': 'Ingrese el valor',
+            'fr': 'Entrez la valeur'
         };
 
         var propInfo = dict[selectedValue];
 
         if (propInfo) {
-            labelElement.innerHTML = `<i class="${propInfo.icon}"></i> ${propInfo[lang]}`;
+            labelElement.innerHTML = `<i class="${propInfo.icon}"></i> ${(propInfo[lang] || propInfo['en'] || propInfo['pt-br'])}`;
             numberInput.setAttribute('min', propInfo.min);
             numberInput.setAttribute('max', propInfo.max);
         } else {
@@ -83,14 +86,15 @@ function updateLabel() {
             var fallback = {
                 'pt-br': 'Digite o valor da propriedade selecionada:',
                 'en': 'Enter the value of the selected property:',
-                'es': 'Ingrese el valor de la propiedad seleccionada:'
+                'es': 'Ingrese el valor de la propiedad seleccionada:',
+                'fr': 'Entrez la valeur de la propriété sélectionnée :'
             };
-            labelElement.innerHTML = `<i class="fas fa-pen"></i> ${fallback[lang]}`;
+            labelElement.innerHTML = `<i class="fas fa-pen"></i> ${(fallback[lang] || fallback['en'] || fallback['pt-br'])}`;
             numberInput.removeAttribute('min');
             numberInput.removeAttribute('max');
         }
 
-        numberInput.placeholder = placeholders[lang];
+        numberInput.placeholder = (placeholders[lang] || placeholders['en'] || placeholders['pt-br']);
         inputField.style.display = 'block';
     }
 

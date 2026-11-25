@@ -11,10 +11,10 @@
         flex-direction: row;
         justify-content: center;
         align-items: stretch;
-        padding: 20px 40px;
-        gap: 30px;
+        padding: 26px 40px 34px;
+        gap: 28px;
         width: 100%;
-        max-width: 1500px;
+        max-width: 1440px;
         margin: 0 auto;
         min-height: 0;
     }
@@ -22,43 +22,50 @@
     /* Containers (Cartões) */
     .team-container, .feedback-container {
         flex: 1;
-        background: var(--card-bg);
-        border-radius: 10px;
-        box-shadow: var(--shadow);
-        padding: 30px;
+        background: var(--card-bg, #ffffff);
+        border-radius: 16px;
+        border: 1px solid rgba(32, 55, 107, 0.08);
+        box-shadow: 0 10px 28px rgba(15, 23, 42, 0.07), 0 2px 6px rgba(15, 23, 42, 0.04);
+        padding: 30px 32px;
         display: flex;
         flex-direction: column;
-        overflow: hidden;
+        overflow-y: auto;
     }
 
-    h2 {
+    .team-container h2, .feedback-container h2 {
         color: var(--primary-color);
-        font-size: 1.6em;
+        font-size: 1.48em;
+        font-weight: 700;
+        letter-spacing: -0.015em;
         margin-top: 0;
         margin-bottom: 20px;
-        border-bottom: 2px solid #eee;
-        padding-bottom: 10px;
+        border-bottom: 1px solid #edf2f7;
+        padding-bottom: 13px;
         display: flex;
         align-items: center;
         gap: 10px;
         flex-shrink: 0;
     }
 
-    /* --- GRID DE EQUIPE  --- */
+    .team-container h2 i, .feedback-container h2 i {
+        color: var(--secondary-color);
+    }
+
+    /* --- GRID DE EQUIPE --- */
     .team-grid {
         display: flex;
         flex-direction: row;
-        gap: 15px;
+        gap: 18px;
         flex: 1;
     }
 
     .profile-card {
-        background-color: #f8fbff;
-        border: 1px solid #e0e0e0;
-        border-radius: 8px;
-        padding: 15px;
+        background: linear-gradient(180deg, #f8fbff 0%, #f1f6fd 100%);
+        border: 1px solid #e2ecf7;
+        border-radius: 14px;
+        padding: 22px 18px;
         text-align: center;
-        transition: var(--hover-transition);
+        transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease, background 0.2s ease;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -67,148 +74,236 @@
     }
 
     .profile-card:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        transform: translateY(-3px);
+        box-shadow: 0 10px 22px rgba(13, 106, 176, 0.1);
         border-color: var(--secondary-color);
-        background-color: white;
+        background: #ffffff;
     }
 
     .avatar {
-        width: 60px; height: 60px;
-        background-color: var(--primary-color);
+        width: 68px;
+        height: 68px;
+        background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
         color: white;
         border-radius: 50%;
+        border: 3px solid #ffffff;
+        box-shadow: 0 6px 14px rgba(32, 55, 107, 0.22);
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 1.5em;
-        margin-bottom: 10px;
+        font-size: 1.6em;
+        margin-bottom: 14px;
         flex-shrink: 0;
     }
 
-    .profile-name { font-size: 1.1em; color: #333; margin: 0 0 5px; font-weight: bold; }
+    .profile-name {
+        font-size: 1.12em;
+        color: #162a54;
+        margin: 0 0 6px;
+        font-weight: 700;
+    }
 
     .profile-role {
-        color: var(--secondary-color);
-        font-weight: bold;
+        color: #4f6480;
+        font-weight: 600;
         font-size: 0.8em;
-        margin-bottom: 15px;
-        text-transform: uppercase;
+        line-height: 1.4;
+        margin-bottom: 16px;
     }
 
-    .social-links { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; }
+    .social-links {
+        display: flex;
+        justify-content: center;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
 
     .social-tag {
-        background-color: #eee; color: #555; padding: 5px 10px;
-        border-radius: 20px; font-size: 0.8em; font-weight: bold;
-        display: flex; align-items: center; gap: 6px;
-        text-decoration: none; transition: var(--hover-transition);
+        background-color: #ffffff;
+        color: #334155;
+        border: 1px solid #dce6f2;
+        padding: 6px 12px;
+        border-radius: 999px;
+        font-size: 0.8em;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        text-decoration: none;
+        transition: transform 0.16s ease, background-color 0.16s ease, color 0.16s ease, border-color 0.16s ease;
     }
 
-    .social-tag i { color: var(--primary-color); }
+    .social-tag i { color: var(--secondary-color); }
 
     .social-tag:hover {
         background-color: var(--primary-color);
+        border-color: var(--primary-color);
         color: white;
+        transform: translateY(-1px);
     }
     .social-tag:hover i { color: white; }
 
-    /* --- BLOCO DO PROJETO (GitHub / Licença) --- */
-    .project-links {
+    /* --- BLOCO INSTITUCIONAL & PROJETO --- */
+    .institution-banner {
         margin-top: 18px;
-        padding-top: 18px;
-        border-top: 1px dashed #e0e0e0;
+        padding: 12px 16px;
+        background: #f8fbff;
+        border: 1px solid #e2ecf7;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        color: #334155;
+        font-size: 0.86em;
+        font-weight: 600;
+        text-align: center;
+        flex-shrink: 0;
+    }
+
+    .institution-banner i {
+        color: var(--secondary-color);
+        font-size: 1.15em;
+    }
+
+    .project-links {
+        margin-top: 16px;
+        padding-top: 16px;
+        border-top: 1px solid #edf2f7;
         flex-shrink: 0;
     }
 
     .project-links-title {
-        font-size: 0.8em;
-        font-weight: bold;
-        color: #888;
+        font-size: 0.78em;
+        font-weight: 700;
+        color: #64748b;
         text-transform: uppercase;
+        letter-spacing: 0.04em;
         margin-bottom: 10px;
         text-align: center;
     }
 
-    .project-links .social-tag {
-        background-color: #f2f2f2;
-    }
-
     .project-links .social-tag.github {
-        background-color: #24292e;
+        background-color: #1e293b;
+        border-color: #1e293b;
         color: white;
     }
     .project-links .social-tag.github i { color: white; }
-    .project-links .social-tag.github:hover { background-color: #444d56; }
+    .project-links .social-tag.github:hover { background-color: #334155; border-color: #334155; }
 
     /* --- SEÇÃO DE FEEDBACK --- */
-    .form-header { margin-bottom: 15px; text-align: center; }
-    .form-header p { color: #666; font-size: 0.95em; margin: 0; }
+    .form-header {
+        margin-bottom: 16px;
+        text-align: left;
+    }
+    .form-header p {
+        color: #5b6b82;
+        font-size: 0.93em;
+        line-height: 1.5;
+        margin: 0;
+    }
 
     .form-alert {
-        padding: 10px 14px;
-        border-radius: 6px;
-        margin-bottom: 15px;
+        padding: 11px 15px;
+        border-radius: 10px;
+        margin-bottom: 16px;
         font-size: 0.9em;
-        font-weight: bold;
+        font-weight: 600;
         text-align: center;
         flex-shrink: 0;
     }
 
     .form-alert.success {
-        background-color: #d4edda;
-        color: #155724;
-        border: 1px solid #c3e6cb;
+        background-color: #ecfdf5;
+        color: #065f46;
+        border: 1px solid #a7f3d0;
     }
 
     .form-alert.error {
-        background-color: #f8d7da;
-        color: #721c24;
-        border: 1px solid #f5c6cb;
+        background-color: #fef2f2;
+        color: #991b1b;
+        border: 1px solid #fecaca;
     }
 
-    .form-group { margin-bottom: 12px; text-align: left; }
-
-    label {
-        display: block; margin-bottom: 5px;
-        font-weight: bold; color: #333; font-size: 0.9em;
+    .form-row-2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
     }
 
-    input[type="text"], input[type="email"], textarea {
-        width: 100%; padding: 10px;
-        border: 1px solid #ccc; border-radius: 6px;
-        font-size: 0.95em; font-family: inherit;
-        transition: border 0.3s ease; background-color: #f9f9f9;
+    .form-group {
+        margin-bottom: 14px;
+        text-align: left;
     }
 
-    textarea { resize: none; }
+    .feedback-container label {
+        display: block;
+        margin-bottom: 6px;
+        font-weight: 600;
+        color: #334155;
+        font-size: 0.88em;
+    }
 
-    input:focus, textarea:focus {
+    .feedback-container input[type="text"],
+    .feedback-container input[type="email"],
+    .feedback-container select,
+    .feedback-container textarea {
+        width: 100%;
+        padding: 11px 14px;
+        border: 1.5px solid #cbd5e1;
+        border-radius: 10px;
+        font-size: 0.94em;
+        font-family: inherit;
+        color: #1e293b;
+        background-color: #f8fafc;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+    }
+
+    .feedback-container textarea {
+        resize: none;
+        line-height: 1.5;
+    }
+
+    .feedback-container input:focus,
+    .feedback-container select:focus,
+    .feedback-container textarea:focus {
         border-color: var(--secondary-color);
-        outline: none; background-color: #fff;
+        outline: none;
+        background-color: #ffffff;
+        box-shadow: 0 0 0 3px rgba(13, 106, 176, 0.14);
     }
 
     .btn-submit {
-        width: 100%; padding: 12px;
-        background-color: var(--primary-color);
-        color: white; border: none; border-radius: 6px;
-        font-size: 1.05em; font-weight: bold; cursor: pointer;
-        transition: var(--hover-transition);
-        display: flex; align-items: center; justify-content: center; gap: 10px;
-        margin-top: 10px;
+        width: 100%;
+        padding: 13px 20px;
+        background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+        color: white;
+        border: none;
+        border-radius: 10px;
+        font-size: 1em;
+        font-weight: 700;
+        cursor: pointer;
+        transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        margin-top: 8px;
+        box-shadow: 0 4px 12px rgba(13, 106, 176, 0.25);
         flex-shrink: 0;
     }
 
     .btn-submit:hover {
-        background-color: var(--secondary-color);
         transform: translateY(-2px);
-        box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        box-shadow: 0 7px 18px rgba(13, 106, 176, 0.35);
+        filter: brightness(1.05);
     }
 
     /* Mobile / Telas Menores */
     @media (max-width: 992px) {
         .contact-wrapper { flex-direction: column; padding: 20px; }
         .team-grid { flex-direction: column; }
+        .form-row-2 { grid-template-columns: 1fr; gap: 0; }
     }
 </style>
 {% endblock %}
@@ -217,18 +312,10 @@
 <p class="lang-text"
    data-pt-br="Use este formulário para enviar dúvidas, sugestões ou relatar problemas encontrados no TERMO-CP. Preencha os campos solicitados e envie a mensagem; a equipe responsável entrará em contato."
    data-en="Use this form to send questions, suggestions, or report problems found in TERMO-CP. Fill in the requested fields and submit the message; the team responsible will get in touch."
-   data-es="Use este formulario para enviar dudas, sugerencias o informar problemas encontrados en TERMO-CP. Complete los campos solicitados y envíe el mensaje; el equipo responsable se pondrá en contacto.">
+   data-es="Use este formulario para enviar dudas, sugerencias o informar problemas encontrados en TERMO-CP. Complete los campos solicitados y envíe el mensaje; el equipo responsable se pondrá en contacto."
+   data-fr="Utilisez ce formulaire pour envoyer des questions, des suggestions ou signaler des problèmes rencontrés dans TERMO-CP. Remplissez les champs demandés et envoyez le message ; notre équipe vous répondra.">
     Use este formulário para enviar dúvidas, sugestões ou relatar problemas encontrados no TERMO-CP. Preencha os campos solicitados e envie a mensagem; a equipe responsável entrará em contato.
 </p>
-<div class="help-tip">
-    <i class="fas fa-lightbulb"></i>
-    <span class="lang-text"
-          data-pt-br="Dica: você também pode consultar a Central de Ajuda no menu superior para aprender a usar todas as funções do sistema."
-          data-en="Tip: you can also consult the Help Center in the top menu to learn how to use all system features."
-          data-es="Consejo: también puedes consultar el Centro de Ayuda en el menú superior para aprender a usar todas las funciones del sistema.">
-        Dica: você também pode consultar a Central de Ajuda no menu superior para aprender a usar todas as funções do sistema.
-    </span>
-</div>
 {% endblock %}
 
 {% block content %}
@@ -236,7 +323,7 @@
     <div class="team-container">
         <h2>
             <i class="fas fa-users"></i>
-            <span class="lang-text" data-pt-br="Equipe de Desenvolvimento" data-en="Development Team" data-es="Equipo de Desarrollo">Equipe de Desenvolvimento</span>
+            <span class="lang-text" data-pt-br="Equipe de Desenvolvimento" data-en="Development Team" data-es="Equipo de Desarrollo" data-fr="Équipe de Développement">Equipe de Desenvolvimento</span>
         </h2>
 
         <div class="team-grid">
@@ -245,11 +332,15 @@
                     <i class="fas fa-user-graduate"></i>
                 </div>
                 <h3 class="profile-name">Gabriel Candido</h3>
-                <div class="profile-role lang-text" data-pt-br="Discente de Engenharia Mecânica da UFR" data-en="Mechanical Engineering Student at UFR" data-es="Estudiante de Ingeniería Mecánica en la UFR">
+                <div class="profile-role lang-text"
+                     data-pt-br="Discente de Engenharia Mecânica da UFR"
+                     data-en="Mechanical Engineering Student at UFR"
+                     data-es="Estudiante de Ingeniería Mecánica en la UFR"
+                     data-fr="Étudiant en Génie Mécanique à l'UFR">
                     Discente de Engenharia Mecânica da UFR
                 </div>
                 <div class="social-links">
-                    <a href="mailto:gabrielcandidomds@gmail.com" class="social-tag"><i class="fas fa-envelope"></i> <span class="lang-text" data-pt-br="Email" data-en="Email" data-es="Correo">Email</span></a>
+                    <a href="mailto:gabrielcandidomds@gmail.com" class="social-tag"><i class="fas fa-envelope"></i> <span class="lang-text" data-pt-br="Email" data-en="Email" data-es="Correo" data-fr="E-mail">Email</span></a>
                     <a href="https://www.linkedin.com/in/gabriel-candido-235637226/" target="_blank" class="social-tag"><i class="fab fa-linkedin-in"></i> LinkedIn</a>
                     <a href="http://lattes.cnpq.br/6696786236047929" target="_blank" class="social-tag"><i class="fas fa-file-alt"></i> Lattes</a>
                     <a href="https://github.com/gcandid0" target="_blank" class="social-tag"><i class="fab fa-github"></i> GitHub</a>
@@ -261,18 +352,33 @@
                     <i class="fas fa-chalkboard-teacher"></i>
                 </div>
                 <h3 class="profile-name">Prof. Dr. Fábio B. Fonseca</h3>
-                <div class="profile-role lang-text" data-pt-br="Docente do Instituto de ciências agrárias e tecnológicas da UFR" data-en="Professor at the Institute of Agricultural and Technological Sciences of UFR" data-es="Profesor del Instituto de Ciencias Agrarias y Tecnológicas de la UFR">
-                    Docente do Instituto de ciências agrárias e tecnológicas da UFR
+                <div class="profile-role lang-text"
+                     data-pt-br="Docente do Instituto de Ciências Agrárias e Tecnológicas da UFR"
+                     data-en="Professor at the Institute of Agricultural and Technological Sciences of UFR"
+                     data-es="Profesor del Instituto de Ciencias Agrarias y Tecnológicas de la UFR"
+                     data-fr="Professeur à l'Institut des Sciences Agricoles et Technologiques de l'UFR">
+                    Docente do Instituto de Ciências Agrárias e Tecnológicas da UFR
                 </div>
                 <div class="social-links">
-                    <a href="mailto:fabio.fonseca@ufr.edu.br" class="social-tag"><i class="fas fa-envelope"></i> <span class="lang-text" data-pt-br="Email" data-en="Email" data-es="Correo">Email</span></a>
+                    <a href="mailto:fabio.fonseca@ufr.edu.br" class="social-tag"><i class="fas fa-envelope"></i> <span class="lang-text" data-pt-br="Email" data-en="Email" data-es="Correo" data-fr="E-mail">Email</span></a>
                     <a href="http://lattes.cnpq.br/4673164208199862" target="_blank" class="social-tag"><i class="fas fa-file-alt"></i> Lattes</a>
                 </div>
             </div>
         </div>
 
+        <div class="institution-banner">
+            <i class="fas fa-university"></i>
+            <span class="lang-text"
+                  data-pt-br="Universidade Federal de Rondonópolis (UFR) · Engenharia Mecânica"
+                  data-en="Federal University of Rondonópolis (UFR) · Mechanical Engineering"
+                  data-es="Universidad Federal de Rondonópolis (UFR) · Ingeniería Mecánica"
+                  data-fr="Université Fédérale de Rondonópolis (UFR) · Génie Mécanique">
+                Universidade Federal de Rondonópolis (UFR) · Engenharia Mecânica
+            </span>
+        </div>
+
         <div class="project-links">
-            <div class="project-links-title lang-text" data-pt-br="Sobre o Projeto" data-en="About the Project" data-es="Sobre el Proyecto">
+            <div class="project-links-title lang-text" data-pt-br="Sobre o Projeto" data-en="About the Project" data-es="Sobre el Proyecto" data-fr="À Propos du Projet">
                 Sobre o Projeto
             </div>
             <div class="social-links">
@@ -280,10 +386,10 @@
                     <i class="fab fa-github"></i> GitHub
                 </a>
                 <a href="https://github.com/gcandid0/Termo-CP/issues" target="_blank" class="social-tag">
-                    <i class="fas fa-bug"></i> <span class="lang-text" data-pt-br="Reportar Issue" data-en="Report Issue" data-es="Reportar Issue">Reportar Issue</span>
+                    <i class="fas fa-bug"></i> <span class="lang-text" data-pt-br="Reportar Issue" data-en="Report Issue" data-es="Reportar Problema" data-fr="Signaler un Problème">Reportar Issue</span>
                 </a>
                 <a href="https://github.com/gcandid0/Termo-CP/blob/main/LICENSE" target="_blank" class="social-tag">
-                    <i class="fas fa-balance-scale"></i> <span class="lang-text" data-pt-br="Licença" data-en="License" data-es="Licencia">Licença</span>
+                    <i class="fas fa-balance-scale"></i> <span class="lang-text" data-pt-br="Licença" data-en="License" data-es="Licencia" data-fr="Licence">Licença</span>
                 </a>
             </div>
         </div>
@@ -292,11 +398,15 @@
     <div class="feedback-container">
         <h2>
             <i class="fas fa-paper-plane"></i>
-            <span class="lang-text" data-pt-br="Fale Conosco" data-en="Contact Us" data-es="Contáctenos">Fale Conosco</span>
+            <span class="lang-text" data-pt-br="Fale Conosco" data-en="Contact Us" data-es="Contáctenos" data-fr="Contactez-nous">Fale Conosco</span>
         </h2>
 
         <div class="form-header">
-            <p class="lang-text" data-pt-br="Reporte erros, tire dúvidas ou envie sugestões diretamente para a nossa equipe." data-en="Report bugs, ask questions, or send suggestions directly to our team." data-es="Reporta errores, haz preguntas o envía sugerencias directamente a nuestro equipo.">
+            <p class="lang-text"
+               data-pt-br="Reporte erros, tire dúvidas ou envie sugestões diretamente para a nossa equipe."
+               data-en="Report bugs, ask questions, or send suggestions directly to our team."
+               data-es="Reporta errores, haz preguntas o envía sugerencias directamente a nuestro equipo."
+               data-fr="Signalez des erreurs, posez vos questions ou envoyez vos suggestions directement à notre équipe.">
                 Reporte erros, tire dúvidas ou envie sugestões diretamente para a nossa equipe.
             </p>
         </div>
@@ -311,39 +421,54 @@
 
         <form action="{% url 'contato' %}" method="post" style="display: flex; flex-direction: column; flex: 1;">
             {% csrf_token %}
-            <div class="form-group">
-                <label for="nome" class="lang-text" data-pt-br="Seu Nome:" data-en="Your Name:" data-es="Tu Nombre:">Seu Nome:</label>
-                <input type="text" id="nome" name="nome" required
-                       class="lang-placeholder"
-                       data-pt-br="Digite seu nome"
-                       data-en="Enter your name"
-                       data-es="Ingresa tu nombre"
-                       placeholder="Digite seu nome">
+            <div class="form-row-2">
+                <div class="form-group">
+                    <label for="nome" class="lang-text" data-pt-br="Seu Nome:" data-en="Your Name:" data-es="Tu Nombre:" data-fr="Votre Nom :">Seu Nome:</label>
+                    <input type="text" id="nome" name="nome" required
+                           class="lang-placeholder"
+                           data-pt-br="Digite seu nome"
+                           data-en="Enter your name"
+                           data-es="Ingresa tu nombre"
+                           data-fr="Entrez votre nom"
+                           placeholder="Digite seu nome">
+                </div>
+
+                <div class="form-group">
+                    <label for="email" class="lang-text" data-pt-br="Seu E-mail:" data-en="Your E-mail:" data-es="Tu Correo:" data-fr="Votre E-mail :">Seu E-mail:</label>
+                    <input type="email" id="email" name="email" required
+                           class="lang-placeholder"
+                           data-pt-br="Para retornarmos o contato"
+                           data-en="So we can get back to you"
+                           data-es="Para que podamos responderte"
+                           data-fr="Pour que nous puissions vous répondre"
+                           placeholder="Para retornarmos o contato">
+                </div>
             </div>
 
             <div class="form-group">
-                <label for="email" class="lang-text" data-pt-br="Seu E-mail:" data-en="Your E-mail:" data-es="Tu Correo:">Seu E-mail:</label>
-                <input type="email" id="email" name="email" required
-                       class="lang-placeholder"
-                       data-pt-br="Para retornarmos o contato"
-                       data-en="So we can get back to you"
-                       data-es="Para que podamos responderte"
-                       placeholder="Para retornarmos o contato">
+                <label for="assunto" class="lang-text" data-pt-br="Assunto:" data-en="Subject:" data-es="Asunto:" data-fr="Sujet :">Assunto:</label>
+                <select id="assunto" name="assunto">
+                    <option value="Dúvida" class="lang-text" data-pt-br="Dúvida sobre cálculos" data-en="Question about calculations" data-es="Duda sobre cálculos" data-fr="Question sur les calculs">Dúvida sobre cálculos</option>
+                    <option value="Sugestão" class="lang-text" data-pt-br="Sugestão de melhoria" data-en="Improvement suggestion" data-es="Sugerencia de mejora" data-fr="Suggestion d'amélioration">Sugestão de melhoria</option>
+                    <option value="Erro" class="lang-text" data-pt-br="Relatar erro / bug" data-en="Report a bug / error" data-es="Informar error / bug" data-fr="Signaler une erreur / un bug">Relatar erro / bug</option>
+                    <option value="Outro" class="lang-text" data-pt-br="Outro assunto" data-en="Other subject" data-es="Otro asunto" data-fr="Autre sujet">Outro assunto</option>
+                </select>
             </div>
 
-            <div class="form-group" style="flex: 1; display: flex; flex-direction: column; min-height: 80px;">
-                <label for="mensagem" class="lang-text" data-pt-br="Mensagem:" data-en="Message:" data-es="Mensaje:">Mensagem:</label>
+            <div class="form-group" style="flex: 1; display: flex; flex-direction: column; min-height: 110px;">
+                <label for="mensagem" class="lang-text" data-pt-br="Mensagem:" data-en="Message:" data-es="Mensaje:" data-fr="Message :">Mensagem:</label>
                 <textarea id="mensagem" name="mensagem" required style="flex: 1;"
                           class="lang-placeholder"
-                          data-pt-br="Descreva o erro ou sua sugestão detalhadamente..."
-                          data-en="Describe the bug or your suggestion in detail..."
-                          data-es="Describe el error o tu sugerencia en detalle..."
-                          placeholder="Descreva o erro ou sua sugestão detalhadamente..."></textarea>
+                          data-pt-br="Descreva o erro, sua dúvida ou sugestão detalhadamente..."
+                          data-en="Describe the bug, your question, or suggestion in detail..."
+                          data-es="Describe el error, tu duda o sugerencia en detalle..."
+                          data-fr="Décrivez l'erreur, votre question ou votre suggestion en détail..."
+                          placeholder="Descreva o erro, sua dúvida ou sugestão detalhadamente..."></textarea>
             </div>
 
             <button type="submit" class="btn-submit">
-                <span class="lang-text" data-pt-br="Enviar Mensagem" data-en="Send Message" data-es="Enviar Mensaje">Enviar Mensagem</span>
-                <i class="fas fa-chevron-right" style="margin-left: 5px;"></i>
+                <i class="fas fa-paper-plane"></i>
+                <span class="lang-text" data-pt-br="Enviar Mensagem" data-en="Send Message" data-es="Enviar Mensaje" data-fr="Envoyer le Message">Enviar Mensagem</span>
             </button>
         </form>
     </div>
@@ -352,25 +477,18 @@
 
 {% block extra_js %}
 <script>
-    // Função específica para atualizar os "placeholders" dos formulários na página de Contato
+    // Atualiza os placeholders na página de Contato conforme o idioma selecionado
     function updatePlaceholders() {
         let currentLang = localStorage.getItem('preferredLang') || 'pt-br';
         document.querySelectorAll('.lang-placeholder').forEach(el => {
-            let newText = el.getAttribute('data-' + currentLang);
+            let newText = el.getAttribute('data-' + currentLang) || el.getAttribute('data-en');
             if (newText) {
                 el.placeholder = newText;
             }
         });
     }
 
-    // Executa ao carregar a página
     document.addEventListener('DOMContentLoaded', updatePlaceholders);
-
-    // Escuta os cliques nos botões de idioma do base.html para traduzir os placeholders na hora
-    document.querySelectorAll('.lang-option').forEach(btn => {
-        btn.addEventListener('click', () => {
-            setTimeout(updatePlaceholders, 50); // Dá um tempinho mínimo para o localStorage salvar a variável
-        });
-    });
+    document.addEventListener('languageChanged', updatePlaceholders);
 </script>
 {% endblock %}

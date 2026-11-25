@@ -24,10 +24,10 @@
     <header>
         <h1 style="margin: 0; font-size: 1.5em; margin-right: 20px;">TERMO-CP</h1>
         <nav>
-            <a href="/" class="{% if request.path == '/' %}active{% endif %} lang-text" data-pt-br="Início" data-en="Home" data-es="Inicio">Início</a>
-            <a href="{% url 'estado' %}" class="{% if 'estado' in request.path or 'gasideal' in request.path and 'pcte' not in request.path and 'vcte' not in request.path and 'scte' not in request.path and 'tcte' not in request.path and 'poli' not in request.path %}active{% endif %} lang-text" data-pt-br="Estados" data-en="States" data-es="Estados">Estados</a>
-            <a href="{% url 'processo' %}" class="{% if '/process' in request.path or 'pcte' in request.path or 'vcte' in request.path or 'scte' in request.path or 'tcte' in request.path or 'poli' in request.path %}active{% endif %} lang-text" data-pt-br="Processos" data-en="Processes" data-es="Procesos">Processos</a>
-            <a href="{% url 'contato' %}" class="{% if '/contato' in request.path %}active{% endif %} lang-text" data-pt-br="Contato" data-en="Contact" data-es="Contacto">Contato</a>
+            <a href="/" class="{% if request.path == '/' %}active{% endif %} lang-text" data-pt-br="Início" data-en="Home" data-es="Inicio" data-fr="Accueil">Início</a>
+            <a href="{% url 'estado' %}" class="{% if 'estado' in request.path or 'gasideal' in request.path and 'pcte' not in request.path and 'vcte' not in request.path and 'scte' not in request.path and 'tcte' not in request.path and 'poli' not in request.path %}active{% endif %} lang-text" data-pt-br="Estados" data-en="States" data-es="Estados" data-fr="États">Estados</a>
+            <a href="{% url 'processo' %}" class="{% if '/process' in request.path or 'pcte' in request.path or 'vcte' in request.path or 'scte' in request.path or 'tcte' in request.path or 'poli' in request.path %}active{% endif %} lang-text" data-pt-br="Processos" data-en="Processes" data-es="Procesos" data-fr="Processus">Processos</a>
+            <a href="{% url 'contato' %}" class="{% if '/contato' in request.path %}active{% endif %} lang-text" data-pt-br="Contato" data-en="Contact" data-es="Contacto" data-fr="Contact">Contato</a>
         </nav>
 
         <div class="header-actions">
@@ -41,6 +41,9 @@
                 </div>
                 <div class="lang-option" onclick="changeLanguage(2, 'es')" title="Español">
                     <span class="fi fi-es flag-circle"></span>
+                </div>
+                <div class="lang-option" onclick="changeLanguage(3, 'fr')" title="Français">
+                    <span class="fi fi-fr flag-circle"></span>
                 </div>
             </div>
 
@@ -65,7 +68,7 @@
                 <h3 id="page-help-modal-title">
                     <i class="fas fa-circle-question"></i>
                     {% block help_title %}
-                    <span class="lang-text" data-pt-br="Ajuda" data-en="Help" data-es="Ayuda">Ajuda</span>
+                    <span class="lang-text" data-pt-br="Ajuda" data-en="Help" data-es="Ayuda" data-fr="Aide">Ajuda</span>
                     {% endblock %}
                 </h3>
                 <button type="button" id="page-help-close" aria-label="Fechar">
@@ -89,7 +92,7 @@
                 </button>
                 <a href="{% url 'ajuda' %}">
                     <i class="fas fa-book"></i>
-                    <span class="lang-text" data-pt-br="Ver tutorial completo" data-en="View full tutorial" data-es="Ver tutorial completo">Ver tutorial completo</span>
+                    <span class="lang-text" data-pt-br="Ver tutorial completo" data-en="View full tutorial" data-es="Ver tutorial completo" data-fr="Voir le tutoriel complet">Ver tutorial completo</span>
                 </a>
             </div>
         </div>
@@ -113,10 +116,10 @@
                 <span class="tour-step-count" id="tour-step-count"></span>
                 <div class="tour-nav-buttons">
                     <button type="button" id="tour-prev-btn">
-                        <span class="lang-text" data-pt-br="Anterior" data-en="Previous" data-es="Anterior">Anterior</span>
+                        <span class="lang-text" data-pt-br="Anterior" data-en="Previous" data-es="Anterior" data-fr="Précédent">Anterior</span>
                     </button>
                     <button type="button" id="tour-next-btn" class="tour-primary">
-                        <span class="lang-text" data-pt-br="Próximo" data-en="Next" data-es="Siguiente">Próximo</span>
+                        <span class="lang-text" data-pt-br="Próximo" data-en="Next" data-es="Siguiente" data-fr="Suivant">Próximo</span>
                     </button>
                 </div>
             </div>
@@ -125,7 +128,7 @@
 
     <!-- SCRIPT GLOBAL DA TROCA DE IDIOMA -->
     <!-- Espaço para JavaScript específico da página filha -->
-    <script src="{% static 'myapp/js/base_ui.js' %}?v=4"></script>
+    <script src="{% static 'myapp/js/base_ui.js' %}?v=5"></script>
     {% block extra_js %}{% endblock %}
 
 </body>

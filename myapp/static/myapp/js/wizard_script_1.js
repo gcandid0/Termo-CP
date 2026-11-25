@@ -5,11 +5,12 @@ function updatePlaceholder() {
         let phStr = {
             'pt-br': 'Digite o valor',
             'en': 'Enter the value',
-            'es': 'Introduzca el valor'
+            'es': 'Introduzca el valor',
+            'fr': 'Entrez la valeur'
         };
 
         if(numberInput) {
-            numberInput.placeholder = phStr[currentLang] || phStr['pt-br'];
+            numberInput.placeholder = (phStr[currentLang] || phStr['en'] || phStr['pt-br']) || phStr['pt-br'];
         }
     }
 

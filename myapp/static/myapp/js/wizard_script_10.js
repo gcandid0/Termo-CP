@@ -15,7 +15,8 @@ function updateLabel() {
         let phStr = {
             'pt-br': 'Digite o valor',
             'en': 'Enter the value',
-            'es': 'Introduzca el valor'
+            'es': 'Introduzca el valor',
+            'fr': 'Entrez la valeur'
         };
 
         // Mapeamento expandido adaptado para o sistema de idiomas dinâmico
@@ -49,14 +50,14 @@ function updateLabel() {
             numberInput.removeAttribute('max');
         }
 
-        numberInput.placeholder = phStr[currentLang];
+        numberInput.placeholder = (phStr[currentLang] || phStr['en'] || phStr['pt-br']);
         inputField.style.display = 'block';
 
         // Dispara a tradução para formatar o label que acabou de ser injetado (caso não esteja em pt-br)
         if(currentLang !== 'pt-br') {
              const elements = document.querySelectorAll('.lang-text');
              elements.forEach(el => {
-                 const newText = el.getAttribute('data-' + currentLang);
+                 const newText = el.getAttribute('data-' + currentLang) || (currentLang === 'fr' ? el.getAttribute('data-en') : null);
                  if (newText) el.textContent = newText;
              });
         }
