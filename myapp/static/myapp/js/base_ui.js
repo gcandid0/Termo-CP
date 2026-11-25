@@ -693,7 +693,6 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!str) return null;
         var clean = String(str).replace(/[^\d.,\-+eE]/g, '').trim();
         if (!clean) return null;
-        // Handle comma as decimal separator when no dot, or European formatting
         if (clean.indexOf(',') !== -1 && clean.indexOf('.') === -1) {
             clean = clean.replace(',', '.');
         } else if (clean.indexOf(',') !== -1 && clean.indexOf('.') !== -1) {
@@ -714,21 +713,57 @@ document.addEventListener('DOMContentLoaded', function () {
         return s.replace('.', ',');
     }
 
-    function extractMetrics() {
-        var m = { mass: null, W: null, Q: null, Sger: null, Tviz: null, TvizUnit: '°C', hasQ: false, hasW: false, hasSger: false, hasTviz: false };
-
-        // Mass from first state card
-        document.querySelectorAll('.state-card .data-row').forEach(function (row) {
+    function extractStateCardData(card) {
+        var data = { phase: '', T: null, TUnit: '°C', P: null, v: null, u: null, h: null, s: null, x: null, mass: null };
+        if (!card) return data;
+        card.querySelectorAll('.data-row').forEach(function (row) {
             var lbl = row.querySelector('.data-label');
-            if (!lbl) return;
+            var valEl = row.querySelector('.data-value');
+            if (!lbl || !valEl) return;
             var pt = (lbl.getAttribute('data-pt-br') || lbl.textContent || '').toLowerCase();
-            if (pt.indexOf('massa') !== -1 && m.mass === null) {
-                var valEl = row.querySelector('.data-value');
-                if (valEl) m.mass = parseLocaleNum(valEl.textContent);
+            var raw = valEl.textContent.trim();
+            var num = parseLocaleNum(raw);
+
+            if (pt.indexOf('fase') !== -1) {
+                data.phase = raw;
+            } else if (pt.indexOf('massa') !== -1) {
+                data.mass = num;
+            } else if (pt.indexOf('temperatura') !== -1) {
+                data.T = num;
+                data.TUnit = (raw.indexOf('K') !== -1 && raw.indexOf('°C') === -1) ? 'K' : '°C';
+            } else if (pt.indexOf('press') !== -1) {
+                data.P = num;
+            } else if (pt.indexOf('volume espec') !== -1) {
+                data.v = num;
+            } else if (pt.indexOf('energia interna') !== -1) {
+                data.u = num;
+            } else if (pt.indexOf('entalpia') !== -1) {
+                data.h = num;
+            } else if (pt.indexOf('entropia') !== -1) {
+                data.s = num;
+            } else if (pt.indexOf('título') !== -1 || pt.indexOf('titulo') !== -1) {
+                // Only take first percentage number
+                var pctMatch = raw.match(/[\d.,]+/);
+                data.x = pctMatch ? parseLocaleNum(pctMatch[0]) : num;
             }
         });
+        return data;
+    }
 
-        // Process results bar
+    function extractMetrics() {
+        var cards = document.querySelectorAll('.state-card');
+        var st1 = extractStateCardData(cards[0]);
+        var st2 = extractStateCardData(cards[1]);
+
+        var m = {
+            st1: st1,
+            st2: st2,
+            mass: st1.mass !== null ? st1.mass : (st2.mass !== null ? st2.mass : 1.0),
+            W: null, Q: null, Sger: null, Tviz: null, TvizUnit: st1.TUnit || '°C',
+            hasQ: false, hasW: false, hasSger: false, hasTviz: false,
+            isIdealGas: (document.body.textContent || '').indexOf('Pv = RT') !== -1 || (content.textContent || '').indexOf('Pv = RT') !== -1
+        };
+
         document.querySelectorAll('.process-results .process-item').forEach(function (item) {
             var sp = item.querySelector('span');
             var st = item.querySelector('strong');
@@ -740,7 +775,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (pt.indexOf('vizinhan') !== -1 || pt.indexOf('entorno') !== -1 || pt.indexOf('surround') !== -1) {
                 m.Tviz = num;
                 m.hasTviz = num !== null;
-                m.TvizUnit = raw.indexOf('K') !== -1 && raw.indexOf('°C') === -1 ? 'K' : '°C';
+                m.TvizUnit = (raw.indexOf('K') !== -1 && raw.indexOf('°C') === -1) ? 'K' : '°C';
             } else if (pt.indexOf('calor') !== -1 || pt.indexOf('heat') !== -1) {
                 m.Q = num;
                 m.hasQ = num !== null;
@@ -753,7 +788,6 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
 
-        // Fallbacks for isentropic / isochoric where Q=0 or W=0 or Sger=0 isn't listed in bottom bar
         var stepTexts = content.textContent || '';
         if (!m.hasQ && (stepTexts.indexOf('Q = 0') !== -1 || stepTexts.indexOf('q = 0') !== -1)) {
             m.Q = 0; m.hasQ = true;
@@ -764,8 +798,6 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!m.hasSger && (stepTexts.indexOf('Sger = 0') !== -1 || stepTexts.indexOf('sger = 0') !== -1)) {
             m.Sger = 0; m.hasSger = true;
         }
-        if (m.mass === null) m.mass = 1.0;
-
         return m;
     }
 
@@ -778,6 +810,28 @@ document.addEventListener('DOMContentLoaded', function () {
             status: '2ª Lei',
             possible: 'Possível',
             impossible: 'Impossível',
+            propCol: 'Propriedade',
+            st1Col: 'Estado 1',
+            st2Col: 'Estado 2',
+            deltaCol: 'Variação (Δ = 2 − 1)',
+            phaseLbl: 'Fase',
+            tempLbl: 'Temperatura (T)',
+            presLbl: 'Pressão (P)',
+            volEspLbl: 'Volume específico (v)',
+            volTotLbl: 'Volume total (V = m·v)',
+            uLbl: 'Energia interna (u)',
+            hLbl: 'Entalpia (h)',
+            sLbl: 'Entropia (s)',
+            xLbl: 'Título (x)',
+            uTotLbl: 'Variação de Energia Interna Total (ΔU)',
+            hTotLbl: 'Variação de Entalpia Total (ΔH)',
+            sTotLbl: 'Variação de Entropia Total (ΔS)',
+            firstLawTitle: 'Verificação Numérica da 1ª Lei da Termodinâmica (Q − W = ΔU)',
+            firstLawDesc: 'Conferência direta do balanço de energia para o sistema fechado com massa m:',
+            firstLawLeft: 'Balanço de Fronteira (Q − W)',
+            firstLawRight: 'Variação Interna (ΔU = m·Δu)',
+            irrevTitle: 'Irreversibilidade / Exergia Destruída (Teorema de Gouy-Stodola)',
+            irrevDesc: 'Energia útil degradada pelas irreversibilidades do processo em relação à vizinhança:',
             signTitle: 'Interpretação Física e Convenção de Sinais',
             wPos: 'Trabalho positivo (W > 0): o fluido expandiu e realizou trabalho sobre a vizinhança.',
             wNeg: 'Trabalho negativo (W < 0): o fluido foi comprimido (trabalho realizado sobre o sistema).',
@@ -788,12 +842,17 @@ document.addEventListener('DOMContentLoaded', function () {
             sZero: 'Entropia gerada nula (Sger = 0): processo idealmente reversível (sem irreversibilidades).',
             sPos: 'Entropia gerada positiva (Sger > 0): processo fisicamente possível e irreversível (satisfaz a 2ª Lei).',
             sNeg: 'Entropia gerada negativa (Sger < 0): viola a 2ª Lei da Termodinâmica — processo fisicamente impossível nesta Tviz.',
-            irrevTitle: 'Irreversibilidade / Exergia Destruída (Teorema de Gouy-Stodola)',
-            irrevDesc: 'Energia útil degradada pelas irreversibilidades do processo em relação à vizinhança:',
-            exportPng: 'Exportar Memorial (PNG)',
-            exporting: 'Exportando...',
+            assumpTitle: 'Hipóteses de Modelagem e Referência',
+            a1: 'Sistema fechado estacionário (ΔEc = 0, ΔEp = 0)',
+            a2: 'Processo quase-estático (fronteira sem atrito)',
+            a3: 'Massa constante no cilindro-pistão',
+            a4: 'Convenção: Q > 0 (entra), W > 0 (realizado)',
+            a5Pure: 'Base de dados: Tabelas termodinâmicas clássicas (Borgnakke & Sonntag)',
+            a5Gas: 'Modelo: Gás Ideal (Pv = RT) com calores específicos constantes',
+            exportPdf: 'Exportar Memorial (PDF)',
             copyTxt: 'Copiar Resumo',
-            copied: 'Copiado!'
+            copied: 'Copiado!',
+            pdfFooter: 'Gerado pela plataforma educacional TERMO-CP (UFR) — Memorial de Cálculo Termodinâmico'
         },
         'en': {
             mass: 'System Mass',
@@ -803,6 +862,28 @@ document.addEventListener('DOMContentLoaded', function () {
             status: '2nd Law',
             possible: 'Possible',
             impossible: 'Impossible',
+            propCol: 'Property',
+            st1Col: 'State 1',
+            st2Col: 'State 2',
+            deltaCol: 'Change (Δ = 2 − 1)',
+            phaseLbl: 'Phase',
+            tempLbl: 'Temperature (T)',
+            presLbl: 'Pressure (P)',
+            volEspLbl: 'Specific volume (v)',
+            volTotLbl: 'Total volume (V = m·v)',
+            uLbl: 'Internal energy (u)',
+            hLbl: 'Enthalpy (h)',
+            sLbl: 'Entropy (s)',
+            xLbl: 'Quality (x)',
+            uTotLbl: 'Total Internal Energy Change (ΔU)',
+            hTotLbl: 'Total Enthalpy Change (ΔH)',
+            sTotLbl: 'Total Entropy Change (ΔS)',
+            firstLawTitle: 'Numerical Verification of the 1st Law of Thermodynamics (Q − W = ΔU)',
+            firstLawDesc: 'Direct check of the closed-system energy balance for mass m:',
+            firstLawLeft: 'Boundary Balance (Q − W)',
+            firstLawRight: 'Internal Change (ΔU = m·Δu)',
+            irrevTitle: 'Irreversibility / Exergy Destroyed (Gouy-Stodola Theorem)',
+            irrevDesc: 'Useful work potential degraded by process irreversibilities relative to surroundings:',
             signTitle: 'Physical Interpretation & Sign Convention',
             wPos: 'Positive work (W > 0): the fluid expanded and did work on the surroundings.',
             wNeg: 'Negative work (W < 0): the fluid was compressed (work done on the system).',
@@ -813,12 +894,17 @@ document.addEventListener('DOMContentLoaded', function () {
             sZero: 'Zero entropy generation (Sgen = 0): ideally reversible process (no irreversibilities).',
             sPos: 'Positive entropy generation (Sgen > 0): physically possible and irreversible process (satisfies 2nd Law).',
             sNeg: 'Negative entropy generation (Sgen < 0): violates the 2nd Law of Thermodynamics — physically impossible at this Tsurr.',
-            irrevTitle: 'Irreversibility / Exergy Destroyed (Gouy-Stodola Theorem)',
-            irrevDesc: 'Useful work potential degraded by process irreversibilities relative to surroundings:',
-            exportPng: 'Export Memorial (PNG)',
-            exporting: 'Exporting...',
+            assumpTitle: 'Modeling Assumptions & Reference',
+            a1: 'Stationary closed system (ΔKE = 0, ΔPE = 0)',
+            a2: 'Quasi-equilibrium process (frictionless boundary)',
+            a3: 'Constant mass inside the piston-cylinder',
+            a4: 'Sign convention: Q > 0 (heat in), W > 0 (work out)',
+            a5Pure: 'Database: Classical thermodynamic tables (Borgnakke & Sonntag)',
+            a5Gas: 'Model: Ideal Gas (Pv = RT) with constant specific heats',
+            exportPdf: 'Export Memorial (PDF)',
             copyTxt: 'Copy Summary',
-            copied: 'Copied!'
+            copied: 'Copied!',
+            pdfFooter: 'Generated by TERMO-CP educational platform (UFR) — Thermodynamic Calculation Memorial'
         },
         'es': {
             mass: 'Masa del Sistema',
@@ -828,6 +914,28 @@ document.addEventListener('DOMContentLoaded', function () {
             status: '2ª Ley',
             possible: 'Posible',
             impossible: 'Imposible',
+            propCol: 'Propiedad',
+            st1Col: 'Estado 1',
+            st2Col: 'Estado 2',
+            deltaCol: 'Variación (Δ = 2 − 1)',
+            phaseLbl: 'Fase',
+            tempLbl: 'Temperatura (T)',
+            presLbl: 'Presión (P)',
+            volEspLbl: 'Volumen específico (v)',
+            volTotLbl: 'Volumen total (V = m·v)',
+            uLbl: 'Energía interna (u)',
+            hLbl: 'Entalpía (h)',
+            sLbl: 'Entropía (s)',
+            xLbl: 'Calidad (x)',
+            uTotLbl: 'Variación de Energía Interna Total (ΔU)',
+            hTotLbl: 'Variación de Entalpía Total (ΔH)',
+            sTotLbl: 'Variación de Entropía Total (ΔS)',
+            firstLawTitle: 'Verificación Numérica de la 1ª Ley de la Termodinámica (Q − W = ΔU)',
+            firstLawDesc: 'Comprobación directa del balance de energía del sistema cerrado con masa m:',
+            firstLawLeft: 'Balance de Frontera (Q − W)',
+            firstLawRight: 'Variación Interna (ΔU = m·Δu)',
+            irrevTitle: 'Irreversibilidad / Exergía Destruida (Teorema de Gouy-Stodola)',
+            irrevDesc: 'Energía útil degradada por las irreversibilidades del proceso respecto al entorno:',
             signTitle: 'Interpretación Física y Convención de Signos',
             wPos: 'Trabajo positivo (W > 0): el fluido se expandió y realizó trabajo sobre el entorno.',
             wNeg: 'Trabajo negativo (W < 0): el fluido fue comprimido (trabajo realizado sobre el sistema).',
@@ -838,12 +946,17 @@ document.addEventListener('DOMContentLoaded', function () {
             sZero: 'Entropía generada nula (Sgen = 0): proceso idealmente reversible (sin irreversibilidades).',
             sPos: 'Entropía generada positiva (Sgen > 0): proceso físicamente posible e irreversible (cumple la 2ª Ley).',
             sNeg: 'Entropía generada negativa (Sgen < 0): viola la 2ª Ley de la Termodinámica — proceso físicamente imposible.',
-            irrevTitle: 'Irreversibilidad / Exergía Destruida (Teorema de Gouy-Stodola)',
-            irrevDesc: 'Energía útil degradada por las irreversibilidades del proceso respecto al entorno:',
-            exportPng: 'Exportar Memoria (PNG)',
-            exporting: 'Exportando...',
+            assumpTitle: 'Hipótesis de Modelado y Referencia',
+            a1: 'Sistema cerrado estacionario (ΔEc = 0, ΔEp = 0)',
+            a2: 'Proceso cuasi-estático (frontera sin fricción)',
+            a3: 'Masa constante en el cilindro-pistón',
+            a4: 'Convención: Q > 0 (entra), W > 0 (realizado)',
+            a5Pure: 'Base de datos: Tablas termodinámicas clásicas (Borgnakke & Sonntag)',
+            a5Gas: 'Modelo: Gas Ideal (Pv = RT) con calores específicos constantes',
+            exportPdf: 'Exportar Memoria (PDF)',
             copyTxt: 'Copiar Resumen',
-            copied: '¡Copiado!'
+            copied: '¡Copiado!',
+            pdfFooter: 'Generado por la plataforma educativa TERMO-CP (UFR) — Memoria de Cálculo Termodinámico'
         },
         'fr': {
             mass: 'Masse du Système',
@@ -853,6 +966,28 @@ document.addEventListener('DOMContentLoaded', function () {
             status: '2e Loi',
             possible: 'Possible',
             impossible: 'Impossible',
+            propCol: 'Propriété',
+            st1Col: 'État 1',
+            st2Col: 'État 2',
+            deltaCol: 'Variation (Δ = 2 − 1)',
+            phaseLbl: 'Phase',
+            tempLbl: 'Température (T)',
+            presLbl: 'Pression (P)',
+            volEspLbl: 'Volume spécifique (v)',
+            volTotLbl: 'Volume total (V = m·v)',
+            uLbl: 'Énergie interne (u)',
+            hLbl: 'Enthalpie (h)',
+            sLbl: 'Entropie (s)',
+            xLbl: 'Titre (x)',
+            uTotLbl: 'Variation d\'Énergie Interne Totale (ΔU)',
+            hTotLbl: 'Variation d\'Enthalpie Totale (ΔH)',
+            sTotLbl: 'Variation d\'Entropie Totale (ΔS)',
+            firstLawTitle: 'Vérification Numérique de la 1re Loi de la Thermodynamique (Q − W = ΔU)',
+            firstLawDesc: 'Contrôle direct du bilan d\'énergie pour le système fermé de masse m :',
+            firstLawLeft: 'Bilan de Frontière (Q − W)',
+            firstLawRight: 'Variation Interne (ΔU = m·Δu)',
+            irrevTitle: 'Irréversibilité / Exergie Détruite (Théorème de Gouy-Stodola)',
+            irrevDesc: 'Potentiel de travail utile dégradé par les irréversibilités du processus :',
             signTitle: 'Interprétation Physique et Convention de Signes',
             wPos: 'Travail positif (W > 0) : le fluide s\'est détendu et a fourni un travail au milieu extérieur.',
             wNeg: 'Travail négatif (W < 0) : le fluide a été comprimé (travail reçu par le système).',
@@ -863,12 +998,17 @@ document.addEventListener('DOMContentLoaded', function () {
             sZero: 'Entropie générée nulle (Sgén = 0) : processus idéalement réversible (sans irréversibilités).',
             sPos: 'Entropie générée positive (Sgén > 0) : processus physiquement possible et irréversible (conforme à la 2e Loi).',
             sNeg: 'Entropie générée négative (Sgén < 0) : viole la 2e Loi de la Thermodynamique — processus impossible.',
-            irrevTitle: 'Irréversibilité / Exergie Détruite (Théorème de Gouy-Stodola)',
-            irrevDesc: 'Potentiel de travail utile dégradé par les irréversibilités du processus :',
-            exportPng: 'Exporter le Mémorial (PNG)',
-            exporting: 'Exportation...',
+            assumpTitle: 'Hypothèses de Modélisation et Référence',
+            a1: 'Système fermé stationnaire (ΔEc = 0, ΔEp = 0)',
+            a2: 'Processus quasi-statique (frontière sans frottement)',
+            a3: 'Masse constante dans le cylindre-piston',
+            a4: 'Convention : Q > 0 (reçu), W > 0 (fourni)',
+            a5Pure: 'Base de données : Tables thermodynamiques classiques (Borgnakke & Sonntag)',
+            a5Gas: 'Modèle : Gaz Idéal (Pv = RT) à chaleurs spécifiques constantes',
+            exportPdf: 'Exporter le Mémorial (PDF)',
             copyTxt: 'Copier le Résumé',
-            copied: 'Copié !'
+            copied: 'Copié !',
+            pdfFooter: 'Généré par la plateforme éducative TERMO-CP (UFR) — Mémorial de Calcul Thermodynamique'
         },
         'zh': {
             mass: '系统质量',
@@ -878,6 +1018,28 @@ document.addEventListener('DOMContentLoaded', function () {
             status: '热力学第二定律',
             possible: '可行',
             impossible: '不可能',
+            propCol: '热力学属性',
+            st1Col: '状态 1',
+            st2Col: '状态 2',
+            deltaCol: '变化量 (Δ = 2 − 1)',
+            phaseLbl: '相态',
+            tempLbl: '温度 (T)',
+            presLbl: '压力 (P)',
+            volEspLbl: '比容 (v)',
+            volTotLbl: '总体积 (V = m·v)',
+            uLbl: '比内能 (u)',
+            hLbl: '比焓 (h)',
+            sLbl: '比熵 (s)',
+            xLbl: '干度 (x)',
+            uTotLbl: '总内能变化 (ΔU)',
+            hTotLbl: '总焓变化 (ΔH)',
+            sTotLbl: '总熵变化 (ΔS)',
+            firstLawTitle: '热力学第一定律数值校核 (Q − W = ΔU)',
+            firstLawDesc: '针对质量为 m 的闭口系统能量平衡直接校核：',
+            firstLawLeft: '边界能量平衡 (Q − W)',
+            firstLawRight: '系统内能变化 (ΔU = m·Δu)',
+            irrevTitle: '不可逆损失 / 㶲损 (Gouy-Stodola 定理)',
+            irrevDesc: '相对于环境，过程不可逆性导致的做功能力损失：',
             signTitle: '物理意义与符号约定解读',
             wPos: '正功 (W > 0)：工质膨胀，系统对外界做功。',
             wNeg: '负功 (W < 0)：工质被压缩，外界对系统做功。',
@@ -888,26 +1050,116 @@ document.addEventListener('DOMContentLoaded', function () {
             sZero: '熵产为零 (Sger = 0)：理想可逆过程（无不可逆损失）。',
             sPos: '正熵产 (Sger > 0)：物理上可行且不可逆的过程（满足第二定律）。',
             sNeg: '负熵产 (Sger < 0)：违反热力学第二定律 —— 在当前环境温度下物理上不可能发生。',
-            irrevTitle: '不可逆损失 / 㶲损 (Gouy-Stodola 定理)',
-            irrevDesc: '相对于环境，过程不可逆性导致的做功能力损失：',
-            exportPng: '导出计算过程 (PNG)',
-            exporting: '正在导出...',
+            assumpTitle: '建模假设与参考依据',
+            a1: '静止闭口系统 (ΔEc = 0, ΔEp = 0)',
+            a2: '准静态过程（无摩擦移动边界）',
+            a3: '活塞-气缸内工质质量恒定',
+            a4: '符号约定：Q > 0（吸热），W > 0（对外做功）',
+            a5Pure: '数据来源：经典热力学性质表 (Borgnakke & Sonntag)',
+            a5Gas: '模型：定比热容理想气体 (Pv = RT)',
+            exportPdf: '导出计算过程 (PDF)',
             copyTxt: '复制摘要',
-            copied: '已复制！'
+            copied: '已复制！',
+            pdfFooter: '由 TERMO-CP 教学平台 (UFR) 生成 — 热力学分步计算过程'
         }
     };
+
+    function formatDelta(v1, v2, dec, unit, lang) {
+        if (v1 === null || v2 === null) return { text: '—', cls: 'delta-zero' };
+        var d = v2 - v1;
+        if (Math.abs(d) < Math.pow(10, -dec - 1)) {
+            return { text: '0' + (unit ? ' ' + unit : ''), cls: 'delta-zero' };
+        }
+        var sign = d > 0 ? '+' : '';
+        return {
+            text: sign + fmtNum(d, dec, lang) + (unit ? ' ' + unit : ''),
+            cls: d > 0 ? 'delta-pos' : 'delta-neg'
+        };
+    }
+
+    function openMemorialPdf(dict, lang) {
+        var clone = content.cloneNode(true);
+        clone.querySelectorAll('.didactic-toolbar, #closeDidacticBtn').forEach(function (el) { el.remove(); });
+        var titleText = (clone.querySelector('h2') && clone.querySelector('h2').textContent.trim()) || 'TERMO-CP — Memorial de Cálculo';
+        var nowStr = new Date().toLocaleString(lang === 'en' ? 'en-US' : (lang === 'zh' ? 'zh-CN' : (lang === 'fr' ? 'fr-FR' : (lang === 'es' ? 'es-ES' : 'pt-BR'))));
+
+        var printWin = window.open('', '_blank', 'width=960,height=800');
+        if (!printWin) {
+            window.print();
+            return;
+        }
+        var html = '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>' + titleText + '</title>'
+            + '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">'
+            + '<style>'
+            + '@page { size: A4; margin: 13mm; }'
+            + '* { box-sizing: border-box; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }'
+            + 'body { font-family: "Segoe UI", Arial, sans-serif; color: #1e293b; background: #ffffff; margin: 0; padding: 0; font-size: 11.5px; line-height: 1.5; }'
+            + '.pdf-shell { max-width: 100%; }'
+            + '.pdf-header { background: linear-gradient(135deg, #1b3668 0%, #0d6ab0 100%); color: #fff; padding: 16px 20px; border-radius: 10px; margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center; }'
+            + '.pdf-header h1 { margin: 0; font-size: 15px; font-weight: 700; }'
+            + '.pdf-header .pdf-meta { font-size: 10px; opacity: 0.9; text-align: right; }'
+            + '.didactic-summary-bar { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-bottom: 14px; }'
+            + '.didactic-summary-pill { border: 1px solid #cbd5e1; border-radius: 8px; padding: 8px 10px; background: #f8fafc; }'
+            + '.didactic-summary-pill .pill-label { display: block; font-size: 8.5px; text-transform: uppercase; color: #64748b; font-weight: 700; }'
+            + '.didactic-summary-pill .pill-value { font-size: 12px; font-weight: 700; color: #0f172a; }'
+            + '.didactic-summary-pill.pill-ok { background: #f0fdf4; border-color: #86efac; } .didactic-summary-pill.pill-ok .pill-value { color: #15803d; }'
+            + '.didactic-summary-pill.pill-bad { background: #fef2f2; border-color: #fca5a5; } .didactic-summary-pill.pill-bad .pill-value { color: #b91c1c; }'
+            + '.math-step, .didactic-sign-card, .didactic-assumptions-card { border: 1px solid #cbd5e1; border-radius: 10px; padding: 14px 16px; margin-bottom: 12px; background: #fff; break-inside: avoid; page-break-inside: avoid; position: relative; }'
+            + '.step-number { position: absolute; top: 12px; left: 14px; width: 24px; height: 24px; border-radius: 7px; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 11px; }'
+            + '.step-1 .step-number { background: #3498db; } .step-2 .step-number { background: #e67e22; } .step-3 .step-number { background: #e74c3c; } .step-4 .step-number { background: #2ecc71; }'
+            + '.step-header { padding-left: 34px; font-size: 13px; font-weight: 700; margin-bottom: 8px; color: #1b3668; }'
+            + '.step-description { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 7px; padding: 8px 11px; margin-bottom: 10px; color: #334155; }'
+            + '.math-step > div[style*="border-left"] { border-left: none !important; border: 1px solid #e2e8f0 !important; border-radius: 8px !important; padding: 10px 12px !important; margin-bottom: 10px !important; font-family: "Segoe UI", Arial, sans-serif !important; font-size: 11px !important; }'
+            + '.state-boxes { display: flex; gap: 10px; margin-bottom: 8px; }'
+            + '.state-box { flex: 1; background: #f8fbff; border: 1px solid #dbe7f5; border-radius: 8px; padding: 9px 12px; }'
+            + '.state-box strong { display: block; border-bottom: 1px solid #dbe7f5; margin-bottom: 5px; padding-bottom: 3px; color: #1b3668; }'
+            + '.didactic-compare-wrap { margin-top: 10px; border: 1px solid #cbdcf0; border-radius: 8px; overflow: hidden; }'
+            + '.didactic-compare-table { width: 100%; border-collapse: collapse; font-size: 10.5px; }'
+            + '.didactic-compare-table th { background: #eff6ff; color: #1b3668; padding: 6px 9px; text-align: left; border-bottom: 1px solid #cbdcf0; }'
+            + '.didactic-compare-table td { padding: 5px 9px; border-bottom: 1px solid #f1f5f9; }'
+            + '.delta-pos { color: #15803d; font-weight: 700; } .delta-neg { color: #b91c1c; font-weight: 700; } .delta-zero { color: #64748b; }'
+            + '.formula-box { background: #f8fbff; border: 1px solid #cbdcf0; border-radius: 8px; padding: 8px 16px; text-align: center; font-family: "Cambria Math", Georgia, serif; font-size: 13.5px; font-weight: 700; margin: 8px auto; width: fit-content; }'
+            + '.step-calc { text-align: center; margin: 8px 0; font-size: 11px; }'
+            + '.val-badge { background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 5px; padding: 1px 5px; font-family: Consolas, monospace; font-weight: 700; }'
+            + '.step-result { text-align: center; font-weight: 700; font-size: 13px; padding: 9px; border-radius: 8px; border: 1.5px solid #cbd5e1; margin-top: 8px; background: #f8fafc; }'
+            + '.didactic-check-card { margin-top: 10px; background: #f0fdf4; border: 1px solid #86efac; border-radius: 8px; padding: 9px 12px; color: #14532d; }'
+            + '.didactic-check-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 6px; }'
+            + '.didactic-check-item { background: #fff; border: 1px solid #bbf7d0; border-radius: 6px; padding: 6px 9px; font-family: Consolas, monospace; }'
+            + '.didactic-irrev-box { margin-top: 10px; background: #f0f9ff; border: 1px solid #7dd3fc; border-radius: 8px; padding: 9px 12px; color: #0c4a6e; }'
+            + '.didactic-sign-card h4, .didactic-assumptions-card h4 { margin: 0 0 8px 0; font-size: 12px; color: #1b3668; }'
+            + '.didactic-sign-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 5px; }'
+            + '.didactic-sign-list li { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 6px 10px; display: flex; gap: 8px; }'
+            + '.didactic-assumptions-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }'
+            + '.didactic-assumption-pill { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 6px 9px; font-size: 10.5px; }'
+            + '.pdf-footer { margin-top: 14px; padding-top: 8px; border-top: 1px solid #cbd5e1; text-align: center; font-size: 9.5px; color: #64748b; }'
+            + '</style></head><body><div class="pdf-shell">'
+            + '<div class="pdf-header"><h1>' + titleText + '</h1><div class="pdf-meta">TERMO-CP<br>' + nowStr + '</div></div>';
+
+        // Append inner elements (skip original header div)
+        Array.prototype.slice.call(clone.children).forEach(function (child, idx) {
+            if (idx === 0 && child.querySelector('h2')) return;
+            html += child.outerHTML;
+        });
+
+        html += '<div class="pdf-footer">' + dict.pdfFooter + '</div></div>'
+            + '<script>window.onload = function(){ setTimeout(function(){ window.focus(); window.print(); }, 350); };<\/script>'
+            + '</body></html>';
+
+        printWin.document.open();
+        printWin.document.write(html);
+        printWin.document.close();
+    }
 
     function renderEnhancements() {
         var lang = localStorage.getItem('preferredLang') || 'pt-br';
         var dict = I18N[lang] || I18N['pt-br'];
         var m = extractMetrics();
 
-        // Remove previous dynamic blocks before re-rendering
-        content.querySelectorAll('.didactic-summary-bar, .didactic-irrev-box, .didactic-sign-card, .didactic-toolbar').forEach(function (el) {
+        content.querySelectorAll('.didactic-summary-bar, .didactic-compare-wrap, .didactic-check-card, .didactic-irrev-box, .didactic-sign-card, .didactic-assumptions-card, .didactic-toolbar').forEach(function (el) {
             el.remove();
         });
 
-        // 1. Executive Summary Bar right after the header div
+        // 1. Executive Summary Bar
         var firstStep = content.querySelector('.math-step');
         if (firstStep) {
             var bar = document.createElement('div');
@@ -925,7 +1177,68 @@ document.addEventListener('DOMContentLoaded', function () {
             content.insertBefore(bar, firstStep);
         }
 
-        // 2. Irreversibility (I = T_viz * Sger) inside Step 4 when applicable
+        // 2. Complete State Comparison Table (Estado 1 vs Estado 2 + Δ) inside Step 1
+        var step1 = content.querySelector('.math-step.step-1');
+        if (step1 && (m.st1.T !== null || m.st1.P !== null)) {
+            var rows = [];
+            if (m.st1.phase || m.st2.phase) {
+                rows.push([dict.phaseLbl, m.st1.phase || '—', m.st2.phase || '—', { text: m.st1.phase === m.st2.phase ? '=' : '→', cls: 'delta-zero' }]);
+            }
+            if (m.st1.T !== null && m.st2.T !== null) {
+                rows.push([dict.tempLbl, fmtNum(m.st1.T, 2, lang) + ' ' + m.st1.TUnit, fmtNum(m.st2.T, 2, lang) + ' ' + m.st2.TUnit, formatDelta(m.st1.T, m.st2.T, 2, m.st1.TUnit, lang)]);
+            }
+            if (m.st1.P !== null && m.st2.P !== null) {
+                rows.push([dict.presLbl, fmtNum(m.st1.P, 2, lang) + ' kPa', fmtNum(m.st2.P, 2, lang) + ' kPa', formatDelta(m.st1.P, m.st2.P, 2, 'kPa', lang)]);
+            }
+            if (m.st1.v !== null && m.st2.v !== null) {
+                rows.push([dict.volEspLbl, fmtNum(m.st1.v, 6, lang) + ' m³/kg', fmtNum(m.st2.v, 6, lang) + ' m³/kg', formatDelta(m.st1.v, m.st2.v, 6, 'm³/kg', lang)]);
+                var V1 = m.st1.v * m.mass, V2 = m.st2.v * m.mass;
+                rows.push([dict.volTotLbl, fmtNum(V1, 5, lang) + ' m³', fmtNum(V2, 5, lang) + ' m³', formatDelta(V1, V2, 5, 'm³', lang)]);
+            }
+            if (m.st1.u !== null && m.st2.u !== null) {
+                rows.push([dict.uLbl, fmtNum(m.st1.u, 2, lang) + ' kJ/kg', fmtNum(m.st2.u, 2, lang) + ' kJ/kg', formatDelta(m.st1.u, m.st2.u, 2, 'kJ/kg', lang)]);
+            }
+            if (m.st1.h !== null && m.st2.h !== null) {
+                rows.push([dict.hLbl, fmtNum(m.st1.h, 2, lang) + ' kJ/kg', fmtNum(m.st2.h, 2, lang) + ' kJ/kg', formatDelta(m.st1.h, m.st2.h, 2, 'kJ/kg', lang)]);
+            }
+            if (m.st1.s !== null && m.st2.s !== null) {
+                rows.push([dict.sLbl, fmtNum(m.st1.s, 4, lang) + ' kJ/kg·K', fmtNum(m.st2.s, 4, lang) + ' kJ/kg·K', formatDelta(m.st1.s, m.st2.s, 4, 'kJ/kg·K', lang)]);
+            }
+            if (m.st1.x !== null || m.st2.x !== null) {
+                var x1s = m.st1.x !== null ? fmtNum(m.st1.x, 2, lang) + ' %' : '—';
+                var x2s = m.st2.x !== null ? fmtNum(m.st2.x, 2, lang) + ' %' : '—';
+                rows.push([dict.xLbl, x1s, x2s, (m.st1.x !== null && m.st2.x !== null) ? formatDelta(m.st1.x, m.st2.x, 2, '%', lang) : { text: '—', cls: 'delta-zero' }]);
+            }
+
+            if (rows.length > 0) {
+                var wrap = document.createElement('div');
+                wrap.className = 'didactic-compare-wrap';
+                var tbody = rows.map(function (r) {
+                    return '<tr><td><strong>' + r[0] + '</strong></td><td>' + r[1] + '</td><td>' + r[2] + '</td><td class="' + r[3].cls + '">' + r[3].text + '</td></tr>';
+                }).join('');
+                wrap.innerHTML = '<table class="didactic-compare-table"><thead><tr><th>' + dict.propCol + '</th><th>' + dict.st1Col + '</th><th>' + dict.st2Col + '</th><th>' + dict.deltaCol + '</th></tr></thead><tbody>' + tbody + '</tbody></table>';
+                step1.appendChild(wrap);
+            }
+        }
+
+        // 3. Numerical 1st Law Energy Conservation Check (Q - W = ΔU = m*(u2 - u1)) inside Step 3
+        var step3 = content.querySelector('.math-step.step-3');
+        if (step3 && m.hasQ && m.hasW && m.st1.u !== null && m.st2.u !== null) {
+            var qMinusW = m.Q - m.W;
+            var dU = m.mass * (m.st2.u - m.st1.u);
+            var checkCard = document.createElement('div');
+            checkCard.className = 'didactic-check-card';
+            checkCard.innerHTML = ''
+                + '<div class="check-title"><i class="fas fa-check-double"></i> ' + dict.firstLawTitle + '</div>'
+                + '<div>' + dict.firstLawDesc + '</div>'
+                + '<div class="didactic-check-grid">'
+                + '<div class="didactic-check-item"><strong>' + dict.firstLawLeft + ':</strong><br>Q &minus; W = ' + fmtNum(m.Q, 2, lang) + ' &minus; (' + fmtNum(m.W, 2, lang) + ') = <strong>' + fmtNum(qMinusW, 2, lang) + ' kJ</strong></div>'
+                + '<div class="didactic-check-item"><strong>' + dict.firstLawRight + ':</strong><br>&Delta;U = ' + fmtNum(m.mass, 2, lang) + ' &times; (' + fmtNum(m.st2.u, 2, lang) + ' &minus; ' + fmtNum(m.st1.u, 2, lang) + ') = <strong>' + fmtNum(dU, 2, lang) + ' kJ</strong></div>'
+                + '</div>';
+            step3.appendChild(checkCard);
+        }
+
+        // 4. Irreversibility (I = T_viz * Sger) inside Step 4
         var step4 = content.querySelector('.math-step.step-4');
         if (step4 && m.hasTviz && m.hasSger && m.Sger >= 0) {
             var TvizK = m.TvizUnit === 'K' ? m.Tviz : (m.Tviz + 273.15);
@@ -941,7 +1254,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
 
-        // 3. Physical Sign Interpretation Card
+        // 5. Physical Sign Interpretation Card
         var signItems = [];
         if (m.hasW) {
             if (Math.abs(m.W) < 1e-6) signItems.push({ icon: 'fa-lock', color: '#64748b', text: dict.wZero });
@@ -969,7 +1282,21 @@ document.addEventListener('DOMContentLoaded', function () {
             content.appendChild(signCard);
         }
 
-        // 4. Action Toolbar (Export PNG + Copy Summary)
+        // 6. Modeling Assumptions Card
+        var assumpCard = document.createElement('div');
+        assumpCard.className = 'didactic-assumptions-card';
+        assumpCard.innerHTML = ''
+            + '<h4><i class="fas fa-clipboard-check" style="color:#0d6ab0;"></i> ' + dict.assumpTitle + '</h4>'
+            + '<div class="didactic-assumptions-grid">'
+            + '<div class="didactic-assumption-pill"><i class="fas fa-cube"></i><span>' + dict.a1 + '</span></div>'
+            + '<div class="didactic-assumption-pill"><i class="fas fa-sliders-h"></i><span>' + dict.a2 + '</span></div>'
+            + '<div class="didactic-assumption-pill"><i class="fas fa-weight-hanging"></i><span>' + dict.a3 + ' (' + fmtNum(m.mass, 2, lang) + ' kg)</span></div>'
+            + '<div class="didactic-assumption-pill"><i class="fas fa-exchange-alt"></i><span>' + dict.a4 + '</span></div>'
+            + '<div class="didactic-assumption-pill" style="grid-column: 1 / -1;"><i class="fas fa-book"></i><span>' + (m.isIdealGas ? dict.a5Gas : dict.a5Pure) + '</span></div>'
+            + '</div>';
+        content.appendChild(assumpCard);
+
+        // 7. Action Toolbar (Copy Summary + Export PDF — NO PNG!)
         var toolbar = document.createElement('div');
         toolbar.className = 'didactic-toolbar';
 
@@ -998,37 +1325,18 @@ document.addEventListener('DOMContentLoaded', function () {
         });
         toolbar.appendChild(btnCopy);
 
-        if (typeof html2canvas === 'function') {
-            var btnPng = document.createElement('button');
-            btnPng.type = 'button';
-            btnPng.className = 'didactic-action-btn btn-export-png';
-            btnPng.innerHTML = '<i class="fas fa-download"></i> <span>' + dict.exportPng + '</span>';
-            btnPng.addEventListener('click', function () {
-                btnPng.querySelector('span').textContent = dict.exporting;
-                toolbar.style.visibility = 'hidden';
-                var closeEl = content.querySelector('#closeDidacticBtn');
-                if (closeEl) closeEl.style.visibility = 'hidden';
-                html2canvas(content, { scale: 2, backgroundColor: '#f5f8fc', useCORS: true }).then(function (canvas) {
-                    toolbar.style.visibility = 'visible';
-                    if (closeEl) closeEl.style.visibility = 'visible';
-                    btnPng.querySelector('span').textContent = dict.exportPng;
-                    var link = document.createElement('a');
-                    link.download = 'TERMO-CP_Memorial_Calculo.png';
-                    link.href = canvas.toDataURL('image/png');
-                    link.click();
-                }).catch(function () {
-                    toolbar.style.visibility = 'visible';
-                    if (closeEl) closeEl.style.visibility = 'visible';
-                    btnPng.querySelector('span').textContent = dict.exportPng;
-                });
-            });
-            toolbar.appendChild(btnPng);
-        }
+        var btnPdf = document.createElement('button');
+        btnPdf.type = 'button';
+        btnPdf.className = 'didactic-action-btn btn-export-pdf';
+        btnPdf.innerHTML = '<i class="fas fa-file-pdf"></i> <span>' + dict.exportPdf + '</span>';
+        btnPdf.addEventListener('click', function () {
+            openMemorialPdf(dict, lang);
+        });
+        toolbar.appendChild(btnPdf);
 
         content.appendChild(toolbar);
     }
 
-    // Run on load (after number formatting) and on language change
     setTimeout(renderEnhancements, 120);
     document.addEventListener('languageChanged', function () {
         setTimeout(renderEnhancements, 80);
