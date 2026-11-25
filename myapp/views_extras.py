@@ -655,9 +655,11 @@ def api_exercicio_gerar_view(request):
     prompt['statement'] = (
         f"Considere um sistema fechado do tipo cilindro-pistão contendo {mass} kg de {prompt['substance']}, "
         f"submetido a um(a) {proc_names.get(proc_type, proc_type)}. "
-        f"A partir dos dados fornecidos abaixo, realize suas previsões físicas (POE) e determine: {ask_str}."
+        f"A partir dos dados fornecidos abaixo, faça sua análise física e determine: {ask_str}."
     )
     prompt['difficulty'] = difficulty
+    prompt['mass'] = mass
+    prompt['process_code'] = proc_type
 
     request.session['poe_exercise'] = {
         'prompt': prompt,
@@ -733,7 +735,7 @@ def api_exercicio_corrigir_view(request):
             'ok': False,
             'blocked': True,
             'reason': 'missing_poe',
-            'message': 'Complete primeiro todas as previsões qualitativas (Etapa Prever - POE).',
+            'message': 'Complete primeiro todas as previsões físicas (Volume, Calor e 2ª Lei).',
         }, status=400)
 
     if len(justification) < 15 or len(set(justification.lower().replace(' ', ''))) < 5:
@@ -817,7 +819,7 @@ def api_exercicio_corrigir_view(request):
         poe_hits = sum(1 for v in (poe_feedback or {}).values() if v)
         UsoSimulacao.objects.create(
             substancia=ex['prompt']['substance'][:50],
-            tipo='Exercício POE',
+            tipo='Modo Exercício',
             idioma=idioma,
         )
         rec = TentativaExercicio.objects.create(
