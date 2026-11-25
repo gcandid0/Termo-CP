@@ -2067,14 +2067,14 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 
-// ============ ESTATÍSTICAS ANÔNIMAS + LINK COMPARTILHÁVEL DE SIMULAÇÃO (v12) ============
+// ============ ESTATÍSTICAS ANÔNIMAS + COMPARTILHAMENTO MODERNO COM QR CODE (v13) ============
 document.addEventListener('DOMContentLoaded', function () {
     var hasStateCard = !!document.querySelector('.state-card, .results-card');
     if (!hasStateCard) return;
 
     function detectSubstanceAndType() {
         var path = (window.location.pathname || '').toLowerCase();
-        var sub = 'Desconhecida';
+        var sub = 'Substância';
         if (path.indexOf('agua') !== -1) sub = 'Água';
         else if (path.indexOf('amonia') !== -1) sub = 'Amônia';
         else if (path.indexOf('co2') !== -1) sub = 'CO₂';
@@ -2094,6 +2094,74 @@ document.addEventListener('DOMContentLoaded', function () {
         return { substancia: sub, tipo: tipo };
     }
 
+    var SHARE_I18N = {
+        'pt-br': {
+            btn: 'Compartilhar',
+            title: 'Compartilhar Simulação',
+            subtitle: 'Envie o link curto ou projete o QR Code para a turma abrir este cálculo:',
+            copy: 'Copiar Link',
+            copied: 'Copiado!',
+            whatsapp: 'WhatsApp',
+            email: 'E-mail',
+            preview: 'Abrir Prévia',
+            qrHint: 'Escaneie com a câmera do celular',
+            generating: 'Gerando link...'
+        },
+        'en': {
+            btn: 'Share',
+            title: 'Share Simulation',
+            subtitle: 'Send the short link or project the QR Code for your class to open this calculation:',
+            copy: 'Copy Link',
+            copied: 'Copied!',
+            whatsapp: 'WhatsApp',
+            email: 'Email',
+            preview: 'Open Preview',
+            qrHint: 'Scan with phone camera',
+            generating: 'Generating link...'
+        },
+        'es': {
+            btn: 'Compartir',
+            title: 'Compartir Simulación',
+            subtitle: 'Envía el enlace corto o proyecta el Código QR para que tu clase abra este cálculo:',
+            copy: 'Copiar Enlace',
+            copied: '¡Copiado!',
+            whatsapp: 'WhatsApp',
+            email: 'Correo',
+            preview: 'Abrir Vista Previa',
+            qrHint: 'Escanear con la cámara del móvil',
+            generating: 'Generando enlace...'
+        },
+        'fr': {
+            btn: 'Partager',
+            title: 'Partager la Simulation',
+            subtitle: 'Envoyez le lien court ou projetez le QR Code pour ouvrir ce calcul :',
+            copy: 'Copier le Lien',
+            copied: 'Copié !',
+            whatsapp: 'WhatsApp',
+            email: 'E-mail',
+            preview: 'Ouvrir l\'Aperçu',
+            qrHint: 'Scanner avec votre smartphone',
+            generating: 'Génération du lien...'
+        },
+        'zh': {
+            btn: '分享',
+            title: '分享模拟结果',
+            subtitle: '发送短链接或展示二维码，让同学直接查看此次计算：',
+            copy: '复制链接',
+            copied: '已复制！',
+            whatsapp: 'WhatsApp',
+            email: '邮件',
+            preview: '打开预览',
+            qrHint: '使用手机相机扫码查看',
+            generating: '正在生成链接...'
+        }
+    };
+
+    function getShareDict() {
+        var l = localStorage.getItem('preferredLang') || 'pt-br';
+        return SHARE_I18N[l] || SHARE_I18N['pt-br'];
+    }
+
     var meta = detectSubstanceAndType();
     var lang = localStorage.getItem('preferredLang') || 'pt-br';
 
@@ -2108,71 +2176,158 @@ document.addEventListener('DOMContentLoaded', function () {
         }).catch(function () {});
     }
 
-    // 2. Botão "Compartilhar Link" na barra de ações (.button-group)
+    // 2. Modal Moderno de Compartilhamento (sem window.prompt!)
+    function openShareModal(shareUrl, titulo) {
+        var dict = getShareDict();
+        var old = document.getElementById('termoShareOverlay');
+        if (old) old.remove();
+
+        var overlay = document.createElement('div');
+        overlay.id = 'termoShareOverlay';
+        overlay.style.cssText = 'position:fixed;inset:0;background:rgba(15,23,42,0.58);backdrop-filter:blur(3px);z-index:9999;display:flex;align-items:center;justify-content:center;padding:16px;';
+
+        var qrUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=170x170&margin=6&data=' + encodeURIComponent(shareUrl);
+        var waUrl = 'https://wa.me/?text=' + encodeURIComponent('TERMO-CP (' + titulo + '): ' + shareUrl);
+        var mailUrl = 'mailto:?subject=' + encodeURIComponent('TERMO-CP — ' + titulo) + '&body=' + encodeURIComponent('Acesse a simulação termodinâmica no TERMO-CP:\n' + shareUrl);
+
+        overlay.innerHTML = ''
+            + '<div style="background:#ffffff;border-radius:18px;max-width:480px;width:100%;overflow:hidden;box-shadow:0 24px 60px rgba(15,23,42,0.28);font-family:inherit;">'
+            +   '<div style="background:linear-gradient(135deg,#1b3668 0%,#0d6ab0 100%);color:#fff;padding:18px 22px;display:flex;justify-content:space-between;align-items:center;">'
+            +     '<h3 style="margin:0;font-size:1.15em;display:flex;align-items:center;gap:9px;"><i class="fas fa-share-alt"></i> ' + dict.title + '</h3>'
+            +     '<button type="button" id="closeShareOverlay" style="background:rgba(255,255,255,0.18);color:#fff;border:none;width:32px;height:32px;border-radius:50%;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;">&times;</button>'
+            +   '</div>'
+            +   '<div style="padding:20px 22px 22px;">'
+            +     '<p style="margin:0 0 12px 0;color:#475569;font-size:0.9em;line-height:1.45;">' + dict.subtitle + '</p>'
+            +     '<div style="display:flex;gap:8px;margin-bottom:14px;">'
+            +       '<input type="text" id="termoShareInput" readonly value="' + shareUrl + '" style="flex:1;padding:9px 12px;border-radius:10px;border:1.5px solid #cbd5e1;background:#f8fafc;color:#0f172a;font-size:0.88em;font-family:Consolas,monospace;outline:none;">'
+            +       '<button type="button" id="btnDoCopyLink" style="padding:9px 14px;border-radius:10px;border:none;background:linear-gradient(135deg,#1b3668,#0d6ab0);color:#fff;font-weight:700;font-size:0.86em;cursor:pointer;white-space:nowrap;display:inline-flex;align-items:center;gap:6px;"><i class="fas fa-copy"></i> <span>' + dict.copy + '</span></button>'
+            +     '</div>'
+            +     '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px;">'
+            +       '<a href="' + waUrl + '" target="_blank" rel="noopener" style="text-decoration:none;background:#22c55e;color:#fff;padding:9px 10px;border-radius:10px;font-weight:600;font-size:0.85em;display:inline-flex;align-items:center;justify-content:center;gap:6px;"><i class="fab fa-whatsapp"></i> ' + dict.whatsapp + '</a>'
+            +       '<a href="' + mailUrl + '" style="text-decoration:none;background:#0284c7;color:#fff;padding:9px 10px;border-radius:10px;font-weight:600;font-size:0.85em;display:inline-flex;align-items:center;justify-content:center;gap:6px;"><i class="fas fa-envelope"></i> ' + dict.email + '</a>'
+            +       '<a href="' + shareUrl + '" target="_blank" rel="noopener" style="text-decoration:none;background:#f1f5f9;color:#1b3668;border:1px solid #cbd5e1;padding:9px 10px;border-radius:10px;font-weight:600;font-size:0.85em;display:inline-flex;align-items:center;justify-content:center;gap:6px;"><i class="fas fa-external-link-alt"></i> ' + dict.preview + '</a>'
+            +     '</div>'
+            +     '<div style="text-align:center;background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:12px;">'
+            +       '<img src="' + qrUrl + '" alt="QR Code" style="width:150px;height:150px;border-radius:8px;background:#fff;padding:4px;border:1px solid #e2e8f0;">'
+            +       '<div style="font-size:0.8em;color:#64748b;margin-top:6px;font-weight:600;"><i class="fas fa-qrcode"></i> ' + dict.qrHint + '</div>'
+            +     '</div>'
+            +   '</div>'
+            + '</div>';
+
+        document.body.appendChild(overlay);
+
+        function closeM() { overlay.remove(); }
+        overlay.querySelector('#closeShareOverlay').addEventListener('click', closeM);
+        overlay.addEventListener('click', function (e) { if (e.target === overlay) closeM(); });
+
+        var inp = overlay.querySelector('#termoShareInput');
+        inp.addEventListener('click', function () { inp.select(); });
+
+        var copyBtn = overlay.querySelector('#btnDoCopyLink');
+        copyBtn.addEventListener('click', function () {
+            inp.select();
+            var done = function () {
+                copyBtn.style.background = 'linear-gradient(135deg,#15803d,#16a34a)';
+                copyBtn.querySelector('span').textContent = dict.copied;
+                setTimeout(function () {
+                    copyBtn.style.background = 'linear-gradient(135deg,#1b3668,#0d6ab0)';
+                    copyBtn.querySelector('span').textContent = dict.copy;
+                }, 1800);
+            };
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(shareUrl).then(done).catch(function () {
+                    try { document.execCommand('copy'); } catch (e) {}
+                    done();
+                });
+            } else {
+                try { document.execCommand('copy'); } catch (e) {}
+                done();
+            }
+        });
+    }
+
+    function captureCylinderSnapshot() {
+        try {
+            var p5Canvas = document.querySelector('#canvas-wrapper canvas, .visualization-container canvas, .p5Canvas');
+            if (p5Canvas && p5Canvas.width > 0 && p5Canvas.height > 0) {
+                var dataUrl = p5Canvas.toDataURL('image/png');
+                if (dataUrl && dataUrl.length < 350000) return dataUrl;
+            }
+        } catch (e) {}
+        return null;
+    }
+
+    function triggerShare(btnEl) {
+        var states = [];
+        document.querySelectorAll('.state-card, .results-card').forEach(function (card) {
+            var h2 = card.querySelector('h2');
+            var rows = [];
+            card.querySelectorAll('.data-row').forEach(function (r) {
+                var l = r.querySelector('.data-label');
+                var v = r.querySelector('.data-value');
+                if (l && v) rows.push({ label: l.textContent.trim(), value: v.textContent.trim() });
+            });
+            if (rows.length) {
+                states.push({ title: h2 ? h2.textContent.trim() : 'Estado', rows: rows });
+            }
+        });
+
+        var procItems = [];
+        document.querySelectorAll('.process-results .process-item').forEach(function (item) {
+            var sp = item.querySelector('span');
+            var st = item.querySelector('strong');
+            if (sp && st) procItems.push({ label: sp.textContent.trim(), value: st.textContent.trim() });
+        });
+
+        var cylImg = captureCylinderSnapshot();
+        var titulo = meta.substancia + ' — ' + meta.tipo;
+        btnEl.disabled = true;
+
+        fetch('/api/compartilhar/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                titulo: titulo,
+                substancia: meta.substancia,
+                tipo: meta.tipo,
+                payload: { states: states, process: procItems, cylinder_img: cylImg }
+            })
+        }).then(function (r) { return r.json(); }).then(function (data) {
+            btnEl.disabled = false;
+            if (data.ok && data.url) {
+                openShareModal(data.url, titulo);
+            }
+        }).catch(function () { btnEl.disabled = false; });
+    }
+
+    // 3. Injetar botão bonito e coerente (retangular .btn nos Estados, circular .icon-btn nos Processos)
     var btnGroup = document.querySelector('.button-group');
     if (btnGroup && !document.getElementById('btnShareSim')) {
+        var isIconMode = !!btnGroup.querySelector('.icon-btn');
         var shareBtn = document.createElement('button');
         shareBtn.id = 'btnShareSim';
         shareBtn.type = 'button';
-        shareBtn.className = 'icon-btn';
-        shareBtn.style.cssText = 'background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); color: white; box-shadow: 0 4px 15px rgba(2,132,199,0.3);';
-        shareBtn.innerHTML = '<i class="fas fa-share-alt"></i><span class="icon-tooltip lang-text" data-pt-br="Compartilhar Link" data-en="Share Link" data-es="Compartir Enlace" data-fr="Partager le Lien" data-zh="分享链接">Compartilhar Link</span>';
 
-        shareBtn.addEventListener('click', function () {
-            var states = [];
-            document.querySelectorAll('.state-card, .results-card').forEach(function (card) {
-                var h2 = card.querySelector('h2');
-                var rows = [];
-                card.querySelectorAll('.data-row').forEach(function (r) {
-                    var l = r.querySelector('.data-label');
-                    var v = r.querySelector('.data-value');
-                    if (l && v) rows.push({ label: l.textContent.trim(), value: v.textContent.trim() });
-                });
-                if (rows.length) {
-                    states.push({ title: h2 ? h2.textContent.trim() : 'Estado', rows: rows });
-                }
-            });
+        if (isIconMode) {
+            shareBtn.className = 'icon-btn';
+            shareBtn.style.cssText = 'background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); color: white; box-shadow: 0 4px 15px rgba(2,132,199,0.3);';
+            shareBtn.innerHTML = '<i class="fas fa-share-alt"></i><span class="icon-tooltip lang-text" data-pt-br="Compartilhar" data-en="Share" data-es="Compartir" data-fr="Partager" data-zh="分享">Compartilhar</span>';
+            btnGroup.insertBefore(shareBtn, btnGroup.firstChild);
+        } else {
+            // Tela de Estados: botão retangular elegante combinando com Diagrama / Voltar / Novo Cálculo
+            shareBtn.className = 'btn';
+            shareBtn.style.cssText = 'background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); color: #ffffff; border: none; box-shadow: 0 4px 12px rgba(2,132,199,0.26);';
+            shareBtn.innerHTML = '<i class="fas fa-share-alt"></i> <span class="lang-text" data-pt-br="Compartilhar" data-en="Share" data-es="Compartir" data-fr="Partager" data-zh="分享">Compartilhar</span>';
+            var diagBtn = btnGroup.querySelector('#btnStateDiagram');
+            if (diagBtn && diagBtn.nextSibling) {
+                btnGroup.insertBefore(shareBtn, diagBtn.nextSibling);
+            } else {
+                btnGroup.appendChild(shareBtn);
+            }
+        }
 
-            var procItems = [];
-            document.querySelectorAll('.process-results .process-item').forEach(function (item) {
-                var sp = item.querySelector('span');
-                var st = item.querySelector('strong');
-                if (sp && st) procItems.push({ label: sp.textContent.trim(), value: st.textContent.trim() });
-            });
+        shareBtn.addEventListener('click', function () { triggerShare(shareBtn); });
 
-            fetch('/api/compartilhar/', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    titulo: meta.substancia + ' — ' + meta.tipo,
-                    substancia: meta.substancia,
-                    tipo: meta.tipo,
-                    payload: { states: states, process: procItems }
-                })
-            }).then(function (r) { return r.json(); }).then(function (data) {
-                if (!data.ok || !data.url) return;
-                var curLang = localStorage.getItem('preferredLang') || 'pt-br';
-                var msgs = {
-                    'pt-br': 'Link copiado! Compartilhe com sua turma:\n',
-                    'en': 'Link copied! Share with your class:\n',
-                    'es': '¡Enlace copiado! Compártelo con tu clase:\n',
-                    'fr': 'Lien copié ! Partagez-le avec votre classe :\n',
-                    'zh': '链接已复制！可分享给同学：\n'
-                };
-                if (navigator.clipboard && navigator.clipboard.writeText) {
-                    navigator.clipboard.writeText(data.url).then(function () {
-                        window.prompt(msgs[curLang] || msgs['pt-br'], data.url);
-                    }).catch(function () {
-                        window.prompt(msgs[curLang] || msgs['pt-br'], data.url);
-                    });
-                } else {
-                    window.prompt(msgs[curLang] || msgs['pt-br'], data.url);
-                }
-            });
-        });
-
-        btnGroup.insertBefore(shareBtn, btnGroup.firstChild);
-        // Apply current language to newly injected tooltip
         var curLangNow = localStorage.getItem('preferredLang') || 'pt-br';
         var tip = shareBtn.querySelector('.lang-text');
         if (tip && curLangNow !== 'pt-br') {

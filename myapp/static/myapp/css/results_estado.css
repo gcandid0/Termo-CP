@@ -675,3 +675,28 @@
         font-size: 0.82em !important;
     }
 }
+
+/* Botões alinhados e responsivos na tela de Estados (com Compartilhar) */
+.results-card .button-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 18px;
+}
+.results-card .button-group .btn {
+    flex: 1 1 calc(50% - 6px);
+    min-width: 130px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 0.92em;
+    transition: transform 0.16s ease, box-shadow 0.16s ease, filter 0.16s ease;
+}
+.results-card .button-group .btn:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.04);
+}
