@@ -650,3 +650,44 @@ class ExtrasFeaturesTests(TestCase):
         self.assertTrue(str(odata.get('receipt_code', '')).startswith('POE-'))
         from myapp.models import TentativaExercicio
         self.assertEqual(TentativaExercicio.objects.filter(codigo=odata['receipt_code']).count(), 1)
+
+    def test_share_process_reopens_exact_process_not_zeroed(self):
+        # Executa processo isobárico da Água (p=200 kPa, x=50% -> T2=200 °C, Tviz=25 °C)
+        self.client.post(reverse('ask_mass', kwargs={'flow_key': 'agua_pcte'}), {'mass_input': '1.0'})
+        self.client.post(reverse('ask_known1_3'), {'property_choice': '1', 'value_input': '200'})
+        self.client.post(reverse('ask_known2_3'), {'property_choice': '6', 'value_input': '50'})
+        self.client.post(reverse('ask_known3_3'), {'property_choice': '0', 'value_input': '200'})
+        self.client.post(reverse('ask_known4_3'), {'property_choice': '7', 'value_input': '25'})
+
+        res_url = reverse('process_values_3')
+        orig = self.client.get(res_url)
+        self.assertEqual(orig.status_code, 200)
+        orig_work = orig.context['Trabalho']
+        orig_heat = orig.context['Calor']
+        self.assertNotEqual(orig_work, 0.0)
+        self.assertNotEqual(orig_heat, 0.0)
+
+        # Compartilha o processo
+        share_resp = self.client.post(
+            '/api/compartilhar/',
+            data=json.dumps({
+                'substancia': 'Água',
+                'tipo': 'Isobárico',
+                'titulo': 'Água — Isobárico',
+                'payload': {
+                    'source_path': res_url,
+                    'cards': [],
+                    'summary': [],
+                },
+            }),
+            content_type='application/json',
+        )
+        self.assertEqual(share_resp.status_code, 200)
+        codigo = share_resp.json()['codigo']
+
+        # Um aluno (sessão limpa) clica em "Simular no TERMO-CP" (/s/<codigo>/abrir/)
+        visitor = Client()
+        open_resp = visitor.get(f'/s/{codigo}/abrir/', follow=True)
+        self.assertEqual(open_resp.status_code, 200)
+        self.assertEqual(open_resp.context['Trabalho'], orig_work)
+        self.assertEqual(open_resp.context['Calor'], orig_heat)

@@ -2085,11 +2085,11 @@ document.addEventListener('DOMContentLoaded', function () {
         else if (path.indexOf('gas') !== -1) sub = 'Gás Ideal';
 
         var tipo = 'Estado';
-        if (path.indexOf('pcte') !== -1 || path.indexOf('results_8') !== -1) tipo = 'Isobárico';
-        else if (path.indexOf('vcte') !== -1 || path.indexOf('results_9') !== -1) tipo = 'Isocórico';
-        else if (path.indexOf('tcte') !== -1 || path.indexOf('results_10') !== -1) tipo = 'Isotérmico';
-        else if (path.indexOf('poli') !== -1 || path.indexOf('results_11') !== -1) tipo = 'Politrópico';
-        else if (path.indexOf('scte') !== -1 || path.indexOf('results_12') !== -1) tipo = 'Isentrópico';
+        if (path.indexOf('pcte') !== -1 || path.indexOf('isobarico') !== -1 || path.indexOf('pressao') !== -1 || path.indexOf('results_8') !== -1) tipo = 'Isobárico';
+        else if (path.indexOf('vcte') !== -1 || path.indexOf('isocorico') !== -1 || path.indexOf('volume') !== -1 || path.indexOf('results_9') !== -1) tipo = 'Isocórico';
+        else if (path.indexOf('tcte') !== -1 || path.indexOf('isotermico') !== -1 || path.indexOf('results_10') !== -1) tipo = 'Isotérmico';
+        else if (path.indexOf('poli') !== -1 || path.indexOf('politropico') !== -1 || path.indexOf('results_11') !== -1) tipo = 'Politrópico';
+        else if (path.indexOf('scte') !== -1 || path.indexOf('adiabatico') !== -1 || path.indexOf('isentropico') !== -1 || path.indexOf('results_12') !== -1) tipo = 'Isentrópico';
 
         return { substancia: sub, tipo: tipo };
     }
@@ -2248,11 +2248,65 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function captureCylinderSnapshot() {
         try {
+            var wrap = document.querySelector('#canvas-wrapper, .visualization-container');
             var p5Canvas = document.querySelector('#canvas-wrapper canvas, .visualization-container canvas, .p5Canvas');
-            if (p5Canvas && p5Canvas.width > 0 && p5Canvas.height > 0) {
-                var dataUrl = p5Canvas.toDataURL('image/png');
-                if (dataUrl && dataUrl.length < 350000) return dataUrl;
+            if (!p5Canvas || p5Canvas.width <= 0 || p5Canvas.height <= 0) return null;
+
+            // Compõe o canvas 3D (respeitando object-fit: contain) + a escala HTML (#scale-container)
+            var wrapRect = wrap ? wrap.getBoundingClientRect() : p5Canvas.getBoundingClientRect();
+            var cRect = p5Canvas.getBoundingClientRect();
+            var w = Math.max(1, Math.round(wrapRect.width || cRect.width));
+            var h = Math.max(1, Math.round(wrapRect.height || cRect.height));
+
+            var tmp = document.createElement('canvas');
+            tmp.width = w;
+            tmp.height = h;
+            var ctx = tmp.getContext('2d');
+            ctx.fillStyle = '#000000';
+            ctx.fillRect(0, 0, w, h);
+
+            var scale = Math.min(cRect.width / p5Canvas.width, cRect.height / p5Canvas.height);
+            var drawW = p5Canvas.width * scale;
+            var drawH = p5Canvas.height * scale;
+            var dx = (cRect.left - wrapRect.left) + (cRect.width - drawW) / 2;
+            var dy = (cRect.top - wrapRect.top) + (cRect.height - drawH) / 2;
+            ctx.drawImage(p5Canvas, dx, dy, drawW, drawH);
+
+            // Desenha os rótulos da escala (#scale-container) na posição e alinhamento exatos do DOM
+            var scaleEl = wrap ? wrap.querySelector('#scale-container') : document.getElementById('scale-container');
+            if (scaleEl) {
+                var els = scaleEl.querySelectorAll('div, span');
+                els.forEach(function (el) {
+                    if (el.children.length > 0) return;
+                    var txt = (el.textContent || '').trim();
+                    if (!txt) return;
+                    var r = el.getBoundingClientRect();
+                    if (r.width === 0 && r.height === 0) return;
+                    var cs = window.getComputedStyle(el);
+                    var fontSize = parseFloat(cs.fontSize) || 11;
+                    var isBold = (cs.fontWeight === 'bold' || parseInt(cs.fontWeight, 10) >= 600);
+                    ctx.font = (isBold ? 'bold ' : '') + fontSize + 'px Arial, sans-serif';
+                    ctx.fillStyle = cs.color || '#ffffff';
+                    ctx.textBaseline = 'middle';
+
+                    var align = cs.textAlign || 'left';
+                    var tx = r.left - wrapRect.left;
+                    if (align === 'right' || align === 'end') {
+                        ctx.textAlign = 'right';
+                        tx = r.right - wrapRect.left;
+                    } else if (align === 'center') {
+                        ctx.textAlign = 'center';
+                        tx = (r.left - wrapRect.left) + r.width / 2;
+                    } else {
+                        ctx.textAlign = 'left';
+                    }
+                    var ty = (r.top - wrapRect.top) + r.height / 2;
+                    ctx.fillText(txt, tx, ty);
+                });
             }
+
+            var dataUrl = tmp.toDataURL('image/png');
+            if (dataUrl && dataUrl.length < 450000) return dataUrl;
         } catch (e) {}
         return null;
     }

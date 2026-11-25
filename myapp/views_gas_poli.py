@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.core.exceptions import ValidationError
 from math import log, isfinite, exp
-from .thermo_engine import format_mass_display
+from .thermo_engine import format_mass_display, save_share_pre_snapshot
 import json
 from . import estados as std
 
@@ -169,6 +169,7 @@ def ask_known7_view11(request):
 # Passo 8 – Cálculos finais (Processo Politrópico)
 ###############################################################################
 def process_values_view11(request):
+    save_share_pre_snapshot(request)
 
     try:
         # Instância stateless de gas isolada na sessão do usuário

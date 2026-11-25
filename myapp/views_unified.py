@@ -40,6 +40,7 @@ from .thermo_engine import (
     get_flow_val,
     has_flow_keys,
     save_flow_cycle,
+    save_share_pre_snapshot,
     set_flow_data,
     subs_cls,
 )
@@ -335,6 +336,7 @@ def make_pcte_views(opt, suffix, error_route=None):
                     float(get_flow_val(request, scope, 'second_value_input')),
                 )
 
+            save_share_pre_snapshot(request)
             mass_val = float(get_flow_val(request, scope, 'mass_input', 1.0) or 1.0)
             ctx, lista_estados, pontos_grafico = compute_pcte_process_context(
                 opt, state1_inputs, third_prop, third_val, temp_viz, lista_estados, pontos_grafico, mass=mass_val
@@ -448,6 +450,7 @@ def make_scte_views(opt, suffix, error_route=None):
                     float(get_flow_val(request, scope, 'second_value_input')),
                 )
 
+            save_share_pre_snapshot(request)
             mass_val = float(get_flow_val(request, scope, 'mass_input', 1.0) or 1.0)
             ctx, lista_estados, pontos_grafico = compute_scte_process_context(
                 opt, state1_inputs, third_prop, third_val, lista_estados, pontos_grafico, mass=mass_val
@@ -577,6 +580,7 @@ def make_vcte_views(opt, suffix, error_route=None):
                     float(get_flow_val(request, scope, 'second_value_input')),
                 )
 
+            save_share_pre_snapshot(request)
             mass_val = float(get_flow_val(request, scope, 'mass_input', 1.0) or 1.0)
             ctx, lista_estados, pontos_grafico = compute_vcte_process_context(
                 opt, state1_inputs, third_prop, third_val, temp_viz, lista_estados, pontos_grafico, mass=mass_val

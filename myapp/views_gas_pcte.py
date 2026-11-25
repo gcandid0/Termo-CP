@@ -9,7 +9,7 @@ from .forms import (
     ConstantesPCte8, ConstantesPCte8_2,
     Prop1PCte8, Prop1PCte8_2, Prop2PCte8, TvizGasIdeal8
 )
-from .thermo_engine import format_mass_display
+from .thermo_engine import format_mass_display, save_share_pre_snapshot
 
 # Funções Auxiliares para conversão de temperatura
 def to_kelvin(T):
@@ -143,6 +143,7 @@ def ask_known6_view8(request):
 ###############################################################################
 
 def process_values_view8(request):
+    save_share_pre_snapshot(request)
     try:
         gas = std.get_gas_session(request)
         # =====================================

@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.core.exceptions import ValidationError
 from math import log, exp
-from .thermo_engine import format_mass_display
+from .thermo_engine import format_mass_display, save_share_pre_snapshot
 import json
 from . import estados as std
 
@@ -144,6 +144,7 @@ def ask_known6_view10(request):
 ###############################################################################
 
 def process_values_view10(request):
+    save_share_pre_snapshot(request)
     try:
         gas = std.get_gas_session(request)
         # =====================================

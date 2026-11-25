@@ -8,7 +8,7 @@ from .forms import (
     ConstantesVCte9, ConstantesVCte9_2,
     Prop1VCte9, Prop1VCte9_2, Prop2VCte9, TvizGasIdeal9
 )
-from .thermo_engine import format_mass_display
+from .thermo_engine import format_mass_display, save_share_pre_snapshot
 
 # Funções Auxiliares
 def to_kelvin(T): return T + 273.15 if T is not None else None
@@ -129,6 +129,7 @@ def ask_known6_view9(request):
 ###############################################################################
 
 def process_values_view9(request):
+    save_share_pre_snapshot(request)
     try:
         gas = std.get_gas_session(request)
         # =============================

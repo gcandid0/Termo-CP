@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.core.exceptions import ValidationError
 from math import log, isfinite
-from .thermo_engine import format_mass_display
+from .thermo_engine import format_mass_display, save_share_pre_snapshot
 import json
 from . import estados as std # Necessário para a continuidade de estado
 
@@ -155,6 +155,7 @@ def ask_known5_view12(request):
 # PROCESSO ISENTRÓPICO (s = constante)
 ###############################################################################
 def process_values_view12(request):
+    save_share_pre_snapshot(request)
     try:
         # Instância stateless de gas isolada na sessão do usuário
         gas = std.get_gas_session(request)

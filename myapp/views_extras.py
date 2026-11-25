@@ -73,15 +73,19 @@ def api_compartilhar_view(request):
     if source_path.startswith('/') and not source_path.startswith('//'):
         payload['source_path'] = source_path[:300]
 
-    session_snapshot = {}
-    for k, v in request.session.items():
-        if str(k).startswith('_') or k == 'poe_exercise':
-            continue
-        try:
-            json.dumps(v)
-            session_snapshot[k] = v
-        except (TypeError, ValueError):
-            continue
+    pre_snap = request.session.get('_share_pre_snapshot')
+    if tipo != 'Estado' and isinstance(pre_snap, dict) and pre_snap:
+        session_snapshot = pre_snap
+    else:
+        session_snapshot = {}
+        for k, v in request.session.items():
+            if str(k).startswith('_') or k == 'poe_exercise':
+                continue
+            try:
+                json.dumps(v)
+                session_snapshot[k] = v
+            except (TypeError, ValueError):
+                continue
     payload['session_snapshot'] = session_snapshot
 
     sim = SimulacaoCompartilhada.objects.create(
@@ -121,6 +125,10 @@ def shared_simulation_open_view(request, codigo):
 
     snapshot = payload.get('session_snapshot')
     if isinstance(snapshot, dict):
+        # Limpa chaves antigas de cálculo da sessão do visitante para não misturar estados
+        for existing_k in list(request.session.keys()):
+            if not str(existing_k).startswith('_') and existing_k != 'poe_exercise':
+                del request.session[existing_k]
         for k, v in snapshot.items():
             if not str(k).startswith('_'):
                 request.session[k] = v

@@ -231,6 +231,20 @@ def save_flow_cycle(request, scope_key, lista_estados, pontos_grafico, legacy_in
         legacy_instance.lista_estados = list(lista_estados)
     request.session.modified = True
 
+def save_share_pre_snapshot(request):
+    """Guarda snapshot da sessão antes do append do processo atual para links compartilháveis."""
+    import copy as _copy
+    snap = {}
+    for _k, _v in request.session.items():
+        if str(_k).startswith('_') or _k == 'poe_exercise':
+            continue
+        try:
+            json.dumps(_v)
+            snap[_k] = _copy.deepcopy(_v)
+        except (TypeError, ValueError):
+            continue
+    request.session['_share_pre_snapshot'] = snap
+
 
 # ==============================================================================
 # MOTOR DE PROPRIEDADES TERMODINÂMICAS (TABELAS B.1 A B.7)
