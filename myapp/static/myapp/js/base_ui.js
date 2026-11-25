@@ -181,6 +181,8 @@ try {
         // Executa assim que o HTML da página (incluindo o que vem do block content) estiver carregado
         document.addEventListener("DOMContentLoaded", function() {
             // Busca se o usuário já escolheu um idioma antes. Se não, o padrão é 'pt-br'
+            const _urlLang = new URLSearchParams(window.location.search).get('lang');
+            if (_urlLang && ['pt-br', 'en', 'es', 'fr', 'zh'].indexOf(_urlLang) !== -1) { localStorage.setItem('preferredLang', _urlLang); }
             let savedLang = localStorage.getItem('preferredLang') || 'pt-br';
 
             // Define o índice da bolinha branca baseado no idioma salvo

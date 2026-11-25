@@ -67,11 +67,12 @@ O projeto tem foco educacional, voltado a estudantes, professores e engenheiros 
 
 - **Cálculo completo de estados termodinâmicos** — determinação de `P`, `T`, `v`, `u`, `h`, `s`, fase e título `x` (em `%` e fração decimal) a partir de pares de propriedades conhecidas, com massa configurável (`m` em kg).
 - **Simulação de processos e encadeamento de ciclos** — cálculo de transformações completas com trabalho (`W`), calor (`Q`), geração de entropia (`Sger`), verificação da 2ª Lei e **Balanço Global do Ciclo** (`W_líq`, `Q_H`, `Q_L`, rendimento térmico `η` e `COP`).
-- **Diagramas termodinâmicos interativos** — visualização em gráficos `P-v`, `T-s`, `h-s`, `T-v` e `P-h` com domo de saturação e ponto crítico.
-- **Memorial de cálculo didático** — deduções teóricas passo a passo e equações aplicadas a cada processo.
-- **Visualização 3D interativa** — animação do conjunto cilindro-pistão em P5.js (WebGL) com controle de volume.
-- **Histórico, comparação e relatórios** — comparação lado a lado de cálculos salvos na sessão e exportação de relatórios como imagem via `html2canvas`.
-- **Ajuda contextual e Tour Guiado** — central de ajuda completa, dicas por página e tour interativo dos botões e resultados.
+- **Diagramas termodinâmicos interativos com Zoom & Pan** — gráficos `P-v`, `T-s`, `h-s`, `T-v` e `P-h` (eixos lineares e logarítmicos) com domo de saturação, ponto crítico e exportação em PNG/PDF/CSV.
+- **Memorial de cálculo didático em PDF** — deduções passo a passo, tabela comparativa Estado 1 × Estado 2, verificação numérica da 1ª Lei, Irreversibilidade de Gouy-Stodola e exportação vetorial em A4.
+- **Modo Exercício e Mini-Prova** — gerador de problemas aleatórios por substância e nível, Mini-Prova de 3 questões, trava anti-burla, conversor rápido, código de autenticidade e comprovante/boletim em PDF.
+- **Compartilhamento de simulações** — geração de link curto (`/s/<codigo>/`) e QR Code com prévia do cilindro 3D e reabertura direta da simulação pronta no TERMO-CP.
+- **Visualização 3D interativa** — animação do conjunto cilindro-pistão em P5.js (WebGL) com régua logarítmica de volume.
+- **Histórico, comparação, relatórios e Ajuda contextual** — comparação lado a lado, exportação em PDF/CSV/PNG, Tour Guiado e estatísticas anônimas no painel administrativo.
 
 <br>
 
@@ -120,9 +121,13 @@ Defina a massa, o estado inicial, o tipo de processo e a condição final (ou ca
 Cada resultado inclui uma animação 3D do cilindro-pistão em P5.js (com distinção visual entre líquido, vapor e mistura bifásica) e diagramas termodinâmicos interativos com domo de saturação e ponto crítico.
 
 ### Memorial Didático, Histórico e Relatórios
-- **Memorial de Cálculo**: exibe as deduções teóricas passo a passo da 1ª e 2ª Leis aplicadas ao processo.
-- **Histórico e Comparação**: guarda os cálculos da sessão no navegador para comparação lado a lado.
-- **Exportação de Relatório**: gera um relatório consolidado pronto para exportação como imagem (`html2canvas`).
+- **Memorial de Cálculo (PDF)**: exibe deduções passo a passo da 1ª e 2ª Leis, verificação numérica (`Q − W = ΔU`), Irreversibilidade de Gouy-Stodola (`I = T_viz · Sger`) e exportação vetorial em PDF A4.
+- **Diagramas com Zoom & Pan**: ampliação e arraste nativos em Chart.js (eixos lineares e logarítmicos), com exportação em PNG, PDF e CSV.
+- **Histórico e Comparação**: guarda os cálculos da sessão com filtro de busca e comparação lado a lado.
+
+### Modo Exercício e Compartilhamento
+- **Modo Exercício (`/exercicios/`)**: problemas aleatórios calibrados para cada substância (ou Mini-Prova de 3 questões), análise física por chips clicáveis, trava anti-burla, conversor de unidades, guia de sinais, código de autenticidade no servidor e comprovante/boletim em PDF.
+- **Links Compartilháveis (`/s/<codigo>/`)**: gera link curto, QR Code e compartilhamento via WhatsApp/e-mail com prévia dos dados + cilindro 3D com escala e botão para abrir a simulação pronta.
 
 <p align="right"><a href="#topo">↑ voltar ao topo</a></p>
 
@@ -190,7 +195,7 @@ Não é necessário instalar nada — acesse diretamente a versão publicada:
 O repositório conta com suíte automatizada de testes (Django `TestCase`) e verificação estática via **Ruff**, executados automaticamente no GitHub Actions:
 
 ```bash
-# Executar os testes automatizados (28 testes: cálculos, views, formulários e integridade UTF-8)
+# Executar os testes automatizados (33 testes: cálculos, views, formulários e integridade UTF-8)
 python manage.py test myapp
 
 # Verificação de integridade do projeto Django
@@ -227,6 +232,10 @@ ruff check myapp termocp
 - [x] Central de Ajuda, ajuda contextual e Tour Guiado interativo
 - [x] Suporte completo a 5 idiomas (PT / EN / ES / FR / ZH)
 - [x] Suíte de testes automatizados e pipeline CI com GitHub Actions
+- [x] Zoom & Pan nos diagramas e exportação vetorial em PDF do Memorial Didático
+- [x] Modo Exercício (avulso e Mini-Prova de 3 questões) com trava anti-burla e comprovante PDF
+- [x] Links compartilháveis de simulação (QR Code, prévia 3D com escala e reabertura direta)
+- [x] Estatísticas anônimas de uso e auditoria de exercícios no Django Admin
 
 <p align="right"><a href="#topo">↑ voltar ao topo</a></p>
 

@@ -67,17 +67,18 @@ Designed with an educational focus, it helps students, professors, and engineers
 
 - **Complete thermodynamic state calculation** — determines `P`, `T`, `v`, `u`, `h`, `s`, phase, and quality `x` (both `%` and decimal fraction) from any valid pair of known properties, with configurable system mass (`m` in kg).
 - **Process simulation & cycle chaining** — computes full transformations including work (`W`), heat (`Q`), entropy generation (`Sgen`), 2nd Law feasibility check, and **Global Cycle Balance** (`W_net`, `Q_H`, `Q_L`, thermal efficiency `η`, and `COP`).
-- **Interactive thermodynamic diagrams** — `P-v`, `T-s`, `h-s`, `T-v`, and `P-h` plots with saturation dome and critical point.
-- **Didactic calculation memorial** — step-by-step theoretical derivations and equations for every process.
-- **Interactive 3D visualization** — WebGL piston-cylinder animation in P5.js with volume control slider.
-- **History, comparison & reports** — side-by-side comparison of session calculations and report image export via `html2canvas`.
-- **Contextual help & Guided Tour** — complete Help Center, per-page tips, and interactive guided tour of buttons and results.
+- **Interactive diagrams with Zoom & Pan** — `P-v`, `T-s`, `h-s`, `T-v`, and `P-h` plots (linear and logarithmic axes) with saturation dome, critical point, and PNG/PDF/CSV export.
+- **Didactic calculation memorial (vector PDF)** — step-by-step derivations, State 1 × State 2 table, 1st Law check, Gouy-Stodola irreversibility, and A4 PDF export.
+- **Exercise Mode & Mini-Exam** — randomized problems by substance and level, 3-question Mini-Exam, anti-cheating lock, quick unit converter, authenticity code, and PDF receipt.
+- **Shareable simulations** — short link (`/s/<code>/`) and QR Code with 3D cylinder preview (including volume scale) and one-click live reopening in TERMO-CP.
+- **Interactive 3D visualization** — WebGL piston-cylinder animation in P5.js with logarithmic volume scale.
+- **History, reports, Guided Tour & Admin analytics** — side-by-side comparison, PDF/CSV/PNG exports, interactive tour, and anonymous usage statistics.
 
 <br>
 
 <div align="center">
   <a href="https://gcandid0.pythonanywhere.com/">
-    <img src="./assets/screenshot-home.png" alt="TERMO-CP Home Screen" width="900" style="border-radius: 12px;">
+    <img src="./assets/screenshot-home-en.png" alt="TERMO-CP Home Screen" width="900" style="border-radius: 12px;">
   </a>
 </div>
 
@@ -120,9 +121,13 @@ Define the mass, initial state, process type, and final condition (or heat trans
 Every result includes a 3D P5.js piston-cylinder animation (visually distinguishing liquid, vapor, and two-phase mixtures) alongside interactive thermodynamic diagrams featuring the saturation dome and critical point.
 
 ### Didactic Memorial, History & Reports
-- **Calculation Memorial**: presents step-by-step theoretical derivations of the 1st and 2nd Laws applied to each process.
-- **History & Comparison**: stores session calculations in the browser for side-by-side comparison.
-- **Report Export**: generates a consolidated report ready to export as an image (`html2canvas`).
+- **Calculation Memorial (PDF)**: step-by-step 1st & 2nd Law derivations, numerical check (`Q − W = ΔU`), Gouy-Stodola irreversibility (`I = T_surr · Sgen`), and vector A4 PDF export.
+- **Zoom & Pan Diagrams**: native Chart.js zoom and drag on both linear and logarithmic axes, with PNG, PDF, and CSV export.
+- **History & Comparison**: stores session calculations with search filter and side-by-side comparison.
+
+### Exercise Mode & Shareable Simulations
+- **Exercise Mode (`/exercicios/`)**: randomized problems calibrated per substance (or 3-question Mini-Exam), clickable physical prediction chips, anti-cheating lock, unit converter, sign convention guide, server authenticity code, and PDF receipt.
+- **Shareable Links (`/s/<code>/`)**: short link, QR Code, and WhatsApp/email sharing with 3D cylinder preview (with scale) and one-click live simulation restore.
 
 <p align="right"><a href="#top">↑ back to top</a></p>
 
@@ -190,7 +195,7 @@ No installation required — use the live deployment directly:
 This repository includes an automated test suite (Django `TestCase`) and static analysis with **Ruff**, running automatically via GitHub Actions:
 
 ```bash
-# Run automated tests (28 tests: thermodynamics, views, forms, and UTF-8 integrity)
+# Run automated tests (33 tests: thermodynamics, views, forms, and UTF-8 integrity)
 python manage.py test myapp
 
 # Run Django system checks
@@ -227,6 +232,10 @@ ruff check myapp termocp
 - [x] Help Center, contextual page help, and interactive Guided Tour
 - [x] Full 5-language support (PT / EN / ES / FR / ZH)
 - [x] Automated test suite and GitHub Actions CI pipeline
+- [x] Diagram Zoom & Pan and vector PDF export for the Didactic Calculation Memorial
+- [x] Exercise Mode (single & 3-question Mini-Exam) with anti-cheating lock and PDF receipt
+- [x] Shareable simulation links (QR Code, scaled 3D preview, and live session restore)
+- [x] Anonymous usage analytics and exercise audit logs in Django Admin
 
 <p align="right"><a href="#top">↑ back to top</a></p>
 

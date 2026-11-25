@@ -67,17 +67,18 @@ Orienté vers l'enseignement et la recherche, le projet aide les étudiants, ens
 
 - **Calcul complet d'états thermodynamiques** — détermine `P`, `T`, `v`, `u`, `h`, `s`, la phase et le titre `x` (en `%` et en fraction décimale) à partir de paires de propriétés connues, avec masse configurable (`m` en kg).
 - **Simulation de processus et enchaînement de cycles** — calcule des transformations complètes incluant le travail (`W`), la chaleur (`Q`), l'entropie générée (`Sgén`), la vérification de la 2e Loi et le **Bilan Global du Cycle** (`W_net`, `Q_H`, `Q_L`, rendement thermique `η` et `COP`).
-- **Diagrammes thermodynamiques interactifs** — tracés `P-v`, `T-s`, `h-s`, `T-v` et `P-h` avec dôme de saturation et point critique.
-- **Mémoire de calcul didactique** — démonstrations théoriques étape par étape et équations appliquées à chaque processus.
-- **Visualisation 3D interactive** — animation WebGL du cylindre-piston avec P5.js et curseur de volume.
-- **Historique, comparaison et rapports** — comparaison côte à côte des calculs de la session et exportation de rapports en image via `html2canvas`.
-- **Aide contextuelle et Visite Guidée** — centre d'aide complet, conseils par page et visite interactive des boutons et résultats.
+- **Diagrammes interactifs avec Zoom & Pan** — tracés `P-v`, `T-s`, `h-s`, `T-v` et `P-h` (axes linéaires et logarithmiques) avec dôme de saturation, point critique et export PNG/PDF/CSV.
+- **Mémoire didactique en PDF vectoriel** — démonstrations étape par étape, tableau État 1 × État 2, vérification de la 1re Loi, irréversibilité de Gouy-Stodola et export PDF A4.
+- **Mode Exercice et Mini-Examen** — exercices aléatoires par substance et niveau, Mini-Examen de 3 questions, verrou anti-triche, convertisseur rapide, code d'authenticité et justificatif PDF.
+- **Partage de simulations** — lien court (`/s/<code>/`) et QR Code avec aperçu 3D du cylindre (avec échelle) et réouverture directe dans TERMO-CP.
+- **Visualisation 3D interactive** — animation WebGL du cylindre-piston avec P5.js et échelle logarithmique de volume.
+- **Historique, rapports, Visite Guidée et statistiques** — comparaison côte à côte, export PDF/CSV/PNG, visite interactive et statistiques anonymes dans Django Admin.
 
 <br>
 
 <div align="center">
   <a href="https://gcandid0.pythonanywhere.com/">
-    <img src="./assets/screenshot-home.png" alt="Écran d'accueil de TERMO-CP" width="900" style="border-radius: 12px;">
+    <img src="./assets/screenshot-home-fr.png" alt="Écran d'accueil de TERMO-CP" width="900" style="border-radius: 12px;">
   </a>
 </div>
 
@@ -120,9 +121,13 @@ Définissez la masse, l'état initial, le type de processus et la condition fina
 Chaque résultat s'accompagne d'une animation 3D du cylindre-piston sous P5.js (distinguant visuellement liquide, vapeur et mélange diphasique) ainsi que de diagrammes thermodynamiques interactifs avec dôme de saturation et point critique.
 
 ### Mémoire Didactique, Historique et Rapports
-- **Mémoire de Calcul** : détaille étape par étape les démonstrations des 1re et 2e Lois appliquées au processus.
-- **Historique et Comparaison** : enregistre les calculs de la session dans le navigateur pour les comparer côte à côte.
-- **Exportation de Rapports** : génère un rapport consolidé prêt à être exporté en image (`html2canvas`).
+- **Mémoire de Calcul (PDF)** : démonstrations étape par étape des 1re et 2e Lois, vérification numérique (`Q − W = ΔU`), irréversibilité de Gouy-Stodola et export PDF vectoriel A4.
+- **Diagrammes avec Zoom & Pan** : zoom et déplacement natifs Chart.js (axes linéaires et logarithmiques), avec export PNG, PDF et CSV.
+- **Historique et Comparaison** : enregistre les calculs de la session avec filtre de recherche et comparaison côte à côte.
+
+### Mode Exercice et Partage de Simulations
+- **Mode Exercice (`/exercicios/`)** : problèmes aléatoires calibrés par substance (ou Mini-Examen de 3 questions), boutons d'analyse physique, verrou anti-triche, convertisseur rapide, convention de signes, code d'authenticité et justificatif PDF.
+- **Liens Partageables (`/s/<code>/`)** : lien court, QR Code et aperçu 3D avec échelle permettant de rouvrir la simulation prête dans TERMO-CP.
 
 <p align="right"><a href="#haut">↑ retour en haut</a></p>
 
@@ -190,7 +195,7 @@ Aucune installation nécessaire — utilisez directement la version publiée :
 Le dépôt inclut une suite de tests automatisés (Django `TestCase`) ainsi qu'une analyse statique via **Ruff**, exécutées automatiquement sur GitHub Actions :
 
 ```bash
-# Lancer les tests automatisés (28 tests : calculs, vues, formulaires et intégrité UTF-8)
+# Lancer les tests automatisés (33 tests : calculs, vues, formulaires et intégrité UTF-8)
 python manage.py test myapp
 
 # Vérification du projet Django
@@ -227,6 +232,10 @@ ruff check myapp termocp
 - [x] Centre d'Aide, aide contextuelle et Visite Guidée interactive
 - [x] Prise en charge complète de 5 langues (PT / EN / ES / FR / ZH)
 - [x] Suite de tests automatisés et pipeline CI avec GitHub Actions
+- [x] Zoom & Pan sur les diagrammes et export PDF vectoriel du Mémoire Didactique
+- [x] Mode Exercice (libre et Mini-Examen de 3 questions) avec verrou anti-triche et justificatif PDF
+- [x] Liens partageables de simulation (QR Code, aperçu 3D avec échelle et réouverture directe)
+- [x] Statistiques anonymes d'utilisation et suivi des exercices dans Django Admin
 
 <p align="right"><a href="#haut">↑ retour en haut</a></p>
 

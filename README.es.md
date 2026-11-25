@@ -67,17 +67,18 @@ Con un enfoque educativo, está dirigida a estudiantes, docentes e ingenieros qu
 
 - **Cálculo completo de estados termodinámicos** — determina `P`, `T`, `v`, `u`, `h`, `s`, fase y calidad `x` (en `%` y fracción decimal) a partir de pares de propiedades conocidas, con masa configurable (`m` en kg).
 - **Simulación de procesos y encadenamiento de ciclos** — calcula transformaciones completas con trabajo (`W`), calor (`Q`), generación de entropía (`Sgen`), verificación de la 2ª Ley y **Balance Global del Ciclo** (`W_neto`, `Q_H`, `Q_L`, eficiencia térmica `η` y `COP`).
-- **Diagramas termodinámicos interactivos** — gráficos `P-v`, `T-s`, `h-s`, `T-v` y `P-h` con domo de saturación y punto crítico.
-- **Memoria de cálculo didáctica** — deducciones teóricas paso a paso y ecuaciones aplicadas a cada proceso.
-- **Visualización 3D interactiva** — animación WebGL del cilindro-pistón en P5.js con control deslizable de volumen.
-- **Historial, comparación e informes** — comparación lado a lado de cálculos de la sesión y exportación de informes en imagen con `html2canvas`.
-- **Ayuda contextual y Tour Guiado** — centro de ayuda completo, consejos por página y recorrido guiado de botones y resultados.
+- **Diagramas interactivos con Zoom y Pan** — gráficos `P-v`, `T-s`, `h-s`, `T-v` y `P-h` (ejes lineales y logarítmicos) con domo de saturación, punto crítico y exportación en PNG/PDF/CSV.
+- **Memoria de cálculo didáctica en PDF** — deducciones paso a paso, tabla Estado 1 × Estado 2, verificación de la 1ª Ley, irreversibilidad de Gouy-Stodola y PDF vectorial A4.
+- **Modo Ejercicio y Mini-Examen** — problemas aleatorios por sustancia y nivel, Mini-Examen de 3 preguntas, bloqueo anti-trampa, conversor rápido, código de autenticidad y comprobante PDF.
+- **Simulaciones compartibles** — enlace corto (`/s/<codigo>/`) y código QR con vista previa del cilindro 3D con escala y reapertura directa en TERMO-CP.
+- **Visualización 3D interactiva** — animación WebGL del cilindro-pistón en P5.js con escala logarítmica de volumen.
+- **Historial, informes, Tour Guiado y estadísticas** — comparación lado a lado, exportación PDF/CSV/PNG, recorrido interactivo y estadísticas anónimas en Django Admin.
 
 <br>
 
 <div align="center">
   <a href="https://gcandid0.pythonanywhere.com/">
-    <img src="./assets/screenshot-home.png" alt="Pantalla principal de TERMO-CP" width="900" style="border-radius: 12px;">
+    <img src="./assets/screenshot-home-es.png" alt="Pantalla principal de TERMO-CP" width="900" style="border-radius: 12px;">
   </a>
 </div>
 
@@ -120,9 +121,13 @@ Defina la masa, el estado inicial, el tipo de proceso y la condición final (o e
 Cada resultado incluye una animación 3D del cilindro-pistón en P5.js (distinguiendo visualmente líquido, vapor y mezcla bifásica) junto con diagramas termodinámicos interactivos con domo de saturación y punto crítico.
 
 ### Memoria Didáctica, Historial e Informes
-- **Memoria de Cálculo**: muestra las deducciones teóricas paso a paso de la 1ª y 2ª Leyes aplicadas al proceso.
-- **Historial y Comparación**: guarda los cálculos de la sesión en el navegador para compararlos lado a lado.
-- **Exportación de Informes**: genera un informe consolidado listo para exportar como imagen (`html2canvas`).
+- **Memoria de Cálculo (PDF)**: deducciones paso a paso de la 1ª y 2ª Ley, verificación numérica (`Q − W = ΔU`), irreversibilidad de Gouy-Stodola y exportación vectorial en PDF A4.
+- **Diagramas con Zoom y Pan**: zoom y arrastre nativos en Chart.js (ejes lineales y logarítmicos), con exportación en PNG, PDF y CSV.
+- **Historial y Comparación**: guarda los cálculos de la sesión con filtro de búsqueda y comparación lado a lado.
+
+### Modo Ejercicio y Enlaces Compartibles
+- **Modo Ejercicio (`/exercicios/`)**: problemas aleatorios calibrados por sustancia (o Mini-Examen de 3 preguntas), chips de análisis físico, bloqueo anti-trampa, conversor rápido, guía de signos, código de autenticidad y comprobante/boletín en PDF.
+- **Enlaces Compartibles (`/s/<codigo>/`)**: enlace corto, código QR y vista previa 3D con escala para reabrir la simulación lista en TERMO-CP.
 
 <p align="right"><a href="#inicio">↑ volver arriba</a></p>
 
@@ -190,7 +195,7 @@ No requiere instalación — acceda directamente a la versión publicada:
 El repositorio cuenta con una suite automatizada de pruebas (Django `TestCase`) y análisis estático con **Ruff**, ejecutados automáticamente mediante GitHub Actions:
 
 ```bash
-# Ejecutar pruebas automatizadas (28 pruebas: cálculos, vistas, formularios e integridad UTF-8)
+# Ejecutar pruebas automatizadas (33 pruebas: cálculos, vistas, formularios e integridad UTF-8)
 python manage.py test myapp
 
 # Verificación del proyecto Django
@@ -227,6 +232,10 @@ ruff check myapp termocp
 - [x] Centro de Ayuda, ayuda contextual y Tour Guiado interactivo
 - [x] Soporte completo en 5 idiomas (PT / EN / ES / FR / ZH)
 - [x] Suite de pruebas automatizadas y pipeline CI con GitHub Actions
+- [x] Zoom y Pan en diagramas y exportación vectorial en PDF de la Memoria Didáctica
+- [x] Modo Ejercicio (individual y Mini-Examen de 3 preguntas) con bloqueo anti-trampa y PDF
+- [x] Enlaces compartibles de simulación (código QR, vista previa 3D con escala y reapertura directa)
+- [x] Estadísticas anónimas de uso y registro de ejercicios en Django Admin
 
 <p align="right"><a href="#inicio">↑ volver arriba</a></p>
 
