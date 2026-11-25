@@ -11,6 +11,7 @@ Cobre:
 """
 
 import copy
+import json
 import pathlib
 import re
 from django.test import Client, TestCase
