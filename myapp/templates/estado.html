@@ -110,6 +110,45 @@
             padding: 20px;
         }
     }
+
+    /* --- Refinamento Visual Moderno (Seleção de Substância) --- */
+    .states-container, .processes-container {
+        border-radius: 16px !important;
+        border: 1px solid rgba(32, 55, 107, 0.08);
+        box-shadow: 0 12px 32px rgba(15, 23, 42, 0.07), 0 2px 6px rgba(15, 23, 42, 0.04) !important;
+        padding: 42px 38px !important;
+    }
+    .hero-icon {
+        width: 74px;
+        height: 74px;
+        margin: 0 auto 16px !important;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #eef6ff 0%, #dbeafe 100%);
+        color: var(--secondary-color) !important;
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+        font-size: 2.1em !important;
+        box-shadow: 0 6px 16px rgba(13, 106, 176, 0.14);
+    }
+    .states-container h2, .processes-container h2 {
+        font-weight: 700;
+        letter-spacing: -0.015em;
+    }
+    .states-container p, .processes-container p {
+        color: #5b6b82 !important;
+    }
+    .sub-card {
+        border-radius: 12px !important;
+        padding: 22px 12px !important;
+        box-shadow: 0 4px 10px rgba(15, 23, 42, 0.1) !important;
+        transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease !important;
+    }
+    .sub-card:hover {
+        transform: translateY(-4px) scale(1.02) !important;
+        box-shadow: 0 10px 22px rgba(15, 23, 42, 0.18) !important;
+        filter: brightness(1.07) !important;
+    }
 </style>
 {% endblock %}
 
