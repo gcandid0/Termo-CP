@@ -20,7 +20,7 @@ function updateLabel() {
 
         // Mapeamento expandido adaptado para o sistema de idiomas dinâmico
         var info = {
-            '0': { icon: 'fas fa-temperature-high', min: -64.34, max: 360.0, 
+            '0': { icon: 'fas fa-temperature-high', min: -60, max: 360, 
                 pt: 'Digite o valor da Temperatura (°C)', en: 'Enter the Temperature value (°C)', es: 'Introduzca el valor de la Temperatura (°C)'},
             '1': { icon: 'fas fa-tachometer-alt', min: 50, max: 4901.2, 
                 pt: 'Digite o valor da Pressão (kPa)', en: 'Enter the Pressure value (kPa)', es: 'Introduzca el valor de la Presión (kPa)'},

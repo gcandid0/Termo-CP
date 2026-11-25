@@ -53,7 +53,7 @@
                     </span>
                 </label>
                 <!-- O placeholder será atualizado pelo JS abaixo -->
-                <input type="number" id="value_input" name="value_input" step="any" min="-500" max="500000" required placeholder="Digite o valor">
+                <input type="number" id="value_input" name="value_input" step="any" min="1" max="3000" required placeholder="Digite o valor">
             </div>
 
             <div class="button-container">
@@ -73,5 +73,5 @@
 {% endblock %}
 
 {% block extra_js %}
-<script src="{% static 'myapp/js/wizard_script_1.js' %}"></script>
+<script src="{% static 'myapp/js/wizard_script_1.js' %}?v=2"></script>
 {% endblock %}

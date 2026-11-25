@@ -251,9 +251,9 @@
 
             // Mapeamento com gênero aplicado (da / do)
             var info = {
-                '0': { nome: 'Temperatura', genero: 'da', unidade: '(°C)', icon: 'fas fa-temperature-high', min: -500, max: 10000 },
-                '1': { nome: 'Pressão', genero: 'da', unidade: '(kPa)', icon: 'fas fa-tachometer-alt', min: 0, max: 50000 },
-                '2': { nome: 'Volume Específico', genero: 'do', unidade: '(m³/kg)', icon: 'fas fa-cube', min: 0, max: 10000 }
+                '0': { nome: 'Temperatura', genero: 'da', unidade: '(°C)', icon: 'fas fa-temperature-high', min: -250, max: 3000 },
+                '1': { nome: 'Pressão', genero: 'da', unidade: '(kPa)', icon: 'fas fa-tachometer-alt', min: 0.1, max: 50000 },
+                '2': { nome: 'Volume Específico', genero: 'do', unidade: '(m³/kg)', icon: 'fas fa-cube', min: 0.0001, max: 1000 }
             };
 
             if (info[selectedValue]) {

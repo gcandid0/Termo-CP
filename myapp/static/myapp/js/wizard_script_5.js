@@ -16,15 +16,15 @@ function updateLabel() {
 
         // Dicionário completo e traduzido
         var dict = {
-            '0': { icon: 'fas fa-temperature-high', min: -273.14, max: 10000,
+            '0': { icon: 'fas fa-temperature-high', min: -250, max: 3000,
                    'pt-br': 'Digite o valor da Temperatura (°C):',
                    'en': 'Enter the Temperature value (°C):',
                    'es': 'Ingrese el valor de la Temperatura (°C):' },
-            '1': { icon: 'fas fa-tachometer-alt', min: 0, max: 50000,
+            '1': { icon: 'fas fa-tachometer-alt', min: 0.1, max: 50000,
                    'pt-br': 'Digite o valor da Pressão (kPa):',
                    'en': 'Enter the Pressure value (kPa):',
                    'es': 'Ingrese el valor de la Presión (kPa):' },
-            '2': { icon: 'fas fa-cube', min: 0, max: 10000,
+            '2': { icon: 'fas fa-cube', min: 0.0001, max: 1000,
                    'pt-br': 'Digite o valor do Volume (m³/kg):',
                    'en': 'Enter the Volume value (m³/kg):',
                    'es': 'Ingrese el valor del Volumen (m³/kg):' }

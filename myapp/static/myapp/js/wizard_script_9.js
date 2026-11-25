@@ -26,7 +26,7 @@ function updateLabel() {
                               'data-es="Introduzca el valor de la Temperatura (°C)">' +
                               'Digite o valor da Temperatura (°C)</span>';
 
-            numberInput.setAttribute('min', '-1000');
+            numberInput.setAttribute('min', '-50');
             numberInput.setAttribute('max', '320');
             numberInput.placeholder = phStr[currentLang];
 

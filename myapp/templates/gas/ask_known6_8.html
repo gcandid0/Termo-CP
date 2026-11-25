@@ -37,7 +37,7 @@
                     Digite o valor da Temperatura da vizinhança (°C):
                 </span>
             </label>
-            <input type="number" id="Tviz_value_input" name="Tviz_value_input" step="any" min="-500" max="500000" required>
+            <input type="number" id="Tviz_value_input" name="Tviz_value_input" step="any" min="-273" max="3000" required>
         </div>
 
         <div class="button-container">
@@ -56,5 +56,5 @@
 {% endblock %}
 
 {% block extra_js %}
-<script src="{% static 'myapp/js/wizard_script_15.js' %}"></script>
+<script src="{% static 'myapp/js/wizard_script_15.js' %}?v=2"></script>
 {% endblock %}

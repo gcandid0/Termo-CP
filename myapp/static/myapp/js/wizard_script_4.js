@@ -15,10 +15,10 @@ function updateLabel() {
 
         // Definição das constantes e seus limites
         var info = {
-            '11': { text: 'Cv0', icon: 'fas fa-compress-arrows-alt', min: 0, max: 1000 },
-            '12': { text: 'Cp0', icon: 'fas fa-expand-arrows-alt', min: 0, max: 1000 },
-            '13': { text: 'R', icon: 'fas fa-superscript', min: 0.0001, max: 1000 },
-            '14': { text: 'K', icon: 'fas fa-project-diagram', min: 1.0001, max: 1000 }
+            '11': { text: 'Cv0', icon: 'fas fa-compress-arrows-alt', min: 0.1, max: 15 },
+            '12': { text: 'Cp0', icon: 'fas fa-expand-arrows-alt', min: 0.1, max: 20 },
+            '13': { text: 'R', icon: 'fas fa-superscript', min: 0.05, max: 5 },
+            '14': { text: 'K', icon: 'fas fa-project-diagram', min: 1.01, max: 2.0 }
         };
 
         // Dicionário de traduções dinâmicas para o JavaScript
