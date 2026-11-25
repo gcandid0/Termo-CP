@@ -397,55 +397,8 @@ try {
         });
 
 
-// ============ EXIBIÇÃO PRÉVIA DOS LIMITES VÁLIDOS + CONVERSOR DE UNIDADES ============
+// ============ EXIBIÇÃO PRÉVIA DOS LIMITES VÁLIDOS (HELPER TEXT) ============
 document.addEventListener('DOMContentLoaded', function () {
-    var UNIT_CONVERSIONS = {
-        'kPa': [
-            { label: 'kPa', toBase: function (v) { return v; }, fromBase: function (v) { return v; } },
-            { label: 'bar', toBase: function (v) { return v * 100; }, fromBase: function (v) { return v / 100; } },
-            { label: 'MPa', toBase: function (v) { return v * 1000; }, fromBase: function (v) { return v / 1000; } },
-            { label: 'atm', toBase: function (v) { return v * 101.325; }, fromBase: function (v) { return v / 101.325; } },
-            { label: 'psi', toBase: function (v) { return v * 6.894757; }, fromBase: function (v) { return v / 6.894757; } }
-        ],
-        '°C': [
-            { label: '°C', toBase: function (v) { return v; }, fromBase: function (v) { return v; } },
-            { label: 'K', toBase: function (v) { return v - 273.15; }, fromBase: function (v) { return v + 273.15; } },
-            { label: '°F', toBase: function (v) { return (v - 32) * 5 / 9; }, fromBase: function (v) { return v * 9 / 5 + 32; } }
-        ],
-        'K': [
-            { label: 'K', toBase: function (v) { return v; }, fromBase: function (v) { return v; } },
-            { label: '°C', toBase: function (v) { return v + 273.15; }, fromBase: function (v) { return v - 273.15; } },
-            { label: '°F', toBase: function (v) { return (v - 32) * 5 / 9 + 273.15; }, fromBase: function (v) { return (v - 273.15) * 9 / 5 + 32; } }
-        ],
-        'kg': [
-            { label: 'kg', toBase: function (v) { return v; }, fromBase: function (v) { return v; } },
-            { label: 'g', toBase: function (v) { return v / 1000; }, fromBase: function (v) { return v * 1000; } },
-            { label: 'lb', toBase: function (v) { return v * 0.45359237; }, fromBase: function (v) { return v / 0.45359237; } }
-        ],
-        'm³/kg': [
-            { label: 'm³/kg', toBase: function (v) { return v; }, fromBase: function (v) { return v; } },
-            { label: 'L/kg', toBase: function (v) { return v / 1000; }, fromBase: function (v) { return v * 1000; } },
-            { label: 'cm³/g', toBase: function (v) { return v / 1000; }, fromBase: function (v) { return v * 1000; } }
-        ],
-        'kJ': [
-            { label: 'kJ', toBase: function (v) { return v; }, fromBase: function (v) { return v; } },
-            { label: 'J', toBase: function (v) { return v / 1000; }, fromBase: function (v) { return v * 1000; } },
-            { label: 'MJ', toBase: function (v) { return v * 1000; }, fromBase: function (v) { return v / 1000; } },
-            { label: 'kcal', toBase: function (v) { return v * 4.184; }, fromBase: function (v) { return v / 4.184; } }
-        ],
-        'kJ/kg': [
-            { label: 'kJ/kg', toBase: function (v) { return v; }, fromBase: function (v) { return v; } },
-            { label: 'J/kg', toBase: function (v) { return v / 1000; }, fromBase: function (v) { return v * 1000; } },
-            { label: 'MJ/kg', toBase: function (v) { return v * 1000; }, fromBase: function (v) { return v / 1000; } },
-            { label: 'kcal/kg', toBase: function (v) { return v * 4.184; }, fromBase: function (v) { return v / 4.184; } }
-        ]
-    };
-
-    function cleanNum(num) {
-        if (Math.abs(num) < 1e-12) return '0';
-        return String(parseFloat(num.toPrecision(6)));
-    }
-
     function formatBound(val, lang) {
         if (val === null || val === undefined || val === '') return '';
         var str = String(val).trim();
@@ -453,148 +406,74 @@ document.addEventListener('DOMContentLoaded', function () {
         return str.replace('.', ',');
     }
 
-    function findAssociatedLabel(input) {
+    function extractUnit(input) {
+        var label = null;
         if (input.id) {
-            var lbl = document.querySelector('label[for="' + input.id + '"]');
-            if (lbl) return lbl;
+            label = document.querySelector('label[for="' + input.id + '"]');
         }
-        var wrap = input.closest('.unit-input-wrap') || input;
-        if (wrap.previousElementSibling && wrap.previousElementSibling.tagName === 'LABEL') {
-            return wrap.previousElementSibling;
+        if (!label && input.previousElementSibling && input.previousElementSibling.tagName === 'LABEL') {
+            label = input.previousElementSibling;
         }
-        return null;
-    }
-
-    function extractBaseUnit(input) {
-        var label = findAssociatedLabel(input);
         if (!label) return '';
         var text = label.textContent.trim();
         var match = text.match(/\(([^()]+)\)\s*:?\s*$/);
-        return match ? match[1].trim() : '';
-    }
-
-    function getActiveConversion(input) {
-        var baseUnit = input._baseUnit || '';
-        var list = UNIT_CONVERSIONS[baseUnit];
-        if (!list || !input._unitSelect) return null;
-        var idx = parseInt(input._unitSelect.value, 10) || 0;
-        return list[idx] || list[0];
-    }
-
-    function syncUnitSelector(input) {
-        var baseUnit = extractBaseUnit(input);
-        var prevBase = input._baseUnit;
-        var select = input._unitSelect;
-        var list = UNIT_CONVERSIONS[baseUnit];
-
-        if (baseUnit !== prevBase) {
-            input._baseUnit = baseUnit;
-            // Captura limites originais na unidade base
-            var curMin = input.getAttribute('min');
-            var curMax = input.getAttribute('max');
-            input._baseMin = (curMin !== null && curMin !== '') ? curMin : null;
-            input._baseMax = (curMax !== null && curMax !== '') ? curMax : null;
-
-            if (select) {
-                select.innerHTML = '';
-                if (list) {
-                    list.forEach(function (u, i) {
-                        var opt = document.createElement('option');
-                        opt.value = String(i);
-                        opt.textContent = u.label;
-                        select.appendChild(opt);
-                    });
-                    select.value = '0';
-                    select.style.display = 'block';
-                } else {
-                    select.style.display = 'none';
-                }
-            }
-        }
-    }
-
-    function applyConvertedBounds(input) {
-        var conv = getActiveConversion(input);
-        input._isConvertingBounds = true;
-        try {
-            if (input._baseMin !== null && input._baseMin !== undefined) {
-                var minNum = parseFloat(input._baseMin);
-                var convertedMin = conv ? conv.fromBase(minNum) : minNum;
-                input.setAttribute('min', cleanNum(convertedMin));
-            }
-            if (input._baseMax !== null && input._baseMax !== undefined) {
-                var maxNum = parseFloat(input._baseMax);
-                var convertedMax = conv ? conv.fromBase(maxNum) : maxNum;
-                input.setAttribute('max', cleanNum(convertedMax));
-            }
-            // Descarta imediatamente as mutações geradas por nós mesmos antes do microtask disparar
-            if (input._attrObserver) {
-                input._attrObserver.takeRecords();
-            }
-        } finally {
-            input._isConvertingBounds = false;
-        }
+        return match ? ' ' + match[1].trim() : '';
     }
 
     function updateInputHelper(input) {
-        syncUnitSelector(input);
-
         var helper = input._rangeHelper;
+        if (!helper) {
+            helper = document.createElement('small');
+            helper.className = 'input-range-helper';
+            helper.setAttribute('role', 'status');
+            input.insertAdjacentElement('afterend', helper);
+            input._rangeHelper = helper;
+        }
+
         var minAttr = input.getAttribute('min');
         var maxAttr = input.getAttribute('max');
         var hasMin = minAttr !== null && minAttr !== '';
         var hasMax = maxAttr !== null && maxAttr !== '';
 
-        var conv = getActiveConversion(input);
-        var isConverted = conv && input._unitSelect && input._unitSelect.value !== '0';
-        var displayUnit = conv ? ' ' + conv.label : (input._baseUnit ? ' ' + input._baseUnit : '');
-
-        if (!hasMin && !hasMax && !isConverted) {
-            if (helper) helper.style.display = 'none';
+        if (!hasMin && !hasMax) {
+            helper.style.display = 'none';
             return;
         }
 
         var lang = localStorage.getItem('preferredLang') || 'pt-br';
+        var unit = extractUnit(input);
         var minStr = formatBound(minAttr, lang);
         var maxStr = formatBound(maxAttr, lang);
         var msg = '';
 
         if (hasMin && hasMax) {
-            if (lang === 'en') msg = 'Valid range: ' + minStr + ' to ' + maxStr + displayUnit;
-            else if (lang === 'es') msg = 'Rango válido: ' + minStr + ' a ' + maxStr + displayUnit;
-            else msg = 'Faixa válida: ' + minStr + ' a ' + maxStr + displayUnit;
+            if (lang === 'en') msg = 'Valid range: ' + minStr + ' to ' + maxStr + unit;
+            else if (lang === 'es') msg = 'Rango válido: ' + minStr + ' a ' + maxStr + unit;
+            else msg = 'Faixa válida: ' + minStr + ' a ' + maxStr + unit;
         } else if (hasMin) {
-            if (lang === 'en') msg = 'Minimum value: ' + minStr + displayUnit;
-            else if (lang === 'es') msg = 'Valor mínimo: ' + minStr + displayUnit;
-            else msg = 'Valor mínimo: ' + minStr + displayUnit;
+            if (lang === 'en') msg = 'Minimum value: ' + minStr + unit;
+            else if (lang === 'es') msg = 'Valor mínimo: ' + minStr + unit;
+            else msg = 'Valor mínimo: ' + minStr + unit;
         } else if (hasMax) {
-            if (lang === 'en') msg = 'Maximum value: ' + maxStr + displayUnit;
-            else if (lang === 'es') msg = 'Valor máximo: ' + maxStr + displayUnit;
-            else msg = 'Valor máximo: ' + maxStr + displayUnit;
+            if (lang === 'en') msg = 'Maximum value: ' + maxStr + unit;
+            else if (lang === 'es') msg = 'Valor máximo: ' + maxStr + unit;
+            else msg = 'Valor máximo: ' + maxStr + unit;
         }
 
-        // Verifica se o valor atual digitado está fora da faixa e mostra prévia convertida
         var rawVal = input.value;
         var outOfRange = false;
-        var preview = '';
         if (rawVal !== '') {
             var numVal = parseFloat(rawVal);
             if (!isNaN(numVal)) {
-                if (hasMin && numVal < parseFloat(minAttr) - 1e-9) outOfRange = true;
-                if (hasMax && numVal > parseFloat(maxAttr) + 1e-9) outOfRange = true;
-                if (isConverted) {
-                    var baseVal = conv.toBase(numVal);
-                    preview = '  •  = ' + formatBound(cleanNum(baseVal), lang) + ' ' + input._baseUnit;
-                }
+                if (hasMin && numVal < parseFloat(minAttr)) outOfRange = true;
+                if (hasMax && numVal > parseFloat(maxAttr)) outOfRange = true;
             }
         }
 
-        if (helper) {
-            helper.classList.toggle('out-of-range', outOfRange);
-            var iconClass = outOfRange ? 'fas fa-exclamation-triangle' : 'fas fa-info-circle';
-            helper.innerHTML = '<i class="' + iconClass + '"></i><span>' + msg + preview + '</span>';
-            helper.style.display = 'flex';
-        }
+        helper.classList.toggle('out-of-range', outOfRange);
+        var iconClass = outOfRange ? 'fas fa-exclamation-triangle' : 'fas fa-info-circle';
+        helper.innerHTML = '<i class="' + iconClass + '"></i><span>' + msg + '</span>';
+        helper.style.display = 'flex';
     }
 
     function attachAllNumberInputs() {
@@ -606,76 +485,10 @@ document.addEventListener('DOMContentLoaded', function () {
             }
             input._rangeObserverAttached = true;
 
-            // Envolve o input num wrapper flex com seletor de unidade ao lado
-            var wrap = document.createElement('div');
-            wrap.className = 'unit-input-wrap';
-            input.parentNode.insertBefore(wrap, input);
-            wrap.appendChild(input);
-
-            var select = document.createElement('select');
-            select.className = 'unit-converter-select';
-            select.setAttribute('aria-label', 'Unidade');
-            select.style.display = 'none';
-            wrap.appendChild(select);
-            input._unitSelect = select;
-
-            var helper = document.createElement('small');
-            helper.className = 'input-range-helper';
-            helper.setAttribute('role', 'status');
-            wrap.insertAdjacentElement('afterend', helper);
-            input._rangeHelper = helper;
-
-            // Ao trocar de unidade no dropdown, atualiza min/max e helper
-            select.addEventListener('change', function () {
-                applyConvertedBounds(input);
-                updateInputHelper(input);
-            });
-
-            // Ao enviar o formulário, converte automaticamente para a unidade padrão (SI) do backend
-            var form = input.closest('form');
-            if (form && !form._unitConvertBound) {
-                form._unitConvertBound = true;
-                form.addEventListener('submit', function () {
-                    var numInputs = form.querySelectorAll('input[type="number"]');
-                    numInputs.forEach(function (ni) {
-                        var conv = getActiveConversion(ni);
-                        if (conv && ni._unitSelect && ni._unitSelect.value !== '0' && ni.value !== '') {
-                            var v = parseFloat(ni.value);
-                            if (!isNaN(v)) {
-                                ni._isConvertingBounds = true;
-                                if (ni._baseMin !== null && ni._baseMin !== undefined) ni.setAttribute('min', ni._baseMin);
-                                if (ni._baseMax !== null && ni._baseMax !== undefined) ni.setAttribute('max', ni._baseMax);
-                                ni.value = String(parseFloat(conv.toBase(v).toPrecision(8)));
-                                ni._unitSelect.value = '0';
-                                if (ni._attrObserver) ni._attrObserver.takeRecords();
-                                ni._isConvertingBounds = false;
-                            }
-                        }
-                    });
-                });
-            }
-
-            // Observa alterações dinâmicas de min/max feitas pelos wizard_script_*.js
             var observer = new MutationObserver(function () {
-                if (input._isConvertingBounds) return;
-                var curMin = input.getAttribute('min');
-                var curMax = input.getAttribute('max');
-                input._baseMin = (curMin !== null && curMin !== '') ? curMin : null;
-                input._baseMax = (curMax !== null && curMax !== '') ? curMax : null;
-                input._baseUnit = null; // força ressincronizar unidade com o novo label
                 updateInputHelper(input);
             });
             observer.observe(input, { attributes: true, attributeFilter: ['min', 'max'] });
-            input._attrObserver = observer;
-
-            // Observa alterações de texto no label associado (ex: troca de rádio ou idioma)
-            var lbl = findAssociatedLabel(input);
-            if (lbl) {
-                var lblObserver = new MutationObserver(function () {
-                    updateInputHelper(input);
-                });
-                lblObserver.observe(lbl, { childList: true, subtree: true, characterData: true });
-            }
 
             input.addEventListener('input', function () {
                 updateInputHelper(input);

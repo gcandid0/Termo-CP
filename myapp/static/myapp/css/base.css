@@ -473,7 +473,7 @@
             align-items: center;
             justify-content: center;
             gap: 6px;
-            max-width: 360px;
+            max-width: 320px;
             margin: 10px auto 0;
             font-size: 0.85em;
             color: #4a607a;
@@ -498,49 +498,4 @@
 
         .input-range-helper.out-of-range i {
             color: #dc2626;
-        }
-
-        /* ================= CONVERSOR DE UNIDADES NOS FORMULÁRIOS ================= */
-        .unit-input-wrap {
-            display: flex;
-            align-items: stretch;
-            justify-content: center;
-            gap: 8px;
-            width: 100%;
-            max-width: 360px;
-            margin: 0 auto;
-        }
-
-        .unit-input-wrap input[type="number"] {
-            flex: 1;
-            min-width: 0;
-            width: auto !important;
-            max-width: none !important;
-            margin: 0 !important;
-            text-align: center;
-        }
-
-        .unit-converter-select {
-            flex: 0 0 auto;
-            min-width: 82px;
-            padding: 0 12px;
-            border-radius: 10px;
-            border: 1.5px solid #cbd5e1;
-            background: #f8fafc;
-            color: var(--primary-color);
-            font-weight: 700;
-            font-size: 0.92em;
-            cursor: pointer;
-            transition: border-color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
-        }
-
-        .unit-converter-select:hover {
-            border-color: var(--secondary-color);
-            background: #eef5fc;
-        }
-
-        .unit-converter-select:focus {
-            outline: none;
-            border-color: var(--secondary-color);
-            box-shadow: 0 0 0 3px rgba(13, 106, 176, 0.16);
         }
