@@ -680,3 +680,357 @@ document.addEventListener('DOMContentLoaded', function () {
         setTimeout(attachAllNumberInputs, 60);
     });
 });
+
+
+// ============ APRIMORAMENTO PEDAGÓGICO DO MEMORIAL DE CÁLCULO (TODAS AS SUBSTÂNCIAS) ============
+document.addEventListener('DOMContentLoaded', function () {
+    var modal = document.getElementById('didacticModal');
+    if (!modal) return;
+    var content = modal.querySelector('.modal-content');
+    if (!content) return;
+
+    function parseLocaleNum(str) {
+        if (!str) return null;
+        var clean = String(str).replace(/[^\d.,\-+eE]/g, '').trim();
+        if (!clean) return null;
+        // Handle comma as decimal separator when no dot, or European formatting
+        if (clean.indexOf(',') !== -1 && clean.indexOf('.') === -1) {
+            clean = clean.replace(',', '.');
+        } else if (clean.indexOf(',') !== -1 && clean.indexOf('.') !== -1) {
+            if (clean.lastIndexOf(',') > clean.lastIndexOf('.')) {
+                clean = clean.replace(/\./g, '').replace(',', '.');
+            } else {
+                clean = clean.replace(/,/g, '');
+            }
+        }
+        var n = parseFloat(clean);
+        return isNaN(n) ? null : n;
+    }
+
+    function fmtNum(val, decimals, lang) {
+        if (val === null || val === undefined || isNaN(val)) return '—';
+        var s = Number(val).toFixed(decimals);
+        if (lang === 'en' || lang === 'zh') return s;
+        return s.replace('.', ',');
+    }
+
+    function extractMetrics() {
+        var m = { mass: null, W: null, Q: null, Sger: null, Tviz: null, TvizUnit: '°C', hasQ: false, hasW: false, hasSger: false, hasTviz: false };
+
+        // Mass from first state card
+        document.querySelectorAll('.state-card .data-row').forEach(function (row) {
+            var lbl = row.querySelector('.data-label');
+            if (!lbl) return;
+            var pt = (lbl.getAttribute('data-pt-br') || lbl.textContent || '').toLowerCase();
+            if (pt.indexOf('massa') !== -1 && m.mass === null) {
+                var valEl = row.querySelector('.data-value');
+                if (valEl) m.mass = parseLocaleNum(valEl.textContent);
+            }
+        });
+
+        // Process results bar
+        document.querySelectorAll('.process-results .process-item').forEach(function (item) {
+            var sp = item.querySelector('span');
+            var st = item.querySelector('strong');
+            if (!sp || !st) return;
+            var pt = (sp.getAttribute('data-pt-br') || sp.textContent || '').toLowerCase();
+            var raw = st.textContent || '';
+            var num = parseLocaleNum(raw);
+
+            if (pt.indexOf('vizinhan') !== -1 || pt.indexOf('entorno') !== -1 || pt.indexOf('surround') !== -1) {
+                m.Tviz = num;
+                m.hasTviz = num !== null;
+                m.TvizUnit = raw.indexOf('K') !== -1 && raw.indexOf('°C') === -1 ? 'K' : '°C';
+            } else if (pt.indexOf('calor') !== -1 || pt.indexOf('heat') !== -1) {
+                m.Q = num;
+                m.hasQ = num !== null;
+            } else if (pt.indexOf('trabalho') !== -1 || pt.indexOf('work') !== -1) {
+                m.W = num;
+                m.hasW = num !== null;
+            } else if (pt.indexOf('sger') !== -1 || pt.indexOf('entropia gerada') !== -1) {
+                m.Sger = num;
+                m.hasSger = num !== null;
+            }
+        });
+
+        // Fallbacks for isentropic / isochoric where Q=0 or W=0 or Sger=0 isn't listed in bottom bar
+        var stepTexts = content.textContent || '';
+        if (!m.hasQ && (stepTexts.indexOf('Q = 0') !== -1 || stepTexts.indexOf('q = 0') !== -1)) {
+            m.Q = 0; m.hasQ = true;
+        }
+        if (!m.hasW && (stepTexts.indexOf('W = 0') !== -1 || stepTexts.indexOf('w = 0') !== -1)) {
+            m.W = 0; m.hasW = true;
+        }
+        if (!m.hasSger && (stepTexts.indexOf('Sger = 0') !== -1 || stepTexts.indexOf('sger = 0') !== -1)) {
+            m.Sger = 0; m.hasSger = true;
+        }
+        if (m.mass === null) m.mass = 1.0;
+
+        return m;
+    }
+
+    var I18N = {
+        'pt-br': {
+            mass: 'Massa do Sistema',
+            work: 'Trabalho (W)',
+            heat: 'Calor (Q)',
+            sgen: 'Entropia Gerada (Sger)',
+            status: '2ª Lei',
+            possible: 'Possível',
+            impossible: 'Impossível',
+            signTitle: 'Interpretação Física e Convenção de Sinais',
+            wPos: 'Trabalho positivo (W > 0): o fluido expandiu e realizou trabalho sobre a vizinhança.',
+            wNeg: 'Trabalho negativo (W < 0): o fluido foi comprimido (trabalho realizado sobre o sistema).',
+            wZero: 'Trabalho nulo (W = 0): fronteira rígida (sem deslocamento do pistão).',
+            qPos: 'Calor positivo (Q > 0): o sistema recebeu energia térmica da vizinhança (aquecimento).',
+            qNeg: 'Calor negativo (Q < 0): o sistema cedeu energia térmica para a vizinhança (resfriamento).',
+            qZero: 'Calor nulo (Q = 0): processo adiabático (sem troca de calor pela fronteira).',
+            sZero: 'Entropia gerada nula (Sger = 0): processo idealmente reversível (sem irreversibilidades).',
+            sPos: 'Entropia gerada positiva (Sger > 0): processo fisicamente possível e irreversível (satisfaz a 2ª Lei).',
+            sNeg: 'Entropia gerada negativa (Sger < 0): viola a 2ª Lei da Termodinâmica — processo fisicamente impossível nesta Tviz.',
+            irrevTitle: 'Irreversibilidade / Exergia Destruída (Teorema de Gouy-Stodola)',
+            irrevDesc: 'Energia útil degradada pelas irreversibilidades do processo em relação à vizinhança:',
+            exportPng: 'Exportar Memorial (PNG)',
+            exporting: 'Exportando...',
+            copyTxt: 'Copiar Resumo',
+            copied: 'Copiado!'
+        },
+        'en': {
+            mass: 'System Mass',
+            work: 'Work (W)',
+            heat: 'Heat (Q)',
+            sgen: 'Entropy Generated (Sgen)',
+            status: '2nd Law',
+            possible: 'Possible',
+            impossible: 'Impossible',
+            signTitle: 'Physical Interpretation & Sign Convention',
+            wPos: 'Positive work (W > 0): the fluid expanded and did work on the surroundings.',
+            wNeg: 'Negative work (W < 0): the fluid was compressed (work done on the system).',
+            wZero: 'Zero work (W = 0): rigid boundary (no piston displacement).',
+            qPos: 'Positive heat (Q > 0): the system absorbed thermal energy from the surroundings (heating).',
+            qNeg: 'Negative heat (Q < 0): the system rejected thermal energy to the surroundings (cooling).',
+            qZero: 'Zero heat (Q = 0): adiabatic process (no heat transfer across the boundary).',
+            sZero: 'Zero entropy generation (Sgen = 0): ideally reversible process (no irreversibilities).',
+            sPos: 'Positive entropy generation (Sgen > 0): physically possible and irreversible process (satisfies 2nd Law).',
+            sNeg: 'Negative entropy generation (Sgen < 0): violates the 2nd Law of Thermodynamics — physically impossible at this Tsurr.',
+            irrevTitle: 'Irreversibility / Exergy Destroyed (Gouy-Stodola Theorem)',
+            irrevDesc: 'Useful work potential degraded by process irreversibilities relative to surroundings:',
+            exportPng: 'Export Memorial (PNG)',
+            exporting: 'Exporting...',
+            copyTxt: 'Copy Summary',
+            copied: 'Copied!'
+        },
+        'es': {
+            mass: 'Masa del Sistema',
+            work: 'Trabajo (W)',
+            heat: 'Calor (Q)',
+            sgen: 'Entropía Generada (Sgen)',
+            status: '2ª Ley',
+            possible: 'Posible',
+            impossible: 'Imposible',
+            signTitle: 'Interpretación Física y Convención de Signos',
+            wPos: 'Trabajo positivo (W > 0): el fluido se expandió y realizó trabajo sobre el entorno.',
+            wNeg: 'Trabajo negativo (W < 0): el fluido fue comprimido (trabajo realizado sobre el sistema).',
+            wZero: 'Trabajo nulo (W = 0): frontera rígida (sin desplazamiento del pistón).',
+            qPos: 'Calor positivo (Q > 0): el sistema absorbió energía térmica del entorno (calentamiento).',
+            qNeg: 'Calor negativo (Q < 0): el sistema cedió energía térmica al entorno (enfriamiento).',
+            qZero: 'Calor nulo (Q = 0): proceso adiabático (sin transferencia de calor).',
+            sZero: 'Entropía generada nula (Sgen = 0): proceso idealmente reversible (sin irreversibilidades).',
+            sPos: 'Entropía generada positiva (Sgen > 0): proceso físicamente posible e irreversible (cumple la 2ª Ley).',
+            sNeg: 'Entropía generada negativa (Sgen < 0): viola la 2ª Ley de la Termodinámica — proceso físicamente imposible.',
+            irrevTitle: 'Irreversibilidad / Exergía Destruida (Teorema de Gouy-Stodola)',
+            irrevDesc: 'Energía útil degradada por las irreversibilidades del proceso respecto al entorno:',
+            exportPng: 'Exportar Memoria (PNG)',
+            exporting: 'Exportando...',
+            copyTxt: 'Copiar Resumen',
+            copied: '¡Copiado!'
+        },
+        'fr': {
+            mass: 'Masse du Système',
+            work: 'Travail (W)',
+            heat: 'Chaleur (Q)',
+            sgen: 'Entropie Générée (Sgén)',
+            status: '2e Loi',
+            possible: 'Possible',
+            impossible: 'Impossible',
+            signTitle: 'Interprétation Physique et Convention de Signes',
+            wPos: 'Travail positif (W > 0) : le fluide s\'est détendu et a fourni un travail au milieu extérieur.',
+            wNeg: 'Travail négatif (W < 0) : le fluide a été comprimé (travail reçu par le système).',
+            wZero: 'Travail nul (W = 0) : frontière rigide (aucun déplacement du piston).',
+            qPos: 'Chaleur positive (Q > 0) : le système a absorbé de l\'énergie thermique (chauffage).',
+            qNeg: 'Chaleur négative (Q < 0) : le système a cédé de l\'énergie thermique au milieu (refroidissement).',
+            qZero: 'Chaleur nulle (Q = 0) : processus adiabatique (aucun échange thermique).',
+            sZero: 'Entropie générée nulle (Sgén = 0) : processus idéalement réversible (sans irréversibilités).',
+            sPos: 'Entropie générée positive (Sgén > 0) : processus physiquement possible et irréversible (conforme à la 2e Loi).',
+            sNeg: 'Entropie générée négative (Sgén < 0) : viole la 2e Loi de la Thermodynamique — processus impossible.',
+            irrevTitle: 'Irréversibilité / Exergie Détruite (Théorème de Gouy-Stodola)',
+            irrevDesc: 'Potentiel de travail utile dégradé par les irréversibilités du processus :',
+            exportPng: 'Exporter le Mémorial (PNG)',
+            exporting: 'Exportation...',
+            copyTxt: 'Copier le Résumé',
+            copied: 'Copié !'
+        },
+        'zh': {
+            mass: '系统质量',
+            work: '功 (W)',
+            heat: '热量 (Q)',
+            sgen: '熵产 (Sger)',
+            status: '热力学第二定律',
+            possible: '可行',
+            impossible: '不可能',
+            signTitle: '物理意义与符号约定解读',
+            wPos: '正功 (W > 0)：工质膨胀，系统对外界做功。',
+            wNeg: '负功 (W < 0)：工质被压缩，外界对系统做功。',
+            wZero: '功为零 (W = 0)：刚性边界（活塞无位移）。',
+            qPos: '正热量 (Q > 0)：系统从环境吸收热能（加热过程）。',
+            qNeg: '负热量 (Q < 0)：系统向环境释放热能（冷却过程）。',
+            qZero: '热量为零 (Q = 0)：绝热过程（边界无热交换）。',
+            sZero: '熵产为零 (Sger = 0)：理想可逆过程（无不可逆损失）。',
+            sPos: '正熵产 (Sger > 0)：物理上可行且不可逆的过程（满足第二定律）。',
+            sNeg: '负熵产 (Sger < 0)：违反热力学第二定律 —— 在当前环境温度下物理上不可能发生。',
+            irrevTitle: '不可逆损失 / 㶲损 (Gouy-Stodola 定理)',
+            irrevDesc: '相对于环境，过程不可逆性导致的做功能力损失：',
+            exportPng: '导出计算过程 (PNG)',
+            exporting: '正在导出...',
+            copyTxt: '复制摘要',
+            copied: '已复制！'
+        }
+    };
+
+    function renderEnhancements() {
+        var lang = localStorage.getItem('preferredLang') || 'pt-br';
+        var dict = I18N[lang] || I18N['pt-br'];
+        var m = extractMetrics();
+
+        // Remove previous dynamic blocks before re-rendering
+        content.querySelectorAll('.didactic-summary-bar, .didactic-irrev-box, .didactic-sign-card, .didactic-toolbar').forEach(function (el) {
+            el.remove();
+        });
+
+        // 1. Executive Summary Bar right after the header div
+        var firstStep = content.querySelector('.math-step');
+        if (firstStep) {
+            var bar = document.createElement('div');
+            bar.className = 'didactic-summary-bar';
+            var isImpossible = m.hasSger && m.Sger < -1e-9;
+
+            var pillsHtml = ''
+                + '<div class="didactic-summary-pill"><span class="pill-label">' + dict.mass + '</span><span class="pill-value">' + fmtNum(m.mass, 2, lang) + ' kg</span></div>'
+                + (m.hasW ? '<div class="didactic-summary-pill"><span class="pill-label">' + dict.work + '</span><span class="pill-value">' + fmtNum(m.W, 2, lang) + ' kJ</span></div>' : '')
+                + (m.hasQ ? '<div class="didactic-summary-pill"><span class="pill-label">' + dict.heat + '</span><span class="pill-value">' + fmtNum(m.Q, 2, lang) + ' kJ</span></div>' : '')
+                + (m.hasSger ? '<div class="didactic-summary-pill ' + (isImpossible ? 'pill-bad' : 'pill-ok') + '"><span class="pill-label">' + dict.sgen + '</span><span class="pill-value">' + fmtNum(m.Sger, 4, lang) + ' kJ/K</span></div>' : '')
+                + (m.hasSger ? '<div class="didactic-summary-pill ' + (isImpossible ? 'pill-bad' : 'pill-ok') + '"><span class="pill-label">' + dict.status + '</span><span class="pill-value"><i class="fas ' + (isImpossible ? 'fa-times-circle' : 'fa-check-circle') + '"></i> ' + (isImpossible ? dict.impossible : dict.possible) + '</span></div>' : '');
+
+            bar.innerHTML = pillsHtml;
+            content.insertBefore(bar, firstStep);
+        }
+
+        // 2. Irreversibility (I = T_viz * Sger) inside Step 4 when applicable
+        var step4 = content.querySelector('.math-step.step-4');
+        if (step4 && m.hasTviz && m.hasSger && m.Sger >= 0) {
+            var TvizK = m.TvizUnit === 'K' ? m.Tviz : (m.Tviz + 273.15);
+            if (TvizK > 0) {
+                var irrev = TvizK * m.Sger;
+                var irrevBox = document.createElement('div');
+                irrevBox.className = 'didactic-irrev-box';
+                irrevBox.innerHTML = ''
+                    + '<div class="irrev-title"><i class="fas fa-bolt"></i> ' + dict.irrevTitle + '</div>'
+                    + '<div>' + dict.irrevDesc + '</div>'
+                    + '<div class="irrev-eq">I = T<sub>viz</sub> &times; S<sub>ger</sub> = ' + fmtNum(TvizK, 2, lang) + ' K &times; ' + fmtNum(m.Sger, 4, lang) + ' kJ/K = ' + fmtNum(irrev, 2, lang) + ' kJ</div>';
+                step4.appendChild(irrevBox);
+            }
+        }
+
+        // 3. Physical Sign Interpretation Card
+        var signItems = [];
+        if (m.hasW) {
+            if (Math.abs(m.W) < 1e-6) signItems.push({ icon: 'fa-lock', color: '#64748b', text: dict.wZero });
+            else if (m.W > 0) signItems.push({ icon: 'fa-expand-arrows-alt', color: '#d97706', text: dict.wPos });
+            else signItems.push({ icon: 'fa-compress-arrows-alt', color: '#2563eb', text: dict.wNeg });
+        }
+        if (m.hasQ) {
+            if (Math.abs(m.Q) < 1e-6) signItems.push({ icon: 'fa-shield-alt', color: '#0d9488', text: dict.qZero });
+            else if (m.Q > 0) signItems.push({ icon: 'fa-fire', color: '#dc2626', text: dict.qPos });
+            else signItems.push({ icon: 'fa-snowflake', color: '#0284c7', text: dict.qNeg });
+        }
+        if (m.hasSger) {
+            if (Math.abs(m.Sger) < 1e-6) signItems.push({ icon: 'fa-check-double', color: '#16a34a', text: dict.sZero });
+            else if (m.Sger > 0) signItems.push({ icon: 'fa-check-circle', color: '#16a34a', text: dict.sPos });
+            else signItems.push({ icon: 'fa-exclamation-triangle', color: '#dc2626', text: dict.sNeg });
+        }
+
+        if (signItems.length > 0) {
+            var signCard = document.createElement('div');
+            signCard.className = 'didactic-sign-card';
+            var liHtml = signItems.map(function (it) {
+                return '<li><i class="fas ' + it.icon + '" style="color:' + it.color + ';"></i><span>' + it.text + '</span></li>';
+            }).join('');
+            signCard.innerHTML = '<h4><i class="fas fa-compass" style="color:#0d6ab0;"></i> ' + dict.signTitle + '</h4><ul class="didactic-sign-list">' + liHtml + '</ul>';
+            content.appendChild(signCard);
+        }
+
+        // 4. Action Toolbar (Export PNG + Copy Summary)
+        var toolbar = document.createElement('div');
+        toolbar.className = 'didactic-toolbar';
+
+        var btnCopy = document.createElement('button');
+        btnCopy.type = 'button';
+        btnCopy.className = 'didactic-action-btn btn-copy-txt';
+        btnCopy.innerHTML = '<i class="fas fa-copy"></i> <span>' + dict.copyTxt + '</span>';
+        btnCopy.addEventListener('click', function () {
+            var titleEl = content.querySelector('h2');
+            var lines = [];
+            if (titleEl) lines.push(titleEl.textContent.trim());
+            lines.push('---');
+            lines.push(dict.mass + ': ' + fmtNum(m.mass, 2, lang) + ' kg');
+            if (m.hasW) lines.push(dict.work + ': ' + fmtNum(m.W, 2, lang) + ' kJ');
+            if (m.hasQ) lines.push(dict.heat + ': ' + fmtNum(m.Q, 2, lang) + ' kJ');
+            if (m.hasSger) lines.push(dict.sgen + ': ' + fmtNum(m.Sger, 4, lang) + ' kJ/K');
+            lines.push('---');
+            signItems.forEach(function (it) { lines.push('- ' + it.text); });
+            var textOut = lines.join('\n');
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(textOut).then(function () {
+                    btnCopy.querySelector('span').textContent = dict.copied;
+                    setTimeout(function () { btnCopy.querySelector('span').textContent = dict.copyTxt; }, 1800);
+                });
+            }
+        });
+        toolbar.appendChild(btnCopy);
+
+        if (typeof html2canvas === 'function') {
+            var btnPng = document.createElement('button');
+            btnPng.type = 'button';
+            btnPng.className = 'didactic-action-btn btn-export-png';
+            btnPng.innerHTML = '<i class="fas fa-download"></i> <span>' + dict.exportPng + '</span>';
+            btnPng.addEventListener('click', function () {
+                btnPng.querySelector('span').textContent = dict.exporting;
+                toolbar.style.visibility = 'hidden';
+                var closeEl = content.querySelector('#closeDidacticBtn');
+                if (closeEl) closeEl.style.visibility = 'hidden';
+                html2canvas(content, { scale: 2, backgroundColor: '#f5f8fc', useCORS: true }).then(function (canvas) {
+                    toolbar.style.visibility = 'visible';
+                    if (closeEl) closeEl.style.visibility = 'visible';
+                    btnPng.querySelector('span').textContent = dict.exportPng;
+                    var link = document.createElement('a');
+                    link.download = 'TERMO-CP_Memorial_Calculo.png';
+                    link.href = canvas.toDataURL('image/png');
+                    link.click();
+                }).catch(function () {
+                    toolbar.style.visibility = 'visible';
+                    if (closeEl) closeEl.style.visibility = 'visible';
+                    btnPng.querySelector('span').textContent = dict.exportPng;
+                });
+            });
+            toolbar.appendChild(btnPng);
+        }
+
+        content.appendChild(toolbar);
+    }
+
+    // Run on load (after number formatting) and on language change
+    setTimeout(renderEnhancements, 120);
+    document.addEventListener('languageChanged', function () {
+        setTimeout(renderEnhancements, 80);
+    });
+});
