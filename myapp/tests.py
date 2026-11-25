@@ -546,3 +546,99 @@ class ReliabilityAndThermoFeaturesTests(TestCase):
         self.assertAlmostEqual(refrig['cop_refrigeracao'], 3.0, places=3)
         self.assertAlmostEqual(refrig['cop_bomba_calor'], 4.0, places=3)
         self.assertIsNone(refrig['eficiencia_termica'])
+
+
+class ExtrasFeaturesTests(TestCase):
+    """Testes para Favicon (0 404s), Estatísticas Anônimas, Link Compartilhável e Exercício POE."""
+
+    def test_favicon_root_and_subpaths_redirect_without_404(self):
+        for url in ('/favicon.ico', '/favicon.png', '/agua/agua-estado-1/favicon.png', '/processos/favicon.png'):
+            resp = self.client.get(url)
+            self.assertEqual(resp.status_code, 302, f'Expected 302 for {url}')
+            self.assertIn('/static/myapp/img/favicon.png', resp['Location'])
+
+    def test_anonymous_usage_logging(self):
+        from myapp.models import UsoSimulacao
+        resp = self.client.post(
+            '/api/log-uso/',
+            data=json.dumps({'substancia': 'Água', 'tipo': 'Isobárico', 'idioma': 'pt-br'}),
+            content_type='application/json',
+        )
+        self.assertEqual(resp.status_code, 200)
+        self.assertTrue(resp.json()['ok'])
+        self.assertEqual(UsoSimulacao.objects.filter(substancia='Água', tipo='Isobárico').count(), 1)
+
+    def test_shareable_simulation_link(self):
+        resp = self.client.post(
+            '/api/compartilhar/',
+            data=json.dumps({
+                'titulo': 'Água — Isobárico',
+                'substancia': 'Água',
+                'tipo': 'Isobárico',
+                'payload': {
+                    'states': [{'title': 'Estado 1', 'rows': [{'label': 'P:', 'value': '100 kPa'}]}],
+                    'process': [{'label': 'W', 'value': '96,86 kJ'}],
+                },
+            }),
+            content_type='application/json',
+        )
+        self.assertEqual(resp.status_code, 200)
+        data = resp.json()
+        self.assertTrue(data['ok'])
+        page = self.client.get(f"/s/{data['codigo']}/")
+        self.assertEqual(page.status_code, 200)
+        self.assertContains(page, '100 kPa')
+        self.assertContains(page, '96,86 kJ')
+
+    def test_poe_exercise_anti_cheating_and_unlock(self):
+        # 1. Página carrega
+        self.assertEqual(self.client.get('/exercicios/').status_code, 200)
+
+        # 2. Gera exercício sem vazar gabarito na resposta
+        gen = self.client.post(
+            '/api/exercicios/gerar/',
+            data=json.dumps({'substance': 'gas', 'process': 'pcte', 'difficulty': 'basic'}),
+            content_type='application/json',
+        )
+        self.assertEqual(gen.status_code, 200)
+        gdata = gen.json()
+        self.assertTrue(gdata['ok'])
+        self.assertNotIn('solution', gdata)
+
+        # 3. Envio imediato (< 25s) é bloqueado pela trava anti-burla
+        fast = self.client.post(
+            '/api/exercicios/corrigir/',
+            data=json.dumps({
+                'pred_vol': 'expand', 'pred_heat': 'in', 'pred_law2': 'possible',
+                'justification': 'Apliquei W = m*P*(v2 - v1) e Q = m*Cp0*(T2 - T1).',
+                'answers': {'W': 10, 'Q': 20, 'Sger': 0.1},
+            }),
+            content_type='application/json',
+        )
+        self.assertEqual(fast.status_code, 400)
+        self.assertEqual(fast.json()['reason'], 'min_time')
+
+        # 4. Simula passagem de 30s e envia respostas corretas do gabarito de sessão -> desbloqueia Memorial
+        session = self.client.session
+        ex = session['poe_exercise']
+        ex['created_at'] -= 30
+        sol = ex['solution']
+        session['poe_exercise'] = ex
+        session.save()
+
+        ok_resp = self.client.post(
+            '/api/exercicios/corrigir/',
+            data=json.dumps({
+                'pred_vol': sol['expected_vol'],
+                'pred_heat': sol['expected_heat'],
+                'pred_law2': sol['expected_law2'],
+                'justification': 'Utilizei a 1a e 2a Leis para gas ideal com massa constante.',
+                'answers': {f: sol[f] for f in ex['prompt']['ask_fields']},
+            }),
+            content_type='application/json',
+        )
+        self.assertEqual(ok_resp.status_code, 200)
+        odata = ok_resp.json()
+        self.assertTrue(odata['unlocked'])
+        self.assertEqual(odata['score_pct'], 100.0)
+        self.assertIn('steps', odata['solution'])

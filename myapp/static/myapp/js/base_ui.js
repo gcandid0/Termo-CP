@@ -2065,3 +2065,119 @@ document.addEventListener('DOMContentLoaded', function () {
         setTimeout(renderZoomControls, 110);
     });
 });
+
+
+// ============ ESTATÍSTICAS ANÔNIMAS + LINK COMPARTILHÁVEL DE SIMULAÇÃO (v12) ============
+document.addEventListener('DOMContentLoaded', function () {
+    var hasStateCard = !!document.querySelector('.state-card, .results-card');
+    if (!hasStateCard) return;
+
+    function detectSubstanceAndType() {
+        var path = (window.location.pathname || '').toLowerCase();
+        var sub = 'Desconhecida';
+        if (path.indexOf('agua') !== -1) sub = 'Água';
+        else if (path.indexOf('amonia') !== -1) sub = 'Amônia';
+        else if (path.indexOf('co2') !== -1) sub = 'CO₂';
+        else if (path.indexOf('r410') !== -1) sub = 'R-410A';
+        else if (path.indexOf('r134') !== -1) sub = 'R-134a';
+        else if (path.indexOf('nitro') !== -1 || path.indexOf('nkelvin') !== -1) sub = 'Nitrogênio';
+        else if (path.indexOf('metano') !== -1 || path.indexOf('mkelvin') !== -1) sub = 'Metano';
+        else if (path.indexOf('gas') !== -1) sub = 'Gás Ideal';
+
+        var tipo = 'Estado';
+        if (path.indexOf('pcte') !== -1 || path.indexOf('results_8') !== -1) tipo = 'Isobárico';
+        else if (path.indexOf('vcte') !== -1 || path.indexOf('results_9') !== -1) tipo = 'Isocórico';
+        else if (path.indexOf('tcte') !== -1 || path.indexOf('results_10') !== -1) tipo = 'Isotérmico';
+        else if (path.indexOf('poli') !== -1 || path.indexOf('results_11') !== -1) tipo = 'Politrópico';
+        else if (path.indexOf('scte') !== -1 || path.indexOf('results_12') !== -1) tipo = 'Isentrópico';
+
+        return { substancia: sub, tipo: tipo };
+    }
+
+    var meta = detectSubstanceAndType();
+    var lang = localStorage.getItem('preferredLang') || 'pt-br';
+
+    // 1. Log anônimo deduplicado por carregamento de página
+    var logKey = 'termoLogged_' + window.location.pathname + '_' + document.title;
+    if (!sessionStorage.getItem(logKey)) {
+        sessionStorage.setItem(logKey, '1');
+        fetch('/api/log-uso/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ substancia: meta.substancia, tipo: meta.tipo, idioma: lang })
+        }).catch(function () {});
+    }
+
+    // 2. Botão "Compartilhar Link" na barra de ações (.button-group)
+    var btnGroup = document.querySelector('.button-group');
+    if (btnGroup && !document.getElementById('btnShareSim')) {
+        var shareBtn = document.createElement('button');
+        shareBtn.id = 'btnShareSim';
+        shareBtn.type = 'button';
+        shareBtn.className = 'icon-btn';
+        shareBtn.style.cssText = 'background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); color: white; box-shadow: 0 4px 15px rgba(2,132,199,0.3);';
+        shareBtn.innerHTML = '<i class="fas fa-share-alt"></i><span class="icon-tooltip lang-text" data-pt-br="Compartilhar Link" data-en="Share Link" data-es="Compartir Enlace" data-fr="Partager le Lien" data-zh="分享链接">Compartilhar Link</span>';
+
+        shareBtn.addEventListener('click', function () {
+            var states = [];
+            document.querySelectorAll('.state-card, .results-card').forEach(function (card) {
+                var h2 = card.querySelector('h2');
+                var rows = [];
+                card.querySelectorAll('.data-row').forEach(function (r) {
+                    var l = r.querySelector('.data-label');
+                    var v = r.querySelector('.data-value');
+                    if (l && v) rows.push({ label: l.textContent.trim(), value: v.textContent.trim() });
+                });
+                if (rows.length) {
+                    states.push({ title: h2 ? h2.textContent.trim() : 'Estado', rows: rows });
+                }
+            });
+
+            var procItems = [];
+            document.querySelectorAll('.process-results .process-item').forEach(function (item) {
+                var sp = item.querySelector('span');
+                var st = item.querySelector('strong');
+                if (sp && st) procItems.push({ label: sp.textContent.trim(), value: st.textContent.trim() });
+            });
+
+            fetch('/api/compartilhar/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    titulo: meta.substancia + ' — ' + meta.tipo,
+                    substancia: meta.substancia,
+                    tipo: meta.tipo,
+                    payload: { states: states, process: procItems }
+                })
+            }).then(function (r) { return r.json(); }).then(function (data) {
+                if (!data.ok || !data.url) return;
+                var curLang = localStorage.getItem('preferredLang') || 'pt-br';
+                var msgs = {
+                    'pt-br': 'Link copiado! Compartilhe com sua turma:\n',
+                    'en': 'Link copied! Share with your class:\n',
+                    'es': '¡Enlace copiado! Compártelo con tu clase:\n',
+                    'fr': 'Lien copié ! Partagez-le avec votre classe :\n',
+                    'zh': '链接已复制！可分享给同学：\n'
+                };
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(data.url).then(function () {
+                        window.prompt(msgs[curLang] || msgs['pt-br'], data.url);
+                    }).catch(function () {
+                        window.prompt(msgs[curLang] || msgs['pt-br'], data.url);
+                    });
+                } else {
+                    window.prompt(msgs[curLang] || msgs['pt-br'], data.url);
+                }
+            });
+        });
+
+        btnGroup.insertBefore(shareBtn, btnGroup.firstChild);
+        // Apply current language to newly injected tooltip
+        var curLangNow = localStorage.getItem('preferredLang') || 'pt-br';
+        var tip = shareBtn.querySelector('.lang-text');
+        if (tip && curLangNow !== 'pt-br') {
+            var tVal = tip.getAttribute('data-' + curLangNow) || tip.getAttribute('data-en');
+            if (tVal) tip.textContent = tVal;
+        }
+    }
+});

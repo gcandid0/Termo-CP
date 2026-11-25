@@ -1,0 +1,155 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}TERMO-CP — {{ sim.titulo }}{% endblock %}
+
+{% block extra_css %}
+<style>
+    .share-wrapper {
+        max-width: 1020px;
+        width: 100%;
+        margin: 0 auto;
+        padding: 20px 24px 36px;
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+    }
+    .share-banner {
+        background: linear-gradient(135deg, #1b3668 0%, #0d6ab0 100%);
+        color: #ffffff;
+        border-radius: 16px;
+        padding: 22px 26px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 14px;
+        flex-wrap: wrap;
+        box-shadow: 0 10px 26px rgba(27, 54, 104, 0.16);
+    }
+    .share-banner h2 { margin: 0 0 4px 0; font-size: 1.35em; }
+    .share-banner .share-meta { font-size: 0.85em; opacity: 0.88; }
+    .share-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+    .share-btn {
+        display: inline-flex; align-items: center; gap: 7px;
+        padding: 9px 15px; border-radius: 10px; font-weight: 600; font-size: 0.88em;
+        cursor: pointer; border: none; text-decoration: none; font-family: inherit;
+    }
+    .share-btn-light { background: rgba(255,255,255,0.2); color: #fff; }
+    .share-btn-white { background: #fff; color: #1b3668; }
+    .share-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 16px;
+    }
+    .share-card {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 14px;
+        padding: 18px 22px;
+        box-shadow: 0 4px 14px rgba(15, 23, 42, 0.05);
+    }
+    .share-card h3 {
+        margin: 0 0 12px 0;
+        color: #1b3668;
+        font-size: 1.06em;
+        border-bottom: 1px solid #e2e8f0;
+        padding-bottom: 8px;
+    }
+    .share-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 6px 0;
+        border-bottom: 1px solid #f1f5f9;
+        font-size: 0.93em;
+    }
+    .share-row:last-child { border-bottom: none; }
+    .share-row span { color: #475569; }
+    .share-row strong { color: #0f172a; }
+    .share-process-bar {
+        background: #FFF9C4;
+        border-radius: 14px;
+        padding: 16px 22px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        align-items: center;
+        justify-content: space-around;
+    }
+    .share-proc-item {
+        display: flex; flex-direction: column; align-items: center; gap: 3px;
+    }
+    .share-proc-item span { font-size: 0.82em; color: #475569; font-weight: 600; }
+    .share-proc-item strong { font-size: 1.12em; color: #0f172a; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="share-wrapper">
+    <div class="share-banner">
+        <div>
+            <h2><i class="fas fa-share-alt" style="margin-right:8px;"></i>{{ sim.titulo }}</h2>
+            <div class="share-meta">
+                {{ sim.substancia }} · {{ sim.tipo }} · #{{ sim.codigo }} · {{ sim.criado_em|date:"d/m/Y H:i" }}
+            </div>
+        </div>
+        <div class="share-actions">
+            <button type="button" id="btnCopyShareUrl" class="share-btn share-btn-light">
+                <i class="fas fa-link"></i>
+                <span class="lang-text" data-pt-br="Copiar Link" data-en="Copy Link" data-es="Copiar Enlace" data-fr="Copier le Lien" data-zh="复制链接">Copiar Link</span>
+            </button>
+            <button type="button" onclick="window.print()" class="share-btn share-btn-light">
+                <i class="fas fa-file-pdf"></i> PDF
+            </button>
+            <a href="/" class="share-btn share-btn-white">
+                <i class="fas fa-play"></i>
+                <span class="lang-text" data-pt-br="Abrir no TERMO-CP" data-en="Open in TERMO-CP" data-es="Abrir en TERMO-CP" data-fr="Ouvrir dans TERMO-CP" data-zh="在 TERMO-CP 中打开">Abrir no TERMO-CP</span>
+            </a>
+        </div>
+    </div>
+
+    {% if payload.states %}
+    <div class="share-grid">
+        {% for st in payload.states %}
+        <div class="share-card">
+            <h3>{{ st.title }}</h3>
+            {% for row in st.rows %}
+            <div class="share-row">
+                <span>{{ row.label }}</span>
+                <strong>{{ row.value }}</strong>
+            </div>
+            {% endfor %}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if payload.process %}
+    <div class="share-process-bar">
+        {% for item in payload.process %}
+        <div class="share-proc-item">
+            <span>{{ item.label }}</span>
+            <strong>{{ item.value }}</strong>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    var btn = document.getElementById('btnCopyShareUrl');
+    if (btn && navigator.clipboard) {
+        btn.addEventListener('click', function () {
+            navigator.clipboard.writeText(window.location.href).then(function () {
+                var sp = btn.querySelector('span');
+                var old = sp.textContent;
+                sp.textContent = '✓';
+                setTimeout(function () { sp.textContent = old; }, 1600);
+            });
+        });
+    }
+});
+</script>
+{% endblock %}

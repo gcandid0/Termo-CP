@@ -5,6 +5,14 @@ from django.urls import include, path, re_path
 from django.views.generic import RedirectView
 from django.views.static import serve
 
+from myapp.views_extras import (
+    api_compartilhar_view,
+    api_exercicio_corrigir_view,
+    api_exercicio_gerar_view,
+    api_log_uso_view,
+    exercicios_poe_view,
+    shared_simulation_view,
+)
 from myapp.views_unified import (
     api_calculate_state_view,
     ask_mass_view,
@@ -18,6 +26,15 @@ urlpatterns = [
     # Favicon oficial do TERMO-CP (logo do README)
     path('favicon.ico', RedirectView.as_view(url='/static/myapp/img/favicon.png', permanent=False)),
     path('favicon.png', RedirectView.as_view(url='/static/myapp/img/favicon.png', permanent=False)),
+    re_path(r'^.+?/favicon\.(ico|png)$', RedirectView.as_view(url='/static/myapp/img/favicon.png', permanent=False)),
+
+    # Modo Exercício (POE), Link Compartilhável e Estatísticas Anônimas
+    path('exercicios/', exercicios_poe_view, name='exercicios_poe'),
+    path('api/exercicios/gerar/', api_exercicio_gerar_view, name='api_exercicio_gerar'),
+    path('api/exercicios/corrigir/', api_exercicio_corrigir_view, name='api_exercicio_corrigir'),
+    path('api/log-uso/', api_log_uso_view, name='api_log_uso'),
+    path('api/compartilhar/', api_compartilhar_view, name='api_compartilhar'),
+    path('s/<str:codigo>/', shared_simulation_view, name='shared_simulation'),
 
     # Fallback para servir arquivos estáticos mesmo quando DEBUG=False localmente
     re_path(r'^static/(?P<path>.*)$', serve, {'document_root': settings.BASE_DIR / 'myapp' / 'static'}),
