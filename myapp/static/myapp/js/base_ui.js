@@ -2290,6 +2290,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 titulo: titulo,
                 substancia: meta.substancia,
                 tipo: meta.tipo,
+                source_path: window.location.pathname + window.location.search,
                 payload: { states: states, process: procItems, cylinder_img: cylImg }
             })
         }).then(function (r) { return r.json(); }).then(function (data) {

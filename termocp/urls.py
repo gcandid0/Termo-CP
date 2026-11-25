@@ -11,6 +11,7 @@ from myapp.views_extras import (
     api_exercicio_gerar_view,
     api_log_uso_view,
     exercicios_poe_view,
+    shared_simulation_open_view,
     shared_simulation_view,
 )
 from myapp.views_unified import (
@@ -35,6 +36,7 @@ urlpatterns = [
     path('api/log-uso/', api_log_uso_view, name='api_log_uso'),
     path('api/compartilhar/', api_compartilhar_view, name='api_compartilhar'),
     path('s/<str:codigo>/', shared_simulation_view, name='shared_simulation'),
+    path('s/<str:codigo>/abrir/', shared_simulation_open_view, name='shared_simulation_open'),
 
     # Fallback para servir arquivos estáticos mesmo quando DEBUG=False localmente
     re_path(r'^static/(?P<path>.*)$', serve, {'document_root': settings.BASE_DIR / 'myapp' / 'static'}),

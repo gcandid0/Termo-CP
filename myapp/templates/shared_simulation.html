@@ -6,10 +6,10 @@
 {% block extra_css %}
 <style>
     .share-wrapper {
-        max-width: 1060px;
+        max-width: 1220px;
         width: 100%;
         margin: 0 auto;
-        padding: 20px 24px 36px;
+        padding: 22px 28px 36px;
         display: flex;
         flex-direction: column;
         gap: 18px;
@@ -17,105 +17,191 @@
     .share-banner {
         background: linear-gradient(135deg, #1b3668 0%, #0d6ab0 100%);
         color: #ffffff;
-        border-radius: 16px;
-        padding: 20px 26px;
+        border-radius: 18px;
+        padding: 22px 28px;
         display: flex;
         justify-content: space-between;
         align-items: center;
-        gap: 14px;
+        gap: 16px;
         flex-wrap: wrap;
-        box-shadow: 0 10px 26px rgba(27, 54, 104, 0.16);
+        box-shadow: 0 12px 30px rgba(27, 54, 104, 0.18);
     }
-    .share-banner h2 { margin: 0 0 4px 0; font-size: 1.35em; display: flex; align-items: center; gap: 10px; }
-    .share-banner .share-meta { font-size: 0.85em; opacity: 0.9; }
-    .share-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+    .share-banner-left { display: flex; flex-direction: column; gap: 6px; }
+    .share-banner h2 {
+        margin: 0;
+        font-size: 1.48em;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    .share-meta-pills {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        align-items: center;
+        font-size: 0.82em;
+    }
+    .share-meta-pill {
+        background: rgba(255, 255, 255, 0.16);
+        border: 1px solid rgba(255, 255, 255, 0.24);
+        border-radius: 999px;
+        padding: 3px 11px;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+    }
+    .share-actions { display: flex; gap: 9px; flex-wrap: wrap; align-items: center; }
     .share-btn {
         display: inline-flex; align-items: center; gap: 7px;
-        padding: 9px 14px; border-radius: 10px; font-weight: 600; font-size: 0.87em;
+        padding: 10px 16px; border-radius: 11px; font-weight: 700; font-size: 0.88em;
         cursor: pointer; border: none; text-decoration: none; font-family: inherit;
-        transition: transform 0.15s ease, opacity 0.15s ease;
+        transition: transform 0.16s ease, box-shadow 0.16s ease, filter 0.16s ease;
     }
-    .share-btn:hover { transform: translateY(-1px); }
-    .share-btn-light { background: rgba(255,255,255,0.2); color: #fff; }
-    .share-btn-wa { background: #22c55e; color: #fff; }
-    .share-btn-white { background: #fff; color: #1b3668; }
+    .share-btn:hover { transform: translateY(-2px); filter: brightness(1.04); }
+    .share-btn-light { background: rgba(255,255,255,0.18); color: #fff; border: 1px solid rgba(255,255,255,0.28); }
+    .share-btn-wa { background: #22c55e; color: #fff; box-shadow: 0 4px 12px rgba(34,197,94,0.28); }
+    .share-btn-cta {
+        background: #ffffff;
+        color: #1b3668;
+        box-shadow: 0 6px 16px rgba(15, 23, 42, 0.2);
+        padding: 10px 18px;
+    }
 
+    /* Callout informando interatividade completa */
+    .share-live-callout {
+        background: #eff6ff;
+        border: 1px solid #bfdbfe;
+        border-radius: 13px;
+        padding: 12px 18px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+        flex-wrap: wrap;
+        color: #1e3a8a;
+        font-size: 0.91em;
+    }
+    .share-live-callout span { display: inline-flex; align-items: center; gap: 9px; }
+
+    /* Grade Principal */
     .share-main-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        gap: 16px;
+        grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+        gap: 20px;
         align-items: stretch;
     }
     .share-card {
         background: #ffffff;
         border: 1px solid #e2e8f0;
-        border-radius: 14px;
-        padding: 18px 22px;
-        box-shadow: 0 4px 14px rgba(15, 23, 42, 0.05);
+        border-radius: 16px;
+        padding: 22px 26px;
+        box-shadow: 0 6px 20px rgba(15, 23, 42, 0.055);
         display: flex;
         flex-direction: column;
     }
     .share-card h3 {
-        margin: 0 0 12px 0;
+        margin: 0 0 14px 0;
         color: #1b3668;
-        font-size: 1.05em;
-        border-bottom: 1px solid #e2e8f0;
-        padding-bottom: 8px;
+        font-size: 1.12em;
+        font-weight: 700;
+        border-bottom: 1.5px solid #e2ecf7;
+        padding-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 9px;
     }
     .share-row {
         display: flex;
         justify-content: space-between;
-        padding: 6px 0;
-        border-bottom: 1px solid #f1f5f9;
-        font-size: 0.92em;
+        align-items: center;
+        padding: 8px 10px;
+        border-radius: 8px;
+        font-size: 0.94em;
+        gap: 12px;
     }
-    .share-row:last-child { border-bottom: none; }
-    .share-row span { color: #475569; }
-    .share-row strong { color: #0f172a; }
+    .share-row:nth-child(even) { background: #f8fafc; }
+    .share-row span { color: #475569; font-weight: 500; }
+    .share-row strong { color: #0f172a; font-weight: 700; text-align: right; }
 
+    /* Cartão do Cilindro 3D sem emenda (#000000 puro combinando com o canvas P5.js) */
     .share-cyl-card {
-        background: #0b1120;
+        background: #000000;
         border: 1px solid #1e293b;
-        border-radius: 14px;
-        padding: 14px;
+        border-radius: 16px;
+        padding: 18px 20px 16px;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        box-shadow: 0 4px 14px rgba(15, 23, 42, 0.08);
+        box-shadow: 0 10px 28px rgba(15, 23, 42, 0.16);
+        min-height: 360px;
     }
     .share-cyl-card img {
         max-width: 100%;
-        max-height: 320px;
-        border-radius: 10px;
+        max-height: 360px;
         object-fit: contain;
+        display: block;
     }
-    .share-cyl-caption {
+    .share-cyl-footer {
+        width: 100%;
+        margin-top: 12px;
+        padding-top: 10px;
+        border-top: 1px solid rgba(255, 255, 255, 0.12);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 8px;
         color: #cbd5e1;
         font-size: 0.82em;
-        margin-top: 8px;
+    }
+    .share-cyl-legend {
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+    .share-leg-dot {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
         font-weight: 600;
     }
+    .share-leg-dot i {
+        width: 10px; height: 10px; border-radius: 3px; display: inline-block;
+    }
 
+    /* Barra Amarela de Resultados do Processo */
     .share-process-bar {
         background: #FFF9C4;
-        border-radius: 14px;
-        padding: 16px 22px;
+        border-radius: 16px;
+        padding: 18px 24px;
         display: flex;
         flex-wrap: wrap;
-        gap: 20px;
+        gap: 22px;
         align-items: center;
         justify-content: space-around;
-        box-shadow: 0 4px 14px rgba(15, 23, 42, 0.05);
+        box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
     }
     .share-proc-item {
-        display: flex; flex-direction: column; align-items: center; gap: 3px;
+        display: flex; flex-direction: column; align-items: center; gap: 4px;
     }
-    .share-proc-item span { font-size: 0.82em; color: #475569; font-weight: 600; }
-    .share-proc-item strong { font-size: 1.12em; color: #0f172a; }
+    .share-proc-item span { font-size: 0.82em; color: #475569; font-weight: 700; text-transform: uppercase; letter-spacing: 0.3px; }
+    .share-proc-item strong { font-size: 1.18em; color: #0f172a; font-weight: 800; }
+
+    @media (max-height: 820px), (max-width: 1440px) {
+        .share-wrapper { padding: 14px 22px 24px; gap: 14px; }
+        .share-banner { padding: 16px 22px; }
+        .share-card { padding: 16px 20px; }
+        .share-row { padding: 6px 8px; font-size: 0.9em; }
+        .share-cyl-card { min-height: 310px; }
+        .share-cyl-card img { max-height: 300px; }
+    }
 
     @media print {
-        header, footer, .share-actions { display: none !important; }
+        header, footer, .share-actions, .share-live-callout { display: none !important; }
         .share-wrapper { padding: 0; }
     }
 </style>
@@ -124,10 +210,13 @@
 {% block content %}
 <div class="share-wrapper">
     <div class="share-banner">
-        <div>
+        <div class="share-banner-left">
             <h2><i class="fas fa-share-alt"></i> {{ sim.titulo }}</h2>
-            <div class="share-meta">
-                {{ sim.substancia }} · {{ sim.tipo }} · Código: <strong>{{ sim.codigo }}</strong> · {{ sim.criado_em|date:"d/m/Y H:i" }}
+            <div class="share-meta-pills">
+                <span class="share-meta-pill"><i class="fas fa-flask"></i> {{ sim.substancia }}</span>
+                <span class="share-meta-pill"><i class="fas fa-sliders-h"></i> {{ sim.tipo }}</span>
+                <span class="share-meta-pill"><i class="fas fa-hashtag"></i> {{ sim.codigo }}</span>
+                <span class="share-meta-pill"><i class="fas fa-clock"></i> {{ sim.criado_em|date:"d/m/Y H:i" }}</span>
             </div>
         </div>
         <div class="share-actions">
@@ -141,18 +230,34 @@
             <button type="button" onclick="window.print()" class="share-btn share-btn-light">
                 <i class="fas fa-file-pdf"></i> PDF
             </button>
-            <a href="/" class="share-btn share-btn-white">
+            <a href="{% if has_live_open %}{% url 'shared_simulation_open' codigo=sim.codigo %}{% else %}/{% endif %}" class="share-btn share-btn-cta">
                 <i class="fas fa-play"></i>
                 <span class="lang-text" data-pt-br="Simular no TERMO-CP" data-en="Open in TERMO-CP" data-es="Abrir en TERMO-CP" data-fr="Ouvrir dans TERMO-CP" data-zh="在 TERMO-CP 中打开">Simular no TERMO-CP</span>
             </a>
         </div>
     </div>
 
+    {% if has_live_open %}
+    <div class="share-live-callout">
+        <span>
+            <i class="fas fa-magic" style="color:#0d6ab0;"></i>
+            <span class="lang-text"
+                  data-pt-br="Esta é uma prévia compartilhada. Clique em &ldquo;Simular no TERMO-CP&rdquo; para abrir esta simulação pronta e interativa (cilindro 3D, diagramas com zoom, memorial de cálculo e continuação de processos)."
+                  data-en="This is a shared preview. Click &ldquo;Open in TERMO-CP&rdquo; to launch this exact simulation interactively (3D cylinder, zoomable diagrams, calculation memorial, and process chaining)."
+                  data-es="Esta es una vista previa compartida. Haz clic en &ldquo;Abrir en TERMO-CP&rdquo; para abrir esta simulación lista e interactiva (cilindro 3D, diagramas con zoom, memoria de cálculo y continuación)."
+                  data-fr="Ceci est un aperçu partagé. Cliquez sur &ldquo;Ouvrir dans TERMO-CP&rdquo; pour lancer cette simulation complète et interactive (cylindre 3D, diagrammes zoomables et mémorial de calcul)."
+                  data-zh="这是分享预览页面。点击“在 TERMO-CP 中打开”即可直接加载此完整交互式模拟（3D 气缸、可缩放图表、分步计算过程与连续过程）。">
+                Esta é uma prévia compartilhada. Clique em "Simular no TERMO-CP" para abrir esta simulação pronta e interativa (cilindro 3D, diagramas com zoom, memorial de cálculo e continuação de processos).
+            </span>
+        </span>
+    </div>
+    {% endif %}
+
     <div class="share-main-grid">
         {% if payload.states %}
             {% for st in payload.states %}
             <div class="share-card">
-                <h3>{{ st.title }}</h3>
+                <h3><i class="fas fa-table" style="color:#0d6ab0;"></i> {{ st.title }}</h3>
                 {% for row in st.rows %}
                 <div class="share-row">
                     <span>{{ row.label }}</span>
@@ -166,7 +271,14 @@
         {% if payload.cylinder_img %}
         <div class="share-cyl-card">
             <img src="{{ payload.cylinder_img }}" alt="Cilindro-Pistão 3D">
-            <div class="share-cyl-caption lang-text" data-pt-br="Visualização 3D do Cilindro-Pistão" data-en="3D Cylinder-Piston Visualization" data-es="Visualización 3D del Cilindro-Pistón" data-fr="Visualisation 3D du Cylindre-Piston" data-zh="3D 活塞-气缸视图">Visualização 3D do Cilindro-Pistão</div>
+            <div class="share-cyl-footer">
+                <strong class="lang-text" data-pt-br="Visualização 3D do Cilindro-Pistão" data-en="3D Cylinder-Piston Visualization" data-es="Visualización 3D del Cilindro-Pistón" data-fr="Visualisation 3D du Cylindre-Piston" data-zh="3D 活塞-气缸视图">Visualização 3D do Cilindro-Pistão</strong>
+                <div class="share-cyl-legend">
+                    <span class="share-leg-dot"><i style="background:#94a3b8;"></i><span class="lang-text" data-pt-br="Pistão" data-en="Piston" data-es="Pistón" data-fr="Piston" data-zh="活塞">Pistão</span></span>
+                    <span class="share-leg-dot"><i style="background:#1d4ed8;"></i><span class="lang-text" data-pt-br="Líquido" data-en="Liquid" data-es="Líquido" data-fr="Liquide" data-zh="液体">Líquido</span></span>
+                    <span class="share-leg-dot"><i style="background:#1e3a5f;"></i><span class="lang-text" data-pt-br="Vapor" data-en="Vapor" data-es="Vapor" data-fr="Vapeur" data-zh="蒸汽">Vapor</span></span>
+                </div>
+            </div>
         </div>
         {% endif %}
     </div>

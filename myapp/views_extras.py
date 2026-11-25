@@ -5,7 +5,7 @@ import random
 import time
 
 from django.http import JsonResponse
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_GET, require_POST
 
@@ -67,6 +67,23 @@ def api_compartilhar_view(request):
     if not isinstance(payload, dict):
         return JsonResponse({'ok': False, 'error': 'Payload inválido'}, status=400)
 
+    # Guarda o caminho de origem e um snapshot seguro dos dados de cálculo da sessão
+    # para que "Simular no TERMO-CP" reabra a simulação pronta e interativa para qualquer visitante.
+    source_path = str(body.get('source_path', '')).strip()
+    if source_path.startswith('/') and not source_path.startswith('//'):
+        payload['source_path'] = source_path[:300]
+
+    session_snapshot = {}
+    for k, v in request.session.items():
+        if str(k).startswith('_') or k == 'poe_exercise':
+            continue
+        try:
+            json.dumps(v)
+            session_snapshot[k] = v
+        except (TypeError, ValueError):
+            continue
+    payload['session_snapshot'] = session_snapshot
+
     sim = SimulacaoCompartilhada.objects.create(
         titulo=titulo,
         substancia=substancia,
@@ -89,8 +106,30 @@ def shared_simulation_view(request, codigo):
     return render(request, 'shared_simulation.html', {
         'sim': sim,
         'payload': payload,
-        'payload_json': sim.payload_json,
+        'has_live_open': bool(payload.get('source_path')),
     })
+
+
+@require_GET
+def shared_simulation_open_view(request, codigo):
+    """Restaura a sessão salva e redireciona direto para a simulação pronta no TERMO-CP."""
+    sim = get_object_or_404(SimulacaoCompartilhada, codigo=codigo.upper())
+    try:
+        payload = json.loads(sim.payload_json)
+    except ValueError:
+        payload = {}
+
+    snapshot = payload.get('session_snapshot')
+    if isinstance(snapshot, dict):
+        for k, v in snapshot.items():
+            if not str(k).startswith('_'):
+                request.session[k] = v
+        request.session.modified = True
+
+    target = str(payload.get('source_path', '/')).strip()
+    if not target.startswith('/') or target.startswith('//'):
+        target = '/'
+    return redirect(target)
 
 
 # ==============================================================================

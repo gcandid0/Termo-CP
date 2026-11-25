@@ -576,6 +576,7 @@ class ExtrasFeaturesTests(TestCase):
                 'titulo': 'Água — Isobárico',
                 'substancia': 'Água',
                 'tipo': 'Isobárico',
+                'source_path': '/agua/agua-estado-resultados/',
                 'payload': {
                     'states': [{'title': 'Estado 1', 'rows': [{'label': 'P:', 'value': '100 kPa'}]}],
                     'process': [{'label': 'W', 'value': '96,86 kJ'}],
@@ -590,6 +591,9 @@ class ExtrasFeaturesTests(TestCase):
         self.assertEqual(page.status_code, 200)
         self.assertContains(page, '100 kPa')
         self.assertContains(page, '96,86 kJ')
+        opened = self.client.get(f"/s/{data['codigo']}/abrir/")
+        self.assertEqual(opened.status_code, 302)
+        self.assertEqual(opened['Location'], '/agua/agua-estado-resultados/')
 
     def test_poe_exercise_anti_cheating_and_unlock(self):
         # 1. Página carrega
