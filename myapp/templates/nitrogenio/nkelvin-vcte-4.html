@@ -8,14 +8,14 @@
 {% endblock %}
 
 {% block help_title %}
-<span class="lang-text" data-pt-br="Ajuda &ndash; Processo a volume constante (4/4)" data-en="Help &ndash; Constant-volume process (4/4)" data-es="Ayuda &ndash; Proceso a volumen constante (4/4)">Ajuda &ndash; Processo a volume constante (4/4)</span>
+<span class="lang-text" data-pt-br="Ajuda &ndash; Processo a volume constante (4/4)" data-en="Help &ndash; Constant-volume process (4/4)" data-es="Ayuda &ndash; Proceso a volumen constante (4/4)" data-fr="Aide &ndash; Processus à volume constant (4/4)" data-zh="帮助 &ndash; 等容过程 (4/4)">Ajuda &ndash; Processo a volume constante (4/4)</span>
 {% endblock %}
 
 {% block help_content %}
 <p class="lang-text"
    data-pt-br="Defina o estado final do processo: escolha uma propriedade do estado final de Nitrogênio (o volume específico permanece igual ao do estado inicial)."
    data-en="Define the final state of the process: choose a final-state property of Nitrogen (specific volume stays equal to the initial state)."
-   data-es="Define el estado final del proceso: elige una propiedad del estado final de Nitrógeno (el volumen específico permanece igual al del estado inicial).">
+   data-es="Define el estado final del proceso: elige una propiedad del estado final de Nitrógeno (el volumen específico permanece igual al del estado inicial)." data-fr="Définissez l'état final du processus : choisissez une propriété de l'état final d'Azote (le volume spécifique reste égal à celui de l'état initial)." data-zh="定义过程的最终状态：选择氮气最终状态的一个属性（比容保持与初始状态相同）。">
     Defina o estado final do processo: escolha uma propriedade do estado final de Nitrogênio (o volume específico permanece igual ao do estado inicial).
 </p>
 {% endblock %}
@@ -29,7 +29,7 @@
         <h2 class="lang-text" 
             data-pt-br="Nitrogênio — Selecione a propriedade no estado final" 
             data-en="Nitrogen — Select the property in the final state" 
-            data-es="Nitrógeno — Seleccione la propiedad en el estado final">
+            data-es="Nitrógeno — Seleccione la propiedad en el estado final" data-fr="Azote — Sélectionnez la propriété de l'état final" data-zh="氮气 — 选择最终状态属性">
             Nitrogênio — Selecione a propriedade no estado final
         </h2>
 
@@ -101,31 +101,33 @@
         let phStr = {
             'pt-br': 'Digite o valor',
             'en': 'Enter the value',
-            'es': 'Introduzca el valor'
+            'es': 'Introduzca el valor',
+            'fr': 'Entrez la valeur',
+            'zh': '请输入数值'
         };
 
         // Mapeamento contendo APENAS Temperatura e Pressão
         var info = {
             '0': { icon: 'fas fa-temperature-high', min: 63.1, max: 1000, 
-                pt: 'Digite o valor da Temperatura (K)', en: 'Enter the Temperature value (K)', es: 'Introduzca el valor de la Temperatura (K)'},
+                pt: 'Digite o valor da Temperatura (K)', en: 'Enter the Temperature value (K)', es: 'Introduzca el valor de la Temperatura (K)', fr: 'Entrez la valeur de la Température (K)', zh: '请输入温度值 (K)'},
             '1': { icon: 'fas fa-tachometer-alt', min: 12.5, max: 10000, 
-                pt: 'Digite o valor da Pressão (kPa)', en: 'Enter the Pressure value (kPa)', es: 'Introduzca el valor de la Presión (kPa)'}
+                pt: 'Digite o valor da Pressão (kPa)', en: 'Enter the Pressure value (kPa)', es: 'Introduzca el valor de la Presión (kPa)', fr: 'Entrez la valeur de la Pression (kPa)', zh: '请输入压力值 (kPa)'}
         };
 
         var prop = info[selectedValue];
 
         if (prop) {
-            label.innerHTML = `<i class="${prop.icon}"></i> <span class="lang-text" data-pt-br="${prop.pt}" data-en="${prop.en}" data-es="${prop.es}">${prop.pt}</span>`;
+            label.innerHTML = `<i class="${prop.icon}"></i> <span class="lang-text" data-pt-br="${prop.pt}" data-en="${prop.en}" data-es="${prop.es}" data-fr="${prop.fr}" data-zh="${prop.zh}">${prop.pt}</span>`;
             numberInput.setAttribute('min', prop.min);
             numberInput.setAttribute('max', prop.max);
         } else {
             // Fallback de segurança 
-            label.innerHTML = `<i class="fas fa-pencil-alt"></i> <span class="lang-text" data-pt-br="Digite o valor da propriedade selecionada:" data-en="Enter the selected property value:" data-es="Introduzca el valor de la propiedad seleccionada:">Digite o valor da propriedade selecionada:</span>`;
+            label.innerHTML = `<i class="fas fa-pencil-alt"></i> <span class="lang-text" data-pt-br="Digite o valor da propriedade selecionada:" data-en="Enter the selected property value:" data-es="Introduzca el valor de la propiedad seleccionada:" data-fr="Entrez la valeur de la propriété sélectionnée :" data-zh="请输入所选属性的值：">Digite o valor da propriedade selecionada:</span>`;
             numberInput.removeAttribute('min');
             numberInput.removeAttribute('max');
         }
 
-        numberInput.placeholder = phStr[currentLang];
+        numberInput.placeholder = phStr[currentLang] || phStr['en'];
         inputField.style.display = 'block';
 
         // Atualiza a língua no momento da injeção se for diferente de PT-BR

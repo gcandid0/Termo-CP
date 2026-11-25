@@ -666,13 +666,13 @@ def get_registered_views(opt, kind):
 
 
 _SUBSTANCE_I18N_NAMES = {
-    1: ('Água', 'Water', 'Agua'),
-    2: ('Amônia', 'Ammonia', 'Amoníaco'),
-    3: ('CO₂', 'CO₂', 'CO₂'),
-    4: ('R-410A', 'R-410A', 'R-410A'),
-    5: ('R-134A', 'R-134A', 'R-134A'),
-    6: ('Nitrogênio', 'Nitrogen', 'Nitrógeno'),
-    7: ('Metano', 'Methane', 'Metano'),
+    1: ('Água', 'Water', 'Agua', 'Eau', '水'),
+    2: ('Amônia', 'Ammonia', 'Amoníaco', 'Ammoniac', '氨'),
+    3: ('CO₂', 'CO₂', 'CO₂', 'CO₂', '二氧化碳 (CO₂)'),
+    4: ('R-410A', 'R-410A', 'R-410A', 'R-410A', 'R-410A'),
+    5: ('R-134A', 'R-134A', 'R-134A', 'R-134A', 'R-134A'),
+    6: ('Nitrogênio', 'Nitrogen', 'Nitrógeno', 'Azote', '氮气'),
+    7: ('Metano', 'Methane', 'Metano', 'Méthane', '甲烷'),
 }
 
 _MASS_FLOW_REGISTRY = {
@@ -680,49 +680,49 @@ _MASS_FLOW_REGISTRY = {
         'session_scope': 'gas_prop',
         'next_route': 'ask_known3_6',
         'is_final_step': False,
-        'names': ('Gás Ideal', 'Ideal Gas', 'Gas Ideal'),
+        'names': ('Gás Ideal', 'Ideal Gas', 'Gas Ideal', 'Gaz Idéal', '理想气体'),
         'is_gas_process': False,
     },
     'gas_cilindro': {
         'session_scope': 'gas_cilindro',
         'next_route': 'ask_known3_7',
         'is_final_step': False,
-        'names': ('Gás Ideal', 'Ideal Gas', 'Gas Ideal'),
+        'names': ('Gás Ideal', 'Ideal Gas', 'Gas Ideal', 'Gaz Idéal', '理想气体'),
         'is_gas_process': False,
     },
     'gas_pcte': {
         'session_scope': 'gas_pcte',
         'next_route': 'ask_known1_8',
         'is_final_step': False,
-        'names': ('Gás Ideal', 'Ideal Gas', 'Gas Ideal'),
+        'names': ('Gás Ideal', 'Ideal Gas', 'Gas Ideal', 'Gaz Idéal', '理想气体'),
         'is_gas_process': True,
     },
     'gas_vcte': {
         'session_scope': 'gas_vcte',
         'next_route': 'ask_known1_9',
         'is_final_step': False,
-        'names': ('Gás Ideal', 'Ideal Gas', 'Gas Ideal'),
+        'names': ('Gás Ideal', 'Ideal Gas', 'Gas Ideal', 'Gaz Idéal', '理想气体'),
         'is_gas_process': True,
     },
     'gas_tcte': {
         'session_scope': 'gas_tcte',
         'next_route': 'ask_known1_10',
         'is_final_step': False,
-        'names': ('Gás Ideal', 'Ideal Gas', 'Gas Ideal'),
+        'names': ('Gás Ideal', 'Ideal Gas', 'Gas Ideal', 'Gaz Idéal', '理想气体'),
         'is_gas_process': True,
     },
     'gas_poli': {
         'session_scope': 'gas_poli',
         'next_route': 'ask_known1_11',
         'is_final_step': False,
-        'names': ('Gás Ideal', 'Ideal Gas', 'Gas Ideal'),
+        'names': ('Gás Ideal', 'Ideal Gas', 'Gas Ideal', 'Gaz Idéal', '理想气体'),
         'is_gas_process': True,
     },
     'gas_scte': {
         'session_scope': 'gas_scte',
         'next_route': 'ask_known1_12',
         'is_final_step': False,
-        'names': ('Gás Ideal', 'Ideal Gas', 'Gas Ideal'),
+        'names': ('Gás Ideal', 'Ideal Gas', 'Gas Ideal', 'Gaz Idéal', '理想气体'),
         'is_gas_process': True,
     },
 }
@@ -767,12 +767,14 @@ def ask_mass_view(request, flow_key):
     else:
         form = MassForm()
 
-    name_pt, name_en, name_es = meta['names']
+    name_pt, name_en, name_es, name_fr, name_zh = meta['names']
     return render(request, 'massa_step.html', {
         'form': form,
         'name_pt': name_pt,
         'name_en': name_en,
         'name_es': name_es,
+        'name_fr': name_fr,
+        'name_zh': name_zh,
         'is_final_step': meta['is_final_step'],
     })
 

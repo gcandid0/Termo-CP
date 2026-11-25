@@ -8,20 +8,22 @@
 {% endblock %}
 
 {% block help_title %}
-<span class="lang-text" data-pt-br="Ajuda &ndash; Primeira propriedade" data-en="Help &ndash; First property" data-es="Ayuda &ndash; Primera propiedad">Ajuda &ndash; Primeira propriedade</span>
+<span class="lang-text" data-pt-br="Ajuda &ndash; Primeira propriedade" data-en="Help &ndash; First property" data-es="Ayuda &ndash; Primera propiedad" data-fr="Aide &ndash; Première propriété" data-zh="帮助 &ndash; 第一个属性">Ajuda &ndash; Primeira propriedade</span>
 {% endblock %}
 
 {% block help_content %}
 <p class="lang-text"
    data-pt-br="Nesta tela você escolhe a primeira propriedade que já conhece sobre o estado da água."
    data-en="On this screen you choose the first property you already know about the water's state."
-   data-es="En esta pantalla eliges la primera propiedad que ya conoces sobre el estado del agua.">
+   data-es="En esta pantalla eliges la primera propiedad que ya conoces sobre el estado del agua." data-fr="Sur cet écran, vous choisissez la première propriété déjà connue de l'état de l'eau." data-zh="在此页面中，选择您已知的水状态的第一个属性。">
     Nesta tela você escolhe a primeira propriedade que já conhece sobre o estado da água.
 </p>
 <ol class="lang-html"
     data-pt-br="<li>Clique no cartão da propriedade que você já sabe (ex: Temperatura ou Pressão).</li><li>Um campo numérico aparecerá abaixo &ndash; digite o valor respeitando a unidade indicada (°C para temperatura, kPa para pressão).</li><li>Clique em Continuar para informar a segunda propriedade conhecida na próxima tela.</li>"
     data-en="<li>Click the card of the property you already know (e.g., Temperature or Pressure).</li><li>A numeric field will appear below &ndash; enter the value respecting the indicated unit (°C for temperature, kPa for pressure).</li><li>Click Continue to enter the second known property on the next screen.</li>"
-    data-es="<li>Haz clic en la tarjeta de la propiedad que ya conoces (ej: Temperatura o Presión).</li><li>Aparecerá un campo numérico abajo &ndash; ingresa el valor respetando la unidad indicada (°C para temperatura, kPa para presión).</li><li>Haz clic en Continuar para ingresar la segunda propiedad conocida en la siguiente pantalla.</li>">
+    data-es="<li>Haz clic en la tarjeta de la propiedad que ya conoces (ej: Temperatura o Presión).</li><li>Aparecerá un campo numérico abajo &ndash; ingresa el valor respetando la unidad indicada (°C para temperatura, kPa para presión).</li><li>Haz clic en Continuar para ingresar la segunda propiedad conocida en la siguiente pantalla.</li>"
+    data-fr="<li>Cliquez sur la carte de la propriété que vous connaissez déjà (ex : Température ou Pression).</li><li>Un champ numérique apparaît ci-dessous &ndash; saisissez la valeur en respectant l'unité indiquée (°C pour la température, kPa pour la pression).</li><li>Cliquez sur Continuer pour saisir la seconde propriété connue sur l'écran suivant.</li>"
+    data-zh="<li>点击您已知属性的卡片（例如：温度或压力）。</li><li>下方会出现数字输入框 &ndash; 请按标示单位输入数值（温度为 °C，压力为 kPa）。</li><li>点击“继续”以在下一页面输入第二个已知属性。</li>">
     <li>Clique no cartão da propriedade que você já sabe (ex: Temperatura ou Pressão).</li>
     <li>Um campo numérico aparecerá abaixo &ndash; digite o valor respeitando a unidade indicada (°C para temperatura, kPa para pressão).</li>
     <li>Clique em Continuar para informar a segunda propriedade conhecida na próxima tela.</li>
@@ -31,7 +33,7 @@
     <span class="lang-text"
           data-pt-br="Dica: os limites mínimo e máximo aceitos para o valor são definidos automaticamente conforme a propriedade escolhida."
           data-en="Tip: the minimum and maximum accepted values are set automatically depending on the chosen property."
-          data-es="Consejo: los límites mínimo y máximo aceptados se definen automáticamente según la propiedad elegida.">
+          data-es="Consejo: los límites mínimo y máximo aceptados se definen automáticamente según la propiedad elegida." data-fr="Conseil : les limites minimale et maximale acceptées sont définies automatiquement selon la propriété choisie." data-zh="提示：允许的最小值和最大值会根据所选属性自动设定。">
         Dica: os limites mínimo e máximo aceitos para o valor são definidos automaticamente conforme a propriedade escolhida.
     </span>
 </div>
@@ -42,7 +44,7 @@
     <div class="container">
         <i class="fas fa-sliders-h" style="font-size: 2.2em; color: #00A8FF; margin-bottom: 10px;"></i>
 
-        <h2 class="lang-text" data-pt-br="Água — Selecione a primeira propriedade" data-en="Water — Select the first property" data-es="Agua — Seleccione la primera propiedad">
+        <h2 class="lang-text" data-pt-br="Água — Selecione a primeira propriedade" data-en="Water — Select the first property" data-es="Agua — Seleccione la primera propiedad" data-fr="Eau — Sélectionnez la première propriété" data-zh="水 — 选择第一个属性">
             Água — Selecione a primeira propriedade
         </h2>
 
@@ -94,5 +96,5 @@
 {% endblock %}
 
 {% block extra_js %}
-<script src="{% static 'myapp/js/wizard_script_6.js' %}?v=4"></script>
+<script src="{% static 'myapp/js/wizard_script_6.js' %}?v=5"></script>
 {% endblock %}

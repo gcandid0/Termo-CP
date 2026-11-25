@@ -8,14 +8,14 @@
 {% endblock %}
 
 {% block help_title %}
-<span class="lang-text" data-pt-br="Ajuda &ndash; Processo isentrópico (2/3)" data-en="Help &ndash; Isentropic process (2/3)" data-es="Ayuda &ndash; Proceso isentrópico (2/3)">Ajuda &ndash; Processo isentrópico (2/3)</span>
+<span class="lang-text" data-pt-br="Ajuda &ndash; Processo isentrópico (2/3)" data-en="Help &ndash; Isentropic process (2/3)" data-es="Ayuda &ndash; Proceso isentrópico (2/3)" data-fr="Aide &ndash; Processus isentropique (2/3)" data-zh="帮助 &ndash; 等熵过程 (2/3)">Ajuda &ndash; Processo isentrópico (2/3)</span>
 {% endblock %}
 
 {% block help_content %}
 <p class="lang-text"
    data-pt-br="Informe a segunda propriedade conhecida do estado inicial de R-134a. A entropia específica calculada aqui será mantida constante até o estado final."
    data-en="Enter the second known property of the R-134a initial state. The specific entropy calculated here will be kept constant through the final state."
-   data-es="Ingresa la segunda propiedad conocida del estado inicial de R-134a. La entropía específica calculada aquí se mantendrá constante hasta el estado final.">
+   data-es="Ingresa la segunda propiedad conocida del estado inicial de R-134a. La entropía específica calculada aquí se mantendrá constante hasta el estado final." data-fr="Saisissez la seconde propriété connue de l'état initial de R-134a. L'entropie spécifique calculée ici restera constante jusqu'à l'état final." data-zh="输入R-134a初始状态的第二个已知属性。此处计算出的比熵将在整个过程中保持恒定直至最终状态。">
     Informe a segunda propriedade conhecida do estado inicial de R-134a. A entropia específica calculada aqui será mantida constante até o estado final.
 </p>
 {% endblock %}
@@ -25,7 +25,7 @@
     <div class="container">
         <i class="fas fa-layer-group" style="font-size: 2.5em; color: #00A8FF; margin-bottom: 15px;"></i>
 
-        <h2 class="lang-text" data-pt-br="R-134a — Selecione a segunda propriedade" data-en="R-134a — Select the second property" data-es="R-134a — Seleccione la segunda propiedad">
+        <h2 class="lang-text" data-pt-br="R-134a — Selecione a segunda propriedade" data-en="R-134a — Select the second property" data-es="R-134a — Seleccione la segunda propiedad" data-fr="R-134a — Sélectionnez la deuxième propriété" data-zh="R-134a — 选择第二个属性">
             R-134a — Selecione a segunda propriedade
         </h2>
 
@@ -104,42 +104,44 @@
         let phStr = {
             'pt-br': 'Digite o valor',
             'en': 'Enter the value',
-            'es': 'Introduzca el valor'
+            'es': 'Introduzca el valor',
+            'fr': 'Entrez la valeur',
+            'zh': '请输入数值'
         };
 
         // Mapeamento expandido adaptado para o sistema de idiomas dinâmico
         var info = {
             '0': { icon: 'fas fa-temperature-high', min: -70, max: 180, 
-                pt: 'Digite o valor da Temperatura (°C)', en: 'Enter the Temperature value (°C)', es: 'Introduzca el valor de la Temperatura (°C)'},
+                pt: 'Digite o valor da Temperatura (°C)', en: 'Enter the Temperature value (°C)', es: 'Introduzca el valor de la Temperatura (°C)', fr: 'Entrez la valeur de la Température (°C)', zh: '请输入温度值 (°C)'},
             '1': { icon: 'fas fa-tachometer-alt', min: 8.3, max: 10000, 
-                pt: 'Digite o valor da Pressão (kPa)', en: 'Enter the Pressure value (kPa)', es: 'Introduzca el valor de la Presión (kPa)'},
+                pt: 'Digite o valor da Pressão (kPa)', en: 'Enter the Pressure value (kPa)', es: 'Introduzca el valor de la Presión (kPa)', fr: 'Entrez la valeur de la Pression (kPa)', zh: '请输入压力值 (kPa)'},
             '2': { icon: 'fas fa-cube', min: 0.000675, max: 1.97274, 
-                pt: 'Digite o valor do Volume Específico (m³/kg)', en: 'Enter the Specific Volume value (m³/kg)', es: 'Introduzca el valor del Volumen Específico (m³/kg)'},
+                pt: 'Digite o valor do Volume Específico (m³/kg)', en: 'Enter the Specific Volume value (m³/kg)', es: 'Introduzca el valor del Volumen Específico (m³/kg)', fr: 'Entrez la valeur du Volume Spécifique (m³/kg)', zh: '请输入比容值 (m³/kg)'},
             '3': { icon: 'fas fa-bolt', min: 119.46, max: 534.51, 
-                pt: 'Digite o valor da Energia Interna (kJ/kg)', en: 'Enter the Internal Energy value (kJ/kg)', es: 'Introduzca el valor de la Energía Interna (kJ/kg)'},
+                pt: 'Digite o valor da Energia Interna (kJ/kg)', en: 'Enter the Internal Energy value (kJ/kg)', es: 'Introduzca el valor de la Energía Interna (kJ/kg)', fr: 'Entrez la valeur de l\'Énergie Interne (kJ/kg)', zh: '请输入内能值 (kJ/kg)'},
             '4': { icon: 'fas fa-fire', min: 119.47, max: 570.08, 
-                pt: 'Digite o valor da Entalpia (kJ/kg)', en: 'Enter the Enthalpy value (kJ/kg)', es: 'Introduzca el valor de la Entalpía (kJ/kg)'},
+                pt: 'Digite o valor da Entalpia (kJ/kg)', en: 'Enter the Enthalpy value (kJ/kg)', es: 'Introduzca el valor de la Entalpía (kJ/kg)', fr: 'Entrez la valeur de l\'Enthalpie (kJ/kg)', zh: '请输入焓值 (kJ/kg)'},
             '5': { icon: 'fas fa-random', min: 0.6645, max: 2.2379, 
-                pt: 'Digite o valor da Entropia (kJ/kg·K)', en: 'Enter the Entropy value (kJ/kg·K)', es: 'Introduzca el valor de la Entropía (kJ/kg·K)'},
+                pt: 'Digite o valor da Entropia (kJ/kg·K)', en: 'Enter the Entropy value (kJ/kg·K)', es: 'Introduzca el valor de la Entropía (kJ/kg·K)', fr: 'Entrez la valeur de l\'Entropie (kJ/kg·K)', zh: '请输入熵值 (kJ/kg·K)'},
             '6': { icon: 'fas fa-percentage', min: 0, max: 100, 
-                pt: 'Digite o valor do Título (%)', en: 'Enter the Quality value (%)', es: 'Introduzca el valor del Título (%)'}
+                pt: 'Digite o valor do Título (%)', en: 'Enter the Quality value (%)', es: 'Introduzca el valor del Título (%)', fr: 'Entrez la valeur du Titre (%)', zh: '请输入干度值 (%)'}
         };
 
 
         var prop = info[selectedValue];
 
         if (prop) {
-            label.innerHTML = `<i class="${prop.icon}"></i> <span class="lang-text" data-pt-br="${prop.pt}" data-en="${prop.en}" data-es="${prop.es}">${prop.pt}</span>`;
+            label.innerHTML = `<i class="${prop.icon}"></i> <span class="lang-text" data-pt-br="${prop.pt}" data-en="${prop.en}" data-es="${prop.es}" data-fr="${prop.fr}" data-zh="${prop.zh}">${prop.pt}</span>`;
             numberInput.setAttribute('min', prop.min);
             numberInput.setAttribute('max', prop.max);
         } else {
             // Comportamento padrão de segurança
-            label.innerHTML = `<i class="fas fa-pencil-alt"></i> <span class="lang-text" data-pt-br="Digite o valor da propriedade selecionada:" data-en="Enter the selected property value:" data-es="Introduzca el valor de la propiedad seleccionada:">Digite o valor da propriedade selecionada:</span>`;
+            label.innerHTML = `<i class="fas fa-pencil-alt"></i> <span class="lang-text" data-pt-br="Digite o valor da propriedade selecionada:" data-en="Enter the selected property value:" data-es="Introduzca el valor de la propiedad seleccionada:" data-fr="Entrez la valeur de la propriété sélectionnée :" data-zh="请输入所选属性的值：">Digite o valor da propriedade selecionada:</span>`;
             numberInput.removeAttribute('min');
             numberInput.removeAttribute('max');
         }
 
-        numberInput.placeholder = phStr[currentLang];
+        numberInput.placeholder = phStr[currentLang] || phStr['en'];
         inputField.style.display = 'block';
 
         // Dispara a tradução para formatar o label que acabou de ser injetado (caso não esteja em pt-br)

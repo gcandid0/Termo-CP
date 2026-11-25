@@ -8,14 +8,14 @@
 {% endblock %}
 
 {% block help_title %}
-<span class="lang-text" data-pt-br="Ajuda &ndash; Processo a pressão constante (4/4)" data-en="Help &ndash; Constant-pressure process (4/4)" data-es="Ayuda &ndash; Proceso a presión constante (4/4)">Ajuda &ndash; Processo a pressão constante (4/4)</span>
+<span class="lang-text" data-pt-br="Ajuda &ndash; Processo a pressão constante (4/4)" data-en="Help &ndash; Constant-pressure process (4/4)" data-es="Ayuda &ndash; Proceso a presión constante (4/4)" data-fr="Aide &ndash; Processus à pression constante (4/4)" data-zh="帮助 &ndash; 等压过程 (4/4)">Ajuda &ndash; Processo a pressão constante (4/4)</span>
 {% endblock %}
 
 {% block help_content %}
 <p class="lang-text"
    data-pt-br="Defina o estado final do processo: escolha uma propriedade do estado final de CO₂ (a pressão permanece igual à do estado inicial) ou informe diretamente o calor transferido no processo."
    data-en="Define the final state of the process: choose a final-state property of CO₂ (pressure stays equal to the initial state) or directly enter the heat transferred during the process."
-   data-es="Define el estado final del proceso: elige una propiedad del estado final de CO₂ (la presión permanece igual a la del estado inicial) o ingresa directamente el calor transferido en el proceso.">
+   data-es="Define el estado final del proceso: elige una propiedad del estado final de CO₂ (la presión permanece igual a la del estado inicial) o ingresa directamente el calor transferido en el proceso." data-fr="Définissez l'état final du processus : choisissez une propriété de l'état final de CO₂ (la pression reste égale à celle de l'état initial) ou saisissez directement la chaleur transférée." data-zh="定义过程的最终状态：选择二氧化碳 (CO₂)最终状态的一个属性（压力保持与初始状态相同），或直接输入过程传递的热量。">
     Defina o estado final do processo: escolha uma propriedade do estado final de CO₂ (a pressão permanece igual à do estado inicial) ou informe diretamente o calor transferido no processo.
 </p>
 {% endblock %}
@@ -28,7 +28,7 @@
         <h2 class="lang-text"
             data-pt-br="CO₂ — Selecione a propriedade no estado final ou o calor transferido"
             data-en="CO₂ — Select the property in the final state or the heat transferred"
-            data-es="CO₂ — Seleccione la propiedad en el estado final o el calor transferido">
+            data-es="CO₂ — Seleccione la propiedad en el estado final o el calor transferido" data-fr="CO₂ — Sélectionnez la propriété de l'état final ou la chaleur transférée" data-zh="二氧化碳 (CO₂) — 选择最终状态属性或传递的热量">
             CO₂ — Selecione a propriedade no estado final ou o calor transferido
         </h2>
 
@@ -108,44 +108,46 @@
         let phStr = {
             'pt-br': 'Digite o valor',
             'en': 'Enter the value',
-            'es': 'Introduzca el valor'
+            'es': 'Introduzca el valor',
+            'fr': 'Entrez la valeur',
+            'zh': '请输入数值'
         };
 
         // Mapeamento com suporte para 3 idiomas
         var info = {
             '0': { icon: 'fas fa-temperature-high', min: -50, max: 320,
-                   pt: 'Digite o valor da Temperatura (°C)', en: 'Enter the Temperature value (°C)', es: 'Introduzca el valor de la Temperatura (°C)'},
+                   pt: 'Digite o valor da Temperatura (°C)', en: 'Enter the Temperature value (°C)', es: 'Introduzca el valor de la Temperatura (°C)', fr: 'Entrez la valeur de la Température (°C)', zh: '请输入温度值 (°C)'},
             '1': { icon: 'fas fa-tachometer-alt', min: 400, max: 10000,
-                   pt: 'Digite o valor da Pressão (kPa)', en: 'Enter the Pressure value (kPa)', es: 'Introduzca el valor de la Presión (kPa)'},
+                   pt: 'Digite o valor da Pressão (kPa)', en: 'Enter the Pressure value (kPa)', es: 'Introduzca el valor de la Presión (kPa)', fr: 'Entrez la valeur de la Pression (kPa)', zh: '请输入压力值 (kPa)'},
             '2': { icon: 'fas fa-cube', min: 0.000866, max: 0.25127,
-                   pt: 'Digite o valor do Volume Específico (m³/kg)', en: 'Enter the Specific Volume value (m³/kg)', es: 'Introduzca el valor del Volumen Específico (m³/kg)'},
+                   pt: 'Digite o valor do Volume Específico (m³/kg)', en: 'Enter the Specific Volume value (m³/kg)', es: 'Introduzca el valor del Volumen Específico (m³/kg)', fr: 'Entrez la valeur du Volume Spécifique (m³/kg)', zh: '请输入比容值 (m³/kg)'},
             '3': { icon: 'fas fa-bolt', min: -20.55, max: 556.37,
-                   pt: 'Digite o valor da Energia Interna (kJ/kg)', en: 'Enter the Internal Energy value (kJ/kg)', es: 'Introduzca el valor de la Energía Interna (kJ/kg)'},
+                   pt: 'Digite o valor da Energia Interna (kJ/kg)', en: 'Enter the Internal Energy value (kJ/kg)', es: 'Introduzca el valor de la Energía Interna (kJ/kg)', fr: 'Entrez la valeur de l\'Énergie Interne (kJ/kg)', zh: '请输入内能值 (kJ/kg)'},
             '4': { icon: 'fas fa-fire', min: -19.96, max: 666.8,
-                   pt: 'Digite o valor da Entalpia (kJ/kg)', en: 'Enter the Enthalpy value (kJ/kg)', es: 'Introduzca el valor de la Entalpía (kJ/kg)'},
+                   pt: 'Digite o valor da Entalpia (kJ/kg)', en: 'Enter the Enthalpy value (kJ/kg)', es: 'Introduzca el valor de la Entalpía (kJ/kg)', fr: 'Entrez la valeur de l\'Enthalpie (kJ/kg)', zh: '请输入焓值 (kJ/kg)'},
             '5': { icon: 'fas fa-random', min: -0.0863, max: 2.3578,
-                   pt: 'Digite o valor da Entropia (kJ/kg·K)', en: 'Enter the Entropy value (kJ/kg·K)', es: 'Introduzca el valor de la Entropía (kJ/kg·K)'},
+                   pt: 'Digite o valor da Entropia (kJ/kg·K)', en: 'Enter the Entropy value (kJ/kg·K)', es: 'Introduzca el valor de la Entropía (kJ/kg·K)', fr: 'Entrez la valeur de l\'Entropie (kJ/kg·K)', zh: '请输入熵值 (kJ/kg·K)'},
             '6': { icon: 'fas fa-percentage', min: 0, max: 100,
-                   pt: 'Digite o valor do Título (%)', en: 'Enter the Quality value (%)', es: 'Introduzca el valor del Título (%)'},
+                   pt: 'Digite o valor do Título (%)', en: 'Enter the Quality value (%)', es: 'Introduzca el valor del Título (%)', fr: 'Entrez la valeur du Titre (%)', zh: '请输入干度值 (%)'},
             '7': { icon: 'fas fa-cogs', min: -100000, max: 100000,
-                   pt: 'Digite o valor do Trabalho (kJ)', en: 'Enter the Work value (kJ)', es: 'Introduzca el valor del Trabajo (kJ)' },
+                   pt: 'Digite o valor do Trabalho (kJ)', en: 'Enter the Work value (kJ)', es: 'Introduzca el valor del Trabajo (kJ)', fr: 'Entrez la valeur du Travail (kJ)', zh: '请输入功的值 (kJ)' },
             '8': { icon: 'fas fa-fire-alt', min: -100000, max: 100000,
-                   pt: 'Digite o valor do Calor Transferido (kJ)', en: 'Enter the Transferred Heat value (kJ)', es: 'Introduzca el valor del Calor Transferido (kJ)' }
+                   pt: 'Digite o valor do Calor Transferido (kJ)', en: 'Enter the Transferred Heat value (kJ)', es: 'Introduzca el valor del Calor Transferido (kJ)', fr: 'Entrez la valeur de la Chaleur Transférée (kJ)', zh: '请输入传递的热量值 (kJ)' }
         };
 
         var prop = info[selectedValue];
 
         if (prop) {
-            label.innerHTML = `<i class="${prop.icon}"></i> <span class="lang-text" data-pt-br="${prop.pt}" data-en="${prop.en}" data-es="${prop.es}">${prop.pt}</span>`;
+            label.innerHTML = `<i class="${prop.icon}"></i> <span class="lang-text" data-pt-br="${prop.pt}" data-en="${prop.en}" data-es="${prop.es}" data-fr="${prop.fr}" data-zh="${prop.zh}">${prop.pt}</span>`;
             numberInput.setAttribute('min', prop.min);
             numberInput.setAttribute('max', prop.max);
         } else {
-            label.innerHTML = `<i class="fas fa-pencil-alt"></i> <span class="lang-text" data-pt-br="Digite o valor da propriedade selecionada:" data-en="Enter the selected property value:" data-es="Introduzca el valor de la propiedad seleccionada:">Digite o valor da propriedade selecionada:</span>`;
+            label.innerHTML = `<i class="fas fa-pencil-alt"></i> <span class="lang-text" data-pt-br="Digite o valor da propriedade selecionada:" data-en="Enter the selected property value:" data-es="Introduzca el valor de la propiedad seleccionada:" data-fr="Entrez la valeur de la propriété sélectionnée :" data-zh="请输入所选属性的值：">Digite o valor da propriedade selecionada:</span>`;
             numberInput.removeAttribute('min');
             numberInput.removeAttribute('max');
         }
 
-        numberInput.placeholder = phStr[currentLang];
+        numberInput.placeholder = phStr[currentLang] || phStr['en'];
         inputField.style.display = 'block';
 
         // Força a retradução do label recém injetado, caso o idioma não seja pt-br

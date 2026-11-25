@@ -11,7 +11,7 @@
 <p class="lang-text"
    data-pt-br="Selecione a segunda propriedade conhecida do Gás Ideal e informe o valor correspondente. Com as duas propriedades, o TERMO-CP conseguirá determinar completamente o estado do gás."
    data-en="Select the second known property of the Ideal Gas and enter the corresponding value. With both properties, TERMO-CP will be able to fully determine the state of the gas."
-   data-es="Seleccione la segunda propiedad conocida del Gas Ideal e ingrese el valor correspondiente. Con ambas propiedades, TERMO-CP podrá determinar completamente el estado del gas.">
+   data-es="Seleccione la segunda propiedad conocida del Gas Ideal e ingrese el valor correspondiente. Con ambas propiedades, TERMO-CP podrá determinar completamente el estado del gas." data-fr="Sélectionnez la seconde propriété connue du Gaz Idéal et saisissez la valeur correspondante. Avec ces deux propriétés, TERMO-CP déterminera complètement l'état du gaz." data-zh="选择理想气体的第二个已知属性并输入对应数值。凭借这两个属性，TERMO-CP 将完整确定气体状态。">
     Selecione a segunda propriedade conhecida do Gás Ideal e informe o valor correspondente. Com as duas propriedades, o TERMO-CP conseguirá determinar completamente o estado do gás.
 </p>
 {% endblock %}
@@ -21,7 +21,7 @@
     <i class="fas fa-atom" style="font-size: 2.2em; color: #00A8FF; margin-bottom: 10px;"></i>
 
     <h2>
-        <span class="lang-text" data-pt-br="Gás Ideal — Selecione a segunda constante" data-en="Ideal Gas — Select the second constant" data-es="Gas Ideal — Seleccione la segunda constante">
+        <span class="lang-text" data-pt-br="Gás Ideal — Selecione a segunda constante" data-en="Ideal Gas — Select the second constant" data-es="Gas Ideal — Seleccione la segunda constante" data-fr="Gaz Idéal — Sélectionnez la seconde constante" data-zh="理想气体 — 选择第二个常数">
             Gás Ideal — Selecione a segunda constante
         </span>
     </h2>
@@ -54,7 +54,7 @@
         <div class="button-container">
             <a href="{% url 'ask_known1_8' %}" class="btn btn-secondary">
                 <i class="fas fa-arrow-left" style="margin-right: 8px;"></i> 
-                <span class="lang-text" data-pt-br="Voltar" data-en="Back" data-es="Atrás">Voltar</span>
+                <span class="lang-text" data-pt-br="Voltar" data-en="Back" data-es="Atrás" data-fr="Retour" data-zh="返回">Voltar</span>
             </a>
 
             <button type="submit" class="btn btn-primary">
@@ -67,5 +67,5 @@
 {% endblock %}
 
 {% block extra_js %}
-<script src="{% static 'myapp/js/wizard_script_4.js' %}?v=4"></script>
+<script src="{% static 'myapp/js/wizard_script_4.js' %}?v=5"></script>
 {% endblock %}

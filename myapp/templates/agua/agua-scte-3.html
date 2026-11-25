@@ -8,14 +8,14 @@
 {% endblock %}
 
 {% block help_title %}
-<span class="lang-text" data-pt-br="Ajuda &ndash; Processo isentrópico (3/3)" data-en="Help &ndash; Isentropic process (3/3)" data-es="Ayuda &ndash; Proceso isentrópico (3/3)">Ajuda &ndash; Processo isentrópico (3/3)</span>
+<span class="lang-text" data-pt-br="Ajuda &ndash; Processo isentrópico (3/3)" data-en="Help &ndash; Isentropic process (3/3)" data-es="Ayuda &ndash; Proceso isentrópico (3/3)" data-fr="Aide &ndash; Processus isentropique (3/3)" data-zh="帮助 &ndash; 等熵过程 (3/3)">Ajuda &ndash; Processo isentrópico (3/3)</span>
 {% endblock %}
 
 {% block help_content %}
 <p class="lang-text"
    data-pt-br="Escolha a propriedade que define o estado final de Água (ex: pressão ou temperatura final). Como o processo é isentrópico, a entropia do estado final será igual à do estado inicial."
    data-en="Choose the property that defines the Water final state (e.g., final pressure or temperature). Since the process is isentropic, the final state's entropy will equal the initial state's entropy."
-   data-es="Elige la propiedad que define el estado final de Agua (ej: presión o temperatura final). Como el proceso es isentrópico, la entropía del estado final será igual a la del estado inicial.">
+   data-es="Elige la propiedad que define el estado final de Agua (ej: presión o temperatura final). Como el proceso es isentrópico, la entropía del estado final será igual a la del estado inicial." data-fr="Choisissez la propriété définissant l'état final d'Eau (ex : pression ou température finale). Le processus étant isentropique, l'entropie finale sera égale à l'entropie initiale." data-zh="选择定义水最终状态的属性（例如：最终压力或温度）。由于过程为等熵过程，最终熵将等于初始熵。">
     Escolha a propriedade que define o estado final de Água (ex: pressão ou temperatura final). Como o processo é isentrópico, a entropia do estado final será igual à do estado inicial.
 </p>
 {% endblock %}
@@ -28,7 +28,7 @@
         <h2 class="lang-text"
             data-pt-br="Água — Selecione a propriedade no estado final"
             data-en="Water — Select the property in the final state"
-            data-es="Agua — Seleccione la propiedad en el estado final">
+            data-es="Agua — Seleccione la propiedad en el estado final" data-fr="Eau — Sélectionnez la propriété de l'état final" data-zh="水 — 选择最终状态属性">
             Água — Selecione a propriedade no estado final
         </h2>
 
@@ -111,17 +111,19 @@
         let phStr = {
             'pt-br': 'Digite o valor',
             'en': 'Enter the value',
-            'es': 'Introduzca el valor'
+            'es': 'Introduzca el valor',
+            'fr': 'Entrez la valeur',
+            'zh': '请输入数值'
         };
 
         // Mapeamento expandido para lidar com Trabalho, Calor e as demais propriedades nos 3 idiomas
         var info = {
             '0': { icon: 'fas fa-temperature-high', min: 0, max: 1300,
-                   pt: 'Digite o valor da Temperatura (°C)', en: 'Enter the Temperature value (°C)', es: 'Introduzca el valor de la Temperatura (°C)' },
+                   pt: 'Digite o valor da Temperatura (°C)', en: 'Enter the Temperature value (°C)', es: 'Introduzca el valor de la Temperatura (°C)', fr: 'Entrez la valeur de la Température (°C)', zh: '请输入温度值 (°C)' },
             '1': { icon: 'fas fa-tachometer-alt', min: 0.6113, max: 50000,
-                   pt: 'Digite o valor da Pressão (kPa)', en: 'Enter the Pressure value (kPa)', es: 'Introduzca el valor de la Presión (kPa)' },
+                   pt: 'Digite o valor da Pressão (kPa)', en: 'Enter the Pressure value (kPa)', es: 'Introduzca el valor de la Presión (kPa)', fr: 'Entrez la valeur de la Pression (kPa)', zh: '请输入压力值 (kPa)' },
             '2': { icon: 'fas fa-cube', min: 0.000977, max: 206.132,
-                   pt: 'Digite o valor do Volume Específico (m³/kg)', en: 'Enter the Specific Volume value (m³/kg)', es: 'Introduzca el valor del Volumen Específico (m³/kg)' },
+                   pt: 'Digite o valor do Volume Específico (m³/kg)', en: 'Enter the Specific Volume value (m³/kg)', es: 'Introduzca el valor del Volumen Específico (m³/kg)', fr: 'Entrez la valeur du Volume Spécifique (m³/kg)', zh: '请输入比容值 (m³/kg)' },
             '3': { icon: 'fas fa-bolt', min: 0, max: 4683.68,
                    pt: 'Digite o valor da Energia Interna Específica (kJ/kg)', en: 'Enter the Specific Internal Energy value (kJ/kg)', es: 'Introduzca el valor de la Energía Interna Específica (kJ/kg)' },
             '4': { icon: 'fas fa-fire', min: 0, max: 5409.7,
@@ -129,27 +131,27 @@
             '5': { icon: 'fas fa-random', min: 0, max: 14.581,
                    pt: 'Digite o valor da Entropia Específica (kJ/kg·K)', en: 'Enter the Specific Entropy value (kJ/kg·K)', es: 'Introduzca el valor de la Entropía Específica (kJ/kg·K)' },
             '6': { icon: 'fas fa-percentage', min: 0, max: 100,
-                   pt: 'Digite o valor do Título (%)', en: 'Enter the Quality value (%)', es: 'Introduzca el valor del Título (%)' },
+                   pt: 'Digite o valor do Título (%)', en: 'Enter the Quality value (%)', es: 'Introduzca el valor del Título (%)', fr: 'Entrez la valeur du Titre (%)', zh: '请输入干度值 (%)' },
             '7': { icon: 'fas fa-cogs', min: -100000, max: 100000,
-                   pt: 'Digite o valor do Trabalho (kJ)', en: 'Enter the Work value (kJ)', es: 'Introduzca el valor del Trabajo (kJ)' },
+                   pt: 'Digite o valor do Trabalho (kJ)', en: 'Enter the Work value (kJ)', es: 'Introduzca el valor del Trabajo (kJ)', fr: 'Entrez la valeur du Travail (kJ)', zh: '请输入功的值 (kJ)' },
             '8': { icon: 'fas fa-fire-alt', min: -100000, max: 100000,
-                   pt: 'Digite o valor do Calor Transferido (kJ)', en: 'Enter the Transferred Heat value (kJ)', es: 'Introduzca el valor del Calor Transferido (kJ)' }
+                   pt: 'Digite o valor do Calor Transferido (kJ)', en: 'Enter the Transferred Heat value (kJ)', es: 'Introduzca el valor del Calor Transferido (kJ)', fr: 'Entrez la valeur de la Chaleur Transférée (kJ)', zh: '请输入传递的热量值 (kJ)' }
         };
 
         var prop = info[selectedValue];
 
         if (prop) {
-            label.innerHTML = `<i class="${prop.icon}"></i> <span class="lang-text" data-pt-br="${prop.pt}" data-en="${prop.en}" data-es="${prop.es}">${prop.pt}</span>`;
+            label.innerHTML = `<i class="${prop.icon}"></i> <span class="lang-text" data-pt-br="${prop.pt}" data-en="${prop.en}" data-es="${prop.es}" data-fr="${prop.fr}" data-zh="${prop.zh}">${prop.pt}</span>`;
             numberInput.setAttribute('min', prop.min);
             numberInput.setAttribute('max', prop.max);
         } else {
             // Fallback caso venha um valor não mapeado (segurança)
-            label.innerHTML = `<i class="fas fa-pencil-alt"></i> <span class="lang-text" data-pt-br="Digite o valor da propriedade selecionada:" data-en="Enter the selected property value:" data-es="Introduzca el valor de la propiedad seleccionada:">Digite o valor da propriedade selecionada:</span>`;
+            label.innerHTML = `<i class="fas fa-pencil-alt"></i> <span class="lang-text" data-pt-br="Digite o valor da propriedade selecionada:" data-en="Enter the selected property value:" data-es="Introduzca el valor de la propiedad seleccionada:" data-fr="Entrez la valeur de la propriété sélectionnée :" data-zh="请输入所选属性的值：">Digite o valor da propriedade selecionada:</span>`;
             numberInput.removeAttribute('min');
             numberInput.removeAttribute('max');
         }
 
-        numberInput.placeholder = phStr[currentLang];
+        numberInput.placeholder = phStr[currentLang] || phStr['en'];
         inputField.style.display = 'block';
 
         // Dispara a tradução para formatar o label que acabou de ser injetado (caso não esteja em pt-br)

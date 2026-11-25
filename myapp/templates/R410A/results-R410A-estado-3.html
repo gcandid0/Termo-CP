@@ -15,14 +15,14 @@
 {% endblock %}
 
 {% block help_title %}
-<span class="lang-text" data-pt-br="Ajuda &ndash; Resultados do Estado" data-en="Help &ndash; State Results" data-es="Ayuda &ndash; Resultados del Estado">Ajuda &ndash; Resultados do Estado</span>
+<span class="lang-text" data-pt-br="Ajuda &ndash; Resultados do Estado" data-en="Help &ndash; State Results" data-es="Ayuda &ndash; Resultados del Estado" data-fr="Aide &ndash; Résultats de l'État" data-zh="帮助 &ndash; 状态结果">Ajuda &ndash; Resultados do Estado</span>
 {% endblock %}
 
 {% block help_content %}
 <p class="lang-text"
    data-pt-br="Esta tela mostra todas as propriedades termodinâmicas calculadas para o estado de R-410a, junto com a animação 3D do cilindro-pistão correspondente."
    data-en="This screen shows all thermodynamic properties calculated for the state of R-410a, along with the corresponding 3D piston-cylinder animation."
-   data-es="Esta pantalla muestra todas las propiedades termodinámicas calculadas para el estado de R-410a, junto con la animación 3D del cilindro-pistón correspondiente.">
+   data-es="Esta pantalla muestra todas las propiedades termodinámicas calculadas para el estado de R-410a, junto con la animación 3D del cilindro-pistón correspondiente." data-fr="Cet écran affiche toutes les propriétés thermodynamiques calculées pour l'état de R-410A, accompagnées de l'animation 3D correspondante du cylindre-piston." data-zh="此页面显示R-410A状态计算得到的所有热力学属性，以及对应的 3D 活塞-气缸动画。">
     Esta tela mostra todas as propriedades termodinâmicas calculadas para o estado de R-410a, junto com a animação 3D do cilindro-pistão correspondente.
 </p>
 <div class="help-tip">
@@ -30,7 +30,7 @@
     <span class="lang-text"
           data-pt-br="Dica: use o botão de exportar para salvar os resultados e a animação como imagem (relatório)."
           data-en="Tip: use the export button to save the results and animation as an image (report)."
-          data-es="Consejo: usa el botón de exportar para guardar los resultados y la animación como imagen (informe).">
+          data-es="Consejo: usa el botón de exportar para guardar los resultados y la animación como imagen (informe)." data-fr="Conseil : utilisez le bouton d'exportation pour enregistrer les résultats et l'animation sous forme d'image." data-zh="提示：使用导出按钮可将结果和动画保存为图片报告。">
         Dica: use o botão de exportar para salvar os resultados e a animação como imagem (relatório).
     </span>
 </div>
@@ -42,7 +42,7 @@
     <div class="results-card">
         <h2>
             <i class="fas fa-clipboard-list"></i>
-            <span class="lang-text" data-pt-br="Resultados — R-410A" data-en="Results — R-410A" data-es="Resultados — R-410A">Resultados — R-410A</span>
+            <span class="lang-text" data-pt-br="Resultados — R-410A" data-en="Results — R-410A" data-es="Resultados — R-410A" data-fr="Résultats — R-410A" data-zh="结果 — R-410A">Resultados — R-410A</span>
         </h2>
 
         <div class="data-row" data-tour-pt-br="Indica se a substância está como líquido comprimido, vapor superaquecido ou numa mistura líquido-vapor (saturação) nesse estado." data-tour-en="Indicates whether the substance is a compressed liquid, superheated vapor, or a liquid-vapor mixture (saturation) at this state." data-tour-es="Indica si la sustancia está como líquido comprimido, vapor sobrecalentado o en una mezcla líquido-vapor (saturación) en este estado.">
@@ -74,7 +74,7 @@
         </div>
 
         <div class="data-row" data-tour-pt-br="Energia associada ao movimento e às interações das moléculas da substância, em kJ/kg." data-tour-en="Energy associated with the motion and interactions of the substance's molecules, in kJ/kg." data-tour-es="Energía asociada al movimiento e interacciones de las moléculas de la sustancia, en kJ/kg.">
-            <span class="data-label lang-text" data-pt-br="Energia interna (u):" data-en="Internal energy (u):" data-es="Energía interna (u):">Energia interna (u):</span>            <span class="data-value">{{ energia_interna }} kJ/kg</span>
+            <span class="data-label lang-text" data-pt-br="Energia interna (u):" data-en="Internal energy (u):" data-es="Energía interna (u):" data-fr="Énergie interne (u) :" data-zh="内能 (u)：">Energia interna (u):</span>            <span class="data-value">{{ energia_interna }} kJ/kg</span>
         </div>
 
         <div class="data-row" data-tour-pt-br="Propriedade definida como h = u + P·v, muito usada em balanços de energia de sistemas abertos, em kJ/kg." data-tour-en="Property defined as h = u + P·v, widely used in energy balances of open systems, in kJ/kg." data-tour-es="Propiedad definida como h = u + P·v, muy usada en balances de energía de sistemas abiertos, en kJ/kg.">
@@ -110,7 +110,7 @@
         <div class="button-group">
             <button type="button" id="btnStateDiagram" class="btn" style="background: var(--primary-color); color: white;">
                 <i class="fas fa-chart-area" style="margin-right: 5px;"></i>
-                <span class="lang-text" data-pt-br="Diagrama" data-en="Diagram" data-es="Diagrama">Diagrama</span>
+                <span class="lang-text" data-pt-br="Diagrama" data-en="Diagram" data-es="Diagrama" data-fr="Diagramme" data-zh="图表">Diagrama</span>
             </button>
             <a href="{% url 'ask_known2_23' %}" class="btn btn-secondary">
                 <i class="fas fa-arrow-left" style="margin-right: 5px;"></i>
@@ -130,19 +130,19 @@
         <div class="legend-container">
             <div class="legend-item">
                 <span class="legend-color legend-cilindro"></span>
-                <span class="lang-text" data-pt-br="Cilindro" data-en="Cylinder" data-es="Cilindro">Cilindro</span>
+                <span class="lang-text" data-pt-br="Cilindro" data-en="Cylinder" data-es="Cilindro" data-fr="Cylindre" data-zh="气缸">Cilindro</span>
             </div>
             <div class="legend-item">
                 <span class="legend-color legend-pistao"></span>
-                <span class="lang-text" data-pt-br="Pistão" data-en="Piston" data-es="Pistón">Pistão</span>
+                <span class="lang-text" data-pt-br="Pistão" data-en="Piston" data-es="Pistón" data-fr="Piston" data-zh="活塞">Pistão</span>
             </div>
             <div class="legend-item">
                 <span class="legend-color legend-vapor"></span>
-                <span class="lang-text" data-pt-br="Vapor" data-en="Vapor" data-es="Vapor">Vapor</span>
+                <span class="lang-text" data-pt-br="Vapor" data-en="Vapor" data-es="Vapor" data-fr="Vapeur" data-zh="蒸汽">Vapor</span>
             </div>
             <div class="legend-item">
                 <span class="legend-color legend-liquido"></span>
-                <span class="lang-text" data-pt-br="Líquido" data-en="Liquid" data-es="Líquido">Líquido</span>
+                <span class="lang-text" data-pt-br="Líquido" data-en="Liquid" data-es="Líquido" data-fr="Liquide" data-zh="液体">Líquido</span>
             </div>
         </div>
     </div>
@@ -151,22 +151,22 @@
 <div id="diagramModal" class="modal">
     <div class="modal-content modal-chart">
         <span class="close-btn" id="closeDiagramBtn" title="Fechar" role="button" tabindex="0">&times;</span>
-        <h3 style="color: var(--primary-color); margin-top: 0; margin-bottom: 5px;" class="lang-text" data-pt-br="Diagrama Termodinâmico do Estado — R-410A" data-en="Thermodynamic State Diagram — R-410A" data-es="Diagrama Termodinámico del Estado — R-410A">Diagrama Termodinâmico do Estado — R-410A</h3>
+        <h3 style="color: var(--primary-color); margin-top: 0; margin-bottom: 5px;" class="lang-text" data-pt-br="Diagrama Termodinâmico do Estado — R-410A" data-en="Thermodynamic State Diagram — R-410A" data-es="Diagrama Termodinámico del Estado — R-410A" data-fr="Diagramme Thermodynamique de l'État — R-410A" data-zh="状态热力学图 — R-410A">Diagrama Termodinâmico do Estado — R-410A</h3>
 
         <div class="chart-controls" data-tour-pt-br="Escolha em qual par de propriedades (por exemplo, Pressão x Volume ou Temperatura x Entropia) deseja visualizar o processo." data-tour-en="Choose which pair of properties (e.g. Pressure x Volume or Temperature x Entropy) you want to visualize the process in." data-tour-es="Elija en qué par de propiedades (por ejemplo, Presión x Volumen o Temperatura x Entropía) desea visualizar el proceso." data-tour-label-pt-br="Tipo de diagrama" data-tour-label-en="Diagram type" data-tour-label-es="Tipo de diagrama">
             
             
             <select id="chartTypeSelector" aria-label="Selecionar tipo de diagrama termodinâmico">
-                <option value="Pv" class="lang-text" data-pt-br="Diagrama P-v (Pressão x Volume)" data-en="P-v Diagram (Pressure x Volume)" data-es="Diagrama P-v (Presión x Volumen)">Diagrama P-v (Pressão x Volume)</option>
-                <option value="Ts" class="lang-text" data-pt-br="Diagrama T-s (Temperatura x Entropia)" data-en="T-s Diagram (Temperature x Entropy)" data-es="Diagrama T-s (Temperatura x Entropía)">Diagrama T-s (Temperatura x Entropia)</option>
-                <option value="Tv" class="lang-text" data-pt-br="Diagrama T-v (Temperatura x Volume)" data-en="T-v Diagram (Temperature x Volume)" data-es="Diagrama T-v (Temperatura x Volumen)">Diagrama T-v (Temperatura x Volume)</option>
-                <option value="Ph" class="lang-text" data-pt-br="Diagrama P-h (Pressão x Entalpia)" data-en="P-h Diagram (Pressure x Enthalpy)" data-es="Diagrama P-h (Presión x Entalpía)">Diagrama P-h (Pressão x Entalpia)</option>
-                <option value="hs" class="lang-text" data-pt-br="Diagrama h-s (Mollier)" data-en="h-s Diagram (Mollier)" data-es="Diagrama h-s (Mollier)">Diagrama h-s (Mollier - Entalpia x Entropia)</option>
-                <option value="PT" class="lang-text" data-pt-br="Diagrama P-T (Pressão x Temperatura)" data-en="P-T Diagram (Pressure x Temperature)" data-es="Diagrama P-T (Presión x Temperatura)">Diagrama P-T (Pressão x Temperatura)</option>
-                <option value="Ps" class="lang-text" data-pt-br="Diagrama P-s (Pressão x Entropia)" data-en="P-s Diagram (Pressure x Entropy)" data-es="Diagrama P-s (Presión x Entropía)">Diagrama P-s (Pressão x Entropia)</option>
-                <option value="Pu" class="lang-text" data-pt-br="Diagrama P-u (Pressão x Energia Interna)" data-en="P-u Diagram (Pressure x Internal Energy)" data-es="Diagrama P-u (Presión x Energía Interna)">Diagrama P-u (Pressão x Energia Interna)</option>
-                <option value="Tu" class="lang-text" data-pt-br="Diagrama T-u (Temperatura x Energia Interna)" data-en="T-u Diagram (Temperature x Internal Energy)" data-es="Diagrama T-u (Temperatura x Energía Interna)">Diagrama T-u (Temperatura x Energia Interna)</option>
-                <option value="Th" class="lang-text" data-pt-br="Diagrama T-h (Temperatura x Entalpia)" data-en="T-h Diagram (Temperature x Enthalpy)" data-es="Diagrama T-h (Temperatura x Entalpía)">Diagrama T-h (Temperatura x Entalpia)</option>
+                <option value="Pv" class="lang-text" data-pt-br="Diagrama P-v (Pressão x Volume)" data-en="P-v Diagram (Pressure x Volume)" data-es="Diagrama P-v (Presión x Volumen)" data-fr="Diagramme P-v (Pression × Volume)" data-zh="P-v 图 (压力 × 比容)">Diagrama P-v (Pressão x Volume)</option>
+                <option value="Ts" class="lang-text" data-pt-br="Diagrama T-s (Temperatura x Entropia)" data-en="T-s Diagram (Temperature x Entropy)" data-es="Diagrama T-s (Temperatura x Entropía)" data-fr="Diagramme T-s (Température × Entropie)" data-zh="T-s 图 (温度 × 熵)">Diagrama T-s (Temperatura x Entropia)</option>
+                <option value="Tv" class="lang-text" data-pt-br="Diagrama T-v (Temperatura x Volume)" data-en="T-v Diagram (Temperature x Volume)" data-es="Diagrama T-v (Temperatura x Volumen)" data-fr="Diagramme T-v (Température × Volume)" data-zh="T-v 图 (温度 × 比容)">Diagrama T-v (Temperatura x Volume)</option>
+                <option value="Ph" class="lang-text" data-pt-br="Diagrama P-h (Pressão x Entalpia)" data-en="P-h Diagram (Pressure x Enthalpy)" data-es="Diagrama P-h (Presión x Entalpía)" data-fr="Diagramme P-h (Pression × Enthalpie)" data-zh="P-h 图 (压力 × 焓)">Diagrama P-h (Pressão x Entalpia)</option>
+                <option value="hs" class="lang-text" data-pt-br="Diagrama h-s (Mollier)" data-en="h-s Diagram (Mollier)" data-es="Diagrama h-s (Mollier)" data-fr="Diagramme h-s (Mollier)" data-zh="h-s 图 (莫里尔图)">Diagrama h-s (Mollier - Entalpia x Entropia)</option>
+                <option value="PT" class="lang-text" data-pt-br="Diagrama P-T (Pressão x Temperatura)" data-en="P-T Diagram (Pressure x Temperature)" data-es="Diagrama P-T (Presión x Temperatura)" data-fr="Diagramme P-T (Pression × Température)" data-zh="P-T 图 (压力 × 温度)">Diagrama P-T (Pressão x Temperatura)</option>
+                <option value="Ps" class="lang-text" data-pt-br="Diagrama P-s (Pressão x Entropia)" data-en="P-s Diagram (Pressure x Entropy)" data-es="Diagrama P-s (Presión x Entropía)" data-fr="Diagramme P-s (Pression × Entropie)" data-zh="P-s 图 (压力 × 熵)">Diagrama P-s (Pressão x Entropia)</option>
+                <option value="Pu" class="lang-text" data-pt-br="Diagrama P-u (Pressão x Energia Interna)" data-en="P-u Diagram (Pressure x Internal Energy)" data-es="Diagrama P-u (Presión x Energía Interna)" data-fr="Diagramme P-u (Pression × Énergie Interne)" data-zh="P-u 图 (压力 × 内能)">Diagrama P-u (Pressão x Energia Interna)</option>
+                <option value="Tu" class="lang-text" data-pt-br="Diagrama T-u (Temperatura x Energia Interna)" data-en="T-u Diagram (Temperature x Internal Energy)" data-es="Diagrama T-u (Temperatura x Energía Interna)" data-fr="Diagramme T-u (Température × Énergie Interne)" data-zh="T-u 图 (温度 × 内能)">Diagrama T-u (Temperatura x Energia Interna)</option>
+                <option value="Th" class="lang-text" data-pt-br="Diagrama T-h (Temperatura x Entalpia)" data-en="T-h Diagram (Temperature x Enthalpy)" data-es="Diagrama T-h (Temperatura x Entalpía)" data-fr="Diagramme T-h (Température × Enthalpie)" data-zh="T-h 图 (温度 × 焓)">Diagrama T-h (Temperatura x Entalpia)</option>
             </select>
         </div>
 
@@ -195,7 +195,8 @@
 
 <script>
     // --- FUNÇÃO AUXILIAR DE TRADUÇÃO PARA JS (Diagrama do Estado) ---
-    function t(pt, en, es) {
+    function t(pt, en, es, fr, zh) {
+        if (window.termoTranslate) return window.termoTranslate(pt, en, es, fr, zh);
         let lang = localStorage.getItem('preferredLang') || 'pt-br';
         if (lang === 'en') return en;
         if (lang === 'es') return es;

@@ -8,14 +8,14 @@
 {% endblock %}
 
 {% block help_title %}
-<span class="lang-text" data-pt-br="Ajuda &ndash; 1ª propriedade do Estado" data-en="Help &ndash; 1st State property" data-es="Ayuda &ndash; 1ª propiedad del Estado">Ajuda &ndash; 1ª propriedade do Estado</span>
+<span class="lang-text" data-pt-br="Ajuda &ndash; 1ª propriedade do Estado" data-en="Help &ndash; 1st State property" data-es="Ayuda &ndash; 1ª propiedad del Estado" data-fr="Aide &ndash; 1re propriété de l'État" data-zh="帮助 &ndash; 状态的第 1 个属性">Ajuda &ndash; 1ª propriedade do Estado</span>
 {% endblock %}
 
 {% block help_content %}
 <p class="lang-text"
    data-pt-br="Escolha a primeira propriedade que você já conhece sobre o estado de Metano (ex: temperatura ou pressão) e informe o valor no campo indicado."
    data-en="Choose the first property you already know about the state of Methane (e.g., temperature or pressure) and enter the value in the indicated field."
-   data-es="Elige la primera propiedad que ya conoces sobre el estado de Metano (ej: temperatura o presión) e ingresa el valor en el campo indicado.">
+   data-es="Elige la primera propiedad que ya conoces sobre el estado de Metano (ej: temperatura o presión) e ingresa el valor en el campo indicado." data-fr="Choisissez la première propriété déjà connue de l'état de Méthane (ex : température ou pression) et saisissez la valeur dans le champ indiqué." data-zh="选择您已知的甲烷状态的第一个属性（例如：温度或压力），并在指定栏中输入数值。">
     Escolha a primeira propriedade que você já conhece sobre o estado de Metano (ex: temperatura ou pressão) e informe o valor no campo indicado.
 </p>
 <div class="help-tip">
@@ -23,7 +23,7 @@
     <span class="lang-text"
           data-pt-br="Dica: respeite a faixa de valores válidos indicada junto ao campo numérico."
           data-en="Tip: respect the valid value range shown next to the numeric field."
-          data-es="Consejo: respeta el rango de valores válidos indicado junto al campo numérico.">
+          data-es="Consejo: respeta el rango de valores válidos indicado junto al campo numérico." data-fr="Conseil : respectez la plage de valeurs valides indiquée près du champ numérique." data-zh="提示：请遵守数字输入框旁标示的有效数值范围。">
         Dica: respeite a faixa de valores válidos indicada junto ao campo numérico.
     </span>
 </div>
@@ -34,7 +34,7 @@
     <div class="container">
         <i class="fas fa-sliders-h" style="font-size: 2.2em; color: #00A8FF; margin-bottom: 10px;"></i>
 
-        <h2 class="lang-text" data-pt-br="Metano — Selecione a primeira propriedade" data-en="Methane — Select the first property" data-es="Metano — Seleccione la primera propiedad">
+        <h2 class="lang-text" data-pt-br="Metano — Selecione a primeira propriedade" data-en="Methane — Select the first property" data-es="Metano — Seleccione la primera propiedad" data-fr="Méthane — Sélectionnez la première propriété" data-zh="甲烷 — 选择第一个属性">
             Metano — Selecione a primeira propriedade
         </h2>
 
@@ -103,7 +103,9 @@
         let phStr = {
             'pt-br': 'Digite o valor',
             'en': 'Enter the value',
-            'es': 'Introduzca el valor'
+            'es': 'Introduzca el valor',
+            'fr': 'Entrez la valeur',
+            'zh': '请输入数值'
         };
 
         // Lógica de Label e Limites, injetando as classes .lang-text para funcionar com o seu base.html
@@ -112,24 +114,24 @@
                               '<span class="lang-text" ' +
                               'data-pt-br="Digite o valor da Temperatura (K)" ' +
                               'data-en="Enter the Temperature value (K)" ' +
-                              'data-es="Introduzca el valor de la Temperatura (K)">' +
+                              'data-es="Introduzca el valor de la Temperatura (K)" data-fr="Entrez la valeur de la Température (K)" data-zh="请输入温度值 (K)">' +
                               'Digite o valor da Temperatura (K)</span>';
 
             numberInput.setAttribute('min', '90.7');
             numberInput.setAttribute('max', '575');
-            numberInput.placeholder = phStr[currentLang];
+            numberInput.placeholder = phStr[currentLang] || phStr['en'];
 
         } else if (selectedValue == '1') {
             label.innerHTML = '<i class="fas fa-tachometer-alt"></i> ' +
                               '<span class="lang-text" ' +
                               'data-pt-br="Digite o valor da Pressão (kPa)" ' +
                               'data-en="Enter the Pressure value (kPa)" ' +
-                              'data-es="Introduzca el valor de la Presión (kPa)">' +
+                              'data-es="Introduzca el valor de la Presión (kPa)" data-fr="Entrez la valeur de la Pression (kPa)" data-zh="请输入压力值 (kPa)">' +
                               'Digite o valor da Pressão (kPa)</span>';
 
             numberInput.setAttribute('min', '11.7');
             numberInput.setAttribute('max', '8000');
-            numberInput.placeholder = phStr[currentLang];
+            numberInput.placeholder = phStr[currentLang] || phStr['en'];
         }
 
         inputField.style.display = 'block';

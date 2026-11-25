@@ -1,3 +1,167 @@
+// ============ TRADUÇÃO GLOBAL AUXILIAR PARA JS (PT / EN / ES / FR / ZH) ============
+window.TERMO_I18N_FR = {
+    'Pressão (P) [kPa]': 'Pression (P) [kPa]',
+    'Estado': 'État',
+    'Temperatura (T) [°C]': 'Température (T) [°C]',
+    'Temperatura (T) [K]': 'Température (T) [K]',
+    'Entropia (s) [kJ/kg.K]': 'Entropie (s) [kJ/kg.K]',
+    'Entalpia (h) [kJ/kg]': 'Enthalpie (h) [kJ/kg]',
+    'Ver Processo Atual': 'Voir le Processus Actuel',
+    'Ver todos processos': 'Voir Tous les Processus',
+    'Estados': 'États',
+    'Processo': 'Processus',
+    'Volume Específico (v) [m³/kg]': 'Volume Spécifique (v) [m³/kg]',
+    'Energia Interna (u) [kJ/kg]': 'Énergie Interne (u) [kJ/kg]',
+    'Trabalho (W)': 'Travail (W)',
+    'Estado Inicial': 'État Initial',
+    'Estado Final': 'État Final',
+    'Ordem em que foi simulado': 'Ordre de simulation',
+    'Excluir': 'Supprimer',
+    'Domo de Saturação': 'Dôme de Saturation',
+    'Ponto Crítico': 'Point Critique',
+    'Calor (Q)': 'Chaleur (Q)',
+    'Volume esp. [m³/kg]': 'Vol. spéc. [m³/kg]',
+    'Volume [m³]': 'Volume [m³]',
+    'Renderizando diagramas termodinâmicos...': 'Rendu des diagrammes thermodynamiques...',
+    'Erro ao gerar relatório. Tente novamente.': 'Erreur lors de la génération du rapport. Veuillez réessayer.',
+    'Rendimento Térmico (η)': 'Rendement Thermique (η)',
+    'COP (Refrigeração)': 'COP (Réfrigération)',
+    'Sger Total': 'Sgén Total',
+    'Balanço Global do Ciclo / Encadeamento': 'Bilan Global du Cycle / Enchaînement',
+    'Trabalho Líquido (W_líq)': 'Travail Net (W_net)',
+    'Calor Fornecido (Q_H)': 'Chaleur Fournie (Q_H)',
+    'Calor Rejeitado (Q_L)': 'Chaleur Rejetée (Q_L)',
+    'Estado Intermediário': 'État Intermédiaire',
+    'Massa (m):': 'Masse (m) :',
+    'Temperatura (T):': 'Température (T) :',
+    'Pressão (p):': 'Pression (p) :',
+    'Volume específico (v):': 'Volume spécifique (v) :',
+    'Temperatura (T)': 'Température (T)',
+    'Pressão (p)': 'Pression (p)',
+    'Volume específico (v)': 'Volume spécifique (v)',
+    'Propriedade': 'Propriété',
+    'Estado A': 'État A',
+    'Estado B': 'État B',
+    'Variação': 'Variation',
+    'É necessário pelo menos dois estados para comparar.': 'Au moins deux états sont nécessaires pour comparer.',
+    'Visualização não disponível': 'Visualisation non disponible',
+    'Fechar': 'Fermer',
+    'Nenhum cálculo salvo ainda.': 'Aucun calcul enregistré pour le moment.',
+    'Selecionar para comparar': 'Sélectionner pour comparer',
+    'Nome do cálculo': 'Nom du calcul',
+    'Comparação entre Cálculos': 'Comparaison des Calculs',
+    'itens': 'éléments',
+    'Excluir este cálculo do histórico?': 'Supprimer ce calcul de l\'historique ?',
+    'Isso vai apagar TODO o histórico de cálculos salvos neste navegador. Deseja continuar?': 'Cela effacera TOUT l\'historique des calculs enregistrés dans ce navigateur. Continuer ?',
+    'Ponto Intermediário': 'Point Intermédiaire',
+    'Título (x):': 'Titre (x) :',
+    'Energia Interna (u):': 'Énergie Interne (u) :',
+    'Fase:': 'Phase :',
+    'Entalpia (h):': 'Enthalpie (h) :',
+    'Entropia (s):': 'Entropie (s) :',
+    'Entalpia (h)': 'Enthalpie (h)',
+    'Entropia (s)': 'Entropie (s)',
+    'Energia Interna (u)': 'Énergie Interne (u)',
+    'Sger': 'Sgén',
+    'IMPOSSÍVEL': 'IMPOSSIBLE',
+    'POSSÍVEL': 'POSSIBLE',
+    'Temp. Vizinhança': 'Temp. Ambiante',
+    'Nenhum dado termodinâmico disponível para gerar o diagrama.': 'Aucune donnée thermodynamique disponible pour générer le diagramme.',
+    'Microprocessos': 'Micro-processus',
+    'Entropia Gerada (Sger)': 'Entropie Générée (Sgén)',
+    'Estado Calculado': 'État Calculé',
+    'Microestado atual': 'Micro-état actuel',
+    'Microestado': 'Micro-état',
+    'Constante R': 'Constante R',
+    'Razão (k)': 'Rapport (k)'
+};
+
+window.TERMO_I18N_ZH = {
+    'Pressão (P) [kPa]': '压力 (P) [kPa]',
+    'Estado': '状态',
+    'Temperatura (T) [°C]': '温度 (T) [°C]',
+    'Temperatura (T) [K]': '温度 (T) [K]',
+    'Entropia (s) [kJ/kg.K]': '熵 (s) [kJ/kg.K]',
+    'Entalpia (h) [kJ/kg]': '焓 (h) [kJ/kg]',
+    'Ver Processo Atual': '查看当前过程',
+    'Ver todos processos': '查看所有过程',
+    'Estados': '状态',
+    'Processo': '过程',
+    'Volume Específico (v) [m³/kg]': '比容 (v) [m³/kg]',
+    'Energia Interna (u) [kJ/kg]': '内能 (u) [kJ/kg]',
+    'Trabalho (W)': '功 (W)',
+    'Estado Inicial': '初始状态',
+    'Estado Final': '最终状态',
+    'Ordem em que foi simulado': '模拟顺序',
+    'Excluir': '删除',
+    'Domo de Saturação': '饱和穹顶',
+    'Ponto Crítico': '临界点',
+    'Calor (Q)': '热量 (Q)',
+    'Volume esp. [m³/kg]': '比容 [m³/kg]',
+    'Volume [m³]': '体积 [m³]',
+    'Renderizando diagramas termodinâmicos...': '正在渲染热力学图...',
+    'Erro ao gerar relatório. Tente novamente.': '生成报告时出错，请重试。',
+    'Rendimento Térmico (η)': '热效率 (η)',
+    'COP (Refrigeração)': '制冷系数 (COP)',
+    'Sger Total': '总熵产',
+    'Balanço Global do Ciclo / Encadeamento': '循环 / 串联全局平衡',
+    'Trabalho Líquido (W_líq)': '净功 (W_net)',
+    'Calor Fornecido (Q_H)': '吸热量 (Q_H)',
+    'Calor Rejeitado (Q_L)': '放热量 (Q_L)',
+    'Estado Intermediário': '中间状态',
+    'Massa (m):': '质量 (m)：',
+    'Temperatura (T):': '温度 (T)：',
+    'Pressão (p):': '压力 (p)：',
+    'Volume específico (v):': '比容 (v)：',
+    'Temperatura (T)': '温度 (T)',
+    'Pressão (p)': '压力 (p)',
+    'Volume específico (v)': '比容 (v)',
+    'Propriedade': '属性',
+    'Estado A': '状态 A',
+    'Estado B': '状态 B',
+    'Variação': '变化量',
+    'É necessário pelo menos dois estados para comparar.': '至少需要两个状态才能进行比较。',
+    'Visualização não disponível': '可视化不可用',
+    'Fechar': '关闭',
+    'Nenhum cálculo salvo ainda.': '尚未保存任何计算记录。',
+    'Selecionar para comparar': '选择以进行比较',
+    'Nome do cálculo': '计算名称',
+    'Comparação entre Cálculos': '计算结果比较',
+    'itens': '项',
+    'Excluir este cálculo do histórico?': '从历史记录中删除此计算？',
+    'Isso vai apagar TODO o histórico de cálculos salvos neste navegador. Deseja continuar?': '这将清除此浏览器中保存的所有计算历史记录。是否继续？',
+    'Ponto Intermediário': '中间点',
+    'Título (x):': '干度 (x)：',
+    'Energia Interna (u):': '内能 (u)：',
+    'Fase:': '相态：',
+    'Entalpia (h):': '焓 (h)：',
+    'Entropia (s):': '熵 (s)：',
+    'Entalpia (h)': '焓 (h)',
+    'Entropia (s)': '熵 (s)',
+    'Energia Interna (u)': '内能 (u)',
+    'Sger': '熵产',
+    'IMPOSSÍVEL': '不可能',
+    'POSSÍVEL': '可能',
+    'Temp. Vizinhança': '环境温度',
+    'Nenhum dado termodinâmico disponível para gerar o diagrama.': '没有可用的热力学数据来生成图表。',
+    'Microprocessos': '微过程',
+    'Entropia Gerada (Sger)': '熵产 (Sger)',
+    'Estado Calculado': '计算状态',
+    'Microestado atual': '当前微状态',
+    'Microestado': '微状态',
+    'Constante R': '气体常数 R',
+    'Razão (k)': '比热比 (k)'
+};
+
+window.termoTranslate = function(pt, en, es, fr, zh) {
+    var lang = localStorage.getItem('preferredLang') || 'pt-br';
+    if (lang === 'en') return en;
+    if (lang === 'es') return es;
+    if (lang === 'fr') return fr || window.TERMO_I18N_FR[pt] || en;
+    if (lang === 'zh') return zh || window.TERMO_I18N_ZH[pt] || en;
+    return pt;
+};
+
 // Limpa qualquer preferência residual de tema
 try {
     localStorage.removeItem('thermo_theme');
@@ -109,18 +273,18 @@ try {
             // Descrições de "o que o botão faz", por id do elemento (prioridade)
             // e, em seguida, pelo texto do rótulo (fallback), nos 3 idiomas.
             var descById = {
-                'btnDidactic': { 'pt-br': 'Mostra o memorial de cálculo: o passo a passo e as fórmulas usadas para chegar ao resultado.', 'en': 'Shows the calculation memorial: the step-by-step and formulas used to reach the result.', 'es': 'Muestra la memoria de cálculo: el paso a paso y las fórmulas usadas para llegar al resultado.' },
-                'btnCurrentDiagram': { 'pt-br': 'Abre o diagrama termodinâmico (T-s, P-v, etc.) do processo calculado.', 'en': 'Opens the thermodynamic diagram (T-s, P-v, etc.) of the calculated process.', 'es': 'Abre el diagrama termodinámico (T-s, P-v, etc.) del proceso calculado.' },
-                'btnFinalReport': { 'pt-br': 'Gera um relatório final com os resultados, pronto para exportar como imagem.', 'en': 'Generates a final report with the results, ready to export as an image.', 'es': 'Genera un informe final con los resultados, listo para exportar como imagen.' },
-                'btnHistory': { 'pt-br': 'Mostra o histórico dos cálculos feitos nesta sessão, para comparar resultados.', 'en': 'Shows the history of calculations made in this session, to compare results.', 'es': 'Muestra el historial de los cálculos hechos en esta sesión, para comparar resultados.' },
-                'openModalBtn': { 'pt-br': 'Avança para a próxima etapa, informando o segundo estado do processo.', 'en': 'Moves to the next step, entering the second state of the process.', 'es': 'Avanza a la siguiente etapa, ingresando el segundo estado del proceso.' },
-                'page-help-btn': { 'pt-br': 'Abre a ajuda contextual desta página.', 'en': 'Opens the contextual help for this page.', 'es': 'Abre la ayuda contextual de esta página.' },
-                'btnToggleFullCycle': { 'pt-br': 'Alterna entre ver só este processo e ver todos os processos do ciclo juntos no diagrama.', 'en': 'Switches between showing only this process and all the cycle processes together on the diagram.', 'es': 'Alterna entre ver solo este proceso y todos los procesos del ciclo juntos en el diagrama.' },
-                'btnCompareSelected': { 'pt-br': 'Compara lado a lado os cálculos marcados no histórico.', 'en': 'Compares side by side the calculations ticked in the history.', 'es': 'Compara lado a lado los cálculos marcados en el historial.' },
-                'btnClearHistory': { 'pt-br': 'Apaga todos os cálculos guardados no histórico desta sessão.', 'en': "Deletes all calculations stored in this session's history.", 'es': 'Borra todos los cálculos guardados en el historial de esta sesión.' },
-                'btnStateDiagram': { 'pt-br': 'Abre o diagrama termodinâmico do estado calculado.', 'en': 'Opens the thermodynamic diagram of the calculated state.', 'es': 'Abre el diagrama termodinámico del estado calculado.' },
-                'volumeSlider': { 'pt-br': 'Arraste para ver como o pistão e o volume do cilindro mudam entre o estado inicial e o final.', 'en': 'Drag to see how the piston and cylinder volume change between the initial and final states.', 'es': 'Arrastre para ver cómo cambian el pistón y el volumen del cilindro entre el estado inicial y el final.' },
-                'chartTypeSelector': { 'pt-br': 'Escolhe o par de propriedades (P-v, T-s, h-s…) em que o processo é desenhado.', 'en': 'Chooses the property pair (P-v, T-s, h-s…) in which the process is drawn.', 'es': 'Elige el par de propiedades (P-v, T-s, h-s…) en que se dibuja el proceso.' }
+                'btnDidactic': { 'pt-br': 'Mostra o memorial de cálculo: o passo a passo e as fórmulas usadas para chegar ao resultado.', 'en': 'Shows the calculation memorial: the step-by-step and formulas used to reach the result.', 'es': 'Muestra la memoria de cálculo: el paso a paso y las fórmulas usadas para llegar al resultado.', 'fr': 'Affiche le mémoire de calcul : les étapes et les formules utilisées pour obtenir le résultat.', 'zh': '显示计算过程说明：得出结果所用的分步推导和公式。' },
+                'btnCurrentDiagram': { 'pt-br': 'Abre o diagrama termodinâmico (T-s, P-v, etc.) do processo calculado.', 'en': 'Opens the thermodynamic diagram (T-s, P-v, etc.) of the calculated process.', 'es': 'Abre el diagrama termodinámico (T-s, P-v, etc.) del proceso calculado.', 'fr': 'Ouvre le diagramme thermodynamique (T-s, P-v, etc.) du processus calculé.', 'zh': '打开所计算过程的热力学图（T-s、P-v 等）。' },
+                'btnFinalReport': { 'pt-br': 'Gera um relatório final com os resultados, pronto para exportar como imagem.', 'en': 'Generates a final report with the results, ready to export as an image.', 'es': 'Genera un informe final con los resultados, listo para exportar como imagen.', 'fr': 'Génère un rapport final avec les résultats, prêt à être exporté en image.', 'zh': '生成包含结果的最终报告，可直接导出为图片。' },
+                'btnHistory': { 'pt-br': 'Mostra o histórico dos cálculos feitos nesta sessão, para comparar resultados.', 'en': 'Shows the history of calculations made in this session, to compare results.', 'es': 'Muestra el historial de los cálculos hechos en esta sesión, para comparar resultados.', 'fr': 'Affiche l\'historique des calculs effectués dans cette session pour comparer les résultats.', 'zh': '显示本次会话的计算历史记录，以便对比结果。' },
+                'openModalBtn': { 'pt-br': 'Avança para a próxima etapa, informando o segundo estado do processo.', 'en': 'Moves to the next step, entering the second state of the process.', 'es': 'Avanza a la siguiente etapa, ingresando el segundo estado del proceso.', 'fr': 'Passe à l\'étape suivante pour saisir le second état du processus.', 'zh': '进入下一步，输入过程的第二个状态。' },
+                'page-help-btn': { 'pt-br': 'Abre a ajuda contextual desta página.', 'en': 'Opens the contextual help for this page.', 'es': 'Abre la ayuda contextual de esta página.', 'fr': 'Ouvre l\'aide contextuelle de cette page.', 'zh': '打开当前页面的上下文帮助。' },
+                'btnToggleFullCycle': { 'pt-br': 'Alterna entre ver só este processo e ver todos os processos do ciclo juntos no diagrama.', 'en': 'Switches between showing only this process and all the cycle processes together on the diagram.', 'es': 'Alterna entre ver solo este proceso y todos los procesos del ciclo juntos en el diagrama.', 'fr': 'Bascule entre l\'affichage de ce processus seul et tous les processus du cycle ensemble sur le diagramme.', 'zh': '在仅显示当前过程与在图上同时显示整个循环的所有过程之间切换。' },
+                'btnCompareSelected': { 'pt-br': 'Compara lado a lado os cálculos marcados no histórico.', 'en': 'Compares side by side the calculations ticked in the history.', 'es': 'Compara lado a lado los cálculos marcados en el historial.', 'fr': 'Compare côte à côte les calculs cochés dans l\'historique.', 'zh': '并排比较历史记录中勾选的计算结果。' },
+                'btnClearHistory': { 'pt-br': 'Apaga todos os cálculos guardados no histórico desta sessão.', 'en': "Deletes all calculations stored in this session's history.", 'es': 'Borra todos los cálculos guardados en el historial de esta sesión.', 'fr': 'Supprime tous les calculs enregistrés dans l\'historique de cette session.', 'zh': '删除本次会话历史记录中保存的所有计算。' },
+                'btnStateDiagram': { 'pt-br': 'Abre o diagrama termodinâmico do estado calculado.', 'en': 'Opens the thermodynamic diagram of the calculated state.', 'es': 'Abre el diagrama termodinámico del estado calculado.', 'fr': 'Ouvre le diagramme thermodynamique de l\'état calculé.', 'zh': '打开所计算状态的热力学图。' },
+                'volumeSlider': { 'pt-br': 'Arraste para ver como o pistão e o volume do cilindro mudam entre o estado inicial e o final.', 'en': 'Drag to see how the piston and cylinder volume change between the initial and final states.', 'es': 'Arrastre para ver cómo cambian el pistón y el volumen del cilindro entre el estado inicial y el final.', 'fr': 'Faites glisser pour voir comment le piston et le volume du cylindre évoluent entre l\'état initial et l\'état final.', 'zh': '拖动滑块查看活塞和气缸体积在初始状态和最终状态之间的变化。' },
+                'chartTypeSelector': { 'pt-br': 'Escolhe o par de propriedades (P-v, T-s, h-s…) em que o processo é desenhado.', 'en': 'Chooses the property pair (P-v, T-s, h-s…) in which the process is drawn.', 'es': 'Elige el par de propiedades (P-v, T-s, h-s…) en que se dibuja el proceso.', 'fr': 'Choisit la paire de propriétés (P-v, T-s, h-s...) utilisée pour tracer le processus.', 'zh': '选择用于绘制过程的属性组合（P-v、T-s、h-s 等）。' }
             };
 
             var descByLabel = {
@@ -198,12 +362,12 @@ try {
 
             function getDescription(el, label) {
                 var lang = localStorage.getItem('preferredLang') || 'pt-br';
-                var own = el.getAttribute('data-tour-' + lang) || el.getAttribute('data-tour-pt-br');
+                var own = el.getAttribute('data-tour-' + lang) || (lang !== 'pt-br' ? el.getAttribute('data-tour-en') : null) || el.getAttribute('data-tour-pt-br');
                 if (own) return own;
                 var byId = el.id && descById[el.id];
-                if (byId) return byId[lang] || byId['pt-br'];
+                if (byId) return byId[lang] || (lang !== 'pt-br' ? byId['en'] : null) || byId['pt-br'];
                 var byLabel = descByLabel[label.trim().toLowerCase()];
-                if (byLabel) return byLabel[lang] || byLabel['pt-br'];
+                if (byLabel) return byLabel[lang] || (lang !== 'pt-br' ? byLabel['en'] : null) || byLabel['pt-br'];
                 return '';
             }
 
@@ -408,7 +572,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function formatBound(val, lang) {
         if (val === null || val === undefined || val === '') return '';
         var str = String(val).trim();
-        if (lang === 'en') return str.replace(',', '.');
+        if (lang === 'en' || lang === 'zh') return str.replace(',', '.');
         return str.replace('.', ',');
     }
 

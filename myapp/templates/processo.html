@@ -168,20 +168,22 @@
 {% endblock %}
 
 {% block help_title %}
-<span class="lang-text" data-pt-br="Ajuda &ndash; Processos" data-en="Help &ndash; Processes" data-es="Ayuda &ndash; Procesos">Ajuda &ndash; Processos</span>
+<span class="lang-text" data-pt-br="Ajuda &ndash; Processos" data-en="Help &ndash; Processes" data-es="Ayuda &ndash; Procesos" data-fr="Aide &ndash; Processus" data-zh="帮助 &ndash; 过程">Ajuda &ndash; Processos</span>
 {% endblock %}
 
 {% block help_content %}
 <p class="lang-text"
    data-pt-br="Aqui você simula uma transformação termodinâmica completa: de um estado inicial a um estado final."
    data-en="Here you simulate a complete thermodynamic transformation: from an initial state to a final state."
-   data-es="Aquí simulas una transformación termodinámica completa: de un estado inicial a un estado final.">
+   data-es="Aquí simulas una transformación termodinámica completa: de un estado inicial a un estado final." data-fr="Ici, vous simulez une transformation thermodynamique complète : d'un état initial à un état final." data-zh="在这里您可以模拟完整的热力学变化：从初始状态到最终状态。">
     Aqui você simula uma transformação termodinâmica completa: de um estado inicial a um estado final.
 </p>
 <ol class="lang-html"
     data-pt-br="<li>Escolha a substância que sofrerá o processo.</li><li>Defina o estado inicial, informando duas propriedades conhecidas (igual à tela de Estados).</li><li>Escolha o tipo de processo: isobárico (P constante), isocórico (v constante), isotérmico (T constante), adiabático ou politrópico.</li><li>Informe o dado adicional pedido para aquele tipo de processo (ex: pressão final).</li><li>Veja o estado final calculado, o trabalho (W) e o calor (Q) trocados, além da animação do pistão.</li>"
     data-en="<li>Choose the substance that will undergo the process.</li><li>Set the initial state by entering two known properties (same as the States screen).</li><li>Choose the process type: isobaric (constant P), isochoric (constant v), isothermal (constant T), adiabatic or polytropic.</li><li>Enter the extra data requested for that process type (e.g., final pressure).</li><li>See the calculated final state, the work (W) and heat (Q) exchanged, plus the piston animation.</li>"
-    data-es="<li>Elige la sustancia que sufrirá el proceso.</li><li>Define el estado inicial, ingresando dos propiedades conocidas (igual que en la pantalla de Estados).</li><li>Elige el tipo de proceso: isobárico (P constante), isocórico (v constante), isotérmico (T constante), adiabático o politrópico.</li><li>Ingresa el dato adicional solicitado para ese tipo de proceso (ej: presión final).</li><li>Consulta el estado final calculado, el trabajo (W) y el calor (Q) intercambiados, además de la animación del pistón.</li>">
+    data-es="<li>Elige la sustancia que sufrirá el proceso.</li><li>Define el estado inicial, ingresando dos propiedades conocidas (igual que en la pantalla de Estados).</li><li>Elige el tipo de proceso: isobárico (P constante), isocórico (v constante), isotérmico (T constante), adiabático o politrópico.</li><li>Ingresa el dato adicional solicitado para ese tipo de proceso (ej: presión final).</li><li>Consulta el estado final calculado, el trabajo (W) y el calor (Q) intercambiados, además de la animación del pistón.</li>"
+    data-fr="<li>Choisissez la substance qui subira le processus.</li><li>Définissez l'état initial en indiquant deux propriétés connues (comme sur l'écran États).</li><li>Choisissez le type de processus : isobare (P constante), isochore (v constant), isotherme (T constante), adiabatique ou polytropique.</li><li>Saisissez la donnée supplémentaire demandée pour ce type de processus (ex : pression finale).</li><li>Consultez l'état final calculé, le travail (W) et la chaleur (Q) échangés, ainsi que l'animation du piston.</li>"
+    data-zh="<li>选择经历该过程的物质。</li><li>输入两个已知属性以定义初始状态（与状态页面相同）。</li><li>选择过程类型：等压（P 恒定）、等容（v 恒定）、等温（T 恒定）、绝热或多变过程。</li><li>输入该过程类型所需的附加数据（例如：最终压力）。</li><li>查看计算得到的最终状态、交换的功 (W) 和热量 (Q) 以及活塞动画。</li>">
     <li>Escolha a substância que sofrerá o processo.</li>
     <li>Defina o estado inicial, informando duas propriedades conhecidas (igual à tela de Estados).</li>
     <li>Escolha o tipo de processo: isobárico (P constante), isocórico (v constante), isotérmico (T constante), adiabático ou politrópico.</li>
@@ -193,7 +195,7 @@
     <span class="lang-text"
           data-pt-br="Dica: não sabe qual tipo de processo escolher? Um processo isobárico mantém a pressão constante, um isocórico mantém o volume constante, e assim por diante."
           data-en="Tip: not sure which process type to choose? An isobaric process keeps pressure constant, an isochoric one keeps volume constant, and so on."
-          data-es="Consejo: ¿no sabes qué tipo de proceso elegir? Un proceso isobárico mantiene la presión constante, uno isocórico mantiene el volumen constante, y así sucesivamente.">
+          data-es="Consejo: ¿no sabes qué tipo de proceso elegir? Un proceso isobárico mantiene la presión constante, uno isocórico mantiene el volumen constante, y así sucesivamente." data-fr="Conseil : vous ne savez pas quel type de processus choisir ? Un processus isobare maintient la pression constante, un processus isochore maintient le volume constant, et ainsi de suite." data-zh="提示：不知道该选哪种过程类型？等压过程保持压力恒定，等容过程保持体积恒定，以此类推。">
         Dica: não sabe qual tipo de processo escolher? Um processo isobárico mantém a pressão constante, um isocórico mantém o volume constante, e assim por diante.
     </span>
 </div>
@@ -203,12 +205,12 @@
 <div class="processes-wrapper">
     <div class="processes-container">
         <i class="fas fa-chart-line hero-icon"></i>
-        <h2 class="lang-text" data-pt-br="Processos" data-en="Processes" data-es="Procesos">Processos</h2>
+        <h2 class="lang-text" data-pt-br="Processos" data-en="Processes" data-es="Procesos" data-fr="Processus" data-zh="过程">Processos</h2>
 
         <p class="lang-text"
            data-pt-br="Selecione uma substância para analisar o processo:"
            data-en="Select a substance to analyze the process:"
-           data-es="Seleccione una sustancia para analizar el proceso:">
+           data-es="Seleccione una sustancia para analizar el proceso:" data-fr="Sélectionnez une substance pour analyser le processus :" data-zh="选择一种物质以分析其过程：">
             Selecione uma substância para analisar o processo:
         </p>
 

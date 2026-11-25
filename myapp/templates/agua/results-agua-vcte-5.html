@@ -18,14 +18,14 @@
 {% endblock %}
 
 {% block help_title %}
-<span class="lang-text" data-pt-br="Ajuda &ndash; Resultados do Processo" data-en="Help &ndash; Process Results" data-es="Ayuda &ndash; Resultados del Proceso">Ajuda &ndash; Resultados do Processo</span>
+<span class="lang-text" data-pt-br="Ajuda &ndash; Resultados do Processo" data-en="Help &ndash; Process Results" data-es="Ayuda &ndash; Resultados del Proceso" data-fr="Aide &ndash; Résultats du Processus" data-zh="帮助 &ndash; 过程结果">Ajuda &ndash; Resultados do Processo</span>
 {% endblock %}
 
 {% block help_content %}
 <p class="lang-text"
    data-pt-br="Aqui estão os resultados do processo isocórico de Água: os estados inicial e final completos, o calor (Q) trocado (o trabalho é nulo, pois o volume não varia), a entropia gerada, e a animação do pistão."
    data-en="Here are the results of the Water isochoric process: the complete initial and final states, the heat (Q) exchanged (work is zero since volume doesn't change), the entropy generated, and the piston animation."
-   data-es="Aquí están los resultados del proceso isocórico de Agua: los estados inicial y final completos, el calor (Q) intercambiado (el trabajo es nulo, ya que el volumen no varía), la entropía generada y la animación del pistón.">
+   data-es="Aquí están los resultados del proceso isocórico de Agua: los estados inicial y final completos, el calor (Q) intercambiado (el trabajo es nulo, ya que el volumen no varía), la entropía generada y la animación del pistón." data-fr="Voici les résultats du processus isochore d'Eau : les états initial et final complets, la chaleur (Q) échangée (le travail est nul car le volume ne varie pas), l'entropie générée et l'animation du piston." data-zh="以下是水等容过程的结果：完整的初始和最终状态、交换的热量 (Q)（由于体积不变，功为零）、熵产以及活塞动画。">
     Aqui estão os resultados do processo isocórico de Água: os estados inicial e final completos, o calor (Q) trocado (o trabalho é nulo, pois o volume não varia), a entropia gerada, e a animação do pistão.
 </p>
 <div class="help-tip">
@@ -33,7 +33,7 @@
     <span class="lang-text"
           data-pt-br="Dica: use o botão de exportar para salvar este relatório como imagem."
           data-en="Tip: use the export button to save this report as an image."
-          data-es="Consejo: usa el botón de exportar para guardar este informe como imagen.">
+          data-es="Consejo: usa el botón de exportar para guardar este informe como imagen." data-fr="Conseil : utilisez le bouton d'exportation pour enregistrer ce rapport sous forme d'image." data-zh="提示：使用导出按钮可将此报告保存为图片。">
         Dica: use o botão de exportar para salvar este relatório como imagem.
     </span>
 </div>
@@ -47,11 +47,11 @@
         <div class="data-row" data-tour-pt-br="Indica se a substância está como líquido comprimido, vapor superaquecido ou numa mistura líquido-vapor (saturação) nesse estado." data-tour-en="Indicates whether the substance is a compressed liquid, superheated vapor, or a liquid-vapor mixture (saturation) at this state." data-tour-es="Indica si la sustancia está como líquido comprimido, vapor sobrecalentado o en una mezcla líquido-vapor (saturación) en este estado.">
             <span class="data-label lang-text" data-pt-br="Fase:" data-en="Phase:" data-es="Fase:" data-fr="Phase :" data-zh="相态：">Fase:</span>            <span class="data-value">
                 {% if fase == 1 %}
-                    <span class="lang-text" data-pt-br="Líquido Comprimido" data-en="Compressed Liquid" data-es="Líquido Comprimido">Líquido Comprimido</span>
+                    <span class="lang-text" data-pt-br="Líquido Comprimido" data-en="Compressed Liquid" data-es="Líquido Comprimido" data-fr="Liquide Comprimé" data-zh="压缩液体">Líquido Comprimido</span>
                 {% elif fase == 2 %}
-                    <span class="lang-text" data-pt-br="Vapor Superaquecido" data-en="Superheated Vapor" data-es="Vapor Sobrecalentado">Vapor Superaquecido</span>
+                    <span class="lang-text" data-pt-br="Vapor Superaquecido" data-en="Superheated Vapor" data-es="Vapor Sobrecalentado" data-fr="Vapeur Surchauffée" data-zh="过热蒸汽">Vapor Superaquecido</span>
                 {% else %}
-                    <span class="lang-text" data-pt-br="Região de Saturação" data-en="Saturation Region" data-es="Región de Saturación">Região de Saturação</span>
+                    <span class="lang-text" data-pt-br="Região de Saturação" data-en="Saturation Region" data-es="Región de Saturación" data-fr="Région de Saturation" data-zh="饱和区">Região de Saturação</span>
                 {% endif %}
             </span>
         </div>
@@ -70,23 +70,23 @@
     <div class="center-column">
         <div class="slider-mini-container" data-tour-pt-br="Arraste para visualizar como o pistão e o volume do cilindro mudam entre o estado inicial e o estado final do processo." data-tour-en="Drag to see how the piston and cylinder volume change between the initial and final states of the process." data-tour-es="Arrastre para visualizar cómo cambian el pistón y el volumen del cilindro entre el estado inicial y el estado final del proceso." data-tour-label-pt-br="Controle do pistão" data-tour-label-en="Piston control" data-tour-label-es="Control del pistón">
             <h4 id="volumeSliderLabel">                <i class="fas fa-eye"></i>
-                <span class="lang-text" data-pt-br="Visualizando Cilindro:" data-en="Viewing Cylinder:" data-es="Viendo Cilindro:">Visualizando Cilindro:</span>
+                <span class="lang-text" data-pt-br="Visualizando Cilindro:" data-en="Viewing Cylinder:" data-es="Viendo Cilindro:" data-fr="Affichage du Cylindre :" data-zh="气缸视图：">Visualizando Cilindro:</span>
                 <span id="volumeValue" style="color: var(--secondary-color);" class="lang-text" data-pt-br="Estado Inicial" data-en="Initial State" data-es="Estado Inicial" data-fr="État Initial" data-zh="初始状态">Estado Inicial</span>
             </h4>
             <input type="range" id="volumeSlider" min="1" max="2" step="1" value="1" aria-labelledby="volumeSliderLabel">
             <div style="display: flex; justify-content: space-between; font-size: 0.75em; color: #666; padding: 0 10%; font-weight: bold;">
-                <span id="sliderStateStart" class="lang-text" data-pt-br="ESTADO 1" data-en="STATE 1" data-es="ESTADO 1">ESTADO 1</span>
-                <span id="sliderStateEnd" class="lang-text" data-pt-br="ESTADO 2" data-en="STATE 2" data-es="ESTADO 2">ESTADO 2</span>
+                <span id="sliderStateStart" class="lang-text" data-pt-br="ESTADO 1" data-en="STATE 1" data-es="ESTADO 1" data-fr="ÉTAT 1" data-zh="状态 1">ESTADO 1</span>
+                <span id="sliderStateEnd" class="lang-text" data-pt-br="ESTADO 2" data-en="STATE 2" data-es="ESTADO 2" data-fr="ÉTAT 2" data-zh="状态 2">ESTADO 2</span>
             </div>
         </div>
 
         <div class="visualization-container" id="canvas-wrapper">
             <div id="scale-container"></div>
             <div class="legend-container">
-                <div class="legend-item"><span class="legend-color legend-cilindro"></span> <span class="lang-text" data-pt-br="Cilindro" data-en="Cylinder" data-es="Cilindro">Cilindro</span></div>
-                <div class="legend-item"><span class="legend-color legend-pistao"></span> <span class="lang-text" data-pt-br="Pistão" data-en="Piston" data-es="Pistón">Pistão</span></div>
-                <div class="legend-item"><span class="legend-color legend-vapor"></span> <span class="lang-text" data-pt-br="Vapor" data-en="Vapor" data-es="Vapor">Vapor</span></div>
-                <div class="legend-item"><span class="legend-color legend-liquido"></span> <span class="lang-text" data-pt-br="Líquido" data-en="Liquid" data-es="Líquido">Líquido</span></div>
+                <div class="legend-item"><span class="legend-color legend-cilindro"></span> <span class="lang-text" data-pt-br="Cilindro" data-en="Cylinder" data-es="Cilindro" data-fr="Cylindre" data-zh="气缸">Cilindro</span></div>
+                <div class="legend-item"><span class="legend-color legend-pistao"></span> <span class="lang-text" data-pt-br="Pistão" data-en="Piston" data-es="Pistón" data-fr="Piston" data-zh="活塞">Pistão</span></div>
+                <div class="legend-item"><span class="legend-color legend-vapor"></span> <span class="lang-text" data-pt-br="Vapor" data-en="Vapor" data-es="Vapor" data-fr="Vapeur" data-zh="蒸汽">Vapor</span></div>
+                <div class="legend-item"><span class="legend-color legend-liquido"></span> <span class="lang-text" data-pt-br="Líquido" data-en="Liquid" data-es="Líquido" data-fr="Liquide" data-zh="液体">Líquido</span></div>
             </div>
         </div>
     </div>
@@ -97,11 +97,11 @@
         <div class="data-row" data-tour-pt-br="Indica se a substância está como líquido comprimido, vapor superaquecido ou numa mistura líquido-vapor (saturação) nesse estado." data-tour-en="Indicates whether the substance is a compressed liquid, superheated vapor, or a liquid-vapor mixture (saturation) at this state." data-tour-es="Indica si la sustancia está como líquido comprimido, vapor sobrecalentado o en una mezcla líquido-vapor (saturación) en este estado.">
             <span class="data-label lang-text" data-pt-br="Fase:" data-en="Phase:" data-es="Fase:" data-fr="Phase :" data-zh="相态：">Fase:</span>            <span class="data-value">
                 {% if fase2 == 1 %}
-                    <span class="lang-text" data-pt-br="Líquido Comprimido" data-en="Compressed Liquid" data-es="Líquido Comprimido">Líquido Comprimido</span>
+                    <span class="lang-text" data-pt-br="Líquido Comprimido" data-en="Compressed Liquid" data-es="Líquido Comprimido" data-fr="Liquide Comprimé" data-zh="压缩液体">Líquido Comprimido</span>
                 {% elif fase2 == 2 %}
-                    <span class="lang-text" data-pt-br="Vapor Superaquecido" data-en="Superheated Vapor" data-es="Vapor Sobrecalentado">Vapor Superaquecido</span>
+                    <span class="lang-text" data-pt-br="Vapor Superaquecido" data-en="Superheated Vapor" data-es="Vapor Sobrecalentado" data-fr="Vapeur Surchauffée" data-zh="过热蒸汽">Vapor Superaquecido</span>
                 {% else %}
-                    <span class="lang-text" data-pt-br="Região de Saturação" data-en="Saturation Region" data-es="Región de Saturación">Região de Saturação</span>
+                    <span class="lang-text" data-pt-br="Região de Saturação" data-en="Saturation Region" data-es="Región de Saturación" data-fr="Région de Saturation" data-zh="饱和区">Região de Saturação</span>
                 {% endif %}
             </span>
         </div>
@@ -119,7 +119,7 @@
 </div>
 
 <div class="bottom-row">
-    <h3><i class="fas fa-chart-line"></i> <span class="lang-text" data-pt-br="Resultados do Processo — Água" data-en="Process Results — Water" data-es="Resultados del Proceso — Agua">Resultados do Processo — Água</span></h3>
+    <h3><i class="fas fa-chart-line"></i> <span class="lang-text" data-pt-br="Resultados do Processo — Água" data-en="Process Results — Water" data-es="Resultados del Proceso — Agua" data-fr="Résultats du Processus — Eau" data-zh="过程结果 — 水">Resultados do Processo — Água</span></h3>
 
     <div class="process-results">
         <div class="process-item" data-tour-pt-br="Temperatura do ambiente externo com o qual o sistema troca calor, usada no cálculo da entropia gerada." data-tour-en="Temperature of the external environment with which the system exchanges heat, used to calculate the entropy generated." data-tour-es="Temperatura del ambiente externo con el que el sistema intercambia calor, usada para calcular la entropía generada."><span class="lang-text" data-pt-br="Temperatura da Vizinhança" data-en="Surroundings Temp" data-es="Temp. del Entorno" data-fr="Temp. de l'Environnement" data-zh="环境温度">Temperatura da Vizinhança</span><strong><span class="format-num">{{ TempViz }}</span> °C</strong></div>
@@ -171,27 +171,27 @@
         <div style="background: var(--primary-color); color: white; padding: 20px; margin: -25px -25px 25px -25px; border-radius: 15px 15px 0 0; text-align: center;">
             <h2 style="margin: 0; font-size: 1.6em; text-transform: uppercase; letter-spacing: 1px;">
                 <i class="fas fa-book-open" style="margin-right: 10px;"></i>
-                <span class="lang-text" data-pt-br="Memorial de Cálculo Passo-a-Passo — Água" data-en="Step-by-Step Calculation Memorial — Water" data-es="Memoria de Cálculo Paso a Paso — Agua">Memorial de Cálculo Passo-a-Passo — Água</span>
+                <span class="lang-text" data-pt-br="Memorial de Cálculo Passo-a-Passo — Água" data-en="Step-by-Step Calculation Memorial — Water" data-es="Memoria de Cálculo Paso a Paso — Agua" data-fr="Mémorial de Calcul Étape par Étape — Eau" data-zh="分步计算过程 — 水">Memorial de Cálculo Passo-a-Passo — Água</span>
             </h2>
         </div>
 
         <div class="math-step step-1">
             <div class="step-number">1</div>
             <div class="step-header">
-                <i class="fas fa-search-location"></i> <span class="lang-text" data-pt-br="Levantamento de Propriedades" data-en="Properties Gathering" data-es="Recopilación de Propiedades">Levantamento de Propriedades</span>
+                <i class="fas fa-search-location"></i> <span class="lang-text" data-pt-br="Levantamento de Propriedades" data-en="Properties Gathering" data-es="Recopilación de Propiedades" data-fr="Relevé des Propriétés" data-zh="状态属性提取">Levantamento de Propriedades</span>
             </div>
-            <div class="step-description lang-text" data-pt-br="No processo isocórico (volume constante), a primeira etapa foca na definição do estado inicial e final, garantindo que o volume específico permaneça inalterado." data-en="In an isochoric (constant volume) process, the first step focuses on defining the initial and final states, ensuring the specific volume remains unchanged." data-es="En el proceso isocórico (volumen constante), el primer paso se centra en definir el estado inicial y final, asegurando que el volumen específico permanezca inalterado.">
+            <div class="step-description lang-text" data-pt-br="No processo isocórico (volume constante), a primeira etapa foca na definição do estado inicial e final, garantindo que o volume específico permaneça inalterado." data-en="In an isochoric (constant volume) process, the first step focuses on defining the initial and final states, ensuring the specific volume remains unchanged." data-es="En el proceso isocórico (volumen constante), el primer paso se centra en definir el estado inicial y final, asegurando que el volumen específico permanezca inalterado." data-fr="Dans le processus isochore (volume constant), la première étape définit les états initial et final en veillant à ce que le volume spécifique reste inchangé." data-zh="在等容（体积恒定）过程中，第一步确定初始和最终状态，确保比容保持不变。">
                 No processo isocórico (volume constante), a primeira etapa foca na definição do estado inicial e final, garantindo que o volume específico permaneça inalterado.
             </div>
             <div class="state-boxes">
                 <div class="state-box">
-                    <strong><i class="fas fa-play" style="font-size: 0.8em; color: #3498db;"></i> <span id="stateBoxStart" class="lang-text" data-pt-br="ESTADO 1" data-en="STATE 1" data-es="ESTADO 1">ESTADO 1</span></strong>
+                    <strong><i class="fas fa-play" style="font-size: 0.8em; color: #3498db;"></i> <span id="stateBoxStart" class="lang-text" data-pt-br="ESTADO 1" data-en="STATE 1" data-es="ESTADO 1" data-fr="ÉTAT 1" data-zh="状态 1">ESTADO 1</span></strong>
                     v<sub>1</sub> = <span class="format-num">{{ volume_especifico|floatformat:6 }}</span> m³/kg<br>
                     u<sub>1</sub> = <span class="format-num">{{ energia_interna }}</span> kJ/kg<br>
                     s<sub>1</sub> = <span class="format-num">{{ entropia_especifica }}</span> kJ/kg.K
                 </div>
                 <div class="state-box">
-                    <strong><i class="fas fa-stop" style="font-size: 0.8em; color: #e74c3c;"></i> <span id="stateBoxEnd" class="lang-text" data-pt-br="ESTADO 2" data-en="STATE 2" data-es="ESTADO 2">ESTADO 2</span></strong>
+                    <strong><i class="fas fa-stop" style="font-size: 0.8em; color: #e74c3c;"></i> <span id="stateBoxEnd" class="lang-text" data-pt-br="ESTADO 2" data-en="STATE 2" data-es="ESTADO 2" data-fr="ÉTAT 2" data-zh="状态 2">ESTADO 2</span></strong>
                     v<sub>2</sub> = <span class="format-num">{{ volume_especifico2|floatformat:6 }}</span> m³/kg<br>
                     u<sub>2</sub> = <span class="format-num">{{ energia_interna2 }}</span> kJ/kg<br>
                     s<sub>2</sub> = <span class="format-num">{{ entropia_especifica2 }}</span> kJ/kg.K
@@ -202,21 +202,21 @@
         <div class="math-step step-2">
             <div class="step-number">2</div>
             <div class="step-header">
-                <i class="fas fa-compress-alt"></i> <span class="lang-text" data-pt-br="Trabalho de Fronteira (W)" data-en="Boundary Work (W)" data-es="Trabajo de Frontera (W)">Trabalho de Fronteira (W)</span>
+                <i class="fas fa-compress-alt"></i> <span class="lang-text" data-pt-br="Trabalho de Fronteira (W)" data-en="Boundary Work (W)" data-es="Trabajo de Frontera (W)" data-fr="Travail de Frontière (W)" data-zh="边界功 (W)">Trabalho de Fronteira (W)</span>
             </div>
-            <div class="step-description lang-text" data-pt-br="Como os limites do sistema não se movem (pistão travado) e a massa é constante, o volume total do sistema não sofre alteração. Logo, o trabalho de fronteira realizado é nulo." data-en="Since the system boundaries do not move (locked piston) and the mass is constant, the total volume remains unchanged. Therefore, the boundary work is zero." data-es="Como los límites del sistema no se mueven (pistón bloqueado) y la masa es constante, el volumen total del sistema no sufre alteración. Por lo tanto, el trabajo de frontera es nulo.">
+            <div class="step-description lang-text" data-pt-br="Como os limites do sistema não se movem (pistão travado) e a massa é constante, o volume total do sistema não sofre alteração. Logo, o trabalho de fronteira realizado é nulo." data-en="Since the system boundaries do not move (locked piston) and the mass is constant, the total volume remains unchanged. Therefore, the boundary work is zero." data-es="Como los límites del sistema no se mueven (pistón bloqueado) y la masa es constante, el volumen total del sistema no sufre alteración. Por lo tanto, el trabajo de frontera es nulo." data-fr="Comme les frontières du système ne se déplacent pas (piston bloqué) et que la masse est constante, le volume total ne varie pas. Le travail de frontière est donc nul." data-zh="由于系统边界不移动（活塞锁定）且质量恒定，系统总体积不变，因此边界功为零。">
                 Como os limites do sistema não se movem (pistão travado) e a massa é constante, o volume total do sistema não sofre alteração. Logo, o trabalho de fronteira realizado é nulo.
             </div>
 
             <div style="background: #f5eef8; border-left: 4px solid #9b59b6; padding: 15px; margin-bottom: 20px; border-radius: 8px; font-family: 'Courier New', Courier, monospace; font-size: 0.95em; line-height: 1.6; color: #333;">
                 <div style="font-family: Arial, sans-serif; font-weight: bold; margin-bottom: 10px; color: #8e44ad; font-size: 1.05em;">
-                    <i class="fas fa-lightbulb"></i> <span class="lang-text" data-pt-br="Dedução Teórica (Volume Constante):" data-en="Theoretical Deduction (Constant Volume):" data-es="Deducción Teórica (Volumen Constante):">Dedução Teórica (Volume Constante):</span>
+                    <i class="fas fa-lightbulb"></i> <span class="lang-text" data-pt-br="Dedução Teórica (Volume Constante):" data-en="Theoretical Deduction (Constant Volume):" data-es="Deducción Teórica (Volumen Constante):" data-fr="Démonstration Théorique (Volume Constant) :" data-zh="理论推导（等容过程）：">Dedução Teórica (Volume Constante):</span>
                 </div>
-                1. <span class="lang-text" data-pt-br="Definição de Trabalho Total:" data-en="Total Work Definition:" data-es="Definición de Trabajo Total:">Definição de Trabalho Total:</span> W = &int; P dV<br>
-                2. <span class="lang-text" data-pt-br="Sendo V = m &middot; v, e ambos constantes, V₁ = V₂:" data-en="Since V = m &middot; v, and both are constant, V₁ = V₂:" data-es="Siendo V = m &middot; v, y ambos constantes, V₁ = V₂:">Sendo V = m &middot; v, e ambos constantes, V<sub>1</sub> = V<sub>2</sub></span><br>
-                3. <span class="lang-text" data-pt-br="Como não há variação (dV = 0):" data-en="Since there is no variation (dV = 0):" data-es="Como no hay variación (dV = 0):">Como não há variação (dV = 0):</span> W = &int; P &middot; 0<br>
+                1. <span class="lang-text" data-pt-br="Definição de Trabalho Total:" data-en="Total Work Definition:" data-es="Definición de Trabajo Total:" data-fr="Définition du Travail Total :" data-zh="总功定义：">Definição de Trabalho Total:</span> W = &int; P dV<br>
+                2. <span class="lang-text" data-pt-br="Sendo V = m &middot; v, e ambos constantes, V₁ = V₂:" data-en="Since V = m &middot; v, and both are constant, V₁ = V₂:" data-es="Siendo V = m &middot; v, y ambos constantes, V₁ = V₂:" data-fr="Comme V = m &middot; v et que tous deux sont constants, V₁ = V₂ :" data-zh="由于 V = m &middot; v 且两者均恒定，故 V₁ = V₂：">Sendo V = m &middot; v, e ambos constantes, V<sub>1</sub> = V<sub>2</sub></span><br>
+                3. <span class="lang-text" data-pt-br="Como não há variação (dV = 0):" data-en="Since there is no variation (dV = 0):" data-es="Como no hay variación (dV = 0):" data-fr="Comme il n'y a pas de variation (dV = 0) :" data-zh="由于体积无变化 (dV = 0)：">Como não há variação (dV = 0):</span> W = &int; P &middot; 0<br>
                 <div style="margin-top: 8px; padding-top: 8px; border-top: 1px dashed #9b59b6; font-weight: bold; color: #8e44ad; font-size: 1.1em;">
-                    &there4; W = 0 <span style="font-size: 0.85em; font-weight: normal;" class="lang-text" data-pt-br="(Processo Isocórico)" data-en="(Isochoric Process)" data-es="(Proceso Isocórico)">(Processo Isocórico)</span>
+                    &there4; W = 0 <span style="font-size: 0.85em; font-weight: normal;" class="lang-text" data-pt-br="(Processo Isocórico)" data-en="(Isochoric Process)" data-es="(Proceso Isocórico)" data-fr="(Processus Isochore)" data-zh="（等容过程）">(Processo Isocórico)</span>
                 </div>
             </div>
             <div class="step-result" style="color: #8e44ad; border-color: #9b59b6; background: #f5eef8;">
@@ -227,19 +227,19 @@
         <div class="math-step step-3">
             <div class="step-number">3</div>
             <div class="step-header">
-                <i class="fas fa-fire"></i> <span class="lang-text" data-pt-br="Primeira Lei e Calor Trocado (Q)" data-en="First Law and Heat Transfer (Q)" data-es="Primera Ley y Calor Intercambiado (Q)">Primeira Lei e Calor Trocado (Q)</span>
+                <i class="fas fa-fire"></i> <span class="lang-text" data-pt-br="Primeira Lei e Calor Trocado (Q)" data-en="First Law and Heat Transfer (Q)" data-es="Primera Ley y Calor Intercambiado (Q)" data-fr="Première Loi et Chaleur Échangée (Q)" data-zh="热力学第一定律与传热量 (Q)">Primeira Lei e Calor Trocado (Q)</span>
             </div>
-            <div class="step-description lang-text" data-pt-br="Pela 1ª Lei da Termodinâmica para um sistema fechado rígido, todo o calor transferido para o sistema resulta diretamente na variação da energia interna total (considerando a massa do sistema)." data-en="By the 1st Law of Thermodynamics for a rigid closed system, all heat transferred to the system directly results in the change of total internal energy (considering mass)." data-es="Por la 1ª Ley de la Termodinámica para un sistema cerrado rígido, todo el calor transferido al sistema resulta directamente en la variación de la energía interna total (considerando la masa).">
+            <div class="step-description lang-text" data-pt-br="Pela 1ª Lei da Termodinâmica para um sistema fechado rígido, todo o calor transferido para o sistema resulta diretamente na variação da energia interna total (considerando a massa do sistema)." data-en="By the 1st Law of Thermodynamics for a rigid closed system, all heat transferred to the system directly results in the change of total internal energy (considering mass)." data-es="Por la 1ª Ley de la Termodinámica para un sistema cerrado rígido, todo el calor transferido al sistema resulta directamente en la variación de la energía interna total (considerando la masa)." data-fr="D'après la 1re Loi de la Thermodynamique pour un système fermé rigide, toute la chaleur transférée au système se traduit directement par la variation de l'énergie interne totale (en tenant compte de la masse)." data-zh="根据刚性闭口系统的热力学第一定律，传入系统的全部热量直接转化为系统总内能的变化（考虑系统质量）。">
                 Pela 1ª Lei da Termodinâmica para um sistema fechado rígido, todo o calor transferido para o sistema resulta diretamente na variação da energia interna total (considerando a massa do sistema).
             </div>
 
             <div style="background: #fff4e6; border-left: 4px solid #e67e22; padding: 15px; margin-bottom: 20px; border-radius: 8px; font-family: 'Courier New', Courier, monospace; font-size: 0.95em; line-height: 1.6; color: #333;">
                 <div style="font-family: Arial, sans-serif; font-weight: bold; margin-bottom: 10px; color: #d35400; font-size: 1.05em;">
-                    <i class="fas fa-lightbulb"></i> <span class="lang-text" data-pt-br="Dedução Teórica (Primeira Lei):" data-en="Theoretical Deduction (First Law):" data-es="Deducción Teórica (Primera Ley):">Dedução Teórica (Primeira Lei):</span>
+                    <i class="fas fa-lightbulb"></i> <span class="lang-text" data-pt-br="Dedução Teórica (Primeira Lei):" data-en="Theoretical Deduction (First Law):" data-es="Deducción Teórica (Primera Ley):" data-fr="Démonstration Théorique (Première Loi) :" data-zh="理论推导（第一定律）：">Dedução Teórica (Primeira Lei):</span>
                 </div>
-                1. <span class="lang-text" data-pt-br="1ª Lei Sist. Fechado:" data-en="1st Law Closed Sys.:" data-es="1ª Ley Sist. Cerrado:">1ª Lei Sist. Fechado:</span> Q - W = &Delta;U<br>
-                2. <span class="lang-text" data-pt-br="Como W = 0:" data-en="Since W = 0:" data-es="Como W = 0:">Como W = 0:</span> Q = (U<sub>2</sub> - U<sub>1</sub>)<br>
-                3. <span class="lang-text" data-pt-br="Introduzindo a massa (U = m &middot; u):" data-en="Introducing mass (U = m &middot; u):" data-es="Introduciendo la masa (U = m &middot; u):">Introduzindo a massa (U = m &middot; u):</span> Q = m &middot; (u<sub>2</sub> - u<sub>1</sub>)<br>
+                1. <span class="lang-text" data-pt-br="1ª Lei Sist. Fechado:" data-en="1st Law Closed Sys.:" data-es="1ª Ley Sist. Cerrado:" data-fr="1re Loi Syst. Fermé :" data-zh="闭口系统热力学第一定律：">1ª Lei Sist. Fechado:</span> Q - W = &Delta;U<br>
+                2. <span class="lang-text" data-pt-br="Como W = 0:" data-en="Since W = 0:" data-es="Como W = 0:" data-fr="Comme W = 0 :" data-zh="由于 W = 0：">Como W = 0:</span> Q = (U<sub>2</sub> - U<sub>1</sub>)<br>
+                3. <span class="lang-text" data-pt-br="Introduzindo a massa (U = m &middot; u):" data-en="Introducing mass (U = m &middot; u):" data-es="Introduciendo la masa (U = m &middot; u):" data-fr="En introduisant la masse (U = m &middot; u) :" data-zh="引入质量 (U = m &middot; u)：">Introduzindo a massa (U = m &middot; u):</span> Q = m &middot; (u<sub>2</sub> - u<sub>1</sub>)<br>
                 <div style="margin-top: 8px; padding-top: 8px; border-top: 1px dashed #e67e22; font-weight: bold; color: #d35400; font-size: 1.1em;">
                     &there4; Q = m &middot; (u<sub>2</sub> - u<sub>1</sub>)
                 </div>
@@ -259,20 +259,20 @@
         <div class="math-step step-4" style="margin-bottom: 0;">
             <div class="step-number">4</div>
             <div class="step-header">
-                <i class="fas fa-balance-scale"></i> <span class="lang-text" data-pt-br="Segunda Lei e Entropia Gerada (Sger)" data-en="Second Law and Entropy Generated (Sger)" data-es="Segunda Ley y Entropía Generada (Sger)">Segunda Lei e Entropia Gerada (Sger)</span>
+                <i class="fas fa-balance-scale"></i> <span class="lang-text" data-pt-br="Segunda Lei e Entropia Gerada (Sger)" data-en="Second Law and Entropy Generated (Sger)" data-es="Segunda Ley y Entropía Generada (Sger)" data-fr="Seconde Loi et Entropie Générée (Sgén)" data-zh="热力学第二定律与熵产 (Sger)">Segunda Lei e Entropia Gerada (Sger)</span>
             </div>
-            <div class="step-description lang-text" data-pt-br="O balanço de entropia determina se o processo é fisicamente possível. Calculamos a variação de entropia do sistema (levando a massa em consideração) menos a entropia transferida com o calor para a vizinhança." data-en="The entropy balance determines if the process is physically possible. We calculate the system's entropy change (considering mass) minus the entropy transferred with heat to the surroundings." data-es="El balance de entropía determina si el proceso es físicamente posible. Calculamos el cambio de entropía del sistema (considerando la masa) menos la entropía transferida con calor al entorno.">
+            <div class="step-description lang-text" data-pt-br="O balanço de entropia determina se o processo é fisicamente possível. Calculamos a variação de entropia do sistema (levando a massa em consideração) menos a entropia transferida com o calor para a vizinhança." data-en="The entropy balance determines if the process is physically possible. We calculate the system's entropy change (considering mass) minus the entropy transferred with heat to the surroundings." data-es="El balance de entropía determina si el proceso es físicamente posible. Calculamos el cambio de entropía del sistema (considerando la masa) menos la entropía transferida con calor al entorno." data-fr="Le bilan d'entropie détermine si le processus est physiquement possible. On calcule la variation d'entropie du système (en tenant compte de la masse) moins l'entropie transférée avec la chaleur vers le milieu extérieur." data-zh="熵平衡决定了该过程在物理上是否可行。我们用系统的熵变（考虑质量）减去随热量传递至环境的熵。">
                 O balanço de entropia determina se o processo é fisicamente possível. Calculamos a variação de entropia do sistema (levando a massa em consideração) menos a entropia transferida com o calor para a vizinhança.
             </div>
 
             <div style="background: #e8f5e9; border-left: 4px solid #2ecc71; padding: 15px; margin-bottom: 20px; border-radius: 8px; font-family: 'Courier New', Courier, monospace; font-size: 0.95em; line-height: 1.6; color: #333;">
                 <div style="font-family: Arial, sans-serif; font-weight: bold; margin-bottom: 10px; color: #27ae60; font-size: 1.05em;">
-                    <i class="fas fa-lightbulb"></i> <span class="lang-text" data-pt-br="Dedução Teórica (Balanço de Entropia):" data-en="Theoretical Deduction (Entropy Balance):" data-es="Deducción Teórica (Balance de Entropía):">Dedução Teórica (Balanço de Entropia):</span>
+                    <i class="fas fa-lightbulb"></i> <span class="lang-text" data-pt-br="Dedução Teórica (Balanço de Entropia):" data-en="Theoretical Deduction (Entropy Balance):" data-es="Deducción Teórica (Balance de Entropía):" data-fr="Démonstration Théorique (Bilan d'Entropie) :" data-zh="理论推导（熵平衡）：">Dedução Teórica (Balanço de Entropia):</span>
                 </div>
-                1. <span class="lang-text" data-pt-br="Balanço geral (Sist. Fechado):" data-en="General balance (Closed Sys.):" data-es="Balance general (Sist. Cerrado):">Balanço geral (Sist. Fechado):</span> S<sub>in</sub> - S<sub>out</sub> + S<sub>ger</sub> = &Delta;S<sub>sist</sub><br>
-                2. <span class="lang-text" data-pt-br="Transf. de entropia por calor e Entropia total (S = m &middot; s):" data-en="Entropy transfer by heat and Total Entropy (S = m &middot; s):" data-es="Transf. de entropía por calor y Entropía total (S = m &middot; s):">Transf. de entropia por calor e Entropia total (S = m &middot; s):</span><br>
+                1. <span class="lang-text" data-pt-br="Balanço geral (Sist. Fechado):" data-en="General balance (Closed Sys.):" data-es="Balance general (Sist. Cerrado):" data-fr="Bilan général (Syst. Fermé) :" data-zh="一般平衡方程（闭口系统）：">Balanço geral (Sist. Fechado):</span> S<sub>in</sub> - S<sub>out</sub> + S<sub>ger</sub> = &Delta;S<sub>sist</sub><br>
+                2. <span class="lang-text" data-pt-br="Transf. de entropia por calor e Entropia total (S = m &middot; s):" data-en="Entropy transfer by heat and Total Entropy (S = m &middot; s):" data-es="Transf. de entropía por calor y Entropía total (S = m &middot; s):" data-fr="Transf. d'entropie par chaleur et Entropie totale (S = m &middot; s) :" data-zh="热量传熵与总熵 (S = m &middot; s)：">Transf. de entropia por calor e Entropia total (S = m &middot; s):</span><br>
                    &nbsp;&nbsp;&nbsp;&nbsp;(Q / T<sub>viz</sub>) + S<sub>ger</sub> = m &middot; (s<sub>2</sub> - s<sub>1</sub>)<br>
-                3. <span class="lang-text" data-pt-br="Isolando a entropia gerada:" data-en="Solving for generated entropy:" data-es="Despejando la entropía generada:">Isolando a entropia gerada:</span><br>
+                3. <span class="lang-text" data-pt-br="Isolando a entropia gerada:" data-en="Solving for generated entropy:" data-es="Despejando la entropía generada:" data-fr="En isolant l'entropie générée :" data-zh="整理得出熵产表达式：">Isolando a entropia gerada:</span><br>
                 <div style="margin-top: 8px; padding-top: 8px; border-top: 1px dashed #2ecc71; font-weight: bold; color: #27ae60; font-size: 1.1em;">
                     &there4; S<sub>ger</sub> = m &middot; (s<sub>2</sub> - s<sub>1</sub>) - (Q / T<sub>viz_K</sub>)
                 </div>
@@ -290,7 +290,7 @@
                 <span class="lang-text"
                     data-pt-br="{% if Sger < 0 %}PROCESSO IMPOSSÍVEL (Sger < 0 viola a 2ª Lei){% else %}PROCESSO POSSÍVEL (Sger &ge; 0 satisfaz a 2ª Lei){% endif %}"
                     data-en="{% if Sger < 0 %}IMPOSSIBLE PROCESS (Sger < 0 violates 2nd Law){% else %}POSSIBLE PROCESS (Sger &ge; 0 satisfies 2nd Law){% endif %}"
-                    data-es="{% if Sger < 0 %}PROCESO IMPOSIBLE (Sger < 0 viola la 2ª Ley){% else %}PROCESO POSIBLE (Sger &ge; 0 satisface la 2ª Ley){% endif %}">
+                    data-es="{% if Sger < 0 %}PROCESO IMPOSIBLE (Sger < 0 viola la 2ª Ley){% else %}PROCESO POSIBLE (Sger &ge; 0 satisface la 2ª Ley){% endif %}" data-fr="{% if Sger < 0 %}PROCESSUS IMPOSSIBLE (Sgén < 0 viole la 2e Loi){% else %}PROCESSUS POSSIBLE (Sgén &ge; 0 satisfait la 2e Loi){% endif %}" data-zh="{% if Sger < 0 %}过程不可能（熵产 Sger < 0，违反热力学第二定律）{% else %}过程可能（熵产 Sger &ge; 0，满足热力学第二定律）{% endif %}">
                     {% if Sger < 0 %}PROCESSO IMPOSSÍVEL (Sger < 0 viola a 2ª Lei){% else %}PROCESSO POSSÍVEL (Sger &ge; 0 satisfaz a 2ª Lei){% endif %}
                 </span></small>
             </div>
@@ -301,17 +301,17 @@
 <div id="processModal" class="modal">
     <div class="modal-content">
         <span class="close-btn" id="closeProcessBtn" title="Fechar" role="button" tabindex="0">&times;</span>
-        <h3 style="color: var(--primary-color);" class="lang-text" data-pt-br="Continuar Processo" data-en="Continue Process" data-es="Continuar Proceso">Continuar Processo</h3>
-        <p class="lang-text" data-pt-br="Selecione o próximo passo:" data-en="Select the next step:" data-es="Seleccione el siguiente paso:">Selecione o próximo passo:</p>
+        <h3 style="color: var(--primary-color);" class="lang-text" data-pt-br="Continuar Processo" data-en="Continue Process" data-es="Continuar Proceso" data-fr="Continuer le Processus" data-zh="继续下一个过程">Continuar Processo</h3>
+        <p class="lang-text" data-pt-br="Selecione o próximo passo:" data-en="Select the next step:" data-es="Seleccione el siguiente paso:" data-fr="Sélectionnez l'étape suivante :" data-zh="请选择下一步过程：">Selecione o próximo passo:</p>
 
         {% if teste3 %}
-            <a href="{% url 'ask_known3_3' %}" class="modal-btn lang-text" data-pt-br="Aquecimento/Resfriamento à Pressão Constante" data-en="Heating/Cooling at Constant Pressure" data-es="Calentamiento/Enfriamiento a Presión Constante">Aquecimento/Resfriamento à Pressão Constante</a>
-            <a href="{% url 'ask_known3_5' %}" class="modal-btn lang-text" data-pt-br="Aquecimento/Resfriamento à Volume Constante" data-en="Heating/Cooling at Constant Volume" data-es="Calentamiento/Enfriamiento a Volumen Constante">Aquecimento/Resfriamento à Volume Constante</a>
-            <a href="{% url 'ask_known3_4' %}" class="modal-btn lang-text" data-pt-br="Compressão/Expansão Adiabática e Reversível" data-en="Reversible Adiabatic Compression/Expansion" data-es="Compresión/Expansión Adiabática Reversible">Compressão/Expansão Adiabática e Reversível</a>
+            <a href="{% url 'ask_known3_3' %}" class="modal-btn lang-text" data-pt-br="Aquecimento/Resfriamento à Pressão Constante" data-en="Heating/Cooling at Constant Pressure" data-es="Calentamiento/Enfriamiento a Presión Constante" data-fr="Chauffage/Refroidissement à Pression Constante" data-zh="定压加热/冷却过程">Aquecimento/Resfriamento à Pressão Constante</a>
+            <a href="{% url 'ask_known3_5' %}" class="modal-btn lang-text" data-pt-br="Aquecimento/Resfriamento à Volume Constante" data-en="Heating/Cooling at Constant Volume" data-es="Calentamiento/Enfriamiento a Volumen Constante" data-fr="Chauffage/Refroidissement à Volume Constante" data-zh="定容加热/冷却过程">Aquecimento/Resfriamento à Volume Constante</a>
+            <a href="{% url 'ask_known3_4' %}" class="modal-btn lang-text" data-pt-br="Compressão/Expansão Adiabática e Reversível" data-en="Reversible Adiabatic Compression/Expansion" data-es="Compresión/Expansión Adiabática Reversible" data-fr="Compression/Détente Adiabatique Réversible" data-zh="可逆绝热压缩/膨胀过程">Compressão/Expansão Adiabática e Reversível</a>
         {% else %}
-            <a href="{% url 'ask_known3_3' %}" class="modal-btn lang-text" data-pt-br="Aquecimento/Resfriamento à Pressão Constante" data-en="Heating/Cooling at Constant Pressure" data-es="Calentamiento/Enfriamiento a Presión Constante">Aquecimento/Resfriamento à Pressão Constante</a>
-            <a href="{% url 'ask_known3_5' %}" class="modal-btn lang-text" data-pt-br="Aquecimento/Resfriamento à Volume Constante" data-en="Heating/Cooling at Constant Volume" data-es="Calentamiento/Enfriamiento a Volumen Constante">Aquecimento/Resfriamento à Volume Constante</a>
-            <a href="{% url 'ask_known3_4' %}" class="modal-btn lang-text" data-pt-br="Compressão/Expansão Adiabática e Reversível" data-en="Reversible Adiabatic Compression/Expansion" data-es="Compresión/Expansión Adiabática Reversible">Compressão/Expansão Adiabática e Reversível</a>
+            <a href="{% url 'ask_known3_3' %}" class="modal-btn lang-text" data-pt-br="Aquecimento/Resfriamento à Pressão Constante" data-en="Heating/Cooling at Constant Pressure" data-es="Calentamiento/Enfriamiento a Presión Constante" data-fr="Chauffage/Refroidissement à Pression Constante" data-zh="定压加热/冷却过程">Aquecimento/Resfriamento à Pressão Constante</a>
+            <a href="{% url 'ask_known3_5' %}" class="modal-btn lang-text" data-pt-br="Aquecimento/Resfriamento à Volume Constante" data-en="Heating/Cooling at Constant Volume" data-es="Calentamiento/Enfriamiento a Volumen Constante" data-fr="Chauffage/Refroidissement à Volume Constante" data-zh="定容加热/冷却过程">Aquecimento/Resfriamento à Volume Constante</a>
+            <a href="{% url 'ask_known3_4' %}" class="modal-btn lang-text" data-pt-br="Compressão/Expansão Adiabática e Reversível" data-en="Reversible Adiabatic Compression/Expansion" data-es="Compresión/Expansión Adiabática Reversible" data-fr="Compression/Détente Adiabatique Réversible" data-zh="可逆绝热压缩/膨胀过程">Compressão/Expansão Adiabática e Reversível</a>
         {% endif %}
     </div>
 </div>
@@ -319,26 +319,26 @@
 <div id="diagramModal" class="modal">
     <div class="modal-content modal-chart">
         <span class="close-btn" id="closeDiagramBtn" title="Fechar" role="button" tabindex="0">&times;</span>
-        <h3 style="color: var(--primary-color); margin-top: 0; margin-bottom: 5px;" class="lang-text" data-pt-br="Diagramas Termodinâmicos Interativos — Água" data-en="Interactive Thermodynamic Diagrams — Water" data-es="Diagramas Termodinámicos Interactivos — Agua">Diagramas Termodinâmicos Interativos — Água</h3>
+        <h3 style="color: var(--primary-color); margin-top: 0; margin-bottom: 5px;" class="lang-text" data-pt-br="Diagramas Termodinâmicos Interativos — Água" data-en="Interactive Thermodynamic Diagrams — Water" data-es="Diagramas Termodinámicos Interactivos — Agua" data-fr="Diagrammes Thermodynamiques Interactifs — Eau" data-zh="交互式热力学图 — 水">Diagramas Termodinâmicos Interativos — Água</h3>
 
         <div class="chart-controls" data-tour-pt-br="Escolha em qual par de propriedades (por exemplo, Pressão x Volume ou Temperatura x Entropia) deseja visualizar o processo." data-tour-en="Choose which pair of properties (e.g. Pressure x Volume or Temperature x Entropy) you want to visualize the process in." data-tour-es="Elija en qué par de propiedades (por ejemplo, Presión x Volumen o Temperatura x Entropía) desea visualizar el proceso." data-tour-label-pt-br="Tipo de diagrama" data-tour-label-en="Diagram type" data-tour-label-es="Tipo de diagrama">
             
             
             <select id="chartTypeSelector" aria-label="Selecionar tipo de diagrama termodinâmico">
-                <option value="Pv" class="lang-text" data-pt-br="Diagrama P-v (Pressão x Volume)" data-en="P-v Diagram (Pressure x Volume)" data-es="Diagrama P-v (Presión x Volumen)">Diagrama P-v (Pressão x Volume)</option>
-                <option value="Ts" class="lang-text" data-pt-br="Diagrama T-s (Temperatura x Entropia)" data-en="T-s Diagram (Temperature x Entropy)" data-es="Diagrama T-s (Temperatura x Entropía)">Diagrama T-s (Temperatura x Entropia)</option>
-                <option value="Tv" class="lang-text" data-pt-br="Diagrama T-v (Temperatura x Volume)" data-en="T-v Diagram (Temperature x Volume)" data-es="Diagrama T-v (Temperatura x Volumen)">Diagrama T-v (Temperatura x Volume)</option>
-                <option value="Ph" class="lang-text" data-pt-br="Diagrama P-h (Pressão x Entalpia)" data-en="P-h Diagram (Pressure x Enthalpy)" data-es="Diagrama P-h (Presión x Entalpía)">Diagrama P-h (Pressão x Entalpia)</option>
-                <option value="hs" class="lang-text" data-pt-br="Diagrama h-s (Mollier)" data-en="h-s Diagram (Mollier)" data-es="Diagrama h-s (Mollier)">Diagrama h-s (Mollier - Entalpia x Entropia)</option>
-                <option value="PT" class="lang-text" data-pt-br="Diagrama P-T (Pressão x Temperatura)" data-en="P-T Diagram (Pressure x Temperature)" data-es="Diagrama P-T (Presión x Temperatura)">Diagrama P-T (Pressão x Temperatura)</option>
-                <option value="Ps" class="lang-text" data-pt-br="Diagrama P-s (Pressão x Entropia)" data-en="P-s Diagram (Pressure x Entropy)" data-es="Diagrama P-s (Presión x Entropía)">Diagrama P-s (Pressão x Entropia)</option>
-                <option value="Pu" class="lang-text" data-pt-br="Diagrama P-u (Pressão x Energia Interna)" data-en="P-u Diagram (Pressure x Internal Energy)" data-es="Diagrama P-u (Presión x Energía Interna)">Diagrama P-u (Pressão x Energia Interna)</option>
-                <option value="Tu" class="lang-text" data-pt-br="Diagrama T-u (Temperatura x Energia Interna)" data-en="T-u Diagram (Temperature x Internal Energy)" data-es="Diagrama T-u (Temperatura x Energía Interna)">Diagrama T-u (Temperatura x Energia Interna)</option>
-                <option value="Th" class="lang-text" data-pt-br="Diagrama T-h (Temperatura x Entalpia)" data-en="T-h Diagram (Temperature x Enthalpy)" data-es="Diagrama T-h (Temperatura x Entalpía)">Diagrama T-h (Temperatura x Entalpia)</option>
+                <option value="Pv" class="lang-text" data-pt-br="Diagrama P-v (Pressão x Volume)" data-en="P-v Diagram (Pressure x Volume)" data-es="Diagrama P-v (Presión x Volumen)" data-fr="Diagramme P-v (Pression × Volume)" data-zh="P-v 图 (压力 × 比容)">Diagrama P-v (Pressão x Volume)</option>
+                <option value="Ts" class="lang-text" data-pt-br="Diagrama T-s (Temperatura x Entropia)" data-en="T-s Diagram (Temperature x Entropy)" data-es="Diagrama T-s (Temperatura x Entropía)" data-fr="Diagramme T-s (Température × Entropie)" data-zh="T-s 图 (温度 × 熵)">Diagrama T-s (Temperatura x Entropia)</option>
+                <option value="Tv" class="lang-text" data-pt-br="Diagrama T-v (Temperatura x Volume)" data-en="T-v Diagram (Temperature x Volume)" data-es="Diagrama T-v (Temperatura x Volumen)" data-fr="Diagramme T-v (Température × Volume)" data-zh="T-v 图 (温度 × 比容)">Diagrama T-v (Temperatura x Volume)</option>
+                <option value="Ph" class="lang-text" data-pt-br="Diagrama P-h (Pressão x Entalpia)" data-en="P-h Diagram (Pressure x Enthalpy)" data-es="Diagrama P-h (Presión x Entalpía)" data-fr="Diagramme P-h (Pression × Enthalpie)" data-zh="P-h 图 (压力 × 焓)">Diagrama P-h (Pressão x Entalpia)</option>
+                <option value="hs" class="lang-text" data-pt-br="Diagrama h-s (Mollier)" data-en="h-s Diagram (Mollier)" data-es="Diagrama h-s (Mollier)" data-fr="Diagramme h-s (Mollier)" data-zh="h-s 图 (莫里尔图)">Diagrama h-s (Mollier - Entalpia x Entropia)</option>
+                <option value="PT" class="lang-text" data-pt-br="Diagrama P-T (Pressão x Temperatura)" data-en="P-T Diagram (Pressure x Temperature)" data-es="Diagrama P-T (Presión x Temperatura)" data-fr="Diagramme P-T (Pression × Température)" data-zh="P-T 图 (压力 × 温度)">Diagrama P-T (Pressão x Temperatura)</option>
+                <option value="Ps" class="lang-text" data-pt-br="Diagrama P-s (Pressão x Entropia)" data-en="P-s Diagram (Pressure x Entropy)" data-es="Diagrama P-s (Presión x Entropía)" data-fr="Diagramme P-s (Pression × Entropie)" data-zh="P-s 图 (压力 × 熵)">Diagrama P-s (Pressão x Entropia)</option>
+                <option value="Pu" class="lang-text" data-pt-br="Diagrama P-u (Pressão x Energia Interna)" data-en="P-u Diagram (Pressure x Internal Energy)" data-es="Diagrama P-u (Presión x Energía Interna)" data-fr="Diagramme P-u (Pression × Énergie Interne)" data-zh="P-u 图 (压力 × 内能)">Diagrama P-u (Pressão x Energia Interna)</option>
+                <option value="Tu" class="lang-text" data-pt-br="Diagrama T-u (Temperatura x Energia Interna)" data-en="T-u Diagram (Temperature x Internal Energy)" data-es="Diagrama T-u (Temperatura x Energía Interna)" data-fr="Diagramme T-u (Température × Énergie Interne)" data-zh="T-u 图 (温度 × 内能)">Diagrama T-u (Temperatura x Energia Interna)</option>
+                <option value="Th" class="lang-text" data-pt-br="Diagrama T-h (Temperatura x Entalpia)" data-en="T-h Diagram (Temperature x Enthalpy)" data-es="Diagrama T-h (Temperatura x Entalpía)" data-fr="Diagramme T-h (Température × Enthalpie)" data-zh="T-h 图 (温度 × 焓)">Diagrama T-h (Temperatura x Entalpia)</option>
             </select>
             <button id="btnToggleFullCycle" class="btn btn-secondary" style="display: none;">
                 <i class="fas fa-layer-group" style="margin-right: 6px;"></i>
-                <span id="toggleText" class="lang-text" data-pt-br="Ver todos processos" data-en="View All Processes" data-es="Ver todos los procesos">Ver todos processos</span>
+                <span id="toggleText" class="lang-text" data-pt-br="Ver todos processos" data-en="View All Processes" data-es="Ver todos los procesos" data-fr="Voir tous les processus" data-zh="查看全部过程">Ver todos processos</span>
             </button>
         </div>
 
@@ -385,14 +385,14 @@
             <div>
                 <h2 style="margin: 0; font-size: 1.3em; letter-spacing: 0.5px;">
                     <i class="fas fa-file-alt" style="margin-right: 10px;"></i>
-                    <span class="lang-text" data-pt-br="Relatório Final do Processo Termodinâmico — Água" data-en="Thermodynamic Process Final Report — Water" data-es="Informe Final del Proceso Termodinámico — Agua">Relatório Final do Processo Termodinâmico — Água</span>
+                    <span class="lang-text" data-pt-br="Relatório Final do Processo Termodinâmico — Água" data-en="Thermodynamic Process Final Report — Water" data-es="Informe Final del Proceso Termodinámico — Agua" data-fr="Rapport Final du Processus Thermodynamique — Eau" data-zh="热力学过程最终报告 — 水">Relatório Final do Processo Termodinâmico — Água</span>
                 </h2>
                 <div id="reportTimestamp" style="font-size: 0.78em; opacity: 0.75; margin-top: 3px;"></div>
             </div>
             <div style="display: flex; gap: 10px; align-items: center;">
                 <button onclick="window.print()" class="btn no-print" style="background: rgba(255,255,255,0.18); color: white; border: 1px solid rgba(255,255,255,0.45); padding: 7px 14px; font-size: 0.9em;">
                     <i class="fas fa-print" style="margin-right: 6px;"></i>
-                    <span class="lang-text" data-pt-br="Imprimir" data-en="Print" data-es="Imprimir">Imprimir</span>
+                    <span class="lang-text" data-pt-br="Imprimir" data-en="Print" data-es="Imprimir" data-fr="Imprimer" data-zh="打印">Imprimir</span>
                 </button>
                 <span id="closeReportBtn" style="cursor: pointer; font-size: 28px; line-height: 1; color: white; padding: 0 4px; opacity: 0.85;" title="Fechar" role="button" tabindex="0">&times;</span>
             </div>
@@ -401,10 +401,10 @@
         <div id="reportLoading" style="display: flex; flex-direction: column; align-items: center; padding: 70px 30px; color: var(--primary-color);">
             <i class="fas fa-cog fa-spin fa-3x" style="margin-bottom: 20px; color: #8e44ad;"></i>
             <span id="loadingMsg" style="font-size: 1.05em; font-weight: bold; color: #555;">
-                <span class="lang-text" data-pt-br="Gerando relatório..." data-en="Generating report..." data-es="Generando informe...">Gerando relatório...</span>
+                <span class="lang-text" data-pt-br="Gerando relatório..." data-en="Generating report..." data-es="Generando informe..." data-fr="Génération du rapport..." data-zh="正在生成报告...">Gerando relatório...</span>
             </span>
             <small style="color: #aaa; margin-top: 8px;">
-                <span class="lang-text" data-pt-br="Capturando visualizações e renderizando diagramas..." data-en="Capturing visualizations and rendering diagrams..." data-es="Capturando visualizaciones y renderizando diagramas...">Capturando visualizações e renderizando diagramas...</span>
+                <span class="lang-text" data-pt-br="Capturando visualizações e renderizando diagramas..." data-en="Capturing visualizations and rendering diagrams..." data-es="Capturando visualizaciones y renderizando diagramas..." data-fr="Capture des visualisations et rendu des diagrammes..." data-zh="正在捕获视图并渲染热力学图表...">Capturando visualizações e renderizando diagramas...</span>
             </small>
         </div>
 
@@ -413,7 +413,7 @@
             <div class="report-section">
                 <div class="report-section-title">
                     <i class="fas fa-chart-bar"></i>
-                    <span class="lang-text" data-pt-br="Resultados do Processo — Água" data-en="Process Results — Water" data-es="Resultados del Proceso — Agua">Resultados do Processo — Água</span>
+                    <span class="lang-text" data-pt-br="Resultados do Processo — Água" data-en="Process Results — Water" data-es="Resultados del Proceso — Agua" data-fr="Résultats du Processus — Eau" data-zh="过程结果 — 水">Resultados do Processo — Água</span>
                 </div>
                 <div id="reportMetrics"></div>
             </div>
@@ -421,7 +421,7 @@
             <div class="report-section">
                 <div class="report-section-title">
                     <i class="fas fa-table"></i>
-                    <span class="lang-text" data-pt-br="Propriedades dos Estados Termodinâmicos" data-en="Thermodynamic State Properties" data-es="Propiedades de los Estados Termodinámicos">Propriedades dos Estados Termodinâmicos</span>
+                    <span class="lang-text" data-pt-br="Propriedades dos Estados Termodinâmicos" data-en="Thermodynamic State Properties" data-es="Propiedades de los Estados Termodinámicos" data-fr="Propriétés des États Thermodynamiques" data-zh="热力学状态属性">Propriedades dos Estados Termodinâmicos</span>
                 </div>
                 <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;" id="reportStatesGrid"></div>
             </div>
@@ -430,7 +430,7 @@
             <div class="report-section">
                 <div class="report-section-title">
                     <i class="fas fa-exchange-alt"></i>
-                    <span class="lang-text" data-pt-br="Comparação entre Estados" data-en="State Comparison" data-es="Comparación entre Estados">Comparação entre Estados</span>
+                    <span class="lang-text" data-pt-br="Comparação entre Estados" data-en="State Comparison" data-es="Comparación entre Estados" data-fr="Comparaison entre États" data-zh="状态对比">Comparação entre Estados</span>
                 </div>
                 <div id="reportComparison"></div>
             </div>
@@ -438,7 +438,7 @@
             <div class="report-section">
                 <div class="report-section-title">
                     <i class="fas fa-cube"></i>
-                    <span class="lang-text" data-pt-br="Visualização do Sistema — Cilindro-Pistão" data-en="System Visualization — Cylinder-Piston" data-es="Visualización del Sistema — Cilindro-Pistón">Visualização do Sistema — Cilindro-Pistão</span>
+                    <span class="lang-text" data-pt-br="Visualização do Sistema — Cilindro-Pistão" data-en="System Visualization — Cylinder-Piston" data-es="Visualización del Sistema — Cilindro-Pistón" data-fr="Visualisation du Système — Cylindre-Piston" data-zh="气缸-活塞系统视图">Visualização do Sistema — Cilindro-Pistão</span>
                 </div>
                 <div class="report-cylinder-grid" id="reportCylinderGrid"></div>
             </div>
@@ -446,66 +446,66 @@
             <div class="report-section">
                 <div class="report-section-title">
                     <i class="fas fa-chart-line"></i>
-                    <span class="lang-text" data-pt-br="Diagramas Termodinâmicos" data-en="Thermodynamic Diagrams" data-es="Diagramas Termodinámicos">Diagramas Termodinâmicos</span>
+                    <span class="lang-text" data-pt-br="Diagramas Termodinâmicos" data-en="Thermodynamic Diagrams" data-es="Diagramas Termodinámicos" data-fr="Diagrammes Thermodynamiques" data-zh="热力学图表">Diagramas Termodinâmicos</span>
                 </div>
                 <div class="report-diagram-grid">
                     <div class="report-diagram-item">
                         <div class="report-diagram-label"><i class="fas fa-chart-area" style="margin-right:5px;"></i>
-                            <span class="lang-text" data-pt-br="Diagrama P-v (Pressão × Volume Específico)" data-en="P-v Diagram (Pressure × Specific Volume)" data-es="Diagrama P-v (Presión × Volumen Específico)">Diagrama P-v (Pressão × Volume Específico)</span>
+                            <span class="lang-text" data-pt-br="Diagrama P-v (Pressão × Volume Específico)" data-en="P-v Diagram (Pressure × Specific Volume)" data-es="Diagrama P-v (Presión × Volumen Específico)" data-fr="Diagramme P-v (Pression × Volume Spécifique)" data-zh="P-v 图 (压力 × 比容)">Diagrama P-v (Pressão × Volume Específico)</span>
                         </div>
                         <div class="report-diagram-canvas-wrap"><canvas id="reportChartPv"></canvas></div>
                     </div>
                     <div class="report-diagram-item">
                         <div class="report-diagram-label"><i class="fas fa-chart-area" style="margin-right:5px;"></i>
-                            <span class="lang-text" data-pt-br="Diagrama T-s (Temperatura × Entropia)" data-en="T-s Diagram (Temperature × Entropy)" data-es="Diagrama T-s (Temperatura × Entropía)">Diagrama T-s (Temperatura × Entropia)</span>
+                            <span class="lang-text" data-pt-br="Diagrama T-s (Temperatura × Entropia)" data-en="T-s Diagram (Temperature × Entropy)" data-es="Diagrama T-s (Temperatura × Entropía)" data-fr="Diagramme T-s (Température × Entropie)" data-zh="T-s 图 (温度 × 熵)">Diagrama T-s (Temperatura × Entropia)</span>
                         </div>
                         <div class="report-diagram-canvas-wrap"><canvas id="reportChartTs"></canvas></div>
                     </div>
                     <div class="report-diagram-item">
                         <div class="report-diagram-label"><i class="fas fa-chart-area" style="margin-right:5px;"></i>
-                            <span class="lang-text" data-pt-br="Diagrama T-v (Temperatura × Volume Específico)" data-en="T-v Diagram (Temperature × Specific Volume)" data-es="Diagrama T-v (Temperatura × Volumen Específico)">Diagrama T-v (Temperatura × Volume Específico)</span>
+                            <span class="lang-text" data-pt-br="Diagrama T-v (Temperatura × Volume Específico)" data-en="T-v Diagram (Temperature × Specific Volume)" data-es="Diagrama T-v (Temperatura × Volumen Específico)" data-fr="Diagramme T-v (Température × Volume Spécifique)" data-zh="T-v 图 (温度 × 比容)">Diagrama T-v (Temperatura × Volume Específico)</span>
                         </div>
                         <div class="report-diagram-canvas-wrap"><canvas id="reportChartTv"></canvas></div>
                     </div>
                     <div class="report-diagram-item">
                         <div class="report-diagram-label"><i class="fas fa-chart-area" style="margin-right:5px;"></i>
-                            <span class="lang-text" data-pt-br="Diagrama P-h (Pressão × Entalpia)" data-en="P-h Diagram (Pressure × Enthalpy)" data-es="Diagrama P-h (Presión × Entalpía)">Diagrama P-h (Pressão × Entalpia)</span>
+                            <span class="lang-text" data-pt-br="Diagrama P-h (Pressão × Entalpia)" data-en="P-h Diagram (Pressure × Enthalpy)" data-es="Diagrama P-h (Presión × Entalpía)" data-fr="Diagramme P-h (Pression × Enthalpie)" data-zh="P-h 图 (压力 × 焓)">Diagrama P-h (Pressão × Entalpia)</span>
                         </div>
                         <div class="report-diagram-canvas-wrap"><canvas id="reportChartPh"></canvas></div>
                     </div>
                     <div class="report-diagram-item">
                         <div class="report-diagram-label"><i class="fas fa-chart-area" style="margin-right:5px;"></i>
-                            <span class="lang-text" data-pt-br="Diagrama h-s — Mollier (Entalpia × Entropia)" data-en="h-s Diagram — Mollier (Enthalpy × Entropy)" data-es="Diagrama h-s — Mollier (Entalpía × Entropía)">Diagrama h-s — Mollier (Entalpia × Entropia)</span>
+                            <span class="lang-text" data-pt-br="Diagrama h-s — Mollier (Entalpia × Entropia)" data-en="h-s Diagram — Mollier (Enthalpy × Entropy)" data-es="Diagrama h-s — Mollier (Entalpía × Entropía)" data-fr="Diagramme h-s — Mollier (Enthalpie × Entropie)" data-zh="h-s 莫里尔图 (焓 × 熵)">Diagrama h-s — Mollier (Entalpia × Entropia)</span>
                         </div>
                         <div class="report-diagram-canvas-wrap"><canvas id="reportChartHs"></canvas></div>
                     </div>
                     <div class="report-diagram-item">
                         <div class="report-diagram-label"><i class="fas fa-chart-area" style="margin-right:5px;"></i>
-                            <span class="lang-text" data-pt-br="Diagrama P-T (Pressão × Temperatura)" data-en="P-T Diagram (Pressure × Temperature)" data-es="Diagrama P-T (Presión × Temperatura)">Diagrama P-T (Pressão × Temperatura)</span>
+                            <span class="lang-text" data-pt-br="Diagrama P-T (Pressão × Temperatura)" data-en="P-T Diagram (Pressure × Temperature)" data-es="Diagrama P-T (Presión × Temperatura)" data-fr="Diagramme P-T (Pression × Température)" data-zh="P-T 图 (压力 × 温度)">Diagrama P-T (Pressão × Temperatura)</span>
                         </div>
                         <div class="report-diagram-canvas-wrap"><canvas id="reportChartPT"></canvas></div>
                     </div>
                     <div class="report-diagram-item">
                         <div class="report-diagram-label"><i class="fas fa-chart-area" style="margin-right:5px;"></i>
-                            <span class="lang-text" data-pt-br="Diagrama P-s (Pressão × Entropia)" data-en="P-s Diagram (Pressure × Entropy)" data-es="Diagrama P-s (Presión × Entropía)">Diagrama P-s (Pressão × Entropia)</span>
+                            <span class="lang-text" data-pt-br="Diagrama P-s (Pressão × Entropia)" data-en="P-s Diagram (Pressure × Entropy)" data-es="Diagrama P-s (Presión × Entropía)" data-fr="Diagramme P-s (Pression × Entropie)" data-zh="P-s 图 (压力 × 熵)">Diagrama P-s (Pressão × Entropia)</span>
                         </div>
                         <div class="report-diagram-canvas-wrap"><canvas id="reportChartPs"></canvas></div>
                     </div>
                     <div class="report-diagram-item">
                         <div class="report-diagram-label"><i class="fas fa-chart-area" style="margin-right:5px;"></i>
-                            <span class="lang-text" data-pt-br="Diagrama P-u (Pressão × Energia Interna)" data-en="P-u Diagram (Pressure × Internal Energy)" data-es="Diagrama P-u (Presión × Energía Interna)">Diagrama P-u (Pressão × Energia Interna)</span>
+                            <span class="lang-text" data-pt-br="Diagrama P-u (Pressão × Energia Interna)" data-en="P-u Diagram (Pressure × Internal Energy)" data-es="Diagrama P-u (Presión × Energía Interna)" data-fr="Diagramme P-u (Pression × Énergie Interne)" data-zh="P-u 图 (压力 × 内能)">Diagrama P-u (Pressão × Energia Interna)</span>
                         </div>
                         <div class="report-diagram-canvas-wrap"><canvas id="reportChartPu"></canvas></div>
                     </div>
                     <div class="report-diagram-item">
                         <div class="report-diagram-label"><i class="fas fa-chart-area" style="margin-right:5px;"></i>
-                            <span class="lang-text" data-pt-br="Diagrama T-u (Temperatura × Energia Interna)" data-en="T-u Diagram (Temperature × Internal Energy)" data-es="Diagrama T-u (Temperatura × Energía Interna)">Diagrama T-u (Temperatura × Energia Interna)</span>
+                            <span class="lang-text" data-pt-br="Diagrama T-u (Temperatura × Energia Interna)" data-en="T-u Diagram (Temperature × Internal Energy)" data-es="Diagrama T-u (Temperatura × Energía Interna)" data-fr="Diagramme T-u (Température × Énergie Interne)" data-zh="T-u 图 (温度 × 内能)">Diagrama T-u (Temperatura × Energia Interna)</span>
                         </div>
                         <div class="report-diagram-canvas-wrap"><canvas id="reportChartTu"></canvas></div>
                     </div>
                     <div class="report-diagram-item">
                         <div class="report-diagram-label"><i class="fas fa-chart-area" style="margin-right:5px;"></i>
-                            <span class="lang-text" data-pt-br="Diagrama T-h (Temperatura × Entalpia)" data-en="T-h Diagram (Temperature × Enthalpy)" data-es="Diagrama T-h (Temperatura × Entalpía)">Diagrama T-h (Temperatura × Entalpia)</span>
+                            <span class="lang-text" data-pt-br="Diagrama T-h (Temperatura × Entalpia)" data-en="T-h Diagram (Temperature × Enthalpy)" data-es="Diagrama T-h (Temperatura × Entalpía)" data-fr="Diagramme T-h (Température × Enthalpie)" data-zh="T-h 图 (温度 × 焓)">Diagrama T-h (Temperatura × Entalpia)</span>
                         </div>
                         <div class="report-diagram-canvas-wrap"><canvas id="reportChartTh"></canvas></div>
                     </div>
@@ -524,18 +524,18 @@
         <p style="color:#666; margin-top:-8px;" class="lang-text"
            data-pt-br="Seus cálculos são salvos automaticamente neste navegador. Marque até 4 itens para comparar lado a lado."
            data-en="Your calculations are saved automatically in this browser. Select up to 4 items to compare side by side."
-           data-es="Sus cálculos se guardan automáticamente en este navegador. Seleccione hasta 4 elementos para comparar uno al lado del otro.">
+           data-es="Sus cálculos se guardan automáticamente en este navegador. Seleccione hasta 4 elementos para comparar uno al lado del otro." data-fr="Vos calculs sont enregistrés automatiquement dans ce navigateur. Sélectionnez jusqu'à 4 éléments pour les comparer côte à côte." data-zh="您的计算结果会自动保存在此浏览器中。最多可勾选 4 项进行并排对比。">
            Seus cálculos são salvos automaticamente neste navegador. Marque até 4 itens para comparar lado a lado.
         </p>
 
         <div id="historyToolbar" style="display:flex; gap:10px; margin-bottom: 15px; flex-wrap: wrap;">
             <button id="btnCompareSelected" class="btn btn-secondary" style="display:none;" disabled>
                 <i class="fas fa-columns" style="margin-right:6px;"></i>
-                <span class="lang-text" data-pt-br="Comparar Selecionados" data-en="Compare Selected" data-es="Comparar Seleccionados">Comparar Selecionados</span>
+                <span class="lang-text" data-pt-br="Comparar Selecionados" data-en="Compare Selected" data-es="Comparar Seleccionados" data-fr="Comparer la Sélection" data-zh="对比所选项">Comparar Selecionados</span>
             </button>
             <button id="btnClearHistory" class="btn btn-outline">
                 <i class="fas fa-trash" style="margin-right:6px;"></i>
-                <span class="lang-text" data-pt-br="Limpar Histórico" data-en="Clear History" data-es="Limpiar Historial">Limpar Histórico</span>
+                <span class="lang-text" data-pt-br="Limpar Histórico" data-en="Clear History" data-es="Limpiar Historial" data-fr="Effacer l'Historique" data-zh="清空历史记录">Limpar Histórico</span>
             </button>
         </div>
 
@@ -575,7 +575,8 @@
     document.addEventListener('DOMContentLoaded', updateNumberFormatting);
 
     // --- FUNÇÃO AUXILIAR DE TRADUÇÃO PARA JS ---
-    function t(pt, en, es) {
+    function t(pt, en, es, fr, zh) {
+        if (window.termoTranslate) return window.termoTranslate(pt, en, es, fr, zh);
         let lang = localStorage.getItem('preferredLang') || 'pt-br';
         if (lang === 'en') return en;
         if (lang === 'es') return es;

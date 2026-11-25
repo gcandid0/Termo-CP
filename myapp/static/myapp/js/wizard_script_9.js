@@ -25,7 +25,7 @@ function updateLabel() {
                               '<span class="lang-text" ' +
                               'data-pt-br="Digite o valor da Temperatura (°C)" ' +
                               'data-en="Enter the Temperature value (°C)" ' +
-                              'data-es="Introduzca el valor de la Temperatura (°C)">' +
+                              'data-es="Introduzca el valor de la Temperatura (°C)" data-fr="Entrez la valeur de la Température (°C)" data-zh="请输入温度值 (°C)">' +
                               'Digite o valor da Temperatura (°C)</span>';
 
             numberInput.setAttribute('min', '-50');
@@ -37,7 +37,7 @@ function updateLabel() {
                               '<span class="lang-text" ' +
                               'data-pt-br="Digite o valor da Pressão (kPa)" ' +
                               'data-en="Enter the Pressure value (kPa)" ' +
-                              'data-es="Introduzca el valor de la Presión (kPa)">' +
+                              'data-es="Introduzca el valor de la Presión (kPa)" data-fr="Entrez la valeur de la Pression (kPa)" data-zh="请输入压力值 (kPa)">' +
                               'Digite o valor da Pressão (kPa)</span>';
 
             numberInput.setAttribute('min', '400');

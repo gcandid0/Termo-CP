@@ -209,7 +209,7 @@
 <p class="lang-text"
    data-pt-br="Selecione a primeira propriedade conhecida do Gás Ideal (Temperatura, Pressão ou Volume Específico) e informe o valor correspondente. Depois, você indicará a segunda propriedade conhecida."
    data-en="Select the first known property of the Ideal Gas (Temperature, Pressure, or Specific Volume) and enter the corresponding value. Afterwards, you will indicate the second known property."
-   data-es="Seleccione la primera propiedad conocida del Gas Ideal (Temperatura, Presión o Volumen Específico) e ingrese el valor correspondiente. Luego, indicará la segunda propiedad conocida.">
+   data-es="Seleccione la primera propiedad conocida del Gas Ideal (Temperatura, Presión o Volumen Específico) e ingrese el valor correspondiente. Luego, indicará la segunda propiedad conocida." data-fr="Sélectionnez la première propriété connue du Gaz Idéal (Température, Pression ou Volume Spécifique) et saisissez la valeur correspondante. Vous indiquerez ensuite la seconde propriété connue." data-zh="选择理想气体的第一个已知属性（温度、压力或比容）并输入对应数值，随后再输入第二个已知属性。">
     Selecione a primeira propriedade conhecida do Gás Ideal (Temperatura, Pressão ou Volume Específico) e informe o valor correspondente. Depois, você indicará a segunda propriedade conhecida.
 </p>
 {% endblock %}
@@ -219,7 +219,7 @@
     <div class="container">
         <i class="fas fa-sliders-h" style="font-size: 2.2em; color: var(--accent-water, #00A8FF); margin-bottom: 10px;"></i>
 
-        <h2 class="lang-text" data-pt-br="Gás Ideal — Selecione a primeira propriedade" data-en="Ideal Gas — Select the first property" data-es="Gas Ideal — Seleccione la primera propiedad">
+        <h2 class="lang-text" data-pt-br="Gás Ideal — Selecione a primeira propriedade" data-en="Ideal Gas — Select the first property" data-es="Gas Ideal — Seleccione la primera propiedad" data-fr="Gaz Idéal — Sélectionnez la première propriété" data-zh="理想气体 — 选择第一个属性">
             Gás Ideal — Selecione a primeira propriedade
         </h2>
 
@@ -293,7 +293,9 @@
         let phStr = {
             'pt-br': 'Digite o valor',
             'en': 'Enter the value',
-            'es': 'Introduzca el valor'
+            'es': 'Introduzca el valor',
+            'fr': 'Entrez la valeur',
+            'zh': '请输入数值'
         };
 
         // Lógica de Label e Limites com suporte a múltiplos idiomas
@@ -302,7 +304,7 @@
                               '<span class="lang-text" ' +
                               'data-pt-br="Digite o valor da Temperatura (°C)" ' +
                               'data-en="Enter the Temperature value (°C)" ' +
-                              'data-es="Introduzca el valor de la Temperatura (°C)">' +
+                              'data-es="Introduzca el valor de la Temperatura (°C)" data-fr="Entrez la valeur de la Température (°C)" data-zh="请输入温度值 (°C)">' +
                               'Digite o valor da Temperatura (°C)</span>';
             
             numberInput.setAttribute('min', '-250');
@@ -313,7 +315,7 @@
                               '<span class="lang-text" ' +
                               'data-pt-br="Digite o valor da Pressão (kPa)" ' +
                               'data-en="Enter the Pressure value (kPa)" ' +
-                              'data-es="Introduzca el valor de la Presión (kPa)">' +
+                              'data-es="Introduzca el valor de la Presión (kPa)" data-fr="Entrez la valeur de la Pression (kPa)" data-zh="请输入压力值 (kPa)">' +
                               'Digite o valor da Pressão (kPa)</span>';
             
             numberInput.setAttribute('min', '0.1');
@@ -324,14 +326,14 @@
                               '<span class="lang-text" ' +
                               'data-pt-br="Digite o valor do Volume Específico (m³/kg)" ' +
                               'data-en="Enter the Specific Volume value (m³/kg)" ' +
-                              'data-es="Introduzca el valor del Volumen Específico (m³/kg)">' +
+                              'data-es="Introduzca el valor del Volumen Específico (m³/kg)" data-fr="Entrez la valeur de le Volume Spécifique (m³/kg)" data-zh="请输入比容值 (m³/kg)">' +
                               'Digite o valor do Volume Específico (m³/kg)</span>';
             
             numberInput.setAttribute('min', '0.0001');
             numberInput.setAttribute('max', '1000');
         }
 
-        numberInput.placeholder = phStr[currentLang];
+        numberInput.placeholder = phStr[currentLang] || phStr['en'];
         inputField.style.display = 'block';
 
         // Dispara a tradução novamente para formatar o label recém injetado (caso não esteja em pt-br)

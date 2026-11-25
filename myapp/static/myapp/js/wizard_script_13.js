@@ -23,25 +23,25 @@ function updateLabel() {
         // Mapeamento expandido adaptado para o sistema de idiomas dinâmico
         var info = {
             '0': { icon: 'fas fa-temperature-high', min: -50, max: 440,
-                   pt: 'Digite o valor da Temperatura (°C)', en: 'Enter the Temperature value (°C)', es: 'Introduzca el valor de la Temperatura (°C)'},
+                   pt: 'Digite o valor da Temperatura (°C)', en: 'Enter the Temperature value (°C)', es: 'Introduzca el valor de la Temperatura (°C)', fr: 'Entrez la valeur de la Température (°C)', zh: '请输入温度值 (°C)'},
             '1': { icon: 'fas fa-tachometer-alt', min: 40.9, max: 11333.2,
-                   pt: 'Digite o valor da Pressão (kPa)', en: 'Enter the Pressure value (kPa)', es: 'Introduzca el valor de la Presión (kPa)'},
+                   pt: 'Digite o valor da Pressão (kPa)', en: 'Enter the Pressure value (kPa)', es: 'Introduzca el valor de la Presión (kPa)', fr: 'Entrez la valeur de la Pression (kPa)', zh: '请输入压力值 (kPa)'},
             '2': { icon: 'fas fa-cube', min: 0.001424, max: 4.6157,
-                   pt: 'Digite o valor do Volume Específico (m³/kg)', en: 'Enter the Specific Volume value (m³/kg)', es: 'Introduzca el valor del Volumen Específico (m³/kg)'},
+                   pt: 'Digite o valor do Volume Específico (m³/kg)', en: 'Enter the Specific Volume value (m³/kg)', es: 'Introduzca el valor del Volumen Específico (m³/kg)', fr: 'Entrez la valeur du Volume Spécifique (m³/kg)', zh: '请输入比容值 (m³/kg)'},
             '3': { icon: 'fas fa-bolt', min: -43.82, max: 2210.1,
-                   pt: 'Digite o valor da Energia Interna (kJ/kg)', en: 'Enter the Internal Energy value (kJ/kg)', es: 'Introduzca el valor de la Energía Interna (kJ/kg)'},
+                   pt: 'Digite o valor da Energia Interna (kJ/kg)', en: 'Enter the Internal Energy value (kJ/kg)', es: 'Introduzca el valor de la Energía Interna (kJ/kg)', fr: 'Entrez la valeur de l\'Énergie Interne (kJ/kg)', zh: '请输入内能值 (kJ/kg)'},
             '4': { icon: 'fas fa-fire', min: -43.76, max: 2550.4,
-                   pt: 'Digite o valor da Entalpia (kJ/kg)', en: 'Enter the Enthalpy value (kJ/kg)', es: 'Introduzca el valor de la Entalpía (kJ/kg)'},
+                   pt: 'Digite o valor da Entalpia (kJ/kg)', en: 'Enter the Enthalpy value (kJ/kg)', es: 'Introduzca el valor de la Entalpía (kJ/kg)', fr: 'Entrez la valeur de l\'Enthalpie (kJ/kg)', zh: '请输入焓值 (kJ/kg)'},
             '5': { icon: 'fas fa-random', min: -0.1916, max: 7.7045,
-                   pt: 'Digite o valor da Entropia (kJ/kg·K)', en: 'Enter the Entropy value (kJ/kg·K)', es: 'Introduzca el valor de la Entropía (kJ/kg·K)'},
+                   pt: 'Digite o valor da Entropia (kJ/kg·K)', en: 'Enter the Entropy value (kJ/kg·K)', es: 'Introduzca el valor de la Entropía (kJ/kg·K)', fr: 'Entrez la valeur de l\'Entropie (kJ/kg·K)', zh: '请输入熵值 (kJ/kg·K)'},
             '6': { icon: 'fas fa-percentage', min: 0, max: 100,
-                   pt: 'Digite o valor do Título (%)', en: 'Enter the Quality value (%)', es: 'Introduzca el valor del Título (%)'}
+                   pt: 'Digite o valor do Título (%)', en: 'Enter the Quality value (%)', es: 'Introduzca el valor del Título (%)', fr: 'Entrez la valeur du Titre (%)', zh: '请输入干度值 (%)'}
         };
 
         var prop = info[selectedValue];
 
         if (prop) {
-            label.innerHTML = `<i class="${prop.icon}"></i> <span class="lang-text" data-pt-br="${prop.pt}" data-en="${prop.en}" data-es="${prop.es}">${prop.pt}</span>`;
+            label.innerHTML = `<i class="${prop.icon}"></i> <span class="lang-text" data-pt-br="${prop.pt}" data-en="${prop.en}" data-es="${prop.es}" data-fr="${prop.fr || prop.en}" data-zh="${prop.zh || prop.en}">${prop.pt}</span>`;
             numberInput.setAttribute('min', prop.min);
             numberInput.setAttribute('max', prop.max);
         } else {
