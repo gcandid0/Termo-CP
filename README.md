@@ -11,7 +11,7 @@
 
 ### Plataforma web para simulação de estados e processos termodinâmicos em sistemas cilindro-pistão.
 
-<sub>🇧🇷 Português &nbsp;|&nbsp; <a href="./README.en.md">🇺🇸 English</a> &nbsp;|&nbsp; <a href="./README.es.md">🇪🇸 Español</a></sub>
+<sub>🇧🇷 Português &nbsp;|&nbsp; <a href="./README.en.md">🇺🇸 English</a> &nbsp;|&nbsp; <a href="./README.es.md">🇪🇸 Español</a> &nbsp;|&nbsp; <a href="./README.fr.md">🇫🇷 Français</a> &nbsp;|&nbsp; <a href="./README.zh.md">🇨🇳 中文 (简体)</a></sub>
 
 <br/>
 
@@ -23,8 +23,9 @@
 
 <br/>
 
+<a href="https://github.com/gcandid0/Termo-CP/actions/workflows/tests.yml"><img src="https://img.shields.io/github/actions/workflow/status/gcandid0/Termo-CP/tests.yml?branch=main&style=flat-square&label=CI%20%2F%20Testes" alt="CI Status"></a>
 <a href="https://github.com/gcandid0/Termo-CP/stargazers"><img src="https://img.shields.io/github/stars/gcandid0/Termo-CP?style=flat-square&color=f0b429&label=stars" alt="GitHub stars"></a>
-<a href="https://github.com/gcandid0/Termo-CP/commits/main"><img src="https://img.shields.io/github/last-commit/gcandid0/Termo-CP?style=flat-square&color=2b9246&label=ultimo%20commit" alt="Último commit"></a>
+<a href="https://github.com/gcandid0/Termo-CP/commits/main"><img src="https://img.shields.io/github/last-commit/gcandid0/Termo-CP?style=flat-square&color=2b9246&label=%C3%BAltimo%20commit" alt="Último commit"></a>
 <a href="https://github.com/gcandid0/Termo-CP"><img src="https://img.shields.io/github/repo-size/gcandid0/Termo-CP?style=flat-square&color=1a5fb4&label=tamanho" alt="Tamanho do repositório"></a>
 <a href="https://github.com/gcandid0/Termo-CP/issues"><img src="https://img.shields.io/github/issues/gcandid0/Termo-CP?style=flat-square&color=b91c1c&label=issues" alt="Issues"></a>
 
@@ -42,9 +43,10 @@
 
 - [Sobre o TERMO-CP](#sobre-o-termo-cp)
 - [Idiomas](#idiomas)
-- [Substâncias suportadas](#substâncias-suportadas)
-- [Como usar](#como-usar)
+- [Substâncias e Processos Suportados](#substâncias-e-processos-suportados)
 - [Funcionalidades](#funcionalidades)
+- [Como usar](#como-usar)
+- [Testes e Qualidade de Código](#testes-e-qualidade-de-código)
 - [Stack Tecnológica](#stack-tecnológica)
 - [Roadmap](#roadmap)
 - [Contato](#contato)
@@ -59,15 +61,17 @@
 
 O **TERMO-CP** é uma plataforma computacional desenvolvida para a simulação de **estados** e **processos termodinâmicos**, aplicada a substâncias puras e a gases ideais em sistemas fechados do tipo cilindro-pistão.
 
-O projeto tem foco educacional, voltado a estudantes, professores e engenheiros que precisam calcular propriedades termodinâmicas e visualizar transformações de forma rápida, interativa e visual.
+O projeto tem foco educacional, voltado a estudantes, professores e engenheiros que precisam calcular propriedades termodinâmicas, analisar balanços da 1ª e 2ª Leis da Termodinâmica e visualizar transformações de forma rápida, interativa e didática.
 
-**Principais recursos:**
+**Principais destaques:**
 
-- **Cálculo de estados termodinâmicos** - determinação de propriedades (P, T, v, u, h, s, x) a partir de pares de variáveis conhecidas
-- **Simulação de processos** - condições iniciais e finais para transformações completas (isobáricas, isocóricas, isotérmicas, adiabáticas, entre outras)
-- **Visualização 3D interativa** - animação do cilindro-pistão em P5.js (WEBGL) para cada resultado
-- **Relatórios exportáveis** - captura dos resultados via html2canvas
-- **Múltiplas substâncias** - água, amônia, CO₂, R-410a, R-134a, nitrogênio, metano e gás ideal
+- **Cálculo completo de estados termodinâmicos** — determinação de `P`, `T`, `v`, `u`, `h`, `s`, fase e título `x` (em `%` e fração decimal) a partir de pares de propriedades conhecidas, com massa configurável (`m` em kg).
+- **Simulação de processos e encadeamento de ciclos** — cálculo de transformações completas com trabalho (`W`), calor (`Q`), geração de entropia (`Sger`), verificação da 2ª Lei e **Balanço Global do Ciclo** (`W_líq`, `Q_H`, `Q_L`, rendimento térmico `η` e `COP`).
+- **Diagramas termodinâmicos interativos** — visualização em gráficos `P-v`, `T-s`, `h-s`, `T-v` e `P-h` com domo de saturação e ponto crítico.
+- **Memorial de cálculo didático** — deduções teóricas passo a passo e equações aplicadas a cada processo.
+- **Visualização 3D interativa** — animação do conjunto cilindro-pistão em P5.js (WebGL) com controle de volume.
+- **Histórico, comparação e relatórios** — comparação lado a lado de cálculos salvos na sessão e exportação de relatórios como imagem via `html2canvas`.
+- **Ajuda contextual e Tour Guiado** — central de ajuda completa, dicas por página e tour interativo dos botões e resultados.
 
 <br>
 
@@ -81,26 +85,48 @@ O projeto tem foco educacional, voltado a estudantes, professores e engenheiros 
 
 ## Idiomas
 
-A plataforma está disponível em três idiomas, selecionáveis diretamente no menu superior:
+A plataforma está disponível em **5 idiomas**, selecionáveis diretamente no menu superior (com preferência salva no navegador):
 
-🇧🇷 Português &nbsp;|&nbsp; 🇺🇸 English &nbsp;|&nbsp; 🇪🇸 Español
+🇧🇷 **Português** &nbsp;|&nbsp; 🇺🇸 **English** &nbsp;|&nbsp; 🇪🇸 **Español** &nbsp;|&nbsp; 🇫🇷 **Français** &nbsp;|&nbsp; 🇨🇳 **中文 (简体)**
+
+<p align="right"><a href="#topo">↑ voltar ao topo</a></p>
+
+## Substâncias e Processos Suportados
+
+| Substância | Estados | Isobárico (`P = cte`) | Isocórico (`v = cte`) | Isentrópico (`s = cte`) | Isotérmico (`T = cte`) | Politrópico (`pvⁿ = cte`) |
+|---|:---:|:---:|:---:|:---:|:---:|:---:|
+| **Gás Ideal** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| **Água** | ✅ | ✅ | ✅ | ✅ | — | — |
+| **Amônia** | ✅ | ✅ | ✅ | ✅ | — | — |
+| **CO₂** | ✅ | ✅ | ✅ | ✅ | — | — |
+| **R-410A** | ✅ | ✅ | ✅ | ✅ | — | — |
+| **R-134a** | ✅ | ✅ | ✅ | ✅ | — | — |
+| **Nitrogênio** | ✅ | ✅ | ✅ | ✅ | — | — |
+| **Metano** | ✅ | ✅ | ✅ | ✅ | — | — |
 
 <p align="right"><a href="#topo">↑ voltar ao topo</a></p>
 
-## Substâncias suportadas
+---
 
-| Substância | Estados | Processos |
-|---|---|---|
-| Gás Ideal | ✅ | ✅ |
-| Água | ✅ | ✅ |
-| Amônia | ✅ | ✅ |
-| CO₂ | ✅ | ✅ |
-| R-410a | ✅ | ✅ |
-| R-134a | ✅ | ✅ |
-| Nitrogênio | ✅ | ✅ |
-| Metano | ✅ | ✅ |
+## Funcionalidades
+
+### Simulação de Estados
+Informe a massa do sistema e duas propriedades conhecidas de uma substância (pressão, temperatura, volume específico, energia interna, entalpia, entropia ou título). O TERMO-CP valida automaticamente os limites físicos de cada tabela termodinâmica, exibe a faixa válida em tempo real e calcula todas as demais propriedades.
+
+### Simulação de Processos e Ciclos
+Defina a massa, o estado inicial, o tipo de processo e a condição final (ou calor transferido) para obter o estado final, `W`, `Q` e `Sger` com diagnóstico automático pela 2ª Lei da Termodinâmica. É possível encadear múltiplos processos consecutivos para analisar o **balanço global do ciclo** (`W_líq`, `Q_H`, `Q_L`, `η` e `COP`).
+
+### Visualização 3D e Diagramas Interativos
+Cada resultado inclui uma animação 3D do cilindro-pistão em P5.js (com distinção visual entre líquido, vapor e mistura bifásica) e diagramas termodinâmicos interativos com domo de saturação e ponto crítico.
+
+### Memorial Didático, Histórico e Relatórios
+- **Memorial de Cálculo**: exibe as deduções teóricas passo a passo da 1ª e 2ª Leis aplicadas ao processo.
+- **Histórico e Comparação**: guarda os cálculos da sessão no navegador para comparação lado a lado.
+- **Exportação de Relatório**: gera um relatório consolidado pronto para exportação como imagem (`html2canvas`).
 
 <p align="right"><a href="#topo">↑ voltar ao topo</a></p>
+
+---
 
 ## Como usar
 
@@ -108,7 +134,7 @@ A plataforma está disponível em três idiomas, selecionáveis diretamente no m
 > O código-fonte está disponível neste repositório apenas para **visualização e estudo acadêmico**, conforme a [licença](#licença) vigente. Para rodar localmente com fins de pesquisa/avaliação:
 
 **Pré-requisitos:**
-- Python 3
+- Python 3.10+
 - pip
 
 ### Instalação local
@@ -120,7 +146,8 @@ cd Termo-CP
 
 # Crie e ative um ambiente virtual
 python3 -m venv venv
-source venv/bin/activate
+source venv/bin/activate      # Linux / macOS
+# venv\Scripts\activate       # Windows (PowerShell/CMD)
 
 # Instale as dependências
 pip install -r requirements.txt
@@ -146,10 +173,11 @@ Acesse `http://127.0.0.1:8000/` no navegador.
 | python-dotenv | 1.2.2 |
 | sqlparse | 0.5.5 |
 | tzdata | 2026.2 |
+| whitenoise | 6.12.0 |
 
 ### Uso online
 
-Não é necessário instalar nada - acesse diretamente a versão publicada:
+Não é necessário instalar nada — acesse diretamente a versão publicada:
 
 **[gcandid0.pythonanywhere.com →](https://gcandid0.pythonanywhere.com/)**
 
@@ -157,23 +185,20 @@ Não é necessário instalar nada - acesse diretamente a versão publicada:
 
 ---
 
-## Funcionalidades
+## Testes e Qualidade de Código
 
-### Simulação de Estados
+O repositório conta com suíte automatizada de testes (Django `TestCase`) e verificação estática via **Ruff**, executados automaticamente no GitHub Actions:
 
-Informe duas propriedades conhecidas de uma substância (pressão, temperatura, volume específico, título, etc.) e o TERMO-CP calcula automaticamente as demais propriedades termodinâmicas com base nas tabelas de referência (ex.: tabelas B.x para água).
+```bash
+# Executar os testes automatizados (28 testes: cálculos, views, formulários e integridade UTF-8)
+python manage.py test myapp
 
-### Simulação de Processos
+# Verificação de integridade do projeto Django
+python manage.py check
 
-Defina o estado inicial e o tipo de processo (isobárico, isocórico, isotérmico, adiabático, politrópico) para obter o estado final e as trocas de energia (trabalho e calor) envolvidas.
-
-### Visualização do Cilindro-Pistão
-
-Cada resultado é acompanhado de uma animação 3D em P5.js que representa o comportamento do pistão durante o processo, facilitando a compreensão visual do fenômeno.
-
-### Relatórios
-
-Os resultados podem ser exportados como imagem/relatório diretamente da página, usando html2canvas.
+# Análise estática com Ruff (se instalado)
+ruff check myapp termocp
+```
 
 <p align="right"><a href="#topo">↑ voltar ao topo</a></p>
 
@@ -181,8 +206,9 @@ Os resultados podem ser exportados como imagem/relatório diretamente da página
 
 ## Stack Tecnológica
 
-- **Backend:** Python 3 + Django
-- **Frontend:** HTML5, JavaScript, P5.js
+- **Backend:** Python 3 + Django 6.0.5 + WhiteNoise
+- **Frontend:** HTML5, CSS3, JavaScript, P5.js (WebGL), Chart.js, html2canvas
+- **Qualidade & CI:** Django Test Suite + Ruff + GitHub Actions
 - **Deploy:** PythonAnywhere
 - **Configuração:** python-dotenv (`.env` com `SECRET_KEY` e `DEBUG`)
 
@@ -192,11 +218,15 @@ Os resultados podem ser exportados como imagem/relatório diretamente da página
 
 ## Roadmap
 
-<!-- Marque o que já está pronto e o que está planejado -->
-- [x] Cálculo de estados para 8 substâncias
-- [x] Simulação de processos com animação do pistão
-- [x] Exportação de relatório
-- [x] Suporte a PT/EN/ES
+- [x] Cálculo de estados para 8 substâncias com validação pelos limites exatos das tabelas
+- [x] Simulação de processos com animação 3D do cilindro-pistão
+- [x] Diagramas termodinâmicos interativos (`P-v`, `T-s`, `h-s`, `T-v`, `P-h`) com domo de saturação
+- [x] Memorial de cálculo didático passo a passo e verificação da 2ª Lei
+- [x] Encadeamento de processos e Balanço Global do Ciclo (`W_líq`, `Q_H`, `Q_L`, `η`, `COP`)
+- [x] Exportação de relatório (`html2canvas`) e histórico comparativo de cálculos
+- [x] Central de Ajuda, ajuda contextual e Tour Guiado interativo
+- [x] Suporte completo a 5 idiomas (PT / EN / ES / FR / ZH)
+- [x] Suíte de testes automatizados e pipeline CI com GitHub Actions
 
 <p align="right"><a href="#topo">↑ voltar ao topo</a></p>
 
@@ -204,14 +234,14 @@ Os resultados podem ser exportados como imagem/relatório diretamente da página
 
 ## Contato
 
-Dúvidas, sugestões ou relatos de problemas podem ser enviados pelo [formulário de contato](https://gcandid0.pythonanywhere.com/) da plataforma, por [issues no GitHub](https://github.com/gcandid0/Termo-CP/issues) ou diretamente pelos e-mails abaixo.
+Dúvidas, sugestões ou relatos de problemas podem ser enviados pelo [formulário de contato](https://gcandid0.pythonanywhere.com/contato/) da plataforma, por [issues no GitHub](https://github.com/gcandid0/Termo-CP/issues) ou diretamente pelos e-mails abaixo.
 
 ## Autores
 
 Projeto desenvolvido no âmbito de pesquisa acadêmica da **Universidade Federal de Rondonópolis (UFR)**:
 
 - **Gabriel Candido Messias dos Santos** — [gabrielcandidomds@gmail.com](mailto:gabrielcandidomds@gmail.com) · [Lattes](http://lattes.cnpq.br/6696786236047929) · [LinkedIn](https://www.linkedin.com/in/gabriel-candido-235637226/)
-- **Fábio Basaglia Fonseca** — [fabio.fonseca@ufr.edu.br](mailto:fabio.fonseca@ufr.edu.br)
+- **Fábio Basaglia Fonseca** — [fabio.fonseca@ufr.edu.br](mailto:fabio.fonseca@ufr.edu.br) · [Lattes](http://lattes.cnpq.br/4673164208199862)
 
 ## Licença
 
