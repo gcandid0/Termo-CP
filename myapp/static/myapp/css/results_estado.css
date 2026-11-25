@@ -520,3 +520,158 @@
         grid-template-columns: 1fr !important;
     }
 }
+
+/* ============================================================================
+   DIAGRAMA SEM ROLAGEM + ZOOM INTERATIVO + ADAPTAÇÃO NOTEBOOK (v11)
+   ============================================================================ */
+#diagramModal {
+    overflow: hidden !important;
+}
+#diagramModal .modal-content.modal-chart {
+    width: min(1040px, 94vw) !important;
+    max-width: 1040px !important;
+    height: min(90vh, 690px) !important;
+    max-height: 92vh !important;
+    margin: 4vh auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: hidden !important;
+    padding: 0 20px 14px 20px !important;
+}
+#diagramModal #closeDiagramBtn {
+    top: 10px !important;
+    right: 14px !important;
+    width: 32px !important;
+    height: 32px !important;
+    font-size: 20px !important;
+}
+#diagramModal .modal-content.modal-chart > h3 {
+    margin: 0 -20px 10px -20px !important;
+    padding: 13px 52px 13px 20px !important;
+    font-size: 1.14em !important;
+    flex-shrink: 0;
+}
+#diagramModal .chart-controls {
+    padding: 8px 12px !important;
+    margin-bottom: 10px !important;
+    gap: 8px !important;
+    flex-shrink: 0;
+}
+#diagramModal .chart-controls select {
+    padding: 7px 10px !important;
+    font-size: 0.88em !important;
+    min-width: 210px !important;
+}
+#diagramModal .chart-canvas-wrapper {
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    height: auto !important;
+    position: relative !important;
+    padding: 10px 14px !important;
+    overflow: hidden !important;
+    cursor: grab;
+    user-select: none;
+}
+#diagramModal .chart-canvas-wrapper.is-panning {
+    cursor: grabbing;
+}
+#diagramModal .chart-canvas-wrapper canvas {
+    width: 100% !important;
+    height: 100% !important;
+    display: block;
+}
+.diagram-didactic-note {
+    margin-top: 8px !important;
+    padding: 7px 12px !important;
+    font-size: 0.82em !important;
+    line-height: 1.38 !important;
+    flex-shrink: 0;
+}
+.diagram-zoom-group {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: #f1f5f9;
+    border: 1px solid #cbd5e1;
+    border-radius: 9px;
+    padding: 2px;
+}
+.diagram-zoom-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    min-width: 30px;
+    height: 30px;
+    padding: 0 8px;
+    border: none;
+    border-radius: 7px;
+    background: transparent;
+    color: #1b3668;
+    font-size: 0.84em;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease;
+    font-family: inherit;
+}
+.diagram-zoom-btn:hover {
+    background: #ffffff;
+    color: #0d6ab0;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+}
+
+/* Adaptação global das telas de resultados para notebooks (720p / 768p / 900p) */
+@media (max-height: 820px), (max-width: 1440px) {
+    .main-container,
+    .results-wrapper,
+    .results-container {
+        padding: 10px 18px !important;
+        gap: 12px !important;
+    }
+    .top-row {
+        gap: 14px !important;
+    }
+    .state-card,
+    .results-card {
+        padding: 13px 16px !important;
+    }
+    .state-card h2,
+    .results-card h2 {
+        font-size: 1.08em !important;
+        margin-bottom: 8px !important;
+        padding-bottom: 6px !important;
+    }
+    .data-row {
+        padding: 5px 0 !important;
+        font-size: 0.9em !important;
+    }
+    .bottom-row {
+        padding: 10px 18px !important;
+        gap: 10px !important;
+    }
+    .bottom-row h3 {
+        font-size: 0.98em !important;
+        margin-bottom: 4px !important;
+    }
+    .process-results {
+        gap: 16px !important;
+    }
+    .process-item {
+        font-size: 0.88em !important;
+    }
+    .icon-btn {
+        width: 42px !important;
+        height: 42px !important;
+        font-size: 1em !important;
+    }
+    #didacticModal .modal-content,
+    #reportModal .modal-content,
+    #historyModal .modal-content {
+        margin: 2.5vh auto !important;
+        max-height: 94vh !important;
+    }
+    .modal-mini-btn {
+        padding: 6px 10px !important;
+        font-size: 0.82em !important;
+    }
+}

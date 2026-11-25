@@ -1810,3 +1810,258 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 });
+
+
+// ============ ZOOM E PAN NATIVOS PARA DIAGRAMAS CHART.JS (LINEAR E LOG) (v11) ============
+document.addEventListener('DOMContentLoaded', function () {
+    var diagModal = document.getElementById('diagramModal');
+    if (!diagModal) return;
+
+    var ZOOM_I18N = {
+        'pt-br': { zoomIn: 'Aproximar (+)', zoomOut: 'Afastar (-)', reset: 'Resetar Zoom', hint: 'Role o mouse para dar zoom · Arraste para mover · Duplo clique para resetar' },
+        'en': { zoomIn: 'Zoom In (+)', zoomOut: 'Zoom Out (-)', reset: 'Reset Zoom', hint: 'Scroll to zoom · Drag to pan · Double-click to reset' },
+        'es': { zoomIn: 'Acercar (+)', zoomOut: 'Alejar (-)', reset: 'Restablecer', hint: 'Rueda del ratón para zoom · Arrastre para mover · Doble clic para restablecer' },
+        'fr': { zoomIn: 'Zoom +', zoomOut: 'Zoom -', reset: 'Réinitialiser', hint: 'Molette pour zoomer · Glisser pour déplacer · Double-clic pour réinitialiser' },
+        'zh': { zoomIn: '放大 (+)', zoomOut: '缩小 (-)', reset: '重置缩放', hint: '滚轮缩放 · 拖动平移 · 双击重置视图' }
+    };
+
+    function getZoomDict() {
+        var lang = localStorage.getItem('preferredLang') || 'pt-br';
+        return ZOOM_I18N[lang] || ZOOM_I18N['pt-br'];
+    }
+
+    function getActiveChart() {
+        var canvas = diagModal.querySelector('canvas');
+        if (!canvas || typeof Chart === 'undefined' || typeof Chart.getChart !== 'function') return null;
+        return Chart.getChart(canvas);
+    }
+
+    function ensureOrigBounds(chart) {
+        if (!chart || !chart.scales) return;
+        if (!chart._termoOrigBounds) {
+            chart._termoOrigBounds = {};
+            ['x', 'y'].forEach(function (axis) {
+                var sc = chart.scales[axis];
+                if (sc) {
+                    chart._termoOrigBounds[axis] = {
+                        min: sc.min,
+                        max: sc.max,
+                        type: sc.type,
+                        optMin: chart.options.scales && chart.options.scales[axis] ? chart.options.scales[axis].min : undefined,
+                        optMax: chart.options.scales && chart.options.scales[axis] ? chart.options.scales[axis].max : undefined
+                    };
+                }
+            });
+        }
+    }
+
+    function applyAxisZoom(scale, optScale, factor, ratio) {
+        if (!scale || !optScale) return;
+        var min = scale.min;
+        var max = scale.max;
+        if (typeof min !== 'number' || typeof max !== 'number' || isNaN(min) || isNaN(max)) return;
+
+        if (scale.type === 'logarithmic') {
+            var logMin = Math.log10(Math.max(min, 1e-12));
+            var logMax = Math.log10(Math.max(max, 1e-11));
+            var span = logMax - logMin;
+            if (span <= 0) return;
+            var center = logMin + span * ratio;
+            var newSpan = Math.max(0.05, Math.min(span * factor, 12));
+            var newMin = Math.pow(10, center - newSpan * ratio);
+            var newMax = Math.pow(10, center + newSpan * (1 - ratio));
+            if (isFinite(newMin) && isFinite(newMax) && newMin > 0 && newMax > newMin) {
+                optScale.min = newMin;
+                optScale.max = newMax;
+            }
+        } else {
+            var spanLin = max - min;
+            if (spanLin <= 0) return;
+            var centerLin = min + spanLin * ratio;
+            var newSpanLin = spanLin * factor;
+            if (newSpanLin <= 1e-9) return;
+            optScale.min = centerLin - newSpanLin * ratio;
+            optScale.max = centerLin + newSpanLin * (1 - ratio);
+        }
+    }
+
+    function zoomChart(factor, ratioX, ratioY) {
+        var chart = getActiveChart();
+        if (!chart) return;
+        ensureOrigBounds(chart);
+        if (!chart.options.scales) chart.options.scales = {};
+        if (!chart.options.scales.x) chart.options.scales.x = {};
+        if (!chart.options.scales.y) chart.options.scales.y = {};
+
+        applyAxisZoom(chart.scales.x, chart.options.scales.x, factor, ratioX !== undefined ? ratioX : 0.5);
+        applyAxisZoom(chart.scales.y, chart.options.scales.y, factor, ratioY !== undefined ? ratioY : 0.5);
+        chart.update('none');
+    }
+
+    function resetZoom() {
+        var chart = getActiveChart();
+        if (!chart || !chart._termoOrigBounds) return;
+        ['x', 'y'].forEach(function (axis) {
+            if (chart.options.scales && chart.options.scales[axis] && chart._termoOrigBounds[axis]) {
+                var ob = chart._termoOrigBounds[axis];
+                if (ob.optMin === undefined) delete chart.options.scales[axis].min;
+                else chart.options.scales[axis].min = ob.optMin;
+                if (ob.optMax === undefined) delete chart.options.scales[axis].max;
+                else chart.options.scales[axis].max = ob.optMax;
+            }
+        });
+        chart._termoOrigBounds = null;
+        chart.update('none');
+    }
+
+    // Inject Zoom +, -, Reset buttons into .chart-controls
+    function renderZoomControls() {
+        var controls = diagModal.querySelector('.chart-controls');
+        if (!controls) return;
+        var dict = getZoomDict();
+        var oldGrp = controls.querySelector('.diagram-zoom-group');
+        if (oldGrp) oldGrp.remove();
+
+        var grp = document.createElement('div');
+        grp.className = 'diagram-zoom-group';
+
+        var bIn = document.createElement('button');
+        bIn.type = 'button';
+        bIn.className = 'diagram-zoom-btn';
+        bIn.title = dict.zoomIn;
+        bIn.innerHTML = '<i class="fas fa-search-plus"></i>';
+        bIn.addEventListener('click', function () { zoomChart(0.75, 0.5, 0.5); });
+
+        var bOut = document.createElement('button');
+        bOut.type = 'button';
+        bOut.className = 'diagram-zoom-btn';
+        bOut.title = dict.zoomOut;
+        bOut.innerHTML = '<i class="fas fa-search-minus"></i>';
+        bOut.addEventListener('click', function () { zoomChart(1.33, 0.5, 0.5); });
+
+        var bReset = document.createElement('button');
+        bReset.type = 'button';
+        bReset.className = 'diagram-zoom-btn';
+        bReset.title = dict.reset;
+        bReset.innerHTML = '<i class="fas fa-undo-alt"></i>';
+        bReset.addEventListener('click', resetZoom);
+
+        grp.appendChild(bIn);
+        grp.appendChild(bOut);
+        grp.appendChild(bReset);
+
+        var exportGrp = controls.querySelector('.diagram-export-group');
+        if (exportGrp) controls.insertBefore(grp, exportGrp);
+        else controls.appendChild(grp);
+    }
+
+    // Attach wheel zoom, drag pan, and double-click reset on canvas wrapper
+    var canvasWrap = diagModal.querySelector('.chart-canvas-wrapper');
+    if (canvasWrap) {
+        canvasWrap.addEventListener('wheel', function (e) {
+            var chart = getActiveChart();
+            if (!chart || !chart.chartArea) return;
+            e.preventDefault();
+            e.stopPropagation();
+
+            var rect = chart.canvas.getBoundingClientRect();
+            var px = e.clientX - rect.left;
+            var py = e.clientY - rect.top;
+            var ca = chart.chartArea;
+            var rx = Math.max(0, Math.min(1, (px - ca.left) / Math.max(1, ca.right - ca.left)));
+            var ry = Math.max(0, Math.min(1, (ca.bottom - py) / Math.max(1, ca.bottom - ca.top)));
+            var factor = e.deltaY < 0 ? 0.82 : 1.22;
+            zoomChart(factor, rx, ry);
+        }, { passive: false });
+
+        // Drag pan
+        var panning = false;
+        var lastX = 0, lastY = 0;
+
+        canvasWrap.addEventListener('mousedown', function (e) {
+            if (e.button !== 0) return;
+            var chart = getActiveChart();
+            if (!chart) return;
+            ensureOrigBounds(chart);
+            panning = true;
+            lastX = e.clientX;
+            lastY = e.clientY;
+            canvasWrap.classList.add('is-panning');
+        });
+
+        window.addEventListener('mousemove', function (e) {
+            if (!panning) return;
+            var chart = getActiveChart();
+            if (!chart || !chart.chartArea) return;
+            var dx = e.clientX - lastX;
+            var dy = e.clientY - lastY;
+            lastX = e.clientX;
+            lastY = e.clientY;
+
+            var ca = chart.chartArea;
+            var w = Math.max(1, ca.right - ca.left);
+            var h = Math.max(1, ca.bottom - ca.top);
+
+            if (!chart.options.scales) chart.options.scales = {};
+            if (!chart.options.scales.x) chart.options.scales.x = {};
+            if (!chart.options.scales.y) chart.options.scales.y = {};
+
+            // Pan X
+            var sx = chart.scales.x;
+            if (sx && typeof sx.min === 'number' && typeof sx.max === 'number') {
+                if (sx.type === 'logarithmic') {
+                    var lx1 = Math.log10(Math.max(sx.min, 1e-12));
+                    var lx2 = Math.log10(Math.max(sx.max, 1e-11));
+                    var shiftLx = -(dx / w) * (lx2 - lx1);
+                    chart.options.scales.x.min = Math.pow(10, lx1 + shiftLx);
+                    chart.options.scales.x.max = Math.pow(10, lx2 + shiftLx);
+                } else {
+                    var shiftX = -(dx / w) * (sx.max - sx.min);
+                    chart.options.scales.x.min = sx.min + shiftX;
+                    chart.options.scales.x.max = sx.max + shiftX;
+                }
+            }
+
+            // Pan Y
+            var sy = chart.scales.y;
+            if (sy && typeof sy.min === 'number' && typeof sy.max === 'number') {
+                if (sy.type === 'logarithmic') {
+                    var ly1 = Math.log10(Math.max(sy.min, 1e-12));
+                    var ly2 = Math.log10(Math.max(sy.max, 1e-11));
+                    var shiftLy = (dy / h) * (ly2 - ly1);
+                    chart.options.scales.y.min = Math.pow(10, ly1 + shiftLy);
+                    chart.options.scales.y.max = Math.pow(10, ly2 + shiftLy);
+                } else {
+                    var shiftY = (dy / h) * (sy.max - sy.min);
+                    chart.options.scales.y.min = sy.min + shiftY;
+                    chart.options.scales.y.max = sy.max + shiftY;
+                }
+            }
+
+            chart.update('none');
+        });
+
+        window.addEventListener('mouseup', function () {
+            if (!panning) return;
+            panning = false;
+            canvasWrap.classList.remove('is-panning');
+        });
+
+        canvasWrap.addEventListener('dblclick', resetZoom);
+    }
+
+    // Ensure chart resizes cleanly whenever diagramModal becomes visible
+    new MutationObserver(function () {
+        if (diagModal.style.display === 'block' || diagModal.style.display === 'flex') {
+            setTimeout(function () {
+                var chart = getActiveChart();
+                if (chart) chart.resize();
+            }, 60);
+        }
+    }).observe(diagModal, { attributes: true, attributeFilter: ['style', 'class'] });
+
+    setTimeout(renderZoomControls, 140);
+    document.addEventListener('languageChanged', function () {
+        setTimeout(renderZoomControls, 110);
+    });
+});
