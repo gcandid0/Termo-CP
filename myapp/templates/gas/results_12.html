@@ -36,11 +36,11 @@
     <!-- COLUNA ESQUERDA -->
     <div class="side-column" style="display: flex; flex-direction: column; gap: 15px; flex: 1; min-height: 0;">
         <div class="state-card" style="flex: 1;">
-            <h2><i class="fas fa-play-circle"></i> <span id="stateHeaderInitial" class="lang-text" data-pt-br="Estado Inicial (1)" data-en="Initial State (1)" data-es="Estado Inicial (1)" data-fr="État Initial (1)">Estado Inicial (1)</span></h2>
-            <div class="data-row" data-tour-pt-br="Temperatura da substância nesse estado, em graus Celsius." data-tour-en="Temperature of the substance at this state, in degrees Celsius." data-tour-es="Temperatura de la sustancia en este estado, en grados Celsius."><span class="data-label lang-text" data-pt-br="Temperatura (T):" data-en="Temperature (T):" data-es="Temperatura (T):" data-fr="Température (T) :">Temperatura (T):</span><span class="data-value"><span class="format-num">{{ T1 }}</span> °C</span></div>
-            <div class="data-row" data-tour-pt-br="Volume ocupado por unidade de massa da substância (v = V/m), em m³/kg." data-tour-en="Volume occupied per unit of mass of the substance (v = V/m), in m³/kg." data-tour-es="Volumen ocupado por unidad de masa de la sustancia (v = V/m), en m³/kg."><span class="data-label lang-text" data-pt-br="Volume específico (v):" data-en="Specific Volume (v):" data-es="Volumen específico (v):" data-fr="Volume spécifique (v) :">Volume específico (v):</span><span class="data-value"><span class="format-num">{{ v1 }}</span> m³/kg</span></div>
-            <div class="data-row" data-tour-pt-br="Pressão absoluta da substância nesse estado, em quilopascal (kPa)." data-tour-en="Absolute pressure of the substance at this state, in kilopascals (kPa)." data-tour-es="Presión absoluta de la sustancia en este estado, en kilopascales (kPa)."><span class="data-label lang-text" data-pt-br="Pressão (p):" data-en="Pressure (p):" data-es="Presión (p):" data-fr="Pression (p) :">Pressão (p):</span><span class="data-value"><span class="format-num">{{ p1 }}</span> kPa</span></div>
-            <div class="data-row" data-tour-pt-br="Quantidade de massa da substância considerada no sistema, usada em todos os cálculos de calor, trabalho e entropia." data-tour-en="Amount of mass of the substance considered in the system, used in all heat, work and entropy calculations." data-tour-es="Cantidad de masa de la sustancia considerada en el sistema, usada en todos los cálculos de calor, trabajo y entropía."><span class="data-label lang-text" data-pt-br="Massa (m):" data-en="Mass (m):" data-es="Masa (m):" data-fr="Masse (m) :">Massa (m):</span><span class="data-value"><span class="format-num">{{ massa|default:"1,0" }}</span> kg</span></div>
+            <h2><i class="fas fa-play-circle"></i> <span id="stateHeaderInitial" class="lang-text" data-pt-br="Estado Inicial (1)" data-en="Initial State (1)" data-es="Estado Inicial (1)" data-fr="État Initial (1)" data-zh="初始状态 (1)">Estado Inicial (1)</span></h2>
+            <div class="data-row" data-tour-pt-br="Temperatura da substância nesse estado, em graus Celsius." data-tour-en="Temperature of the substance at this state, in degrees Celsius." data-tour-es="Temperatura de la sustancia en este estado, en grados Celsius."><span class="data-label lang-text" data-pt-br="Temperatura (T):" data-en="Temperature (T):" data-es="Temperatura (T):" data-fr="Température (T) :" data-zh="温度 (T)：">Temperatura (T):</span><span class="data-value"><span class="format-num">{{ T1 }}</span> °C</span></div>
+            <div class="data-row" data-tour-pt-br="Volume ocupado por unidade de massa da substância (v = V/m), em m³/kg." data-tour-en="Volume occupied per unit of mass of the substance (v = V/m), in m³/kg." data-tour-es="Volumen ocupado por unidad de masa de la sustancia (v = V/m), en m³/kg."><span class="data-label lang-text" data-pt-br="Volume específico (v):" data-en="Specific Volume (v):" data-es="Volumen específico (v):" data-fr="Volume spécifique (v) :" data-zh="比容 (v)：">Volume específico (v):</span><span class="data-value"><span class="format-num">{{ v1 }}</span> m³/kg</span></div>
+            <div class="data-row" data-tour-pt-br="Pressão absoluta da substância nesse estado, em quilopascal (kPa)." data-tour-en="Absolute pressure of the substance at this state, in kilopascals (kPa)." data-tour-es="Presión absoluta de la sustancia en este estado, en kilopascales (kPa)."><span class="data-label lang-text" data-pt-br="Pressão (p):" data-en="Pressure (p):" data-es="Presión (p):" data-fr="Pression (p) :" data-zh="压力 (p)：">Pressão (p):</span><span class="data-value"><span class="format-num">{{ p1 }}</span> kPa</span></div>
+            <div class="data-row" data-tour-pt-br="Quantidade de massa da substância considerada no sistema, usada em todos os cálculos de calor, trabalho e entropia." data-tour-en="Amount of mass of the substance considered in the system, used in all heat, work and entropy calculations." data-tour-es="Cantidad de masa de la sustancia considerada en el sistema, usada en todos los cálculos de calor, trabajo y entropía."><span class="data-label lang-text" data-pt-br="Massa (m):" data-en="Mass (m):" data-es="Masa (m):" data-fr="Masse (m) :" data-zh="质量 (m)：">Massa (m):</span><span class="data-value"><span class="format-num">{{ massa|default:"1,0" }}</span> kg</span></div>
         </div>
 
         <div class="state-card constants-card" style="flex: 0 0 auto;">
@@ -54,8 +54,8 @@
     <div class="center-column">
         <div class="slider-mini-container" data-tour-pt-br="Arraste para visualizar como o pistão e o volume do cilindro mudam entre o estado inicial e o estado final do processo." data-tour-en="Drag to see how the piston and cylinder volume change between the initial and final states of the process." data-tour-es="Arrastre para visualizar cómo cambian el pistón y el volumen del cilindro entre el estado inicial y el estado final del proceso." data-tour-label-pt-br="Controle do pistão" data-tour-label-en="Piston control" data-tour-label-es="Control del pistón">
             <h4 id="volumeSliderLabel">                <i class="fas fa-eye"></i>
-                <span class="lang-text" data-pt-br="Visualizando:" data-en="Viewing:" data-es="Viendo:" data-fr="Affichage :">Visualizando:</span>
-                <span id="volumeValue" style="color: var(--secondary-color);" class="lang-text" data-pt-br="Estado Inicial" data-en="Initial State" data-es="Estado Inicial" data-fr="État Initial">Estado Inicial</span>
+                <span class="lang-text" data-pt-br="Visualizando:" data-en="Viewing:" data-es="Viendo:" data-fr="Affichage :" data-zh="当前显示：">Visualizando:</span>
+                <span id="volumeValue" style="color: var(--secondary-color);" class="lang-text" data-pt-br="Estado Inicial" data-en="Initial State" data-es="Estado Inicial" data-fr="État Initial" data-zh="初始状态">Estado Inicial</span>
             </h4>
             <input type="range" id="volumeSlider" min="1" max="2" step="1" value="1" aria-labelledby="volumeSliderLabel">
             <div style="display: flex; justify-content: space-between; font-size: 0.75em; color: #666; padding: 0 10%; font-weight: bold;">
@@ -69,7 +69,7 @@
             <div class="legend-container">
                 <div class="legend-item"><span class="legend-color legend-cilindro"></span> <span class="lang-text" data-pt-br="Cilindro" data-en="Cylinder" data-es="Cilindro">Cilindro</span></div>
                 <div class="legend-item"><span class="legend-color legend-pistao"></span> <span class="lang-text" data-pt-br="Pistão" data-en="Piston" data-es="Pistón">Pistão</span></div>
-                <div class="legend-item"><span class="legend-color legend-gas"></span> <span class="lang-text" data-pt-br="Gás Ideal" data-en="Ideal Gas" data-es="Gas Ideal" data-fr="Gaz Idéal">Gás Ideal</span></div>
+                <div class="legend-item"><span class="legend-color legend-gas"></span> <span class="lang-text" data-pt-br="Gás Ideal" data-en="Ideal Gas" data-es="Gas Ideal" data-fr="Gaz Idéal" data-zh="理想气体">Gás Ideal</span></div>
             </div>
         </div>
     </div>
@@ -77,11 +77,11 @@
     <!-- COLUNA DIREITA -->
     <div class="side-column" style="display: flex; flex-direction: column; gap: 15px; flex: 1; min-height: 0;">
         <div class="state-card final-state" style="flex: 1;">
-            <h2><i class="fas fa-stop-circle"></i> <span id="stateHeaderFinal" class="lang-text" data-pt-br="Estado Final (2)" data-en="Final State (2)" data-es="Estado Final (2)" data-fr="État Final (2)">Estado Final (2)</span></h2>
-            <div class="data-row" data-tour-pt-br="Temperatura da substância nesse estado, em graus Celsius." data-tour-en="Temperature of the substance at this state, in degrees Celsius." data-tour-es="Temperatura de la sustancia en este estado, en grados Celsius."><span class="data-label lang-text" data-pt-br="Temperatura (T):" data-en="Temperature (T):" data-es="Temperatura (T):" data-fr="Température (T) :">Temperatura (T):</span><span class="data-value"><span class="format-num">{{ T2 }}</span> °C</span></div>
-            <div class="data-row" data-tour-pt-br="Volume ocupado por unidade de massa da substância (v = V/m), em m³/kg." data-tour-en="Volume occupied per unit of mass of the substance (v = V/m), in m³/kg." data-tour-es="Volumen ocupado por unidad de masa de la sustancia (v = V/m), en m³/kg."><span class="data-label lang-text" data-pt-br="Volume específico (v):" data-en="Specific Volume (v):" data-es="Volumen específico (v):" data-fr="Volume spécifique (v) :">Volume específico (v):</span><span class="data-value"><span class="format-num">{{ v2 }}</span> m³/kg</span></div>
-            <div class="data-row" data-tour-pt-br="Pressão absoluta da substância nesse estado, em quilopascal (kPa)." data-tour-en="Absolute pressure of the substance at this state, in kilopascals (kPa)." data-tour-es="Presión absoluta de la sustancia en este estado, en kilopascales (kPa)."><span class="data-label lang-text" data-pt-br="Pressão (p):" data-en="Pressure (p):" data-es="Presión (p):" data-fr="Pression (p) :">Pressão (p):</span><span class="data-value"><span class="format-num">{{ p2 }}</span> kPa</span></div>
-            <div class="data-row" data-tour-pt-br="Quantidade de massa da substância considerada no sistema, usada em todos os cálculos de calor, trabalho e entropia." data-tour-en="Amount of mass of the substance considered in the system, used in all heat, work and entropy calculations." data-tour-es="Cantidad de masa de la sustancia considerada en el sistema, usada en todos los cálculos de calor, trabajo y entropía."><span class="data-label lang-text" data-pt-br="Massa (m):" data-en="Mass (m):" data-es="Masa (m):" data-fr="Masse (m) :">Massa (m):</span><span class="data-value"><span class="format-num">{{ massa|default:"1,0" }}</span> kg</span></div>
+            <h2><i class="fas fa-stop-circle"></i> <span id="stateHeaderFinal" class="lang-text" data-pt-br="Estado Final (2)" data-en="Final State (2)" data-es="Estado Final (2)" data-fr="État Final (2)" data-zh="最终状态 (2)">Estado Final (2)</span></h2>
+            <div class="data-row" data-tour-pt-br="Temperatura da substância nesse estado, em graus Celsius." data-tour-en="Temperature of the substance at this state, in degrees Celsius." data-tour-es="Temperatura de la sustancia en este estado, en grados Celsius."><span class="data-label lang-text" data-pt-br="Temperatura (T):" data-en="Temperature (T):" data-es="Temperatura (T):" data-fr="Température (T) :" data-zh="温度 (T)：">Temperatura (T):</span><span class="data-value"><span class="format-num">{{ T2 }}</span> °C</span></div>
+            <div class="data-row" data-tour-pt-br="Volume ocupado por unidade de massa da substância (v = V/m), em m³/kg." data-tour-en="Volume occupied per unit of mass of the substance (v = V/m), in m³/kg." data-tour-es="Volumen ocupado por unidad de masa de la sustancia (v = V/m), en m³/kg."><span class="data-label lang-text" data-pt-br="Volume específico (v):" data-en="Specific Volume (v):" data-es="Volumen específico (v):" data-fr="Volume spécifique (v) :" data-zh="比容 (v)：">Volume específico (v):</span><span class="data-value"><span class="format-num">{{ v2 }}</span> m³/kg</span></div>
+            <div class="data-row" data-tour-pt-br="Pressão absoluta da substância nesse estado, em quilopascal (kPa)." data-tour-en="Absolute pressure of the substance at this state, in kilopascals (kPa)." data-tour-es="Presión absoluta de la sustancia en este estado, en kilopascales (kPa)."><span class="data-label lang-text" data-pt-br="Pressão (p):" data-en="Pressure (p):" data-es="Presión (p):" data-fr="Pression (p) :" data-zh="压力 (p)：">Pressão (p):</span><span class="data-value"><span class="format-num">{{ p2 }}</span> kPa</span></div>
+            <div class="data-row" data-tour-pt-br="Quantidade de massa da substância considerada no sistema, usada em todos os cálculos de calor, trabalho e entropia." data-tour-en="Amount of mass of the substance considered in the system, used in all heat, work and entropy calculations." data-tour-es="Cantidad de masa de la sustancia considerada en el sistema, usada en todos los cálculos de calor, trabajo y entropía."><span class="data-label lang-text" data-pt-br="Massa (m):" data-en="Mass (m):" data-es="Masa (m):" data-fr="Masse (m) :" data-zh="质量 (m)：">Massa (m):</span><span class="data-value"><span class="format-num">{{ massa|default:"1,0" }}</span> kg</span></div>
         </div>
 
         <div class="state-card constants-card final-state" style="flex: 0 0 auto;">
@@ -96,37 +96,37 @@
     <h3><i class="fas fa-chart-line"></i> <span class="lang-text" data-pt-br="Resultados do Processo — Gás Ideal" data-en="Process Results — Ideal Gas" data-es="Resultados del Proceso — Gas Ideal">Resultados do Processo — Gás Ideal</span></h3>
 
     <div class="process-results">
-        <div class="process-item" data-tour-pt-br="Quantidade de calor trocado entre o sistema e a vizinhança durante o processo (positivo = calor recebido)." data-tour-en="Amount of heat exchanged between the system and the surroundings during the process (positive = heat received)." data-tour-es="Cantidad de calor intercambiado entre el sistema y el entorno durante el proceso (positivo = calor recibido)."><span class="lang-text" data-pt-br="Calor (Q)" data-en="Heat (Q)" data-es="Calor (Q)" data-fr="Chaleur (Q)">Calor (Q)</span><strong><span class="format-num">0</span> kJ</strong></div>
-        <div class="process-item" data-tour-pt-br="Trabalho realizado pelo (ou sobre o) sistema durante o processo, calculado pela área sob a curva P-v." data-tour-en="Work done by (or on) the system during the process, calculated as the area under the P-v curve." data-tour-es="Trabajo realizado por (o sobre) el sistema durante el proceso, calculado como el área bajo la curva P-v."><span class="lang-text" data-pt-br="Trabalho (W)" data-en="Work (W)" data-es="Trabajo (W)" data-fr="Travail (W)">Trabalho (W)</span><strong><span class="format-num abs-num">{{ W12 }}</span> kJ</strong></div>
+        <div class="process-item" data-tour-pt-br="Quantidade de calor trocado entre o sistema e a vizinhança durante o processo (positivo = calor recebido)." data-tour-en="Amount of heat exchanged between the system and the surroundings during the process (positive = heat received)." data-tour-es="Cantidad de calor intercambiado entre el sistema y el entorno durante el proceso (positivo = calor recibido)."><span class="lang-text" data-pt-br="Calor (Q)" data-en="Heat (Q)" data-es="Calor (Q)" data-fr="Chaleur (Q)" data-zh="热量 (Q)">Calor (Q)</span><strong><span class="format-num">0</span> kJ</strong></div>
+        <div class="process-item" data-tour-pt-br="Trabalho realizado pelo (ou sobre o) sistema durante o processo, calculado pela área sob a curva P-v." data-tour-en="Work done by (or on) the system during the process, calculated as the area under the P-v curve." data-tour-es="Trabajo realizado por (o sobre) el sistema durante el proceso, calculado como el área bajo la curva P-v."><span class="lang-text" data-pt-br="Trabalho (W)" data-en="Work (W)" data-es="Trabajo (W)" data-fr="Travail (W)" data-zh="功 (W)">Trabalho (W)</span><strong><span class="format-num abs-num">{{ W12 }}</span> kJ</strong></div>
         <div class="process-item"><span class="lang-text" data-pt-br="Entropia Gerada (Sger)" data-en="Generated Entropy (Sger)" data-es="Entropía Generada (Sger)">Entropia Gerada (S<sub>ger</sub>)</span><strong><span class="format-num">0</span> kJ/K</strong></div>
     </div>
 
     <div class="button-group">
         <button id="btnDidactic" class="icon-btn" style="background: linear-gradient(135deg, #4CAF50 0%, #2E7D32 100%); color: white; box-shadow: 0 4px 15px rgba(76,175,80,0.3);">
             <i class="fas fa-graduation-cap"></i>
-            <span class="icon-tooltip lang-text" data-pt-br="Memorial de Cálculo" data-en="Calculation Memorial" data-es="Memoria de Cálculo" data-fr="Mémorial de Calcul">Memorial de Cálculo</span>
+            <span class="icon-tooltip lang-text" data-pt-br="Memorial de Cálculo" data-en="Calculation Memorial" data-es="Memoria de Cálculo" data-fr="Mémorial de Calcul" data-zh="计算过程">Memorial de Cálculo</span>
         </button>
 
         <button id="btnCurrentDiagram" class="icon-btn" style="background: var(--primary-color); color: white; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
             <i class="fas fa-chart-area"></i>
-            <span class="icon-tooltip lang-text" data-pt-br="Diagrama do Processo" data-en="Process Diagram" data-es="Diagrama del Proceso" data-fr="Diagramme du Processus">Diagrama do Processo</span>
+            <span class="icon-tooltip lang-text" data-pt-br="Diagrama do Processo" data-en="Process Diagram" data-es="Diagrama del Proceso" data-fr="Diagramme du Processus" data-zh="过程图">Diagrama do Processo</span>
         </button>
         <button id="btnFinalReport" class="icon-btn" style="background: linear-gradient(135deg, #5e3a7a 0%, #8e44ad 100%); color: white; box-shadow: 0 4px 15px rgba(94,58,122,0.3);">
             <i class="fas fa-file-export"></i>
-            <span class="icon-tooltip lang-text" data-pt-br="Relatório Final" data-en="Final Report" data-es="Informe Final" data-fr="Rapport Final">Relatório Final</span>
+            <span class="icon-tooltip lang-text" data-pt-br="Relatório Final" data-en="Final Report" data-es="Informe Final" data-fr="Rapport Final" data-zh="最终报告">Relatório Final</span>
         </button>
         <button id="btnHistory" class="icon-btn" style="background: linear-gradient(135deg, #16a085 0%, #0e6655 100%); color: white; box-shadow: 0 4px 15px rgba(22,160,133,0.35);">
             <i class="fas fa-history"></i>
-            <span class="icon-tooltip lang-text" data-pt-br="Histórico de Cálculos" data-en="Calculation History" data-es="Historial de Cálculos" data-fr="Historique des Calculs">Histórico de Cálculos</span>
+            <span class="icon-tooltip lang-text" data-pt-br="Histórico de Cálculos" data-en="Calculation History" data-es="Historial de Cálculos" data-fr="Historique des Calculs" data-zh="计算历史">Histórico de Cálculos</span>
         </button>
 
         <a href="/" class="icon-btn" style="background: #eef1f6; color: var(--primary-color); box-shadow: 0 4px 15px rgba(0,0,0,0.08);">
             <i class="fas fa-home"></i>
-            <span class="icon-tooltip lang-text" data-pt-br="Tela Inicial" data-en="Home Screen" data-es="Pantalla de Inicio" data-fr="Écran d'Accueil">Tela Inicial</span>
+            <span class="icon-tooltip lang-text" data-pt-br="Tela Inicial" data-en="Home Screen" data-es="Pantalla de Inicio" data-fr="Écran d'Accueil" data-zh="主界面">Tela Inicial</span>
         </a>
         <button id="openModalBtn" class="icon-btn" style="background: linear-gradient(135deg, #2980b9 0%, #1c5d8a 100%); color: white; box-shadow: 0 4px 15px rgba(41,128,185,0.35);">
             <i class="fas fa-arrow-right"></i>
-            <span class="icon-tooltip lang-text" data-pt-br="Continuar" data-en="Continue" data-es="Continuar" data-fr="Continuer">Continuar</span>
+            <span class="icon-tooltip lang-text" data-pt-br="Continuar" data-en="Continue" data-es="Continuar" data-fr="Continuer" data-zh="继续">Continuar</span>
         </button>
     </div>
 </div>
@@ -148,7 +148,7 @@
             <a href="{% url 'ask_mass' flow_key='gas_vcte' %}" class="modal-btn lang-text" data-pt-br="Aquecimento/Resfriamento à Volume Constante" data-en="Heating/Cooling at Constant Volume" data-es="Calentamiento/Enfriamiento a Volumen Constante">Aquecimento/Resfriamento à Volume Constante</a>
             <a href="{% url 'ask_mass' flow_key='gas_tcte' %}" class="modal-btn lang-text" data-pt-br="Compressão/Expansão à Temperatura Constante" data-en="Compression/Expansion at Constant Temperature" data-es="Compresión/Expansión a Temperatura Constante">Compressão/Expansão à Temperatura Constante</a>
             <a href="{% url 'ask_mass' flow_key='gas_poli' %}" class="modal-btn lang-text" data-pt-br="Processo Politrópico (pvⁿ = constante)" data-en="Polytropic Process (pvⁿ = constant)" data-es="Proceso Politrópico (pvⁿ = constante)">Processo Politrópico (pvⁿ = constante)</a>
-            <a href="{% url 'ask_mass' flow_key='gas_scte' %}" class="modal-btn lang-text" data-pt-br="Compressão/Expansão adiabática e reversível" data-en="Reversible Adiabatic Compression/Expansion" data-es="Compresión/Expansión adiabática reversible" data-fr="Compression/Détente adiabatique réversible">Compressão/Expansão adiabática e reversível</a>
+            <a href="{% url 'ask_mass' flow_key='gas_scte' %}" class="modal-btn lang-text" data-pt-br="Compressão/Expansão adiabática e reversível" data-en="Reversible Adiabatic Compression/Expansion" data-es="Compresión/Expansión adiabática reversible" data-fr="Compression/Détente adiabatique réversible" data-zh="可逆绝热压缩/膨胀过程">Compressão/Expansão adiabática e reversível</a>
         {% endif %}
     </div>
 </div>
@@ -520,7 +520,7 @@
         <span class="close-btn" id="closeHistoryBtn" title="Fechar" role="button" tabindex="0">&times;</span>
         <h2 style="color: var(--primary-color); margin-top:0;">
             <i class="fas fa-history" style="margin-right:8px;"></i>
-            <span class="lang-text" data-pt-br="Histórico de Cálculos" data-en="Calculation History" data-es="Historial de Cálculos" data-fr="Historique des Calculs">Histórico de Cálculos</span>
+            <span class="lang-text" data-pt-br="Histórico de Cálculos" data-en="Calculation History" data-es="Historial de Cálculos" data-fr="Historique des Calculs" data-zh="计算历史">Histórico de Cálculos</span>
         </h2>
         <p style="color:#666; margin-top:-8px;" class="lang-text"
            data-pt-br="Seus cálculos são salvos automaticamente neste navegador. Marque até 4 itens para comparar lado a lado."

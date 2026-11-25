@@ -20,12 +20,14 @@ function updateLabel() {
                    'pt-br': 'Digite o valor da Temperatura (°C):',
                    'en': 'Enter the Temperature value (°C):',
                    'es': 'Ingrese el valor de la Temperatura (°C):',
-                   'fr': 'Entrez la valeur de la Température (°C) :' },
+                   'fr': 'Entrez la valeur de la Température (°C) :',
+                   'zh': '请输入温度值 (°C)：' },
             '1': { icon: 'fas fa-tachometer-alt', min: 0.1, max: 50000,
                    'pt-br': 'Digite o valor da Pressão (kPa):',
                    'en': 'Enter the Pressure value (kPa):',
                    'es': 'Ingrese el valor de la Presión (kPa):',
-                   'fr': 'Entrez la valeur de la Pression (kPa) :' },
+                   'fr': 'Entrez la valeur de la Pression (kPa) :',
+                   'zh': '请输入压力值 (kPa)：' },
             '2': { icon: 'fas fa-cube', min: 0.0001, max: 1000,
                    'pt-br': 'Digite o valor do Volume Específico (m³/kg):',
                    'en': 'Enter the Specific Volume value (m³/kg):',
@@ -72,7 +74,8 @@ function updateLabel() {
             'pt-br': 'Digite o valor',
             'en': 'Enter the value',
             'es': 'Ingrese el valor',
-            'fr': 'Entrez la valeur'
+            'fr': 'Entrez la valeur',
+            'zh': '输入数值'
         };
 
         var propInfo = dict[selectedValue];
@@ -87,7 +90,8 @@ function updateLabel() {
                 'pt-br': 'Digite o valor da propriedade selecionada:',
                 'en': 'Enter the value of the selected property:',
                 'es': 'Ingrese el valor de la propiedad seleccionada:',
-                'fr': 'Entrez la valeur de la propriété sélectionnée :'
+                'fr': 'Entrez la valeur de la propriété sélectionnée :',
+                'zh': '请输入所选属性的值：'
             };
             labelElement.innerHTML = `<i class="fas fa-pen"></i> ${(fallback[lang] || fallback['en'] || fallback['pt-br'])}`;
             numberInput.removeAttribute('min');

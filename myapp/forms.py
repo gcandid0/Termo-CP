@@ -8,29 +8,30 @@ from django import forms
 from django.utils.safestring import mark_safe
 
 
-def t_html(pt, en, es, fr=None):
+def t_html(pt, en, es, fr=None, zh=None):
     """
     Gera a tag HTML traduzível identificada pelo JavaScript de internacionalização.
     """
     fr_val = fr if fr is not None else en
-    html_string = f'<span class="lang-text" data-pt-br="{pt}" data-en="{en}" data-es="{es}" data-fr="{fr_val}">{pt}</span>'
+    zh_val = zh if zh is not None else en
+    html_string = f'<span class="lang-text" data-pt-br="{pt}" data-en="{en}" data-es="{es}" data-fr="{fr_val}" data-zh="{zh_val}">{pt}</span>'
     return mark_safe(html_string)
 
 
 # --- VARIÁVEIS CONSTANTES DE TEXTO TRADUZIDO ---
-LBL_SEL_PROP = t_html("Selecione a propriedade conhecida", "Select the known property", "Seleccione la propiedad conocida", "Sélectionnez la propriété connue")
-LBL_SEL_OUTRA_PROP = t_html("Selecione a outra propriedade conhecida", "Select the other known property", "Seleccione la otra propiedad conocida", "Sélectionnez l'autre propriété connue")
-LBL_DIGITE_VALOR = t_html("Digite o valor", "Enter the value", "Introduzca el valor", "Entrez la valeur")
+LBL_SEL_PROP = t_html("Selecione a propriedade conhecida", "Select the known property", "Seleccione la propiedad conocida", "Sélectionnez la propriété connue", "选择已知属性")
+LBL_SEL_OUTRA_PROP = t_html("Selecione a outra propriedade conhecida", "Select the other known property", "Seleccione la otra propiedad conocida", "Sélectionnez l'autre propriété connue", "选择另一个已知属性")
+LBL_DIGITE_VALOR = t_html("Digite o valor", "Enter the value", "Introduzca el valor", "Entrez la valeur", "输入数值")
 
 # --- LISTAS DE PROPRIEDADES TRADUZIDAS ---
-P_TEMP = t_html('Temperatura (T)', 'Temperature (T)', 'Temperatura (T)', 'Température (T)')
-P_PRESS = t_html('Pressão (p)', 'Pressure (p)', 'Presión (p)', 'Pression (p)')
-P_VOL = t_html('Volume específico (v)', 'Specific volume (v)', 'Volumen específico (v)', 'Volume spécifique (v)')
-P_ENER = t_html('Energia interna (u)', 'Internal energy (u)', 'Energía interna (u)', 'Énergie interne (u)')
-P_ENTAL = t_html('Entalpia (h)', 'Enthalpy (h)', 'Entalpía (h)', 'Enthalpie (h)')
-P_ENTRO = t_html('Entropia (s)', 'Entropy (s)', 'Entropía (s)', 'Entropie (s)')
-P_TIT = t_html('Título (x)', 'Quality (x)', 'Calidad (x)', 'Titre (x)')
-P_CALOR = t_html('Calor transferido (Q)', 'Transferred heat (Q)', 'Calor transferido (Q)', 'Chaleur transférée (Q)')
+P_TEMP = t_html('Temperatura (T)', 'Temperature (T)', 'Temperatura (T)', 'Température (T)', '温度 (T)')
+P_PRESS = t_html('Pressão (p)', 'Pressure (p)', 'Presión (p)', 'Pression (p)', '压力 (p)')
+P_VOL = t_html('Volume específico (v)', 'Specific volume (v)', 'Volumen específico (v)', 'Volume spécifique (v)', '比容 (v)')
+P_ENER = t_html('Energia interna (u)', 'Internal energy (u)', 'Energía interna (u)', 'Énergie interne (u)', '内能 (u)')
+P_ENTAL = t_html('Entalpia (h)', 'Enthalpy (h)', 'Entalpía (h)', 'Enthalpie (h)', '焓 (h)')
+P_ENTRO = t_html('Entropia (s)', 'Entropy (s)', 'Entropía (s)', 'Entropie (s)', '熵 (s)')
+P_TIT = t_html('Título (x)', 'Quality (x)', 'Calidad (x)', 'Titre (x)', '干度 (x)')
+P_CALOR = t_html('Calor transferido (Q)', 'Transferred heat (Q)', 'Calor transferido (Q)', 'Chaleur transférée (Q)', '传热量 (Q)')
 
 C_CV = t_html('Cv0', 'Cv0', 'Cv0')
 C_CP = t_html('Cp0', 'Cp0', 'Cp0')

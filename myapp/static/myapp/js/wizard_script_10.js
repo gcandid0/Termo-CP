@@ -16,7 +16,8 @@ function updateLabel() {
             'pt-br': 'Digite o valor',
             'en': 'Enter the value',
             'es': 'Introduzca el valor',
-            'fr': 'Entrez la valeur'
+            'fr': 'Entrez la valeur',
+            'zh': '输入数值'
         };
 
         // Mapeamento expandido adaptado para o sistema de idiomas dinâmico
@@ -57,7 +58,7 @@ function updateLabel() {
         if(currentLang !== 'pt-br') {
              const elements = document.querySelectorAll('.lang-text');
              elements.forEach(el => {
-                 const newText = el.getAttribute('data-' + currentLang) || (currentLang === 'fr' ? el.getAttribute('data-en') : null);
+                 const newText = el.getAttribute('data-' + currentLang) || (currentLang !== 'pt-br' ? el.getAttribute('data-en') : null);
                  if (newText) el.textContent = newText;
              });
         }

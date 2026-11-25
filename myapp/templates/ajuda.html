@@ -54,7 +54,6 @@
         box-shadow: var(--shadow);
         padding: 18px;
         text-align: center;
-        border-top: 3px solid var(--secondary-color);
     }
 
     .quick-step .step-num {
@@ -170,7 +169,6 @@
         align-items: flex-start;
         gap: 10px;
         background: #eaf4ff;
-        border-left: 3px solid var(--secondary-color);
         padding: 10px 14px;
         border-radius: 6px;
         margin-top: 10px;
@@ -204,6 +202,62 @@
         .quick-steps { flex-direction: column; }
         .accordion-body-inner { padding-left: 22px; }
     }
+
+    /* --- Refinamento Visual Moderno (Central de Ajuda) --- */
+    .help-header h2 {
+        font-weight: 700;
+        letter-spacing: -0.015em;
+    }
+    .help-header p {
+        color: #5b6b82 !important;
+    }
+    .quick-step {
+        border-radius: 14px !important;
+        border: 1px solid rgba(32, 55, 107, 0.08);
+        box-shadow: 0 8px 22px rgba(15, 23, 42, 0.06), 0 1px 3px rgba(15, 23, 42, 0.04) !important;
+        padding: 22px 18px !important;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .quick-step:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 12px 28px rgba(15, 23, 42, 0.1) !important;
+    }
+    .quick-step .step-num {
+        width: 38px !important;
+        height: 38px !important;
+        background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%) !important;
+        box-shadow: 0 4px 10px rgba(13, 106, 176, 0.25);
+        margin-bottom: 12px !important;
+    }
+    .quick-step p {
+        color: #5b6b82 !important;
+        line-height: 1.5;
+    }
+    .accordion {
+        border-radius: 14px !important;
+        border: 1px solid rgba(32, 55, 107, 0.08);
+        box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06), 0 1px 3px rgba(15, 23, 42, 0.04) !important;
+    }
+    .accordion-item {
+        border-bottom: 1px solid #edf2f7 !important;
+    }
+    .accordion-header {
+        padding: 20px 24px !important;
+    }
+    .accordion-body {
+        background: #fbfdff !important;
+    }
+    .accordion-body-inner .tip {
+        background: #eef6ff !important;
+        border-radius: 10px !important;
+        padding: 12px 16px !important;
+        color: #1e3a8a;
+    }
+    .substance-chips span {
+        background: #eef4fb !important;
+        color: var(--primary-color) !important;
+        padding: 5px 13px !important;
+    }
 </style>
 {% endblock %}
 
@@ -222,7 +276,7 @@
     <div class="help-header">
         <h2>
             <i class="fas fa-circle-question"></i>
-            <span class="lang-text" data-pt-br="Central de Ajuda" data-en="Help Center" data-es="Centro de Ayuda">Central de Ajuda</span>
+            <span class="lang-text" data-pt-br="Central de Ajuda" data-en="Help Center" data-es="Centro de Ayuda" data-fr="Centre d'Aide" data-zh="帮助中心">Central de Ajuda</span>
         </h2>
         <p class="lang-text"
            data-pt-br="Um guia rápido para aprender a calcular estados, simular processos e usar todos os recursos do TERMO-CP."
@@ -236,7 +290,7 @@
     <div class="quick-steps">
         <div class="quick-step">
             <div class="step-num">1</div>
-            <h4 class="lang-text" data-pt-br="Escolha a substância" data-en="Choose the substance" data-es="Elige la sustancia">Escolha a substância</h4>
+            <h4 class="lang-text" data-pt-br="Escolha a substância" data-en="Choose the substance" data-es="Elige la sustancia" data-fr="Choisissez la substance" data-zh="选择工质">Escolha a substância</h4>
             <p class="lang-text"
                data-pt-br="Selecione água, amônia, CO₂, gás ideal, entre outras, no menu superior."
                data-en="Select water, ammonia, CO₂, ideal gas, among others, from the top menu."
@@ -246,7 +300,7 @@
         </div>
         <div class="quick-step">
             <div class="step-num">2</div>
-            <h4 class="lang-text" data-pt-br="Estado ou Processo" data-en="State or Process" data-es="Estado o Proceso">Estado ou Processo</h4>
+            <h4 class="lang-text" data-pt-br="Estado ou Processo" data-en="State or Process" data-es="Estado o Proceso" data-fr="État ou Processus" data-zh="状态或过程">Estado ou Processo</h4>
             <p class="lang-text"
                data-pt-br="Vá em 'Estados' para calcular propriedades, ou em 'Processos' para simular uma transformação."
                data-en="Go to 'States' to calculate properties, or 'Processes' to simulate a transformation."
@@ -256,7 +310,7 @@
         </div>
         <div class="quick-step">
             <div class="step-num">3</div>
-            <h4 class="lang-text" data-pt-br="Informe os dados" data-en="Enter the data" data-es="Ingresa los datos">Informe os dados</h4>
+            <h4 class="lang-text" data-pt-br="Informe os dados" data-en="Enter the data" data-es="Ingresa los datos" data-fr="Entrez les données" data-zh="输入数据">Informe os dados</h4>
             <p class="lang-text"
                data-pt-br="Preencha duas propriedades conhecidas (ex: pressão e temperatura) e envie o formulário."
                data-en="Fill in two known properties (e.g., pressure and temperature) and submit the form."
@@ -266,7 +320,7 @@
         </div>
         <div class="quick-step">
             <div class="step-num">4</div>
-            <h4 class="lang-text" data-pt-br="Veja o resultado" data-en="See the result" data-es="Ve el resultado">Veja o resultado</h4>
+            <h4 class="lang-text" data-pt-br="Veja o resultado" data-en="See the result" data-es="Ve el resultado" data-fr="Voir le résultat" data-zh="查看结果">Veja o resultado</h4>
             <p class="lang-text"
                data-pt-br="Confira as propriedades calculadas, a animação 3D do pistão e exporte o relatório."
                data-en="Check the calculated properties, the 3D piston animation, and export the report."
@@ -282,7 +336,7 @@
         <div class="accordion-item open">
             <div class="accordion-header" onclick="toggleAccordion(this)">
                 <i class="fas fa-atom icon-topic"></i>
-                <span class="topic-title lang-text" data-pt-br="Como calcular um Estado termodinâmico" data-en="How to calculate a thermodynamic State" data-es="Cómo calcular un Estado termodinámico">Como calcular um Estado termodinâmico</span>
+                <span class="topic-title lang-text" data-pt-br="Como calcular um Estado termodinâmico" data-en="How to calculate a thermodynamic State" data-es="Cómo calcular un Estado termodinámico" data-fr="Comment calculer un État thermodynamique" data-zh="如何计算热力学状态">Como calcular um Estado termodinâmico</span>
                 <i class="fas fa-chevron-down chevron"></i>
             </div>
             <div class="accordion-body">
@@ -318,7 +372,7 @@
         <div class="accordion-item">
             <div class="accordion-header" onclick="toggleAccordion(this)">
                 <i class="fas fa-diagram-project icon-topic"></i>
-                <span class="topic-title lang-text" data-pt-br="Como simular um Processo" data-en="How to simulate a Process" data-es="Cómo simular un Proceso">Como simular um Processo</span>
+                <span class="topic-title lang-text" data-pt-br="Como simular um Processo" data-en="How to simulate a Process" data-es="Cómo simular un Proceso" data-fr="Comment simuler un Processus" data-zh="如何模拟热力学过程">Como simular um Processo</span>
                 <i class="fas fa-chevron-down chevron"></i>
             </div>
             <div class="accordion-body">
@@ -374,7 +428,7 @@
                         <span>R-134a</span>
                         <span>Nitrogênio</span>
                         <span>Metano</span>
-                        <span class="lang-text" data-pt-br="Gás Ideal" data-en="Ideal Gas" data-es="Gas Ideal" data-fr="Gaz Idéal">Gás Ideal</span>
+                        <span class="lang-text" data-pt-br="Gás Ideal" data-en="Ideal Gas" data-es="Gas Ideal" data-fr="Gaz Idéal" data-zh="理想气体">Gás Ideal</span>
                     </div>
                 </div>
             </div>

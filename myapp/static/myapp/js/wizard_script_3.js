@@ -26,7 +26,8 @@ function updateLabel() {
             'pt-br': { label: 'Digite o valor de', placeholder: 'Digite o valor' },
             'en': { label: 'Enter the value for', placeholder: 'Enter the value' },
             'es': { label: 'Ingrese el valor de', placeholder: 'Ingrese el valor' },
-            'fr': { label: 'Entrez la valeur de', placeholder: 'Entrez la valeur' }
+            'fr': { label: 'Entrez la valeur de', placeholder: 'Entrez la valeur' },
+            'zh': { label: '请输入数值', placeholder: '输入数值' }
         };
 
         if (info[selectedValue]) {

@@ -46,31 +46,31 @@
         </h2>
 
         <div class="data-row" data-tour-pt-br="Indica se a substância está como líquido comprimido, vapor superaquecido ou numa mistura líquido-vapor (saturação) nesse estado." data-tour-en="Indicates whether the substance is a compressed liquid, superheated vapor, or a liquid-vapor mixture (saturation) at this state." data-tour-es="Indica si la sustancia está como líquido comprimido, vapor sobrecalentado o en una mezcla líquido-vapor (saturación) en este estado.">
-            <span class="data-label lang-text" data-pt-br="Fase:" data-en="Phase:" data-es="Fase:" data-fr="Phase :">Fase:</span>            <span class="data-value">
+            <span class="data-label lang-text" data-pt-br="Fase:" data-en="Phase:" data-es="Fase:" data-fr="Phase :" data-zh="相态：">Fase:</span>            <span class="data-value">
                 {% if fase == 1 %}
-                    <span class="lang-text" data-pt-br="Líquido comprimido" data-en="Compressed liquid" data-es="Líquido comprimido" data-fr="Liquide comprimé">Líquido comprimido</span>
+                    <span class="lang-text" data-pt-br="Líquido comprimido" data-en="Compressed liquid" data-es="Líquido comprimido" data-fr="Liquide comprimé" data-zh="压缩液体">Líquido comprimido</span>
                 {% elif fase == 2 %}
-                    <span class="lang-text" data-pt-br="Vapor superaquecido" data-en="Superheated vapor" data-es="Vapor sobrecalentado" data-fr="Vapeur surchauffée">Vapor superaquecido</span>
+                    <span class="lang-text" data-pt-br="Vapor superaquecido" data-en="Superheated vapor" data-es="Vapor sobrecalentado" data-fr="Vapeur surchauffée" data-zh="过热蒸汽">Vapor superaquecido</span>
                 {% elif fase == 3 %}
-                    <span class="lang-text" data-pt-br="Região de saturação" data-en="Saturation region" data-es="Región de saturación" data-fr="Région de saturation">Região de saturação</span>
+                    <span class="lang-text" data-pt-br="Região de saturação" data-en="Saturation region" data-es="Región de saturación" data-fr="Région de saturation" data-zh="饱和区">Região de saturação</span>
                 {% endif %}
             </span>
         </div>
 
         <div class="data-row" data-tour-pt-br="Quantidade de massa da substância considerada no sistema, usada em todos os cálculos de calor, trabalho e entropia." data-tour-en="Amount of mass of the substance considered in the system, used in all heat, work and entropy calculations." data-tour-es="Cantidad de masa de la sustancia considerada en el sistema, usada en todos los cálculos de calor, trabajo y entropía.">
-            <span class="data-label lang-text" data-pt-br="Massa (m):" data-en="Mass (m):" data-es="Masa (m):" data-fr="Masse (m) :">Massa (m):</span>            <span class="data-value">{{ massa|default:"1,0" }} kg</span>
+            <span class="data-label lang-text" data-pt-br="Massa (m):" data-en="Mass (m):" data-es="Masa (m):" data-fr="Masse (m) :" data-zh="质量 (m)：">Massa (m):</span>            <span class="data-value">{{ massa|default:"1,0" }} kg</span>
         </div>
 
         <div class="data-row" data-tour-pt-br="Temperatura da substância nesse estado, em graus Celsius." data-tour-en="Temperature of the substance at this state, in degrees Celsius." data-tour-es="Temperatura de la sustancia en este estado, en grados Celsius.">
-            <span class="data-label lang-text" data-pt-br="Temperatura (T):" data-en="Temperature (T):" data-es="Temperatura (T):" data-fr="Température (T) :">Temperatura (T):</span>            <span class="data-value">{{ temperatura }} °C</span>
+            <span class="data-label lang-text" data-pt-br="Temperatura (T):" data-en="Temperature (T):" data-es="Temperatura (T):" data-fr="Température (T) :" data-zh="温度 (T)：">Temperatura (T):</span>            <span class="data-value">{{ temperatura }} °C</span>
         </div>
 
         <div class="data-row" data-tour-pt-br="Pressão absoluta da substância nesse estado, em quilopascal (kPa)." data-tour-en="Absolute pressure of the substance at this state, in kilopascals (kPa)." data-tour-es="Presión absoluta de la sustancia en este estado, en kilopascales (kPa).">
-            <span class="data-label lang-text" data-pt-br="Pressão (p):" data-en="Pressure (p):" data-es="Presión (p):" data-fr="Pression (p) :">Pressão (p):</span>            <span class="data-value">{{ pressao }} kPa</span>
+            <span class="data-label lang-text" data-pt-br="Pressão (p):" data-en="Pressure (p):" data-es="Presión (p):" data-fr="Pression (p) :" data-zh="压力 (p)：">Pressão (p):</span>            <span class="data-value">{{ pressao }} kPa</span>
         </div>
 
         <div class="data-row" data-tour-pt-br="Volume ocupado por unidade de massa da substância (v = V/m), em m³/kg." data-tour-en="Volume occupied per unit of mass of the substance (v = V/m), in m³/kg." data-tour-es="Volumen ocupado por unidad de masa de la sustancia (v = V/m), en m³/kg.">
-            <span class="data-label lang-text" data-pt-br="Volume específico (v):" data-en="Specific volume (v):" data-es="Volumen específico (v):" data-fr="Volume spécifique (v) :">Volume específico (v):</span>            <span class="data-value">{{ volume_especifico }} m³/kg</span>
+            <span class="data-label lang-text" data-pt-br="Volume específico (v):" data-en="Specific volume (v):" data-es="Volumen específico (v):" data-fr="Volume spécifique (v) :" data-zh="比容 (v)：">Volume específico (v):</span>            <span class="data-value">{{ volume_especifico }} m³/kg</span>
         </div>
 
         <div class="data-row" data-tour-pt-br="Energia associada ao movimento e às interações das moléculas da substância, em kJ/kg." data-tour-en="Energy associated with the motion and interactions of the substance's molecules, in kJ/kg." data-tour-es="Energía asociada al movimiento e interacciones de las moléculas de la sustancia, en kJ/kg.">
@@ -78,22 +78,22 @@
         </div>
 
         <div class="data-row" data-tour-pt-br="Propriedade definida como h = u + P·v, muito usada em balanços de energia de sistemas abertos, em kJ/kg." data-tour-en="Property defined as h = u + P·v, widely used in energy balances of open systems, in kJ/kg." data-tour-es="Propiedad definida como h = u + P·v, muy usada en balances de energía de sistemas abiertos, en kJ/kg.">
-            <span class="data-label lang-text" data-pt-br="Entalpia (h):" data-en="Enthalpy (h):" data-es="Entalpía (h):" data-fr="Enthalpie (h) :">Entalpia (h):</span>            <span class="data-value">{{ entalpia_especifica }} kJ/kg</span>
+            <span class="data-label lang-text" data-pt-br="Entalpia (h):" data-en="Enthalpy (h):" data-es="Entalpía (h):" data-fr="Enthalpie (h) :" data-zh="焓 (h)：">Entalpia (h):</span>            <span class="data-value">{{ entalpia_especifica }} kJ/kg</span>
         </div>
 
         <div class="data-row" data-tour-pt-br="Medida do grau de desordem molecular da substância, usada para avaliar a reversibilidade do processo, em kJ/kg.K." data-tour-en="Measure of the substance's molecular disorder, used to assess the reversibility of the process, in kJ/kg.K." data-tour-es="Medida del grado de desorden molecular de la sustancia, usada para evaluar la reversibilidad del proceso, en kJ/kg.K.">
-            <span class="data-label lang-text" data-pt-br="Entropia (s):" data-en="Entropy (s):" data-es="Entropía (s):" data-fr="Entropie (s) :">Entropia (s):</span>            <span class="data-value">{{ entropia_especifica }} kJ/kg.K</span>
+            <span class="data-label lang-text" data-pt-br="Entropia (s):" data-en="Entropy (s):" data-es="Entropía (s):" data-fr="Entropie (s) :" data-zh="熵 (s)：">Entropia (s):</span>            <span class="data-value">{{ entropia_especifica }} kJ/kg.K</span>
         </div>
 
         {% if fase == 3 %}
         <div class="data-row" data-tour-pt-br="Fração em massa de vapor presente numa mistura saturada líquido-vapor (0% = só líquido, 100% = só vapor). Só aparece na região de saturação." data-tour-en="Mass fraction of vapor present in a saturated liquid-vapor mixture (0% = only liquid, 100% = only vapor). Only shown in the saturation region." data-tour-es="Fracción en masa de vapor presente en una mezcla saturada líquido-vapor (0% = solo líquido, 100% = solo vapor). Solo aparece en la región de saturación.">
-            <span class="data-label lang-text" data-pt-br="Título (x):" data-en="Quality (x):" data-es="Calidad (x):" data-fr="Titre (x) :">Título (x):</span>            <span class="data-value">{{ titulo }} % {% if titulo_fracao %}<small style="opacity:0.75;font-weight:normal;">(x = {{ titulo_fracao }})</small>{% endif %}</span>
+            <span class="data-label lang-text" data-pt-br="Título (x):" data-en="Quality (x):" data-es="Calidad (x):" data-fr="Titre (x) :" data-zh="干度 (x)：">Título (x):</span>            <span class="data-value">{{ titulo }} % {% if titulo_fracao %}<small style="opacity:0.75;font-weight:normal;">(x = {{ titulo_fracao }})</small>{% endif %}</span>
         </div>
         <div class="data-row" data-tour-pt-br="Volume total ocupado pela fração líquida da mistura saturada, em m³." data-tour-en="Total volume occupied by the liquid fraction of the saturated mixture, in m³." data-tour-es="Volumen total ocupado por la fracción líquida de la mezcla saturada, en m³.">
-            <span class="data-label lang-text" data-pt-br="Volume líquido (Vl):" data-en="Liquid volume (Vl):" data-es="Volumen líquido (Vl):" data-fr="Volume liquide (Vl) :">Volume líquido (Vl):</span>            <span class="data-value">{{ VolumeL }} m³</span>
+            <span class="data-label lang-text" data-pt-br="Volume líquido (Vl):" data-en="Liquid volume (Vl):" data-es="Volumen líquido (Vl):" data-fr="Volume liquide (Vl) :" data-zh="液相体积 (Vl)：">Volume líquido (Vl):</span>            <span class="data-value">{{ VolumeL }} m³</span>
         </div>
         <div class="data-row" data-tour-pt-br="Volume total ocupado pela fração de vapor da mistura saturada, em m³." data-tour-en="Total volume occupied by the vapor fraction of the saturated mixture, in m³." data-tour-es="Volumen total ocupado por la fracción de vapor de la mezcla saturada, en m³.">
-            <span class="data-label lang-text" data-pt-br="Volume vapor (Vv):" data-en="Vapor volume (Vv):" data-es="Volumen vapor (Vv):" data-fr="Volume vapeur (Vv) :">Volume vapor (Vv):</span>            <span class="data-value">{{ VolumeV }} m³</span>
+            <span class="data-label lang-text" data-pt-br="Volume vapor (Vv):" data-en="Vapor volume (Vv):" data-es="Volumen vapor (Vv):" data-fr="Volume vapeur (Vv) :" data-zh="气相体积 (Vv)：">Volume vapor (Vv):</span>            <span class="data-value">{{ VolumeV }} m³</span>
         </div>
         {% endif %}
 
@@ -114,11 +114,11 @@
             </button>
             <a href="{% url 'ask_known2_18' %}" class="btn btn-secondary">
                 <i class="fas fa-arrow-left" style="margin-right: 5px;"></i>
-                <span class="lang-text" data-pt-br="Voltar" data-en="Go Back" data-es="Volver" data-fr="Retour">Voltar</span>
+                <span class="lang-text" data-pt-br="Voltar" data-en="Go Back" data-es="Volver" data-fr="Retour" data-zh="返回">Voltar</span>
             </a>
             <a href="{% url 'ask_mass' flow_key='co2_estado' %}" class="btn btn-primary">
                 <i class="fas fa-redo" style="margin-right: 5px;"></i>
-                <span class="lang-text" data-pt-br="Novo Cálculo" data-en="New Calculation" data-es="Nuevo Cálculo" data-fr="Nouveau Calcul">Novo Cálculo</span>
+                <span class="lang-text" data-pt-br="Novo Cálculo" data-en="New Calculation" data-es="Nuevo Cálculo" data-fr="Nouveau Calcul" data-zh="新计算">Novo Cálculo</span>
             </a>
         </div>
     </div>

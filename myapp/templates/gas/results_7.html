@@ -56,22 +56,22 @@
         </h2>
 
         <div class="data-row">
-            <span class="data-label lang-text" data-pt-br="Massa (m):" data-en="Mass (m):" data-es="Masa (m):" data-fr="Masse (m) :">Massa (m):</span>
+            <span class="data-label lang-text" data-pt-br="Massa (m):" data-en="Mass (m):" data-es="Masa (m):" data-fr="Masse (m) :" data-zh="质量 (m)：">Massa (m):</span>
             <span class="gas-value">{{ massa|default:"1,0" }} kg</span>
         </div>
 
         <div class="data-row">
-            <span class="data-label lang-text" data-pt-br="Temperatura (T):" data-en="Temperature (T):" data-es="Temperatura (T):" data-fr="Température (T) :">Temperatura (T):</span>
+            <span class="data-label lang-text" data-pt-br="Temperatura (T):" data-en="Temperature (T):" data-es="Temperatura (T):" data-fr="Température (T) :" data-zh="温度 (T)：">Temperatura (T):</span>
             <span class="gas-value">{{ temperatura }} °C</span>
         </div>
 
         <div class="data-row">
-            <span class="data-label lang-text" data-pt-br="Pressão (p):" data-en="Pressure (p):" data-es="Presión (p):" data-fr="Pression (p) :">Pressão (p):</span>
+            <span class="data-label lang-text" data-pt-br="Pressão (p):" data-en="Pressure (p):" data-es="Presión (p):" data-fr="Pression (p) :" data-zh="压力 (p)：">Pressão (p):</span>
             <span class="gas-value">{{ pressao }} kPa</span>
         </div>
 
         <div class="data-row">
-            <span class="data-label lang-text" data-pt-br="Volume específico (v):" data-en="Specific volume (v):" data-es="Volumen específico (v):" data-fr="Volume spécifique (v) :">Volume específico (v):</span>
+            <span class="data-label lang-text" data-pt-br="Volume específico (v):" data-en="Specific volume (v):" data-es="Volumen específico (v):" data-fr="Volume spécifique (v) :" data-zh="比容 (v)：">Volume específico (v):</span>
             <span class="gas-value">{{ volume }} m³/kg</span>
         </div>
 
@@ -93,11 +93,11 @@
         <div class="button-group">
             <a href="{% url 'ask_known2_7' %}" class="btn btn-secondary">
                 <i class="fas fa-arrow-left" style="margin-right: 5px;"></i>
-                <span class="lang-text" data-pt-br="Voltar" data-en="Go Back" data-es="Volver" data-fr="Retour">Voltar</span>
+                <span class="lang-text" data-pt-br="Voltar" data-en="Go Back" data-es="Volver" data-fr="Retour" data-zh="返回">Voltar</span>
             </a>
             <a href="{% url 'ask_mass' flow_key='gas_cilindro' %}" class="btn gas-btn">
                 <i class="fas fa-redo" style="margin-right: 5px;"></i>
-                <span class="lang-text" data-pt-br="Novo Cálculo" data-en="New Calculation" data-es="Nuevo Cálculo" data-fr="Nouveau Calcul">Novo Cálculo</span>
+                <span class="lang-text" data-pt-br="Novo Cálculo" data-en="New Calculation" data-es="Nuevo Cálculo" data-fr="Nouveau Calcul" data-zh="新计算">Novo Cálculo</span>
             </a>
         </div>
     </div>

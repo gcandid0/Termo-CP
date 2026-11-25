@@ -6,7 +6,8 @@ function updatePlaceholder() {
             'pt-br': 'Digite o valor',
             'en': 'Enter the value',
             'es': 'Introduzca el valor',
-            'fr': 'Entrez la valeur'
+            'fr': 'Entrez la valeur',
+            'zh': '输入数值'
         };
 
         if(numberInput) {
