@@ -6,19 +6,19 @@
 {% block extra_css %}
 <style>
     .poe-wrapper {
-        max-width: 1020px;
+        max-width: 1060px;
         width: 100%;
         margin: 0 auto;
-        padding: 20px 24px 36px;
+        padding: 18px 24px 34px;
         display: flex;
         flex-direction: column;
-        gap: 18px;
+        gap: 16px;
     }
     .poe-hero {
         background: linear-gradient(135deg, #1b3668 0%, #0d6ab0 100%);
         color: #ffffff;
         border-radius: 16px;
-        padding: 22px 26px;
+        padding: 20px 26px;
         box-shadow: 0 10px 26px rgba(27, 54, 104, 0.16);
         display: flex;
         justify-content: space-between;
@@ -26,185 +26,120 @@
         gap: 16px;
         flex-wrap: wrap;
     }
-    .poe-hero h2 {
-        margin: 0 0 6px 0;
-        font-size: 1.4em;
+    .poe-hero h2 { margin: 0 0 6px 0; font-size: 1.38em; display: flex; align-items: center; gap: 10px; }
+    .poe-hero p { margin: 0; font-size: 0.91em; opacity: 0.92; max-width: 720px; }
+
+    .poe-stats-bar {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+        gap: 12px;
+    }
+    .poe-stat-pill {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        padding: 12px 16px;
         display: flex;
         align-items: center;
-        gap: 10px;
+        gap: 12px;
+        box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
     }
-    .poe-hero p {
-        margin: 0;
-        font-size: 0.92em;
-        opacity: 0.92;
-        max-width: 720px;
+    .poe-stat-icon {
+        width: 38px; height: 38px; border-radius: 10px;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 1.05em; flex-shrink: 0;
     }
+    .poe-stat-pill .st-lbl { display: block; font-size: 0.76em; color: #64748b; font-weight: 700; text-transform: uppercase; }
+    .poe-stat-pill .st-val { font-size: 1.18em; font-weight: 800; color: #0f172a; }
+
     .poe-card {
         background: #ffffff;
         border: 1px solid #e2e8f0;
         border-radius: 14px;
-        padding: 20px 24px;
+        padding: 18px 22px;
         box-shadow: 0 4px 14px rgba(15, 23, 42, 0.05);
     }
     .poe-card h3 {
-        margin: 0 0 12px 0;
-        color: #1b3668;
-        font-size: 1.08em;
-        display: flex;
-        align-items: center;
-        gap: 8px;
+        margin: 0 0 12px 0; color: #1b3668; font-size: 1.06em;
+        display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap;
     }
     .poe-config-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
-        gap: 14px;
+        grid-template-columns: repeat(auto-fit, minmax(185px, 1fr));
+        gap: 12px;
         align-items: end;
     }
-    .poe-field label {
-        display: block;
-        font-size: 0.85em;
-        font-weight: 700;
-        color: #334155;
-        margin-bottom: 5px;
+    .poe-field label { display: block; font-size: 0.84em; font-weight: 700; color: #334155; margin-bottom: 5px; }
+    .poe-field select, .poe-field input, .poe-field textarea {
+        width: 100%; padding: 9px 12px; border-radius: 9px;
+        border: 1.5px solid #cbd5e1; background: #f8fafc; color: #0f172a;
+        font-family: inherit; font-size: 0.92em; box-sizing: border-box;
     }
-    .poe-field select,
-    .poe-field input,
-    .poe-field textarea {
-        width: 100%;
-        padding: 9px 12px;
-        border-radius: 9px;
-        border: 1.5px solid #cbd5e1;
-        background: #f8fafc;
-        color: #0f172a;
-        font-family: inherit;
-        font-size: 0.93em;
-        box-sizing: border-box;
-    }
-    .poe-field select:focus,
-    .poe-field input:focus,
-    .poe-field textarea:focus {
-        outline: none;
-        border-color: #0d6ab0;
-        background: #ffffff;
+    .poe-field select:focus, .poe-field input:focus, .poe-field textarea:focus {
+        outline: none; border-color: #0d6ab0; background: #ffffff;
         box-shadow: 0 0 0 3px rgba(13, 106, 176, 0.14);
     }
     .poe-btn {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-        padding: 10px 18px;
-        border-radius: 10px;
-        border: none;
-        font-weight: 700;
-        font-size: 0.94em;
-        cursor: pointer;
-        font-family: inherit;
+        display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+        padding: 9px 16px; border-radius: 10px; border: none; font-weight: 700;
+        font-size: 0.91em; cursor: pointer; font-family: inherit;
         transition: transform 0.15s ease, box-shadow 0.15s ease;
     }
-    .poe-btn-primary {
-        background: linear-gradient(135deg, #1b3668 0%, #0d6ab0 100%);
-        color: #ffffff;
-        box-shadow: 0 4px 12px rgba(27, 54, 104, 0.22);
-    }
+    .poe-btn-primary { background: linear-gradient(135deg, #1b3668 0%, #0d6ab0 100%); color: #fff; box-shadow: 0 4px 12px rgba(27,54,104,0.22); }
     .poe-btn-primary:hover { transform: translateY(-1px); }
-    .poe-btn-success {
-        background: linear-gradient(135deg, #15803d 0%, #16a34a 100%);
-        color: #ffffff;
-        box-shadow: 0 4px 12px rgba(21, 128, 61, 0.22);
-    }
-    .poe-btn-success:disabled {
-        opacity: 0.6;
-        cursor: not-allowed;
-        transform: none;
-    }
-    .poe-given-list {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
-        margin-top: 8px;
-    }
+    .poe-btn-success { background: linear-gradient(135deg, #15803d 0%, #16a34a 100%); color: #fff; box-shadow: 0 4px 12px rgba(21,128,61,0.22); }
+    .poe-btn-outline { background: #f8fafc; color: #1b3668; border: 1.5px solid #cbd5e1; }
+    .poe-btn-outline:hover { background: #eff6ff; border-color: #93c5fd; }
+    .poe-btn-pdf { background: linear-gradient(135deg, #b91c1c 0%, #dc2626 100%); color: #fff; box-shadow: 0 4px 12px rgba(185,28,28,0.22); }
+
+    .poe-given-list { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
     .poe-given-pill {
-        background: #eff6ff;
-        border: 1px solid #cbdcf0;
-        color: #1b3668;
-        border-radius: 9px;
-        padding: 7px 12px;
-        font-weight: 600;
-        font-size: 0.92em;
+        background: #eff6ff; border: 1px solid #cbdcf0; color: #1b3668;
+        border-radius: 9px; padding: 7px 12px; font-weight: 600; font-size: 0.91em;
+    }
+    .poe-hint-box {
+        display: none; margin-top: 12px; background: #f0f9ff; border: 1px solid #bae6fd;
+        border-radius: 10px; padding: 10px 14px; color: #0c4a6e; font-size: 0.9em;
     }
     .poe-lock-banner {
-        background: #fffbeb;
-        border: 1px solid #fde68a;
-        color: #92400e;
-        border-radius: 10px;
-        padding: 10px 14px;
-        font-size: 0.88em;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        margin-bottom: 14px;
+        background: #fffbeb; border: 1px solid #fde68a; color: #92400e;
+        border-radius: 10px; padding: 10px 14px; font-size: 0.87em;
+        display: flex; align-items: center; gap: 10px; margin-bottom: 14px;
     }
-    .poe-lock-banner.ready {
-        background: #f0fdf4;
-        border-color: #bbf7d0;
-        color: #166534;
-    }
+    .poe-lock-banner.ready { background: #f0fdf4; border-color: #bbf7d0; color: #166534; }
     .poe-inputs-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
-        gap: 12px;
-        margin-bottom: 14px;
+        display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+        gap: 12px; margin-bottom: 14px;
     }
-    .poe-alert {
-        border-radius: 10px;
-        padding: 11px 14px;
-        font-size: 0.92em;
-        margin-top: 12px;
-        display: none;
+    .poe-alert { border-radius: 10px; padding: 11px 14px; font-size: 0.91em; margin-top: 12px; display: none; }
+    .poe-alert.err { background: #fef2f2; border: 1px solid #fecaca; color: #991b1b; }
+    .poe-alert.ok { background: #f0fdf4; border: 1px solid #bbf7d0; color: #166534; }
+
+    .poe-score-bar {
+        height: 10px; background: #e2e8f0; border-radius: 999px; overflow: hidden; margin-top: 8px;
     }
-    .poe-alert.err {
-        background: #fef2f2;
-        border: 1px solid #fecaca;
-        color: #991b1b;
-    }
-    .poe-alert.ok {
-        background: #f0fdf4;
-        border: 1px solid #bbf7d0;
-        color: #166534;
-    }
+    .poe-score-fill { height: 100%; border-radius: 999px; transition: width 0.35s ease; }
+
     .poe-fb-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-        gap: 10px;
-        margin-top: 12px;
+        display: grid; grid-template-columns: repeat(auto-fit, minmax(215px, 1fr));
+        gap: 10px; margin-top: 12px;
     }
     .poe-fb-item {
-        border-radius: 10px;
-        padding: 10px 13px;
-        font-size: 0.89em;
-        border: 1px solid #e2e8f0;
-        background: #f8fafc;
+        border-radius: 10px; padding: 10px 13px; font-size: 0.88em;
+        border: 1px solid #e2e8f0; background: #f8fafc;
     }
     .poe-fb-item.ok { background: #f0fdf4; border-color: #86efac; color: #166534; }
     .poe-fb-item.bad { background: #fef2f2; border-color: #fca5a5; color: #991b1b; }
+
     .poe-steps-box {
-        margin-top: 16px;
-        background: #f8fbff;
-        border: 1px solid #cbdcf0;
-        border-radius: 12px;
-        padding: 16px 20px;
+        margin-top: 16px; background: #f8fbff; border: 1px solid #cbdcf0;
+        border-radius: 12px; padding: 16px 20px;
     }
-    .poe-steps-box h4 {
-        margin: 0 0 10px 0;
-        color: #1b3668;
-    }
-    .poe-steps-box p {
-        margin: 6px 0;
-        font-size: 0.94em;
-        color: #1e293b;
-        font-family: 'Segoe UI', system-ui, sans-serif;
-    }
+    .poe-steps-box h4 { margin: 0 0 10px 0; color: #1b3668; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+    .poe-steps-box p { margin: 6px 0; font-size: 0.93em; color: #1e293b; }
+    .poe-cmp-table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 0.9em; background: #fff; border-radius: 8px; overflow: hidden; border: 1px solid #dbe7f5; }
+    .poe-cmp-table th { background: #eff6ff; color: #1b3668; padding: 8px 10px; text-align: left; }
+    .poe-cmp-table td { padding: 7px 10px; border-top: 1px solid #f1f5f9; }
 </style>
 {% endblock %}
 
@@ -222,12 +157,12 @@
                       data-zh="练习与自我评估模式 (POE)">Modo Exercício e Autoavaliação (POE)</span>
             </h2>
             <p class="lang-text"
-               data-pt-br="Prever, Calcular e Explicar: resolva no caderno usando tabelas ou equações. O memorial passo a passo só é desbloqueado após esforço real (trava anti-burla ativa)."
-               data-en="Predict, Calculate, and Explain: solve on paper using tables or equations. The step-by-step memorial unlocks only after genuine effort (anti-cheating lock active)."
-               data-es="Predecir, Calcular y Explicar: resuelve en cuaderno usando tablas o ecuaciones. La memoria paso a paso solo se desbloquea tras un esfuerzo real."
-               data-fr="Prédire, Calculer et Expliquer : résolvez sur papier à l'aide des tables ou équations. Le mémorial étape par étape ne se débloque qu'après un effort réel."
-               data-zh="预测、计算与解释：请先在纸上利用性质表或公式求解。仅在完成真实作答后才会解锁分步计算过程（防作弊锁已启用）。">
-                Prever, Calcular e Explicar: resolva no caderno usando tabelas ou equações. O memorial passo a passo só é desbloqueado após esforço real (trava anti-burla ativa).
+               data-pt-br="Prever, Calcular e Explicar: resolva no caderno usando tabelas ou equações. O memorial passo a passo só é desbloqueado após esforço real (trava anti-burla ativa) e pode ser exportado em PDF para entrega."
+               data-en="Predict, Calculate, and Explain: solve on paper using tables or equations. The step-by-step memorial unlocks only after genuine effort (anti-cheating lock active) and can be exported as PDF."
+               data-es="Predecir, Calcular y Explicar: resuelve en cuaderno usando tablas o ecuaciones. La memoria paso a paso solo se desbloquea tras un esfuerzo real y puede exportarse en PDF."
+               data-fr="Prédire, Calculer et Expliquer : résolvez sur papier à l'aide des tables ou équations. Le mémorial ne se débloque qu'après un effort réel et peut être exporté en PDF."
+               data-zh="预测、计算与解释：先在纸上使用性质表或公式求解。仅在完成真实作答后才会解锁分步解答（防作弊锁已启用），并支持导出 PDF 提交作业。">
+                Prever, Calcular e Explicar: resolva no caderno usando tabelas ou equações. O memorial passo a passo só é desbloqueado após esforço real (trava anti-burla ativa) e pode ser exportado em PDF para entrega.
             </p>
         </div>
         <a href="/" class="poe-btn" style="background: rgba(255,255,255,0.18); color: #fff; text-decoration: none;">
@@ -236,11 +171,26 @@
         </a>
     </div>
 
+    <!-- Placar da Sessão -->
+    <div class="poe-stats-bar">
+        <div class="poe-stat-pill">
+            <div class="poe-stat-icon" style="background:#eff6ff;color:#1b3668;"><i class="fas fa-tasks"></i></div>
+            <div><span class="st-lbl lang-text" data-pt-br="Resolvidos" data-en="Solved" data-es="Resueltos" data-fr="Résolus" data-zh="已完成">Resolvidos</span><span class="st-val" id="statSolved">0</span></div>
+        </div>
+        <div class="poe-stat-pill">
+            <div class="poe-stat-icon" style="background:#f0fdf4;color:#15803d;"><i class="fas fa-bullseye"></i></div>
+            <div><span class="st-lbl lang-text" data-pt-br="Média de Acerto" data-en="Average Score" data-es="Promedio" data-fr="Moyenne" data-zh="平均正确率">Média de Acerto</span><span class="st-val" id="statAvg">0%</span></div>
+        </div>
+        <div class="poe-stat-pill">
+            <div class="poe-stat-icon" style="background:#fffbeb;color:#d97706;"><i class="fas fa-fire"></i></div>
+            <div><span class="st-lbl lang-text" data-pt-br="Sequência (≥75%)" data-en="Streak (≥75%)" data-es="Racha (≥75%)" data-fr="Série (≥75%)" data-zh="连胜 (≥75%)">Sequência (≥75%)</span><span class="st-val" id="statStreak">0</span></div>
+        </div>
+    </div>
+
     <!-- Configuração e Geração -->
     <div class="poe-card">
         <h3>
-            <i class="fas fa-sliders-h"></i>
-            <span class="lang-text" data-pt-br="Configurar Novo Exercício" data-en="Configure New Exercise" data-es="Configurar Nuevo Ejercicio" data-fr="Configurer un Nouvel Exercice" data-zh="配置新练习题">Configurar Novo Exercício</span>
+            <span><i class="fas fa-sliders-h"></i> <span class="lang-text" data-pt-br="Configurar Novo Exercício" data-en="Configure New Exercise" data-es="Configurar Nuevo Ejercicio" data-fr="Configurer un Nouvel Exercice" data-zh="配置新练习题">Configurar Novo Exercício</span></span>
         </h3>
         <div class="poe-config-grid">
             <div class="poe-field">
@@ -257,18 +207,22 @@
                 </select>
             </div>
             <div class="poe-field">
-                <label class="lang-text" data-pt-br="Tipo de Processo" data-en="Process Type" data-es="Tipo de Proceso" data-fr="Type de Processus" data-zh="过程类型">Tipo de Processo</label>
+                <label class="lang-text" data-pt-br="Tipo de Exercício" data-en="Exercise Type" data-es="Tipo de Ejercicio" data-fr="Type d'Exercice" data-zh="题目类型">Tipo de Exercício</label>
                 <select id="poeProcess">
-                    <option value="pcte" class="lang-text" data-pt-br="Isobárico (P = cte)" data-en="Isobaric (P = const)" data-es="Isobárico (P = cte)" data-fr="Isobare (P = cte)" data-zh="等压过程 (P = 常数)">Isobárico (P = cte)</option>
+                    <option value="estado" class="lang-text" data-pt-br="Determinação de Estado" data-en="State Determination" data-es="Determinación de Estado" data-fr="Détermination d'État" data-zh="状态计算">Determinação de Estado</option>
+                    <option value="pcte" selected class="lang-text" data-pt-br="Isobárico (P = cte)" data-en="Isobaric (P = const)" data-es="Isobárico (P = cte)" data-fr="Isobare (P = cte)" data-zh="等压过程 (P = 常数)">Isobárico (P = cte)</option>
                     <option value="vcte" class="lang-text" data-pt-br="Isocórico (v = cte)" data-en="Isochoric (v = const)" data-es="Isocórico (v = cte)" data-fr="Isochore (v = cte)" data-zh="等容过程 (v = 常数)">Isocórico (v = cte)</option>
                     <option value="scte" class="lang-text" data-pt-br="Isentrópico (s = cte)" data-en="Isentropic (s = const)" data-es="Isentrópico (s = cte)" data-fr="Isentropique (s = cte)" data-zh="等熵过程 (s = 常数)">Isentrópico (s = cte)</option>
+                    <option value="tcte" class="lang-text" data-pt-br="Isotérmico (Gás Ideal)" data-en="Isothermal (Ideal Gas)" data-es="Isotérmico (Gas Ideal)" data-fr="Isotherme (Gaz Idéal)" data-zh="等温过程 (理想气体)">Isotérmico (Gás Ideal)</option>
+                    <option value="poli" class="lang-text" data-pt-br="Politrópico (Gás Ideal)" data-en="Polytropic (Ideal Gas)" data-es="Politrópico (Gas Ideal)" data-fr="Polytropique (Gaz Idéal)" data-zh="多变过程 (理想气体)">Politrópico (Gás Ideal)</option>
                 </select>
             </div>
             <div class="poe-field">
-                <label class="lang-text" data-pt-br="Nível" data-en="Level" data-es="Nivel" data-fr="Niveau" data-zh="难度">Nível</label>
+                <label class="lang-text" data-pt-br="Nível" data-en="Difficulty" data-es="Nivel" data-fr="Niveau" data-zh="难度">Nível</label>
                 <select id="poeDifficulty">
                     <option value="basic" class="lang-text" data-pt-br="Básico (m = 1,0 kg)" data-en="Basic (m = 1.0 kg)" data-es="Básico (m = 1,0 kg)" data-fr="Basique (m = 1,0 kg)" data-zh="基础 (m = 1.0 kg)">Básico (m = 1,0 kg)</option>
                     <option value="intermediate" class="lang-text" data-pt-br="Intermediário (m ≠ 1 kg)" data-en="Intermediate (m ≠ 1 kg)" data-es="Intermedio (m ≠ 1 kg)" data-fr="Intermédiaire (m ≠ 1 kg)" data-zh="进阶 (m ≠ 1 kg)">Intermediário (m ≠ 1 kg)</option>
+                    <option value="challenge" class="lang-text" data-pt-br="Avançado (Desafio 2ª Lei)" data-en="Advanced (2nd Law Challenge)" data-es="Avanzado (Desafío 2ª Ley)" data-fr="Avancé (Défi 2e Loi)" data-zh="挑战 (第二定律检验)">Avançado (Desafio 2ª Lei)</option>
                 </select>
             </div>
             <div>
@@ -284,16 +238,19 @@
     <div id="poeProblemArea" style="display: none; flex-direction: column; gap: 16px;">
         <div class="poe-card">
             <h3>
-                <i class="fas fa-clipboard-list"></i>
-                <span class="lang-text" data-pt-br="Enunciado e Dados Conhecidos" data-en="Problem Statement & Given Data" data-es="Enunciado y Datos Conocidos" data-fr="Énoncé et Données Connues" data-zh="题目描述与已知条件">Enunciado e Dados Conhecidos</span>
+                <span><i class="fas fa-clipboard-list"></i> <span class="lang-text" data-pt-br="Enunciado e Dados Conhecidos" data-en="Problem Statement & Given Data" data-es="Enunciado y Datos Conocidos" data-fr="Énoncé et Données Connues" data-zh="题目描述与已知条件">Enunciado e Dados Conhecidos</span></span>
+                <button type="button" id="btnShowFormulaHint" class="poe-btn poe-btn-outline" style="padding: 6px 12px; font-size: 0.84em;">
+                    <i class="fas fa-lightbulb"></i>
+                    <span class="lang-text" data-pt-br="Pedir Dica de Fórmula" data-en="Formula Hint" data-es="Pista de Fórmula" data-fr="Indice de Formule" data-zh="公式提示">Pedir Dica de Fórmula</span>
+                </button>
             </h3>
             <div id="poeGivenList" class="poe-given-list"></div>
+            <div id="poeFormulaHintBox" class="poe-hint-box"></div>
         </div>
 
         <div class="poe-card">
             <h3>
-                <i class="fas fa-brain"></i>
-                <span class="lang-text" data-pt-br="Etapa 1 (Prever — POE) e Etapa 2 (Suas Respostas)" data-en="Step 1 (Predict — POE) & Step 2 (Your Answers)" data-es="Paso 1 (Predecir — POE) y Paso 2 (Tus Respuestas)" data-fr="Étape 1 (Prédire — POE) et Étape 2 (Vos Réponses)" data-zh="第 1 步（预测 POE）与第 2 步（输入计算结果）">Etapa 1 (Prever — POE) e Etapa 2 (Suas Respostas)</span>
+                <span><i class="fas fa-brain"></i> <span class="lang-text" data-pt-br="Previsão (POE) e Suas Respostas" data-en="Prediction (POE) & Your Answers" data-es="Predicción (POE) y Tus Respuestas" data-fr="Prédiction (POE) et Vos Réponses" data-zh="预测 (POE) 与计算作答">Previsão (POE) e Suas Respostas</span></span>
             </h3>
 
             <div id="poeLockBanner" class="poe-lock-banner">
@@ -301,7 +258,7 @@
                 <span id="poeLockText"></span>
             </div>
 
-            <div class="poe-inputs-grid">
+            <div id="poePredRow" class="poe-inputs-grid">
                 <div class="poe-field">
                     <label class="lang-text" data-pt-br="Previsão de Volume" data-en="Volume Prediction" data-es="Predicción de Volumen" data-fr="Prédiction de Volume" data-zh="体积变化预测">Previsão de Volume</label>
                     <select id="predVol">
@@ -332,20 +289,33 @@
 
             <div id="poeNumericFields" class="poe-inputs-grid"></div>
 
-            <div class="poe-field" style="margin-bottom: 14px;">
-                <label class="lang-text"
-                       data-pt-br="Justificativa / Equações utilizadas (mín. 15 caracteres):"
-                       data-en="Justification / Equations used (min. 15 characters):"
-                       data-es="Justificación / Ecuaciones utilizadas (mín. 15 caracteres):"
-                       data-fr="Justification / Équations utilisées (min. 15 caractères) :"
-                       data-zh="解题依据 / 所用公式（至少 15 个字符）：">Justificativa / Equações utilizadas (mín. 15 caracteres):</label>
-                <textarea id="poeJustification" rows="2" placeholder="Ex.: Usei W = m·P·(v2 - v1) e Q = m·(h2 - h1) com as tabelas..."></textarea>
+            <div class="poe-inputs-grid" style="grid-template-columns: 2fr 1fr;">
+                <div class="poe-field">
+                    <label class="lang-text"
+                           data-pt-br="Justificativa / Equações utilizadas (mín. 15 caracteres):"
+                           data-en="Justification / Equations used (min. 15 characters):"
+                           data-es="Justificación / Ecuaciones utilizadas (mín. 15 caracteres):"
+                           data-fr="Justification / Équations utilisées (min. 15 caractères) :"
+                           data-zh="解题依据 / 所用公式（至少 15 个字符）：">Justificativa / Equações utilizadas (mín. 15 caracteres):</label>
+                    <textarea id="poeJustification" rows="2" placeholder="Ex.: Usei W = m·P·(v2 - v1) e Q = m·(h2 - h1) com as tabelas..."></textarea>
+                </div>
+                <div class="poe-field">
+                    <label class="lang-text"
+                           data-pt-br="Seu Nome (opcional, para PDF):"
+                           data-en="Your Name (optional, for PDF):"
+                           data-es="Tu Nombre (opcional, para PDF):"
+                           data-fr="Votre Nom (optionnel, pour PDF) :"
+                           data-zh="姓名（可选，用于 PDF 报告）：">Seu Nome (opcional, para PDF):</label>
+                    <input type="text" id="poeStudentName" placeholder="Ex.: Maria Silva">
+                </div>
             </div>
 
-            <button type="button" id="btnCheckPoe" class="poe-btn poe-btn-success">
-                <i class="fas fa-check-circle"></i>
-                <span class="lang-text" data-pt-br="Corrigir Respostas" data-en="Check Answers" data-es="Corregir Respuestas" data-fr="Corriger les Réponses" data-zh="提交批改">Corrigir Respostas</span>
-            </button>
+            <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
+                <button type="button" id="btnCheckPoe" class="poe-btn poe-btn-success">
+                    <i class="fas fa-check-circle"></i>
+                    <span class="lang-text" data-pt-br="Corrigir Respostas" data-en="Check Answers" data-es="Corregir Respuestas" data-fr="Corriger les Réponses" data-zh="提交批改">Corrigir Respostas</span>
+                </button>
+            </div>
 
             <div id="poeAlert" class="poe-alert"></div>
             <div id="poeFeedbackArea"></div>
@@ -360,14 +330,44 @@
 document.addEventListener('DOMContentLoaded', function () {
     var timerId = null;
     var currentPrompt = null;
+    var scoredThisExercise = false;
 
     var FIELD_LABELS = {
-        'T2': 'T₂ (Temperatura final)',
-        'P2': 'P₂ (Pressão final, kPa)',
-        'W': 'W (Trabalho, kJ)',
-        'Q': 'Q (Calor, kJ)',
-        'Sger': 'Sger (Entropia Gerada, kJ/K)'
+        'T2': 'T₂',
+        'P2': 'P₂ (kPa)',
+        'v': 'v (m³/kg)',
+        'V': 'V (m³)',
+        'h': 'h (kJ/kg)',
+        's': 's (kJ/kg·K)',
+        'W': 'W (kJ)',
+        'Q': 'Q (kJ)',
+        'Sger': 'Sger (kJ/K)'
     };
+
+    function loadStats() {
+        var st = { solved: 0, sumScore: 0, streak: 0 };
+        try {
+            var raw = localStorage.getItem('termoPoeStats_v1');
+            if (raw) st = Object.assign(st, JSON.parse(raw));
+        } catch (e) {}
+        document.getElementById('statSolved').textContent = st.solved;
+        document.getElementById('statAvg').textContent = st.solved ? Math.round(st.sumScore / st.solved) + '%' : '0%';
+        document.getElementById('statStreak').textContent = st.streak;
+        return st;
+    }
+
+    function recordStat(scorePct) {
+        if (scoredThisExercise) return;
+        scoredThisExercise = true;
+        var st = loadStats();
+        st.solved += 1;
+        st.sumScore += scorePct;
+        st.streak = scorePct >= 75 ? (st.streak + 1) : 0;
+        try { localStorage.setItem('termoPoeStats_v1', JSON.stringify(st)); } catch (e) {}
+        loadStats();
+    }
+
+    loadStats();
 
     function startCountdown(seconds) {
         if (timerId) clearInterval(timerId);
@@ -377,17 +377,24 @@ document.addEventListener('DOMContentLoaded', function () {
         function tick() {
             if (rem > 0) {
                 banner.classList.remove('ready');
-                txt.textContent = 'Trava anti-burla: resolva no caderno. Envio liberado em ' + rem + 's (o Memorial só abre após ≥ 75% de acerto ou 2 tentativas válidas distintas).';
+                txt.textContent = 'Trava anti-burla: resolva no caderno. Envio liberado em ' + rem + 's (Memorial desbloqueia com ≥ 75% ou 2 tentativas válidas distintas).';
                 rem--;
             } else {
                 clearInterval(timerId);
                 banner.classList.add('ready');
-                txt.textContent = 'Tempo mínimo concluído! Preencha as previsões POE, seus valores calculados e sua justificativa para corrigir.';
+                txt.textContent = 'Tempo mínimo concluído! Envie suas respostas e justificativa para correção.';
             }
         }
         tick();
         timerId = setInterval(tick, 1000);
     }
+
+    document.getElementById('btnShowFormulaHint').addEventListener('click', function () {
+        if (!currentPrompt || !currentPrompt.formula_hint) return;
+        var box = document.getElementById('poeFormulaHintBox');
+        box.innerHTML = '<i class="fas fa-lightbulb"></i> <strong>Dica:</strong> ' + currentPrompt.formula_hint;
+        box.style.display = 'block';
+    });
 
     document.getElementById('btnGeneratePoe').addEventListener('click', function () {
         var btn = this;
@@ -404,7 +411,12 @@ document.addEventListener('DOMContentLoaded', function () {
             btn.disabled = false;
             if (!data.ok) return;
             currentPrompt = data.prompt;
+            scoredThisExercise = false;
+
             document.getElementById('poeProblemArea').style.display = 'flex';
+            document.getElementById('poeFormulaHintBox').style.display = 'none';
+            document.getElementById('poePredRow').style.display = data.prompt.is_state ? 'none' : 'grid';
+
             document.getElementById('poeGivenList').innerHTML = data.prompt.given.map(function (g) {
                 return '<span class="poe-given-pill">' + g + '</span>';
             }).join('');
@@ -412,8 +424,8 @@ document.addEventListener('DOMContentLoaded', function () {
             var numDiv = document.getElementById('poeNumericFields');
             numDiv.innerHTML = data.prompt.ask_fields.map(function (f) {
                 var lbl = FIELD_LABELS[f] || f;
-                if (f === 'T2' && data.prompt.unit_t) lbl = 'T₂ (' + data.prompt.unit_t + ')';
-                return '<div class="poe-field"><label>' + lbl + '</label><input type="number" step="any" data-poe-field="' + f + '" placeholder="Digite o valor calculado"></div>';
+                if (f === 'T2' && data.prompt.unit_t) lbl = 'T (' + data.prompt.unit_t + ')';
+                return '<div class="poe-field"><label>' + lbl + '</label><input type="number" step="any" data-poe-field="' + f + '" placeholder="Digite o valor"></div>';
             }).join('');
 
             document.getElementById('predVol').value = '';
@@ -427,6 +439,34 @@ document.addEventListener('DOMContentLoaded', function () {
             startCountdown(data.min_seconds || 25);
         }).catch(function () { btn.disabled = false; });
     });
+
+    function exportPoePdf(data) {
+        var student = document.getElementById('poeStudentName').value.trim();
+        var justif = document.getElementById('poeJustification').value.trim();
+        var win = window.open('', '_blank', 'width=940,height=780');
+        if (!win) { window.print(); return; }
+        var rowsHtml = Object.keys(data.field_feedback).map(function (f) {
+            var it = data.field_feedback[f];
+            var truth = data.solution.values[f];
+            return '<tr><td><strong>' + f + '</strong></td><td>' + it.user_val + '</td><td><strong>' + truth + '</strong></td><td>' + it.rel_err + '%</td><td>' + (it.correct ? '✓ Correto' : '✗ Revisar') + '</td></tr>';
+        }).join('');
+        var stepsHtml = data.solution.steps.map(function (s) { return '<p>' + s + '</p>'; }).join('');
+        win.document.open();
+        win.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><title>TERMO-CP — Resolução POE</title>'
+            + '<style>@page{size:A4;margin:14mm;}body{font-family:"Segoe UI",Arial,sans-serif;color:#1e293b;font-size:11.5px;line-height:1.5;}'
+            + '.hdr{background:linear-gradient(135deg,#1b3668,#0d6ab0);color:#fff;padding:15px 20px;border-radius:10px;margin-bottom:14px;display:flex;justify-content:space-between;}'
+            + '.hdr h1{margin:0;font-size:15px;}.card{border:1px solid #cbd5e1;border-radius:10px;padding:13px 16px;margin-bottom:12px;}'
+            + 'h3{margin:0 0 8px 0;color:#1b3668;font-size:13px;}table{width:100%;border-collapse:collapse;font-size:11px;}'
+            + 'th{background:#eff6ff;color:#1b3668;padding:6px 9px;text-align:left;border-bottom:1px solid #cbdcf0;}td{padding:6px 9px;border-bottom:1px solid #f1f5f9;}'
+            + '</style></head><body>'
+            + '<div class="hdr"><div><h1>TERMO-CP — Comprovante de Exercício (POE)</h1>' + (student ? '<div>Estudante: ' + student + '</div>' : '') + '</div><div>' + new Date().toLocaleString() + '<br>Nota: ' + data.score_pct + '% (' + data.attempts + ' tentativa(s))</div></div>'
+            + '<div class="card"><h3>Dados do Enunciado</h3><p>' + currentPrompt.given.join(' &nbsp;|&nbsp; ') + '</p></div>'
+            + '<div class="card"><h3>Justificativa do Estudante</h3><p>' + justif + '</p></div>'
+            + '<div class="card"><h3>Comparação: Sua Resposta × Gabarito</h3><table><thead><tr><th>Grandeza</th><th>Sua Resposta</th><th>Gabarito</th><th>Erro (%)</th><th>Status</th></tr></thead><tbody>' + rowsHtml + '</tbody></table></div>'
+            + '<div class="card"><h3>Memorial de Cálculo Passo a Passo</h3>' + stepsHtml + '</div>'
+            + '<script>window.onload=function(){setTimeout(function(){window.focus();window.print();},300);};<\/script></body></html>');
+        win.document.close();
+    }
 
     document.getElementById('btnCheckPoe').addEventListener('click', function () {
         if (!currentPrompt) return;
@@ -454,12 +494,19 @@ document.addEventListener('DOMContentLoaded', function () {
                 alertBox.innerHTML = '<i class="fas fa-shield-alt"></i> ' + (data.message || data.error);
                 return;
             }
+            var barColor = data.score_pct >= 75 ? '#16a34a' : (data.score_pct >= 40 ? '#d97706' : '#dc2626');
             alertBox.className = 'poe-alert ' + (data.score_pct >= 75 ? 'ok' : 'err');
             alertBox.style.display = 'block';
             alertBox.innerHTML = '<strong>Tentativa #' + data.attempts + ' — Desempenho: ' + data.score_pct + '%</strong>'
-                + (data.unlocked ? ' · Memorial passo a passo desbloqueado abaixo!' : ' · Use as dicas abaixo e faça uma 2ª tentativa revisada para desbloquear o Memorial.');
+                + (data.unlocked ? ' · Memorial passo a passo desbloqueado!' : ' · Use as dicas abaixo e faça uma 2ª tentativa revisada para desbloquear o Memorial.')
+                + '<div class="poe-score-bar"><div class="poe-score-fill" style="width:' + data.score_pct + '%;background:' + barColor + ';"></div></div>';
 
             var fbHtml = '<div class="poe-fb-grid">';
+            if (data.poe_feedback) {
+                fbHtml += '<div class="poe-fb-item ' + (data.poe_feedback.vol ? 'ok' : 'bad') + '"><strong>POE Volume:</strong> ' + (data.poe_feedback.vol ? '✓ Previsão correta' : '✗ Reveja a variação de volume') + '</div>';
+                fbHtml += '<div class="poe-fb-item ' + (data.poe_feedback.heat ? 'ok' : 'bad') + '"><strong>POE Calor:</strong> ' + (data.poe_feedback.heat ? '✓ Previsão correta' : '✗ Reveja o sentido do calor') + '</div>';
+                fbHtml += '<div class="poe-fb-item ' + (data.poe_feedback.law2 ? 'ok' : 'bad') + '"><strong>POE 2ª Lei:</strong> ' + (data.poe_feedback.law2 ? '✓ Previsão correta' : '✗ Verifique o sinal de Sger') + '</div>';
+            }
             Object.keys(data.field_feedback).forEach(function (f) {
                 var item = data.field_feedback[f];
                 fbHtml += '<div class="poe-fb-item ' + (item.correct ? 'ok' : 'bad') + '">'
@@ -469,12 +516,20 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('poeFeedbackArea').innerHTML = fbHtml;
 
             if (data.unlocked && data.solution) {
-                var stepsHtml = '<div class="poe-steps-box"><h4><i class="fas fa-book-open"></i> Memorial Passo a Passo Desbloqueado</h4>';
+                recordStat(data.score_pct);
+                var cmpRows = Object.keys(data.field_feedback).map(function (f) {
+                    var it = data.field_feedback[f];
+                    return '<tr><td><strong>' + f + '</strong></td><td>' + it.user_val + '</td><td><strong>' + data.solution.values[f] + '</strong></td><td>' + it.rel_err + '%</td><td>' + (it.correct ? '✓' : '✗') + '</td></tr>';
+                }).join('');
+                var stepsHtml = '<div class="poe-steps-box"><h4><span><i class="fas fa-book-open"></i> Memorial Passo a Passo Desbloqueado</span>'
+                    + '<button type="button" id="btnExportPoePdf" class="poe-btn poe-btn-pdf" style="padding:7px 14px;font-size:0.84em;"><i class="fas fa-file-pdf"></i> Exportar Resolução (PDF)</button></h4>'
+                    + '<table class="poe-cmp-table"><thead><tr><th>Grandeza</th><th>Sua Resposta</th><th>Gabarito</th><th>Erro (%)</th><th>OK</th></tr></thead><tbody>' + cmpRows + '</tbody></table>';
                 data.solution.steps.forEach(function (s) {
                     stepsHtml += '<p>' + s + '</p>';
                 });
                 stepsHtml += '</div>';
                 document.getElementById('poeMemorialUnlock').innerHTML = stepsHtml;
+                document.getElementById('btnExportPoePdf').addEventListener('click', function () { exportPoePdf(data); });
             }
         });
     });
