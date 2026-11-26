@@ -1,0 +1,512 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+{% block coltype %}colMS{% endblock %}
+{% block bodyclass %}{{ block.super }} dashboard{% endblock %}
+{% block nav-breadcrumbs %}{% endblock %}
+{% block nav-sidebar %}{% endblock %}
+
+{% block content %}
+{% if analytics %}
+<style>
+    .tdash-wrap {
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+        margin-bottom: 26px;
+    }
+    .tdash-toolbar {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 14px;
+        padding: 14px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 12px;
+        box-shadow: 0 4px 14px rgba(15, 23, 42, 0.05);
+    }
+    .tdash-toolbar h2 {
+        margin: 0;
+        font-size: 1.15rem;
+        color: #1b3668;
+        font-weight: 800;
+    }
+    .tdash-toolbar .sub {
+        font-size: 0.84rem;
+        color: #64748b;
+        margin-top: 2px;
+    }
+    .tdash-actions {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+    .tdash-filter-group {
+        display: inline-flex;
+        background: #f1f5f9;
+        padding: 3px;
+        border-radius: 9px;
+        gap: 2px;
+    }
+    .tdash-filter-btn {
+        padding: 6px 11px;
+        border-radius: 7px;
+        font-size: 0.8rem;
+        font-weight: 700;
+        color: #475569 !important;
+        text-decoration: none !important;
+    }
+    .tdash-filter-btn.active {
+        background: #1b3668;
+        color: #ffffff !important;
+    }
+    .tdash-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 8px 13px;
+        border-radius: 9px;
+        font-size: 0.82rem;
+        font-weight: 700;
+        border: none;
+        cursor: pointer;
+        text-decoration: none !important;
+        transition: transform 0.14s ease, filter 0.14s ease;
+    }
+    .tdash-btn:hover { transform: translateY(-1px); filter: brightness(1.05); }
+    .tdash-btn-csv { background: #15803d; color: #ffffff !important; }
+    .tdash-btn-pdf { background: #b91c1c; color: #ffffff !important; }
+    .tdash-btn-site { background: #eff6ff; color: #1b3668 !important; border: 1px solid #bfdbfe; }
+
+    /* KPIs */
+    .tdash-kpis {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 14px;
+    }
+    .tdash-kpi {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 14px;
+        padding: 15px 18px;
+        box-shadow: 0 4px 12px rgba(15, 23, 42, 0.045);
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+    .tdash-kpi .k-lbl {
+        font-size: 0.74rem;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        color: #64748b;
+        font-weight: 700;
+    }
+    .tdash-kpi .k-val {
+        font-size: 1.75rem;
+        font-weight: 800;
+        color: #1b3668;
+        line-height: 1.15;
+    }
+    .tdash-kpi .k-sub {
+        font-size: 0.79rem;
+        color: #475569;
+    }
+
+    /* Grade de gráficos */
+    .tdash-charts-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px;
+    }
+    @media (max-width: 1020px) {
+        .tdash-charts-grid { grid-template-columns: 1fr; }
+    }
+    .tdash-chart-card {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 14px;
+        padding: 16px 18px;
+        box-shadow: 0 4px 14px rgba(15, 23, 42, 0.05);
+        display: flex;
+        flex-direction: column;
+    }
+    .tdash-chart-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 10px;
+    }
+    .tdash-chart-head h3 {
+        margin: 0;
+        font-size: 0.96rem;
+        color: #1b3668;
+        font-weight: 700;
+    }
+    .tdash-dl-btn {
+        padding: 5px 10px;
+        border-radius: 7px;
+        border: 1px solid #cbd5e1;
+        background: #f8fafc;
+        color: #1b3668;
+        font-size: 0.76rem;
+        font-weight: 700;
+        cursor: pointer;
+    }
+    .tdash-dl-btn:hover { background: #eff6ff; border-color: #93c5fd; }
+    .tdash-canvas-wrap {
+        position: relative;
+        height: 270px;
+        width: 100%;
+    }
+
+    /* Tabelas estatísticas para artigo */
+    .tdash-tables-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 16px;
+    }
+    .tdash-tbl-card {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 14px;
+        padding: 15px 18px;
+        box-shadow: 0 4px 14px rgba(15, 23, 42, 0.045);
+    }
+    .tdash-tbl-card h3 {
+        margin: 0 0 10px 0;
+        font-size: 0.94rem;
+        color: #1b3668;
+        font-weight: 700;
+    }
+    .tdash-tbl {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.84rem;
+    }
+    .tdash-tbl th {
+        background: #eff6ff;
+        color: #1b3668;
+        text-align: left;
+        padding: 7px 9px;
+        font-weight: 700;
+        border-bottom: 1.5px solid #cbdcf0;
+    }
+    .tdash-tbl td {
+        padding: 6px 9px;
+        border-bottom: 1px solid #f1f5f9;
+        color: #1e293b;
+    }
+    .tdash-tbl tr:last-child td { border-bottom: none; }
+    .tdash-empty {
+        color: #64748b;
+        font-size: 0.85rem;
+        margin: 8px 0 0 0;
+    }
+</style>
+
+<div class="tdash-wrap">
+    <!-- Barra de Controle e Exportação para Artigo -->
+    <div class="tdash-toolbar">
+        <div>
+            <h2>Painel de Métricas Científicas — TERMO-CP</h2>
+            <div class="sub">Gráficos em alta resolução (fundo branco) e tabelas de frequência (n e %) prontos para inclusão em artigos.</div>
+        </div>
+        <div class="tdash-actions">
+            <div class="tdash-filter-group">
+                <a href="?periodo=all" class="tdash-filter-btn {% if analytics.periodo == 'all' %}active{% endif %}">Todos</a>
+                <a href="?periodo=7" class="tdash-filter-btn {% if analytics.periodo == '7' %}active{% endif %}">7 dias</a>
+                <a href="?periodo=30" class="tdash-filter-btn {% if analytics.periodo == '30' %}active{% endif %}">30 dias</a>
+                <a href="?periodo=90" class="tdash-filter-btn {% if analytics.periodo == '90' %}active{% endif %}">90 dias</a>
+            </div>
+            <a href="{% url 'admin:termo_cp_export_article_csv' %}?periodo={{ analytics.periodo }}" class="tdash-btn tdash-btn-csv">
+                ⬇ Exportar CSV (Artigo)
+            </a>
+            <button type="button" onclick="window.print()" class="tdash-btn tdash-btn-pdf">
+                🖨 Imprimir / PDF
+            </button>
+            <a href="/" target="_blank" class="tdash-btn tdash-btn-site">
+                ↗ Abrir Plataforma
+            </a>
+        </div>
+    </div>
+
+    <!-- KPI Cards -->
+    <div class="tdash-kpis">
+        <div class="tdash-kpi">
+            <span class="k-lbl">Total de Simulações</span>
+            <span class="k-val">{{ analytics.total_sims }}</span>
+            <span class="k-sub">{{ analytics.sims_7d }} nos últimos 7 dias</span>
+        </div>
+        <div class="tdash-kpi">
+            <span class="k-lbl">Modo Exercício</span>
+            <span class="k-val">{{ analytics.total_ex }}</span>
+            <span class="k-sub">Média de acerto: <strong>{{ analytics.avg_score }}%</strong></span>
+        </div>
+        <div class="tdash-kpi">
+            <span class="k-lbl">Tempo Médio / Exercício</span>
+            <span class="k-val">{{ analytics.avg_time }}s</span>
+            <span class="k-sub">Uso de dica: {{ analytics.hint_pct }}%</span>
+        </div>
+        <div class="tdash-kpi">
+            <span class="k-lbl">Links Compartilhados</span>
+            <span class="k-val">{{ analytics.total_shares }}</span>
+            <span class="k-sub">Rotas curtas /s/&lt;código&gt;/</span>
+        </div>
+        <div class="tdash-kpi">
+            <span class="k-lbl">Mensagens de Contato</span>
+            <span class="k-val">{{ analytics.total_msgs }}</span>
+            <span class="k-sub">Feedbacks recebidos</span>
+        </div>
+    </div>
+
+    <!-- Gráficos Chart.js v4 com Export PNG Fundo Branco -->
+    <div class="tdash-charts-grid">
+        <div class="tdash-chart-card">
+            <div class="tdash-chart-head">
+                <h3>Simulações por Substância</h3>
+                <button type="button" class="tdash-dl-btn" onclick="downloadChartPng('chartBySub', 'termo_cp_substancias.png')">⬇ Baixar PNG (Artigo)</button>
+            </div>
+            <div class="tdash-canvas-wrap"><canvas id="chartBySub"></canvas></div>
+        </div>
+
+        <div class="tdash-chart-card">
+            <div class="tdash-chart-head">
+                <h3>Simulações por Tipo de Processo</h3>
+                <button type="button" class="tdash-dl-btn" onclick="downloadChartPng('chartByType', 'termo_cp_processos.png')">⬇ Baixar PNG (Artigo)</button>
+            </div>
+            <div class="tdash-canvas-wrap"><canvas id="chartByType"></canvas></div>
+        </div>
+
+        <div class="tdash-chart-card">
+            <div class="tdash-chart-head">
+                <h3>Distribuição por Idioma</h3>
+                <button type="button" class="tdash-dl-btn" onclick="downloadChartPng('chartByLang', 'termo_cp_idiomas.png')">⬇ Baixar PNG (Artigo)</button>
+            </div>
+            <div class="tdash-canvas-wrap"><canvas id="chartByLang"></canvas></div>
+        </div>
+
+        <div class="tdash-chart-card">
+            <div class="tdash-chart-head">
+                <h3>Evolução Diária de Simulações</h3>
+                <button type="button" class="tdash-dl-btn" onclick="downloadChartPng('chartTimeline', 'termo_cp_evolucao_uso.png')">⬇ Baixar PNG (Artigo)</button>
+            </div>
+            <div class="tdash-canvas-wrap"><canvas id="chartTimeline"></canvas></div>
+        </div>
+    </div>
+
+    {% if analytics.ex_by_sub %}
+    <div class="tdash-chart-card">
+        <div class="tdash-chart-head">
+            <h3>Desempenho no Modo Exercício por Substância (Média de Acerto %)</h3>
+            <button type="button" class="tdash-dl-btn" onclick="downloadChartPng('chartExScore', 'termo_cp_desempenho_exercicio.png')">⬇ Baixar PNG (Artigo)</button>
+        </div>
+        <div class="tdash-canvas-wrap" style="height:240px;"><canvas id="chartExScore"></canvas></div>
+    </div>
+    {% endif %}
+
+    <!-- Tabelas de Frequência (n e %) prontas para copiar no artigo -->
+    <div class="tdash-tables-grid">
+        <div class="tdash-tbl-card">
+            <h3>Tabela 1 — Simulações por Substância</h3>
+            {% if analytics.by_sub %}
+            <table class="tdash-tbl">
+                <thead><tr><th>Substância</th><th>n</th><th>%</th></tr></thead>
+                <tbody>
+                {% for r in analytics.by_sub %}
+                    <tr><td><strong>{{ r.label }}</strong></td><td>{{ r.count }}</td><td>{{ r.pct }}%</td></tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            {% else %}<p class="tdash-empty">Sem registros no período selecionado.</p>{% endif %}
+        </div>
+
+        <div class="tdash-tbl-card">
+            <h3>Tabela 2 — Simulações por Tipo</h3>
+            {% if analytics.by_type %}
+            <table class="tdash-tbl">
+                <thead><tr><th>Tipo</th><th>n</th><th>%</th></tr></thead>
+                <tbody>
+                {% for r in analytics.by_type %}
+                    <tr><td><strong>{{ r.label }}</strong></td><td>{{ r.count }}</td><td>{{ r.pct }}%</td></tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            {% else %}<p class="tdash-empty">Sem registros no período selecionado.</p>{% endif %}
+        </div>
+
+        <div class="tdash-tbl-card">
+            <h3>Tabela 3 — Distribuição por Idioma</h3>
+            {% if analytics.by_lang %}
+            <table class="tdash-tbl">
+                <thead><tr><th>Idioma</th><th>n</th><th>%</th></tr></thead>
+                <tbody>
+                {% for r in analytics.by_lang %}
+                    <tr><td><strong>{{ r.label }}</strong></td><td>{{ r.count }}</td><td>{{ r.pct }}%</td></tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            {% else %}<p class="tdash-empty">Sem registros no período selecionado.</p>{% endif %}
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+<script>
+(function () {
+    const data = {{ analytics.chart_json|safe }};
+    const palette = ['#1b3668', '#0d6ab0', '#16a34a', '#d97706', '#dc2626', '#7c3aed', '#0891b2', '#64748b'];
+
+    // Plugin para garantir fundo branco nítido na exportação PNG para artigos
+    const whiteBgPlugin = {
+        id: 'whiteBg',
+        beforeDraw(chart) {
+            const ctx = chart.canvas.getContext('2d');
+            ctx.save();
+            ctx.globalCompositeOperation = 'destination-over';
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, chart.width, chart.height);
+            ctx.restore();
+        }
+    };
+
+    const commonOpts = {
+        responsive: true,
+        maintainAspectRatio: false,
+        devicePixelRatio: 2,
+        plugins: {
+            legend: { labels: { color: '#1e293b', font: { family: 'Segoe UI, Arial', size: 12 } } }
+        }
+    };
+
+    new Chart(document.getElementById('chartBySub'), {
+        type: 'bar',
+        plugins: [whiteBgPlugin],
+        data: {
+            labels: data.by_sub.labels.length ? data.by_sub.labels : ['Sem dados'],
+            datasets: [{
+                label: 'Simulações (n)',
+                data: data.by_sub.values.length ? data.by_sub.values : [0],
+                backgroundColor: palette,
+                borderRadius: 6
+            }]
+        },
+        options: Object.assign({}, commonOpts, {
+            indexAxis: 'y',
+            plugins: { legend: { display: false } },
+            scales: {
+                x: { beginAtZero: true, ticks: { precision: 0, color: '#334155' }, grid: { color: '#e2e8f0' } },
+                y: { ticks: { color: '#1e293b', font: { weight: '600' } }, grid: { display: false } }
+            }
+        })
+    });
+
+    new Chart(document.getElementById('chartByType'), {
+        type: 'bar',
+        plugins: [whiteBgPlugin],
+        data: {
+            labels: data.by_type.labels.length ? data.by_type.labels : ['Sem dados'],
+            datasets: [{
+                label: 'Simulações (n)',
+                data: data.by_type.values.length ? data.by_type.values : [0],
+                backgroundColor: '#0d6ab0',
+                borderRadius: 6
+            }]
+        },
+        options: Object.assign({}, commonOpts, {
+            plugins: { legend: { display: false } },
+            scales: {
+                y: { beginAtZero: true, ticks: { precision: 0, color: '#334155' }, grid: { color: '#e2e8f0' } },
+                x: { ticks: { color: '#1e293b', font: { weight: '600' } }, grid: { display: false } }
+            }
+        })
+    });
+
+    new Chart(document.getElementById('chartByLang'), {
+        type: 'doughnut',
+        plugins: [whiteBgPlugin],
+        data: {
+            labels: data.by_lang.labels.length ? data.by_lang.labels : ['Sem dados'],
+            datasets: [{
+                data: data.by_lang.values.length ? data.by_lang.values : [1],
+                backgroundColor: data.by_lang.values.length ? palette : ['#e2e8f0'],
+                borderWidth: 2,
+                borderColor: '#ffffff'
+            }]
+        },
+        options: Object.assign({}, commonOpts, {
+            cutout: '56%',
+            plugins: {
+                legend: { position: 'right', labels: { color: '#1e293b', padding: 14, font: { size: 12 } } }
+            }
+        })
+    });
+
+    new Chart(document.getElementById('chartTimeline'), {
+        type: 'line',
+        plugins: [whiteBgPlugin],
+        data: {
+            labels: data.timeline.labels,
+            datasets: [{
+                label: 'Simulações / dia',
+                data: data.timeline.values,
+                borderColor: '#1b3668',
+                backgroundColor: 'rgba(13, 106, 176, 0.14)',
+                borderWidth: 2.5,
+                tension: 0.3,
+                fill: true,
+                pointRadius: 3,
+                pointBackgroundColor: '#0d6ab0'
+            }]
+        },
+        options: Object.assign({}, commonOpts, {
+            plugins: { legend: { display: false } },
+            scales: {
+                y: { beginAtZero: true, ticks: { precision: 0, color: '#334155' }, grid: { color: '#e2e8f0' } },
+                x: { ticks: { maxTicksLimit: 10, color: '#475569' }, grid: { display: false } }
+            }
+        })
+    });
+
+    const exCanvas = document.getElementById('chartExScore');
+    if (exCanvas && data.ex_by_sub.labels.length) {
+        new Chart(exCanvas, {
+            type: 'bar',
+            plugins: [whiteBgPlugin],
+            data: {
+                labels: data.ex_by_sub.labels,
+                datasets: [{
+                    label: 'Média de Acerto (%)',
+                    data: data.ex_by_sub.scores,
+                    backgroundColor: '#16a34a',
+                    borderRadius: 6
+                }]
+            },
+            options: Object.assign({}, commonOpts, {
+                scales: {
+                    y: { beginAtZero: true, max: 100, ticks: { color: '#334155' }, grid: { color: '#e2e8f0' } },
+                    x: { ticks: { color: '#1e293b', font: { weight: '600' } }, grid: { display: false } }
+                }
+            })
+        });
+    }
+
+    window.downloadChartPng = function (canvasId, filename) {
+        const c = document.getElementById(canvasId);
+        if (!c) return;
+        const a = document.createElement('a');
+        a.href = c.toDataURL('image/png', 1.0);
+        a.download = filename;
+        a.click();
+    };
+})();
+</script>
+{% endif %}
+
+<div id="content-main" class="tdash-models-section">
+    {% include "admin/app_list.html" with app_list=app_list show_changelinks=True %}
+</div>
+{% endblock %}

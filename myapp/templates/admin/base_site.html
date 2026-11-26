@@ -1,0 +1,123 @@
+{% extends "admin/base.html" %}
+{% load static %}
+
+{% block title %}{% if subtitle %}{{ subtitle }} | {% endif %}{{ title }} | TERMO-CP Admin{% endblock %}
+
+{% block extrastyle %}
+{{ block.super }}
+<link rel="icon" type="image/png" href="{% static 'myapp/img/favicon.png' %}">
+<style>
+    :root {
+        --primary: #1b3668;
+        --secondary: #0d6ab0;
+        --accent: #dbeafe;
+        --header-bg: linear-gradient(135deg, #1b3668 0%, #0d6ab0 100%);
+        --header-color: #ffffff;
+        --header-link-color: #ffffff;
+        --breadcrumbs-bg: #1e3a6e;
+        --link-fg: #0d6ab0;
+        --link-hover-color: #1b3668;
+        --button-bg: #1b3668;
+        --button-hover-bg: #0d6ab0;
+        --default-button-bg: #0d6ab0;
+        --default-button-hover-bg: #1b3668;
+        --body-bg: #f1f5f9;
+        --darkened-bg: #ffffff;
+        --hairline-color: #e2e8f0;
+        --border-color: #cbd5e1;
+    }
+
+    body {
+        font-family: 'Segoe UI', system-ui, -apple-system, Roboto, Arial, sans-serif !important;
+        background: #f1f5f9 !important;
+        color: #1e293b !important;
+    }
+
+    #header {
+        background: linear-gradient(135deg, #1b3668 0%, #0d6ab0 100%) !important;
+        color: #ffffff !important;
+        padding: 12px 28px !important;
+        box-shadow: 0 4px 16px rgba(27, 54, 104, 0.22);
+    }
+
+    #branding h1 {
+        font-weight: 800 !important;
+        font-size: 1.25rem !important;
+        letter-spacing: -0.01em;
+    }
+
+    #branding h1 a:link, #branding h1 a:visited {
+        color: #ffffff !important;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    #branding img.termo-admin-logo {
+        width: 28px;
+        height: 28px;
+        border-radius: 7px;
+        background: rgba(255, 255, 255, 0.16);
+        padding: 2px;
+    }
+
+    #user-tools {
+        font-size: 0.85rem !important;
+    }
+
+    #user-tools a {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.35);
+    }
+
+    div.breadcrumbs {
+        background: #162d57 !important;
+        padding: 9px 28px !important;
+        font-size: 0.85rem !important;
+    }
+
+    #content {
+        padding: 20px 28px 36px !important;
+    }
+
+    .module {
+        background: #ffffff !important;
+        border: 1px solid #e2e8f0 !important;
+        border-radius: 12px !important;
+        overflow: hidden;
+        box-shadow: 0 4px 14px rgba(15, 23, 42, 0.05);
+        margin-bottom: 18px !important;
+    }
+
+    .module h2, .module caption, .inline-group h2 {
+        background: linear-gradient(135deg, #1b3668 0%, #0d6ab0 100%) !important;
+        color: #ffffff !important;
+        font-weight: 700 !important;
+        padding: 10px 16px !important;
+        font-size: 0.92rem !important;
+    }
+
+    .button, input[type=submit], input[type=button], .submit-row input, a.button {
+        border-radius: 8px !important;
+        font-weight: 600 !important;
+    }
+
+    /* Desativa dark mode forçado do admin para manter gráficos e tabelas limpos para print de artigo */
+    @media print {
+        #header, div.breadcrumbs, #nav-sidebar, .toggle-nav-sidebar, .tdash-actions, .tdash-dl-btn, #content-related, .tdash-models-section {
+            display: none !important;
+        }
+        body, #content { background: #ffffff !important; padding: 0 !important; }
+    }
+</style>
+{% endblock %}
+
+{% block branding %}
+<h1 id="site-name">
+    <a href="{% url 'admin:index' %}">
+        <img src="{% static 'myapp/img/favicon.png' %}" alt="TERMO-CP" class="termo-admin-logo">
+        <span>TERMO-CP · Painel Científico</span>
+    </a>
+</h1>
+{% endblock %}
+
+{% block nav-global %}{% endblock %}

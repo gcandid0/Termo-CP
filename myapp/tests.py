@@ -742,3 +742,27 @@ class ExtrasFeaturesTests(TestCase):
         })
         self.assertEqual(r_bot.status_code, 302)
         self.assertEqual(MensagemContato.objects.count(), before)
+
+    def test_admin_scientific_dashboard_and_csv_export(self):
+        from django.contrib.auth import get_user_model
+        from myapp.models import UsoSimulacao
+        UsoSimulacao.objects.create(substancia='Água', tipo='Isobárico', idioma='pt-br')
+        UsoSimulacao.objects.create(substancia='Amônia', tipo='Isentrópico', idioma='en')
+
+        # Anônimo não acessa exportação CSV do artigo
+        anon = self.client.get('/admin/exportar-estatisticas-artigo/')
+        self.assertEqual(anon.status_code, 302)
+
+        User = get_user_model()
+        su = User.objects.create_superuser('admin_test', 'admin@test.local', 'StrongPass123!')
+        self.client.force_login(su)
+
+        dash = self.client.get('/admin/?periodo=30')
+        self.assertEqual(dash.status_code, 200)
+        self.assertContains(dash, 'Painel de Métricas Científicas')
+        self.assertContains(dash, 'chartBySub')
+
+        csv_resp = self.client.get('/admin/exportar-estatisticas-artigo/?periodo=all')
+        self.assertEqual(csv_resp.status_code, 200)
+        self.assertIn('text/csv', csv_resp['Content-Type'])
+        self.assertIn('SIMULAÇÕES POR SUBSTÂNCIA', csv_resp.content.decode('utf-8'))
