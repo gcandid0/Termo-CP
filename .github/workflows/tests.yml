@@ -24,7 +24,10 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt ruff
+          pip install -r requirements.txt ruff pip-audit
+
+      - name: Security Dependency Audit (pip-audit)
+        run: pip-audit -r requirements.txt
 
       - name: Static Analysis (Ruff)
         run: ruff check myapp termocp

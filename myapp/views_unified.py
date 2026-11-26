@@ -79,10 +79,26 @@ def erro_generico_view(request):
 
 def contato_view(request):
     if request.method == 'POST':
-        nome = request.POST.get('nome', '').strip()
-        email = request.POST.get('email', '').strip()
-        assunto_tipo = request.POST.get('assunto', '').strip()
-        mensagem = request.POST.get('mensagem', '').strip()
+        # Honeypot invisível contra bots de spam
+        if request.POST.get('website', '').strip():
+            messages.success(request, 'Mensagem enviada com sucesso!')
+            return redirect('contato')
+
+        # Rate limit: máx. 5 envios por hora por IP
+        from django.core.cache import cache
+        xff = request.META.get('HTTP_X_FORWARDED_FOR', '')
+        ip = (xff.split(',')[0].strip() if xff else str(request.META.get('REMOTE_ADDR', 'unknown')))[:64]
+        rl_key = f'rl:contato:{ip}'
+        sent_count = cache.get(rl_key, 0)
+        if sent_count >= 5:
+            messages.error(request, 'Limite de envios atingido. Tente novamente mais tarde.')
+            return redirect('contato')
+        cache.set(rl_key, sent_count + 1, timeout=3600)
+
+        nome = request.POST.get('nome', '').strip()[:120]
+        email = request.POST.get('email', '').strip()[:160]
+        assunto_tipo = request.POST.get('assunto', '').strip()[:80]
+        mensagem = request.POST.get('mensagem', '').strip()[:3000]
 
         if not nome or not email or not mensagem:
             messages.error(request, 'Por favor, preencha todos os campos.')

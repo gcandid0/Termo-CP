@@ -53,7 +53,7 @@ urlpatterns = [
 
     # Rotas Legadas (Mantidas para 100% de retrocompatibilidade)
     path('', include('myapp.agua_urls')),
-    path('admin/', admin.site.urls),
+    path(settings.ADMIN_URL, admin.site.urls),
     path('agua/', include('myapp.agua_urls')),
     path('gas/', include('myapp.gas_urls')),
     path('amonia/', include('myapp.amonia_urls')),

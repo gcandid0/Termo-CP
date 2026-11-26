@@ -691,3 +691,54 @@ class ExtrasFeaturesTests(TestCase):
         self.assertEqual(open_resp.status_code, 200)
         self.assertEqual(open_resp.context['Trabalho'], orig_work)
         self.assertEqual(open_resp.context['Calor'], orig_heat)
+
+    def test_security_csrf_enforced_and_payload_sanitized(self):
+        # 1. CSRF deve ser exigido em /api/compartilhar/
+        csrf_client = Client(enforce_csrf_checks=True)
+        r_no_csrf = csrf_client.post(
+            '/api/compartilhar/',
+            data=json.dumps({'titulo': 'X', 'substancia': 'Água', 'tipo': 'Estado', 'payload': {}}),
+            content_type='application/json',
+        )
+        self.assertEqual(r_no_csrf.status_code, 403)
+
+        # 2. Payload acima de 600 KB é rejeitado (413)
+        big = 'A' * (650 * 1024)
+        r_big = self.client.post(
+            '/api/compartilhar/',
+            data=json.dumps({'titulo': 'Big', 'substancia': 'Água', 'tipo': 'Estado', 'payload': {'big': big}}),
+            content_type='application/json',
+        )
+        self.assertEqual(r_big.status_code, 413)
+
+        # 3. cylinder_img malicioso e source_path proibido (/admin/) são descartados na sanitização
+        r_san = self.client.post(
+            '/api/compartilhar/',
+            data=json.dumps({
+                'titulo': 'Teste San',
+                'substancia': 'Água',
+                'tipo': 'Estado',
+                'source_path': '/admin/',
+                'payload': {
+                    'source_path': '//evil.example.com',
+                    'cylinder_img': 'javascript:alert(1)',
+                    'cards': [{'title': 'OK', 'rows': [{'label': 'T', 'value': '100'}]}],
+                },
+            }),
+            content_type='application/json',
+        )
+        self.assertEqual(r_san.status_code, 200)
+        from myapp.models import SimulacaoCompartilhada
+        sim = SimulacaoCompartilhada.objects.get(codigo=r_san.json()['codigo'])
+        saved = json.loads(sim.payload_json)
+        self.assertNotIn('cylinder_img', saved)
+        self.assertNotIn('source_path', saved)
+
+        # 4. Honeypot em /contato/ bloqueia spam silenciosamente sem gravar no banco
+        from myapp.models import MensagemContato
+        before = MensagemContato.objects.count()
+        r_bot = self.client.post('/contato/', {
+            'nome': 'Bot', 'email': 'bot@spam.test', 'mensagem': 'spam', 'website': 'http://spam.test',
+        })
+        self.assertEqual(r_bot.status_code, 302)
+        self.assertEqual(MensagemContato.objects.count(), before)

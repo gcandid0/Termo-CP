@@ -1,5 +1,7 @@
 import os
+import sys
 from pathlib import Path
+from django.core.exceptions import ImproperlyConfigured
 from dotenv import load_dotenv
 
 # Carrega as variáveis do arquivo .env
@@ -8,18 +10,31 @@ load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-termo-cp-dev-fallback-key-12345')
-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
+RUNNING_TESTS = ('test' in sys.argv) or ('pytest' in sys.argv[0])
 
-# Configuração de hosts permitidos (Local e Produção)
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'gcandid0.pythonanywhere.com', 'testserver']
+# SECURITY WARNING: keep the secret key used in production secret!
+_DEV_FALLBACK_KEY = 'django-insecure-termo-cp-dev-fallback-key-12345'
+SECRET_KEY = os.getenv('SECRET_KEY', _DEV_FALLBACK_KEY)
+if not DEBUG and not RUNNING_TESTS and SECRET_KEY == _DEV_FALLBACK_KEY:
+    raise ImproperlyConfigured(
+        'Defina uma SECRET_KEY segura no arquivo .env antes de executar em produção (DEBUG=False).'
+    )
+
+# Configuração de hosts permitidos (separando desenvolvimento e produção)
+_env_hosts = [h.strip() for h in os.getenv('ALLOWED_HOSTS', '').split(',') if h.strip()]
+if _env_hosts:
+    ALLOWED_HOSTS = _env_hosts
+elif DEBUG or RUNNING_TESTS:
+    ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'gcandid0.pythonanywhere.com', 'testserver']
+else:
+    ALLOWED_HOSTS = ['gcandid0.pythonanywhere.com']
+
+# Rota configurável do Django Admin (defina ADMIN_URL no .env para ocultar /admin/ em produção)
+ADMIN_URL = os.getenv('ADMIN_URL', 'admin/').strip().lstrip('/')
+if not ADMIN_URL.endswith('/'):
+    ADMIN_URL += '/'
 
 
 # Application definition
@@ -138,10 +153,22 @@ EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 CONTACT_EMAIL_DESTINATION = os.getenv('CONTACT_EMAIL_DESTINATION')
 
-# Segurança HTTP automática em produção (DEBUG=False)
-if not DEBUG:
+# Limite máximo de corpo POST (1 MB) e cookies endurecidos
+DATA_UPLOAD_MAX_MEMORY_SIZE = 1048576
+SESSION_COOKIE_HTTPONLY = True
+SESSION_COOKIE_SAMESITE = 'Lax'
+CSRF_COOKIE_SAMESITE = 'Lax'
+SECURE_CONTENT_TYPE_NOSNIFF = True
+SECURE_REFERRER_POLICY = 'same-origin'
+X_FRAME_OPTIONS = 'DENY'
+
+# Segurança HTTP/HTTPS automática em produção (DEBUG=False)
+if not DEBUG and not RUNNING_TESTS:
     SECURE_BROWSER_XSS_FILTER = True
-    SECURE_CONTENT_TYPE_NOSNIFF = True
-    X_FRAME_OPTIONS = 'DENY'
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    SECURE_SSL_REDIRECT = os.getenv('SECURE_SSL_REDIRECT', 'True') == 'True'
+    SECURE_HSTS_SECONDS = int(os.getenv('SECURE_HSTS_SECONDS', '31536000'))
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
     SESSION_COOKIE_SECURE = os.getenv('SESSION_COOKIE_SECURE', 'True') == 'True'
     CSRF_COOKIE_SECURE = os.getenv('CSRF_COOKIE_SECURE', 'True') == 'True'

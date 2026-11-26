@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token }}">
     <title>{% block title %}TERMO-CP - Resultados{% endblock %}</title>
 
     <!-- Ícones e Bandeiras -->
@@ -131,7 +132,7 @@
 
     <!-- SCRIPT GLOBAL DA TROCA DE IDIOMA -->
     <!-- Espaço para JavaScript específico da página filha -->
-    <script src="{% static 'myapp/js/base_ui.js' %}?v=15"></script>
+    <script src="{% static 'myapp/js/base_ui.js' %}?v=16"></script>
     {% block extra_js %}{% endblock %}
 
 </body>

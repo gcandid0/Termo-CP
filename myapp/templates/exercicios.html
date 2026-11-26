@@ -613,6 +613,21 @@ document.addEventListener('DOMContentLoaded', function () {
         return parseFloat(String(str || '').replace(',', '.').trim());
     }
 
+    function escapeHtml(str) {
+        return String(str || '')
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+    }
+
+    function getCsrfToken() {
+        if (window.getTermoCsrfToken) return window.getTermoCsrfToken();
+        var m = document.querySelector('meta[name="csrf-token"]');
+        return m ? (m.getAttribute('content') || '') : '';
+    }
+
     function fmtTime(s) {
         var mm = String(Math.floor(s / 60)).padStart(2, '0');
         var ss = String(s % 60).padStart(2, '0');
@@ -835,7 +850,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         fetch('/api/exercicios/gerar/', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCsrfToken() },
             body: JSON.stringify({
                 substance: document.getElementById('exSubstance').value,
                 process: procVal,
@@ -904,14 +919,14 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     function exportExercisePdf(data) {
-        var student = document.getElementById('exStudentName').value.trim() || 'Não informado';
-        var justif = document.getElementById('exJustification').value.trim();
+        var student = escapeHtml(document.getElementById('exStudentName').value.trim() || 'Não informado');
+        var justif = escapeHtml(document.getElementById('exJustification').value.trim());
         var win = window.open('', '_blank', 'width=940,height=780');
         if (!win) { window.print(); return; }
         var rowsHtml = Object.keys(data.field_feedback).map(function (f) {
             var it = data.field_feedback[f];
             var truth = data.solution.values[f];
-            return '<tr><td><strong>' + fieldLabel(f) + '</strong></td><td>' + it.user_val + '</td><td><strong>' + truth + '</strong></td><td>' + it.rel_err + '%</td><td>' + (it.correct ? '✓ Correto' : '✗ Revisar') + '</td></tr>';
+            return '<tr><td><strong>' + escapeHtml(fieldLabel(f)) + '</strong></td><td>' + escapeHtml(it.user_val) + '</td><td><strong>' + escapeHtml(truth) + '</strong></td><td>' + escapeHtml(it.rel_err) + '%</td><td>' + (it.correct ? '✓ Correto' : '✗ Revisar') + '</td></tr>';
         }).join('');
         var stepsHtml = data.solution.steps.map(function (s) { return '<p>' + s + '</p>'; }).join('');
         win.document.open();
@@ -923,9 +938,9 @@ document.addEventListener('DOMContentLoaded', function () {
             + 'th{background:#eff6ff;color:#1b3668;padding:6px 9px;text-align:left;border-bottom:1px solid #cbdcf0;}td{padding:6px 9px;border-bottom:1px solid #f1f5f9;}'
             + '.code{font-family:Consolas,monospace;font-weight:700;background:rgba(255,255,255,0.2);padding:2px 8px;border-radius:5px;display:inline-block;margin-top:4px;}'
             + '</style></head><body>'
-            + '<div class="hdr"><div><h1>TERMO-CP — Comprovante do Modo Exercício</h1><div>Estudante: ' + student + '</div><div class="code">Autenticidade: ' + (data.receipt_code || '—') + '</div></div>'
-            + '<div style="text-align:right;">' + new Date().toLocaleString() + '<br><strong>Nota: ' + data.score_pct + '%</strong> (' + data.attempts + ' tentativa(s))<br>Tempo: ' + fmtTime(data.elapsed_seconds || elapsedSec) + ' · Dica: ' + (usedHintThisExercise ? 'Sim' : 'Não') + '</div></div>'
-            + '<div class="card"><h3>Enunciado e Dados</h3><p>' + (currentPrompt.statement || '') + '</p><p><strong>' + currentPrompt.given.join(' &nbsp;|&nbsp; ') + '</strong></p></div>'
+            + '<div class="hdr"><div><h1>TERMO-CP — Comprovante do Modo Exercício</h1><div>Estudante: ' + student + '</div><div class="code">Autenticidade: ' + escapeHtml(data.receipt_code || '—') + '</div></div>'
+            + '<div style="text-align:right;">' + escapeHtml(new Date().toLocaleString()) + '<br><strong>Nota: ' + escapeHtml(data.score_pct) + '%</strong> (' + escapeHtml(data.attempts) + ' tentativa(s))<br>Tempo: ' + escapeHtml(fmtTime(data.elapsed_seconds || elapsedSec)) + ' · Dica: ' + (usedHintThisExercise ? 'Sim' : 'Não') + '</div></div>'
+            + '<div class="card"><h3>Enunciado e Dados</h3><p>' + escapeHtml(currentPrompt.statement || '') + '</p><p><strong>' + currentPrompt.given.join(' &nbsp;|&nbsp; ') + '</strong></p></div>'
             + '<div class="card"><h3>Justificativa do Estudante</h3><p>' + justif + '</p></div>'
             + '<div class="card"><h3>Comparação: Sua Resposta × Gabarito</h3><table><thead><tr><th>Grandeza</th><th>Sua Resposta</th><th>Gabarito</th><th>Erro (%)</th><th>Status</th></tr></thead><tbody>' + rowsHtml + '</tbody></table></div>'
             + '<div class="card"><h3>Memorial de Cálculo Passo a Passo</h3>' + stepsHtml + '</div>'
@@ -934,7 +949,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function exportExamSummaryPdf() {
-        var student = document.getElementById('exStudentName').value.trim() || 'Não informado';
+        var student = escapeHtml(document.getElementById('exStudentName').value.trim() || 'Não informado');
         var avg = Math.round(examResults.reduce(function (a, b) { return a + b.score; }, 0) / examResults.length);
         var totalTime = examResults.reduce(function (a, b) { return a + b.time; }, 0);
         var win = window.open('', '_blank', 'width=940,height=780');
@@ -978,7 +993,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         fetch('/api/exercicios/corrigir/', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCsrfToken() },
             body: JSON.stringify({
                 pred_vol: document.getElementById('predVol').value,
                 pred_heat: document.getElementById('predHeat').value,

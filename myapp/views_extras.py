@@ -4,9 +4,9 @@ import math
 import random
 import time
 
+from django.core.cache import cache
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
-from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_GET, require_POST
 
 from .models import SimulacaoCompartilhada, TentativaExercicio, UsoSimulacao
@@ -17,15 +17,93 @@ from .thermo_engine import (
     compute_vcte_process_context,
 )
 
+MAX_SHARE_PAYLOAD_BYTES = 600 * 1024  # 600 KB
+_ALLOWED_SOURCE_PREFIXES = (
+    '/agua/', '/amonia/', '/co2/', '/R410A/', '/R134A/',
+    '/nitrogenio/', '/metano/', '/gas/', '/calc/',
+)
+
+
+def _client_ip(request):
+    xff = request.META.get('HTTP_X_FORWARDED_FOR', '')
+    if xff:
+        return xff.split(',')[0].strip()[:64]
+    return str(request.META.get('REMOTE_ADDR', 'unknown'))[:64]
+
+
+def _is_rate_limited(request, scope, limit, window_seconds=60):
+    key = f'rl:{scope}:{_client_ip(request)}'
+    count = cache.get(key, 0)
+    if count >= limit:
+        return True
+    cache.set(key, count + 1, timeout=window_seconds)
+    return False
+
+
+def _is_valid_source_path(path):
+    if not path or not path.startswith('/') or path.startswith('//'):
+        return False
+    if '..' in path or '\\' in path or '\n' in path or '\r' in path:
+        return False
+    return path.startswith(_ALLOWED_SOURCE_PREFIXES)
+
+
+def _sanitize_share_payload(raw_payload):
+    """Retém apenas os campos esperados e seguros no payload de compartilhamento."""
+    clean = {}
+    for list_key in ('states', 'cards'):
+        cards = raw_payload.get(list_key)
+        if isinstance(cards, list):
+            clean_cards = []
+            for card in cards[:6]:
+                if not isinstance(card, dict):
+                    continue
+                rows = []
+                for r in (card.get('rows') or [])[:30]:
+                    if isinstance(r, dict):
+                        rows.append({
+                            'label': str(r.get('label', ''))[:80],
+                            'value': str(r.get('value', ''))[:120],
+                        })
+                clean_cards.append({
+                    'title': str(card.get('title', ''))[:100],
+                    'rows': rows,
+                })
+            clean[list_key] = clean_cards
+
+    for sum_key in ('process', 'summary'):
+        summary = raw_payload.get(sum_key)
+        if isinstance(summary, list):
+            clean[sum_key] = [
+                {
+                    'label': str(s.get('label', ''))[:80],
+                    'value': str(s.get('value', ''))[:120],
+                }
+                for s in summary[:12]
+                if isinstance(s, dict)
+            ]
+
+    cyl = raw_payload.get('cylinder_img')
+    if isinstance(cyl, str) and cyl.startswith('data:image/png;base64,') and len(cyl) <= 500_000:
+        clean['cylinder_img'] = cyl
+
+    src = str(raw_payload.get('source_path', '')).strip()[:300]
+    if _is_valid_source_path(src):
+        clean['source_path'] = src
+
+    return clean
+
 
 # ==============================================================================
 # 1. ESTATÍSTICAS ANÔNIMAS DE USO (/api/log-uso/)
 # ==============================================================================
 
-@csrf_exempt
 @require_POST
 def api_log_uso_view(request):
     """Registra anonimamente o uso de uma simulação (substância, tipo e idioma)."""
+    if _is_rate_limited(request, 'log_uso', limit=60, window_seconds=60):
+        return JsonResponse({'ok': False, 'error': 'Muitas requisições. Tente novamente em instantes.'}, status=429)
+
     try:
         body = json.loads(request.body.decode('utf-8') or '{}')
     except (ValueError, UnicodeDecodeError):
@@ -50,10 +128,15 @@ def api_log_uso_view(request):
 # 2. LINK COMPARTILHÁVEL DE SIMULAÇÃO (/api/compartilhar/ e /s/<codigo>/)
 # ==============================================================================
 
-@csrf_exempt
 @require_POST
 def api_compartilhar_view(request):
     """Salva snapshot de uma simulação e retorna o link curto compartilhável /s/<codigo>/."""
+    if _is_rate_limited(request, 'compartilhar', limit=15, window_seconds=60):
+        return JsonResponse({'ok': False, 'error': 'Limite de compartilhamentos atingido. Aguarde um minuto.'}, status=429)
+
+    if len(request.body or b'') > MAX_SHARE_PAYLOAD_BYTES:
+        return JsonResponse({'ok': False, 'error': 'Payload excede o limite permitido (600 KB).'}, status=413)
+
     try:
         body = json.loads(request.body.decode('utf-8') or '{}')
     except (ValueError, UnicodeDecodeError):
@@ -62,16 +145,18 @@ def api_compartilhar_view(request):
     titulo = str(body.get('titulo', 'Simulação TERMO-CP')).strip()[:200]
     substancia = str(body.get('substancia', 'Substância')).strip()[:60]
     tipo = str(body.get('tipo', 'Simulação')).strip()[:60]
-    payload = body.get('payload')
+    raw_payload = body.get('payload')
 
-    if not isinstance(payload, dict):
+    if not isinstance(raw_payload, dict):
         return JsonResponse({'ok': False, 'error': 'Payload inválido'}, status=400)
 
-    # Guarda o caminho de origem e um snapshot seguro dos dados de cálculo da sessão
+    payload = _sanitize_share_payload(raw_payload)
+
+    # Guarda o caminho de origem validado e um snapshot seguro dos dados de cálculo da sessão
     # para que "Simular no TERMO-CP" reabra a simulação pronta e interativa para qualquer visitante.
-    source_path = str(body.get('source_path', '')).strip()
-    if source_path.startswith('/') and not source_path.startswith('//'):
-        payload['source_path'] = source_path[:300]
+    source_path = str(body.get('source_path', '')).strip()[:300]
+    if _is_valid_source_path(source_path):
+        payload['source_path'] = source_path
 
     pre_snap = request.session.get('_share_pre_snapshot')
     if tipo != 'Estado' and isinstance(pre_snap, dict) and pre_snap:
@@ -88,11 +173,15 @@ def api_compartilhar_view(request):
                 continue
     payload['session_snapshot'] = session_snapshot
 
+    serialized = json.dumps(payload, ensure_ascii=False)
+    if len(serialized.encode('utf-8')) > MAX_SHARE_PAYLOAD_BYTES:
+        return JsonResponse({'ok': False, 'error': 'Snapshot excede o limite permitido.'}, status=413)
+
     sim = SimulacaoCompartilhada.objects.create(
         titulo=titulo,
         substancia=substancia,
         tipo=tipo,
-        payload_json=json.dumps(payload, ensure_ascii=False),
+        payload_json=serialized,
     )
     share_url = request.build_absolute_uri(f'/s/{sim.codigo}/')
     return JsonResponse({'ok': True, 'codigo': sim.codigo, 'url': share_url})
@@ -110,7 +199,7 @@ def shared_simulation_view(request, codigo):
     return render(request, 'shared_simulation.html', {
         'sim': sim,
         'payload': payload,
-        'has_live_open': bool(payload.get('source_path')),
+        'has_live_open': _is_valid_source_path(str(payload.get('source_path', ''))),
     })
 
 
@@ -135,7 +224,7 @@ def shared_simulation_open_view(request, codigo):
         request.session.modified = True
 
     target = str(payload.get('source_path', '/')).strip()
-    if not target.startswith('/') or target.startswith('//'):
+    if not _is_valid_source_path(target):
         target = '/'
     return redirect(target)
 
@@ -615,10 +704,11 @@ def exercicios_poe_view(request):
     })
 
 
-@csrf_exempt
 @require_POST
 def api_exercicio_gerar_view(request):
-    """Gera um exercício POE aleatório e guarda o gabarito APENAS na sessão do servidor."""
+    """Gera um exercício aleatório e guarda o gabarito APENAS na sessão do servidor."""
+    if _is_rate_limited(request, 'ex_gerar', limit=30, window_seconds=60):
+        return JsonResponse({'ok': False, 'error': 'Muitas solicitações. Aguarde alguns segundos.'}, status=429)
     try:
         body = json.loads(request.body.decode('utf-8') or '{}')
     except (ValueError, UnicodeDecodeError):
@@ -699,10 +789,11 @@ def _hint_for(field, user_val, truth_val):
     return 'Valor distante do esperado — confira a fórmula aplicada e se multiplicou pela massa m.'
 
 
-@csrf_exempt
 @require_POST
 def api_exercicio_corrigir_view(request):
     """Corrige as respostas do aluno com Trava Anti-Burla e só libera o Memorial após esforço genuíno."""
+    if _is_rate_limited(request, 'ex_corrigir', limit=30, window_seconds=60):
+        return JsonResponse({'ok': False, 'error': 'Muitas tentativas seguidas. Aguarde alguns segundos.'}, status=429)
     ex = request.session.get('poe_exercise')
     if not ex:
         return JsonResponse({'ok': False, 'error': 'Gere um exercício antes de corrigir.'}, status=400)

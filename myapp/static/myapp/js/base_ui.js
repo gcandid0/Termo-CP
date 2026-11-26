@@ -153,6 +153,13 @@ window.TERMO_I18N_ZH = {
     'Razão (k)': '比热比 (k)'
 };
 
+window.getTermoCsrfToken = function() {
+    var m = document.cookie.match(/(?:^|; )csrftoken=([^;]+)/);
+    if (m) return decodeURIComponent(m[1]);
+    var meta = document.querySelector('meta[name="csrf-token"]');
+    return meta ? (meta.getAttribute('content') || '') : '';
+};
+
 window.termoTranslate = function(pt, en, es, fr, zh) {
     var lang = localStorage.getItem('preferredLang') || 'pt-br';
     if (lang === 'en') return en;
@@ -2341,7 +2348,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         fetch('/api/compartilhar/', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 'Content-Type': 'application/json', 'X-CSRFToken': window.getTermoCsrfToken() },
             body: JSON.stringify({
                 titulo: titulo,
                 substancia: meta.substancia,
