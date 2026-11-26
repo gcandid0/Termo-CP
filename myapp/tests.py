@@ -759,8 +759,10 @@ class ExtrasFeaturesTests(TestCase):
 
         dash = self.client.get('/admin/?periodo=30')
         self.assertEqual(dash.status_code, 200)
-        self.assertContains(dash, 'Painel de Métricas Científicas')
+        self.assertContains(dash, 'Painel Científico e Analítico')
         self.assertContains(dash, 'chartBySub')
+        self.assertContains(dash, 'chartWeekday')
+        self.assertContains(dash, 'articleSummaryText')
 
         csv_resp = self.client.get('/admin/exportar-estatisticas-artigo/?periodo=all')
         self.assertEqual(csv_resp.status_code, 200)

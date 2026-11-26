@@ -101,6 +101,46 @@
         font-weight: 600 !important;
     }
 
+    /* Tela de Login moderna do TERMO-CP */
+    body.login {
+        background: linear-gradient(135deg, #0f2347 0%, #1b3668 50%, #0d6ab0 100%) !important;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    body.login #container {
+        background: #ffffff !important;
+        border: none !important;
+        border-radius: 18px !important;
+        box-shadow: 0 22px 50px rgba(15, 23, 42, 0.35) !important;
+        overflow: hidden;
+        width: 100% !important;
+        max-width: 400px !important;
+        margin: 20px !important;
+    }
+    body.login #header { padding: 20px 24px !important; text-align: center; }
+    body.login #branding { float: none !important; width: 100%; text-align: center; }
+    body.login #branding h1 { margin: 0 !important; justify-content: center; }
+    body.login #content { padding: 24px 28px 28px !important; }
+    body.login .form-row input {
+        border-radius: 9px !important;
+        border: 1.5px solid #cbd5e1 !important;
+        padding: 9px 12px !important;
+        width: 100% !important;
+        box-sizing: border-box;
+    }
+    body.login .submit-row { padding: 14px 0 0 0 !important; text-align: center !important; }
+    body.login .submit-row input {
+        width: 100%;
+        padding: 11px 16px !important;
+        border-radius: 10px !important;
+        background: linear-gradient(135deg, #1b3668 0%, #0d6ab0 100%) !important;
+        font-size: 0.95rem !important;
+        font-weight: 700 !important;
+        cursor: pointer;
+    }
+
     /* Desativa dark mode forçado do admin para manter gráficos e tabelas limpos para print de artigo */
     @media print {
         #header, div.breadcrumbs, #nav-sidebar, .toggle-nav-sidebar, .tdash-actions, .tdash-dl-btn, #content-related, .tdash-models-section {

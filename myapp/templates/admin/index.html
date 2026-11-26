@@ -13,13 +13,13 @@
         display: flex;
         flex-direction: column;
         gap: 18px;
-        margin-bottom: 26px;
+        margin-bottom: 28px;
     }
     .tdash-toolbar {
         background: #ffffff;
         border: 1px solid #e2e8f0;
         border-radius: 14px;
-        padding: 14px 20px;
+        padding: 15px 20px;
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -27,23 +27,10 @@
         gap: 12px;
         box-shadow: 0 4px 14px rgba(15, 23, 42, 0.05);
     }
-    .tdash-toolbar h2 {
-        margin: 0;
-        font-size: 1.15rem;
-        color: #1b3668;
-        font-weight: 800;
-    }
-    .tdash-toolbar .sub {
-        font-size: 0.84rem;
-        color: #64748b;
-        margin-top: 2px;
-    }
-    .tdash-actions {
-        display: flex;
-        align-items: center;
-        flex-wrap: wrap;
-        gap: 8px;
-    }
+    .tdash-toolbar h2 { margin: 0; font-size: 1.16rem; color: #1b3668; font-weight: 800; }
+    .tdash-toolbar .sub { font-size: 0.83rem; color: #64748b; margin-top: 2px; }
+    .tdash-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
+
     .tdash-filter-group {
         display: inline-flex;
         background: #f1f5f9;
@@ -59,61 +46,60 @@
         color: #475569 !important;
         text-decoration: none !important;
     }
-    .tdash-filter-btn.active {
-        background: #1b3668;
-        color: #ffffff !important;
-    }
+    .tdash-filter-btn.active { background: #1b3668; color: #ffffff !important; }
+
     .tdash-btn {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        padding: 8px 13px;
-        border-radius: 9px;
-        font-size: 0.82rem;
-        font-weight: 700;
-        border: none;
-        cursor: pointer;
-        text-decoration: none !important;
+        display: inline-flex; align-items: center; gap: 6px;
+        padding: 8px 13px; border-radius: 9px; font-size: 0.81rem; font-weight: 700;
+        border: none; cursor: pointer; text-decoration: none !important;
         transition: transform 0.14s ease, filter 0.14s ease;
     }
     .tdash-btn:hover { transform: translateY(-1px); filter: brightness(1.05); }
     .tdash-btn-csv { background: #15803d; color: #ffffff !important; }
     .tdash-btn-pdf { background: #b91c1c; color: #ffffff !important; }
+    .tdash-btn-zip { background: #0d6ab0; color: #ffffff !important; }
     .tdash-btn-site { background: #eff6ff; color: #1b3668 !important; border: 1px solid #bfdbfe; }
 
-    /* KPIs */
+    /* KPIs com ícone colorido */
     .tdash-kpis {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
         gap: 14px;
     }
     .tdash-kpi {
         background: #ffffff;
         border: 1px solid #e2e8f0;
         border-radius: 14px;
-        padding: 15px 18px;
+        padding: 15px 17px;
         box-shadow: 0 4px 12px rgba(15, 23, 42, 0.045);
         display: flex;
-        flex-direction: column;
-        gap: 4px;
+        align-items: center;
+        gap: 14px;
     }
-    .tdash-kpi .k-lbl {
-        font-size: 0.74rem;
-        text-transform: uppercase;
-        letter-spacing: 0.04em;
-        color: #64748b;
-        font-weight: 700;
+    .tdash-kpi-icon {
+        width: 44px; height: 44px; border-radius: 12px;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 1.25rem; flex-shrink: 0;
     }
-    .tdash-kpi .k-val {
-        font-size: 1.75rem;
-        font-weight: 800;
-        color: #1b3668;
-        line-height: 1.15;
+    .tdash-kpi-body { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+    .tdash-kpi .k-lbl { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.04em; color: #64748b; font-weight: 700; }
+    .tdash-kpi .k-val { font-size: 1.6rem; font-weight: 800; color: #0f172a; line-height: 1.15; }
+    .tdash-kpi .k-sub { font-size: 0.77rem; color: #475569; }
+
+    /* Texto pronto para artigo */
+    .tdash-article-box {
+        background: linear-gradient(135deg, #f8fbff 0%, #eff6ff 100%);
+        border: 1px solid #bfdbfe;
+        border-radius: 14px;
+        padding: 15px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 16px;
+        flex-wrap: wrap;
     }
-    .tdash-kpi .k-sub {
-        font-size: 0.79rem;
-        color: #475569;
-    }
+    .tdash-article-box h3 { margin: 0 0 6px 0; font-size: 0.94rem; color: #1b3668; font-weight: 800; }
+    .tdash-article-box p { margin: 0; font-size: 0.89rem; color: #1e293b; line-height: 1.55; max-width: 900px; }
 
     /* Grade de gráficos */
     .tdash-charts-grid {
@@ -134,39 +120,21 @@
         flex-direction: column;
     }
     .tdash-chart-head {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 10px;
-        margin-bottom: 10px;
+        display: flex; justify-content: space-between; align-items: center;
+        gap: 10px; margin-bottom: 10px; flex-wrap: wrap;
     }
-    .tdash-chart-head h3 {
-        margin: 0;
-        font-size: 0.96rem;
-        color: #1b3668;
-        font-weight: 700;
-    }
+    .tdash-chart-head h3 { margin: 0; font-size: 0.95rem; color: #1b3668; font-weight: 700; }
     .tdash-dl-btn {
-        padding: 5px 10px;
-        border-radius: 7px;
-        border: 1px solid #cbd5e1;
-        background: #f8fafc;
-        color: #1b3668;
-        font-size: 0.76rem;
-        font-weight: 700;
-        cursor: pointer;
+        padding: 5px 10px; border-radius: 7px; border: 1px solid #cbd5e1;
+        background: #f8fafc; color: #1b3668; font-size: 0.75rem; font-weight: 700; cursor: pointer;
     }
     .tdash-dl-btn:hover { background: #eff6ff; border-color: #93c5fd; }
-    .tdash-canvas-wrap {
-        position: relative;
-        height: 270px;
-        width: 100%;
-    }
+    .tdash-canvas-wrap { position: relative; height: 275px; width: 100%; }
 
-    /* Tabelas estatísticas para artigo */
+    /* Tabelas estatísticas com barra visual + copiar Word / LaTeX */
     .tdash-tables-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
         gap: 16px;
     }
     .tdash-tbl-card {
@@ -175,45 +143,43 @@
         border-radius: 14px;
         padding: 15px 18px;
         box-shadow: 0 4px 14px rgba(15, 23, 42, 0.045);
+        overflow-x: auto;
     }
-    .tdash-tbl-card h3 {
-        margin: 0 0 10px 0;
-        font-size: 0.94rem;
-        color: #1b3668;
-        font-weight: 700;
+    .tdash-tbl-head {
+        display: flex; justify-content: space-between; align-items: center;
+        gap: 8px; margin-bottom: 10px; flex-wrap: wrap;
     }
-    .tdash-tbl {
-        width: 100%;
-        border-collapse: collapse;
-        font-size: 0.84rem;
-    }
+    .tdash-tbl-head h3 { margin: 0; font-size: 0.93rem; color: #1b3668; font-weight: 700; }
+    .tdash-copy-btns { display: inline-flex; gap: 5px; }
+    .tdash-tbl { width: 100%; border-collapse: collapse; font-size: 0.83rem; }
     .tdash-tbl th {
-        background: #eff6ff;
-        color: #1b3668;
-        text-align: left;
-        padding: 7px 9px;
-        font-weight: 700;
-        border-bottom: 1.5px solid #cbdcf0;
+        background: #eff6ff; color: #1b3668; text-align: left;
+        padding: 7px 9px; font-weight: 700; border-bottom: 1.5px solid #cbdcf0;
     }
-    .tdash-tbl td {
-        padding: 6px 9px;
-        border-bottom: 1px solid #f1f5f9;
-        color: #1e293b;
-    }
+    .tdash-tbl td { padding: 6px 9px; border-bottom: 1px solid #f1f5f9; color: #1e293b; }
     .tdash-tbl tr:last-child td { border-bottom: none; }
-    .tdash-empty {
-        color: #64748b;
-        font-size: 0.85rem;
-        margin: 8px 0 0 0;
+    .tdash-bar-bg { width: 64px; height: 7px; background: #e2e8f0; border-radius: 999px; overflow: hidden; display: inline-block; vertical-align: middle; margin-left: 6px; }
+    .tdash-bar-fill { height: 100%; background: linear-gradient(90deg, #1b3668, #0d6ab0); border-radius: 999px; }
+
+    /* Estatística descritiva do Modo Exercício */
+    .tdash-stat-pills {
+        display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px;
     }
+    .tdash-stat-box {
+        background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 10px 12px; text-align: center;
+    }
+    .tdash-stat-box .sb-l { display: block; font-size: 0.72rem; color: #64748b; font-weight: 700; text-transform: uppercase; }
+    .tdash-stat-box .sb-v { font-size: 1.18rem; font-weight: 800; color: #1b3668; }
+
+    .tdash-empty { color: #64748b; font-size: 0.84rem; margin: 6px 0 0 0; }
 </style>
 
 <div class="tdash-wrap">
-    <!-- Barra de Controle e Exportação para Artigo -->
+    <!-- Barra de Controle -->
     <div class="tdash-toolbar">
         <div>
-            <h2>Painel de Métricas Científicas — TERMO-CP</h2>
-            <div class="sub">Gráficos em alta resolução (fundo branco) e tabelas de frequência (n e %) prontos para inclusão em artigos.</div>
+            <h2>Painel Científico e Analítico — TERMO-CP</h2>
+            <div class="sub">Gráficos com rótulos (n e %) em fundo branco 2x, tabelas prontas para Word/LaTeX e estatística descritiva.</div>
         </div>
         <div class="tdash-actions">
             <div class="tdash-filter-group">
@@ -222,14 +188,17 @@
                 <a href="?periodo=30" class="tdash-filter-btn {% if analytics.periodo == '30' %}active{% endif %}">30 dias</a>
                 <a href="?periodo=90" class="tdash-filter-btn {% if analytics.periodo == '90' %}active{% endif %}">90 dias</a>
             </div>
+            <button type="button" onclick="downloadAllCharts()" class="tdash-btn tdash-btn-zip">
+                🖼 Baixar Todos PNGs
+            </button>
             <a href="{% url 'admin:termo_cp_export_article_csv' %}?periodo={{ analytics.periodo }}" class="tdash-btn tdash-btn-csv">
                 ⬇ Exportar CSV (Artigo)
             </a>
             <button type="button" onclick="window.print()" class="tdash-btn tdash-btn-pdf">
-                🖨 Imprimir / PDF
+                🖨 PDF
             </button>
             <a href="/" target="_blank" class="tdash-btn tdash-btn-site">
-                ↗ Abrir Plataforma
+                ↗ Site
             </a>
         </div>
     </div>
@@ -237,119 +206,244 @@
     <!-- KPI Cards -->
     <div class="tdash-kpis">
         <div class="tdash-kpi">
-            <span class="k-lbl">Total de Simulações</span>
-            <span class="k-val">{{ analytics.total_sims }}</span>
-            <span class="k-sub">{{ analytics.sims_7d }} nos últimos 7 dias</span>
+            <div class="tdash-kpi-icon" style="background:#eff6ff;color:#1b3668;">📊</div>
+            <div class="tdash-kpi-body">
+                <span class="k-lbl">Total de Simulações</span>
+                <span class="k-val">{{ analytics.total_sims }}</span>
+                <span class="k-sub">{{ analytics.sims_7d }} nos últimos 7 dias</span>
+            </div>
         </div>
         <div class="tdash-kpi">
-            <span class="k-lbl">Modo Exercício</span>
-            <span class="k-val">{{ analytics.total_ex }}</span>
-            <span class="k-sub">Média de acerto: <strong>{{ analytics.avg_score }}%</strong></span>
+            <div class="tdash-kpi-icon" style="background:#f0fdf4;color:#15803d;">🎓</div>
+            <div class="tdash-kpi-body">
+                <span class="k-lbl">Modo Exercício</span>
+                <span class="k-val">{{ analytics.total_ex }}</span>
+                <span class="k-sub">Média: <strong>{{ analytics.avg_score }}%</strong> · Aprov.: {{ analytics.pass_rate }}%</span>
+            </div>
         </div>
         <div class="tdash-kpi">
-            <span class="k-lbl">Tempo Médio / Exercício</span>
-            <span class="k-val">{{ analytics.avg_time }}s</span>
-            <span class="k-sub">Uso de dica: {{ analytics.hint_pct }}%</span>
+            <div class="tdash-kpi-icon" style="background:#fffbeb;color:#d97706;">⏱</div>
+            <div class="tdash-kpi-body">
+                <span class="k-lbl">Tempo Médio / Questão</span>
+                <span class="k-val">{{ analytics.avg_time }}s</span>
+                <span class="k-sub">Mediana: {{ analytics.median_time }}s · Dicas: {{ analytics.hint_pct }}%</span>
+            </div>
         </div>
         <div class="tdash-kpi">
-            <span class="k-lbl">Links Compartilhados</span>
-            <span class="k-val">{{ analytics.total_shares }}</span>
-            <span class="k-sub">Rotas curtas /s/&lt;código&gt;/</span>
+            <div class="tdash-kpi-icon" style="background:#f5f3ff;color:#6d28d9;">🔗</div>
+            <div class="tdash-kpi-body">
+                <span class="k-lbl">Links Compartilhados</span>
+                <span class="k-val">{{ analytics.total_shares }}</span>
+                <span class="k-sub">Rotas /s/&lt;código&gt;/</span>
+            </div>
         </div>
         <div class="tdash-kpi">
-            <span class="k-lbl">Mensagens de Contato</span>
-            <span class="k-val">{{ analytics.total_msgs }}</span>
-            <span class="k-sub">Feedbacks recebidos</span>
+            <div class="tdash-kpi-icon" style="background:#fef2f2;color:#b91c1c;">✉</div>
+            <div class="tdash-kpi-body">
+                <span class="k-lbl">Mensagens de Contato</span>
+                <span class="k-val">{{ analytics.total_msgs }}</span>
+                <span class="k-sub">Feedbacks recebidos</span>
+            </div>
         </div>
     </div>
 
-    <!-- Gráficos Chart.js v4 com Export PNG Fundo Branco -->
+    <!-- Parágrafo Pronto para Artigo Científico -->
+    <div class="tdash-article-box">
+        <div>
+            <h3>📝 Resumo Descritivo Automático (Pronto para Seção de Resultados do Artigo)</h3>
+            <p id="articleSummaryText">{{ analytics.article_summary }}</p>
+        </div>
+        <button type="button" class="tdash-dl-btn" onclick="copyTextEl('articleSummaryText', this)">📋 Copiar Texto</button>
+    </div>
+
+    <!-- Gráficos Chart.js v4 com Rótulos n (%) + Export PNG 2x Fundo Branco -->
     <div class="tdash-charts-grid">
         <div class="tdash-chart-card">
             <div class="tdash-chart-head">
-                <h3>Simulações por Substância</h3>
-                <button type="button" class="tdash-dl-btn" onclick="downloadChartPng('chartBySub', 'termo_cp_substancias.png')">⬇ Baixar PNG (Artigo)</button>
+                <h3>1. Simulações por Substância</h3>
+                <button type="button" class="tdash-dl-btn" onclick="downloadChartPng('chartBySub', 'fig1_termo_cp_substancias.png')">⬇ PNG (Artigo)</button>
             </div>
             <div class="tdash-canvas-wrap"><canvas id="chartBySub"></canvas></div>
         </div>
 
         <div class="tdash-chart-card">
             <div class="tdash-chart-head">
-                <h3>Simulações por Tipo de Processo</h3>
-                <button type="button" class="tdash-dl-btn" onclick="downloadChartPng('chartByType', 'termo_cp_processos.png')">⬇ Baixar PNG (Artigo)</button>
+                <h3>2. Simulações por Tipo de Processo</h3>
+                <button type="button" class="tdash-dl-btn" onclick="downloadChartPng('chartByType', 'fig2_termo_cp_processos.png')">⬇ PNG (Artigo)</button>
             </div>
             <div class="tdash-canvas-wrap"><canvas id="chartByType"></canvas></div>
         </div>
 
         <div class="tdash-chart-card">
             <div class="tdash-chart-head">
-                <h3>Distribuição por Idioma</h3>
-                <button type="button" class="tdash-dl-btn" onclick="downloadChartPng('chartByLang', 'termo_cp_idiomas.png')">⬇ Baixar PNG (Artigo)</button>
+                <h3>3. Distribuição por Idioma</h3>
+                <button type="button" class="tdash-dl-btn" onclick="downloadChartPng('chartByLang', 'fig3_termo_cp_idiomas.png')">⬇ PNG (Artigo)</button>
             </div>
             <div class="tdash-canvas-wrap"><canvas id="chartByLang"></canvas></div>
         </div>
 
         <div class="tdash-chart-card">
             <div class="tdash-chart-head">
-                <h3>Evolução Diária de Simulações</h3>
-                <button type="button" class="tdash-dl-btn" onclick="downloadChartPng('chartTimeline', 'termo_cp_evolucao_uso.png')">⬇ Baixar PNG (Artigo)</button>
+                <h3>4. Evolução Diária de Simulações</h3>
+                <button type="button" class="tdash-dl-btn" onclick="downloadChartPng('chartTimeline', 'fig4_termo_cp_evolucao.png')">⬇ PNG (Artigo)</button>
             </div>
             <div class="tdash-canvas-wrap"><canvas id="chartTimeline"></canvas></div>
         </div>
-    </div>
 
-    {% if analytics.ex_by_sub %}
-    <div class="tdash-chart-card">
-        <div class="tdash-chart-head">
-            <h3>Desempenho no Modo Exercício por Substância (Média de Acerto %)</h3>
-            <button type="button" class="tdash-dl-btn" onclick="downloadChartPng('chartExScore', 'termo_cp_desempenho_exercicio.png')">⬇ Baixar PNG (Artigo)</button>
+        <div class="tdash-chart-card">
+            <div class="tdash-chart-head">
+                <h3>5. Engajamento por Dia da Semana</h3>
+                <button type="button" class="tdash-dl-btn" onclick="downloadChartPng('chartWeekday', 'fig5_termo_cp_dia_semana.png')">⬇ PNG (Artigo)</button>
+            </div>
+            <div class="tdash-canvas-wrap"><canvas id="chartWeekday"></canvas></div>
         </div>
-        <div class="tdash-canvas-wrap" style="height:240px;"><canvas id="chartExScore"></canvas></div>
-    </div>
-    {% endif %}
 
-    <!-- Tabelas de Frequência (n e %) prontas para copiar no artigo -->
+        <div class="tdash-chart-card">
+            <div class="tdash-chart-head">
+                <h3>6. Modo Exercício — Média de Acerto por Substância (%)</h3>
+                <button type="button" class="tdash-dl-btn" onclick="downloadChartPng('chartExScore', 'fig6_termo_cp_exercicios.png')">⬇ PNG (Artigo)</button>
+            </div>
+            <div class="tdash-canvas-wrap"><canvas id="chartExScore"></canvas></div>
+        </div>
+    </div>
+
+    <!-- Estatística Descritiva do Modo Exercício -->
+    <div class="tdash-tbl-card">
+        <div class="tdash-tbl-head">
+            <h3>Estatística Descritiva — Modo Exercício (n = {{ analytics.total_ex }})</h3>
+        </div>
+        <div class="tdash-stat-pills">
+            <div class="tdash-stat-box"><span class="sb-l">Média (x̄)</span><span class="sb-v">{{ analytics.avg_score }}%</span></div>
+            <div class="tdash-stat-box"><span class="sb-l">Mediana</span><span class="sb-v">{{ analytics.median_score }}%</span></div>
+            <div class="tdash-stat-box"><span class="sb-l">Desvio-Padrão (s)</span><span class="sb-v">{{ analytics.stdev_score }}%</span></div>
+            <div class="tdash-stat-box"><span class="sb-l">Mín / Máx</span><span class="sb-v">{{ analytics.min_score }}% / {{ analytics.max_score }}%</span></div>
+            <div class="tdash-stat-box"><span class="sb-l">Aprovação (≥75%)</span><span class="sb-v">{{ analytics.pass_rate }}%</span></div>
+            <div class="tdash-stat-box"><span class="sb-l">Sem Dica vs Com Dica</span><span class="sb-v">{{ analytics.avg_no_hint }}% / {{ analytics.avg_with_hint }}%</span></div>
+        </div>
+    </div>
+
+    <!-- Tabelas de Frequência prontas para Word/Excel e LaTeX -->
     <div class="tdash-tables-grid">
         <div class="tdash-tbl-card">
-            <h3>Tabela 1 — Simulações por Substância</h3>
+            <div class="tdash-tbl-head">
+                <h3>Tabela 1 — Substâncias</h3>
+                <div class="tdash-copy-btns">
+                    <button type="button" class="tdash-dl-btn" onclick="copyTableTSV('tblSub', this)">📋 Word/Excel</button>
+                    <button type="button" class="tdash-dl-btn" onclick="copyTableLatex('tblSub', 'Simulações por Substância', this)">LaTeX</button>
+                </div>
+            </div>
             {% if analytics.by_sub %}
-            <table class="tdash-tbl">
+            <table class="tdash-tbl" id="tblSub">
                 <thead><tr><th>Substância</th><th>n</th><th>%</th></tr></thead>
                 <tbody>
                 {% for r in analytics.by_sub %}
-                    <tr><td><strong>{{ r.label }}</strong></td><td>{{ r.count }}</td><td>{{ r.pct }}%</td></tr>
+                    <tr><td><strong>{{ r.label }}</strong></td><td>{{ r.count }}</td><td>{{ r.pct }}% <span class="tdash-bar-bg"><span class="tdash-bar-fill" style="width:{{ r.pct|floatformat:0 }}%;"></span></span></td></tr>
                 {% endfor %}
                 </tbody>
             </table>
-            {% else %}<p class="tdash-empty">Sem registros no período selecionado.</p>{% endif %}
+            {% else %}<p class="tdash-empty">Sem registros no período.</p>{% endif %}
         </div>
 
         <div class="tdash-tbl-card">
-            <h3>Tabela 2 — Simulações por Tipo</h3>
+            <div class="tdash-tbl-head">
+                <h3>Tabela 2 — Tipos de Processo</h3>
+                <div class="tdash-copy-btns">
+                    <button type="button" class="tdash-dl-btn" onclick="copyTableTSV('tblType', this)">📋 Word/Excel</button>
+                    <button type="button" class="tdash-dl-btn" onclick="copyTableLatex('tblType', 'Simulações por Tipo de Processo', this)">LaTeX</button>
+                </div>
+            </div>
             {% if analytics.by_type %}
-            <table class="tdash-tbl">
+            <table class="tdash-tbl" id="tblType">
                 <thead><tr><th>Tipo</th><th>n</th><th>%</th></tr></thead>
                 <tbody>
                 {% for r in analytics.by_type %}
-                    <tr><td><strong>{{ r.label }}</strong></td><td>{{ r.count }}</td><td>{{ r.pct }}%</td></tr>
+                    <tr><td><strong>{{ r.label }}</strong></td><td>{{ r.count }}</td><td>{{ r.pct }}% <span class="tdash-bar-bg"><span class="tdash-bar-fill" style="width:{{ r.pct|floatformat:0 }}%;"></span></span></td></tr>
                 {% endfor %}
                 </tbody>
             </table>
-            {% else %}<p class="tdash-empty">Sem registros no período selecionado.</p>{% endif %}
+            {% else %}<p class="tdash-empty">Sem registros no período.</p>{% endif %}
         </div>
 
         <div class="tdash-tbl-card">
-            <h3>Tabela 3 — Distribuição por Idioma</h3>
+            <div class="tdash-tbl-head">
+                <h3>Tabela 3 — Idiomas</h3>
+                <div class="tdash-copy-btns">
+                    <button type="button" class="tdash-dl-btn" onclick="copyTableTSV('tblLang', this)">📋 Word/Excel</button>
+                    <button type="button" class="tdash-dl-btn" onclick="copyTableLatex('tblLang', 'Distribuição por Idioma', this)">LaTeX</button>
+                </div>
+            </div>
             {% if analytics.by_lang %}
-            <table class="tdash-tbl">
+            <table class="tdash-tbl" id="tblLang">
                 <thead><tr><th>Idioma</th><th>n</th><th>%</th></tr></thead>
                 <tbody>
                 {% for r in analytics.by_lang %}
-                    <tr><td><strong>{{ r.label }}</strong></td><td>{{ r.count }}</td><td>{{ r.pct }}%</td></tr>
+                    <tr><td><strong>{{ r.label }}</strong></td><td>{{ r.count }}</td><td>{{ r.pct }}% <span class="tdash-bar-bg"><span class="tdash-bar-fill" style="width:{{ r.pct|floatformat:0 }}%;"></span></span></td></tr>
                 {% endfor %}
                 </tbody>
             </table>
-            {% else %}<p class="tdash-empty">Sem registros no período selecionado.</p>{% endif %}
+            {% else %}<p class="tdash-empty">Sem registros no período.</p>{% endif %}
+        </div>
+    </div>
+
+    {% if analytics.cross_matrix %}
+    <!-- Matriz Cruzada Substância × Processo -->
+    <div class="tdash-tbl-card">
+        <div class="tdash-tbl-head">
+            <h3>Tabela 4 — Matriz Cruzada: Substância × Tipo de Processo</h3>
+            <div class="tdash-copy-btns">
+                <button type="button" class="tdash-dl-btn" onclick="copyTableTSV('tblCross', this)">📋 Word/Excel</button>
+                <button type="button" class="tdash-dl-btn" onclick="copyTableLatex('tblCross', 'Matriz Substância x Processo', this)">LaTeX</button>
+            </div>
+        </div>
+        <table class="tdash-tbl" id="tblCross">
+            <thead>
+                <tr>
+                    <th>Substância</th>
+                    {% for t in analytics.cross_types %}<th>{{ t }}</th>{% endfor %}
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in analytics.cross_matrix %}
+                <tr>
+                    <td><strong>{{ row.substancia }}</strong></td>
+                    {% for v in row.values %}<td>{% if v > 0 %}<strong>{{ v }}</strong>{% else %}<span style="color:#cbd5e1;">0</span>{% endif %}</td>{% endfor %}
+                    <td><strong>{{ row.total }}</strong></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+
+    <!-- Feed de Atividade Recente -->
+    <div class="tdash-tables-grid">
+        <div class="tdash-tbl-card">
+            <div class="tdash-tbl-head"><h3>Últimas Simulações Registradas</h3></div>
+            {% if analytics.recent_sims %}
+            <table class="tdash-tbl">
+                <thead><tr><th>Substância</th><th>Tipo</th><th>Idioma</th><th>Data/Hora</th></tr></thead>
+                <tbody>
+                {% for s in analytics.recent_sims %}
+                    <tr><td><strong>{{ s.substancia }}</strong></td><td>{{ s.tipo }}</td><td>{{ s.idioma|upper }}</td><td>{{ s.criado_em|date:"d/m H:i" }}</td></tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            {% else %}<p class="tdash-empty">Nenhuma simulação registrada ainda.</p>{% endif %}
+        </div>
+
+        <div class="tdash-tbl-card">
+            <div class="tdash-tbl-head"><h3>Últimas Resoluções do Modo Exercício</h3></div>
+            {% if analytics.recent_ex %}
+            <table class="tdash-tbl">
+                <thead><tr><th>Estudante</th><th>Tema</th><th>Nota</th><th>Tempo</th></tr></thead>
+                <tbody>
+                {% for e in analytics.recent_ex %}
+                    <tr><td><strong>{{ e.nome_aluno }}</strong></td><td>{{ e.substancia }} · {{ e.tipo }}</td><td><strong>{{ e.pontuacao|floatformat:0 }}%</strong></td><td>{{ e.tempo_segundos }}s</td></tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            {% else %}<p class="tdash-empty">Nenhuma resolução registrada ainda.</p>{% endif %}
         </div>
     </div>
 </div>
@@ -360,7 +454,7 @@
     const data = {{ analytics.chart_json|safe }};
     const palette = ['#1b3668', '#0d6ab0', '#16a34a', '#d97706', '#dc2626', '#7c3aed', '#0891b2', '#64748b'];
 
-    // Plugin para garantir fundo branco nítido na exportação PNG para artigos
+    // Plugin 1: Fundo branco 2x para exportação PNG de artigo científico
     const whiteBgPlugin = {
         id: 'whiteBg',
         beforeDraw(chart) {
@@ -373,10 +467,43 @@
         }
     };
 
+    // Plugin 2: Rótulos de valores diretamente nas barras (pronto para publicação)
+    const valueLabelsPlugin = {
+        id: 'valueLabels',
+        afterDatasetsDraw(chart) {
+            if (chart.config.type !== 'bar') return;
+            const ctx = chart.ctx;
+            const isHoriz = chart.options.indexAxis === 'y';
+            const meta = chart.getDatasetMeta(0);
+            const ds = chart.data.datasets[0];
+            const pcts = ds._pcts || null;
+            const suffix = ds._suffix || '';
+            ctx.save();
+            ctx.font = 'bold 11px Segoe UI, Arial, sans-serif';
+            ctx.fillStyle = '#1e293b';
+            meta.data.forEach((bar, idx) => {
+                const val = ds.data[idx];
+                if (val === 0 || val === null || val === undefined) return;
+                const txt = pcts ? `${val} (${pcts[idx]}%)` : `${val}${suffix}`;
+                if (isHoriz) {
+                    ctx.textAlign = 'left';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText(txt, bar.x + 6, bar.y);
+                } else {
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'bottom';
+                    ctx.fillText(txt, bar.x, bar.y - 4);
+                }
+            });
+            ctx.restore();
+        }
+    };
+
     const commonOpts = {
         responsive: true,
         maintainAspectRatio: false,
         devicePixelRatio: 2,
+        layout: { padding: { top: 18, right: 56 } },
         plugins: {
             legend: { labels: { color: '#1e293b', font: { family: 'Segoe UI, Arial', size: 12 } } }
         }
@@ -384,12 +511,13 @@
 
     new Chart(document.getElementById('chartBySub'), {
         type: 'bar',
-        plugins: [whiteBgPlugin],
+        plugins: [whiteBgPlugin, valueLabelsPlugin],
         data: {
             labels: data.by_sub.labels.length ? data.by_sub.labels : ['Sem dados'],
             datasets: [{
                 label: 'Simulações (n)',
                 data: data.by_sub.values.length ? data.by_sub.values : [0],
+                _pcts: data.by_sub.pcts,
                 backgroundColor: palette,
                 borderRadius: 6
             }]
@@ -406,17 +534,19 @@
 
     new Chart(document.getElementById('chartByType'), {
         type: 'bar',
-        plugins: [whiteBgPlugin],
+        plugins: [whiteBgPlugin, valueLabelsPlugin],
         data: {
             labels: data.by_type.labels.length ? data.by_type.labels : ['Sem dados'],
             datasets: [{
                 label: 'Simulações (n)',
                 data: data.by_type.values.length ? data.by_type.values : [0],
+                _pcts: data.by_type.pcts,
                 backgroundColor: '#0d6ab0',
                 borderRadius: 6
             }]
         },
         options: Object.assign({}, commonOpts, {
+            layout: { padding: { top: 22, right: 12 } },
             plugins: { legend: { display: false } },
             scales: {
                 y: { beginAtZero: true, ticks: { precision: 0, color: '#334155' }, grid: { color: '#e2e8f0' } },
@@ -425,11 +555,14 @@
         })
     });
 
+    const langLabelsWithPct = data.by_lang.labels.length
+        ? data.by_lang.labels.map((l, i) => `${l} — ${data.by_lang.pcts[i]}%`)
+        : ['Sem dados'];
     new Chart(document.getElementById('chartByLang'), {
         type: 'doughnut',
         plugins: [whiteBgPlugin],
         data: {
-            labels: data.by_lang.labels.length ? data.by_lang.labels : ['Sem dados'],
+            labels: langLabelsWithPct,
             datasets: [{
                 data: data.by_lang.values.length ? data.by_lang.values : [1],
                 backgroundColor: data.by_lang.values.length ? palette : ['#e2e8f0'],
@@ -438,9 +571,10 @@
             }]
         },
         options: Object.assign({}, commonOpts, {
-            cutout: '56%',
+            layout: { padding: 8 },
+            cutout: '55%',
             plugins: {
-                legend: { position: 'right', labels: { color: '#1e293b', padding: 14, font: { size: 12 } } }
+                legend: { position: 'right', labels: { color: '#1e293b', padding: 12, font: { size: 12 } } }
             }
         })
     });
@@ -463,6 +597,7 @@
             }]
         },
         options: Object.assign({}, commonOpts, {
+            layout: { padding: { top: 12, right: 12 } },
             plugins: { legend: { display: false } },
             scales: {
                 y: { beginAtZero: true, ticks: { precision: 0, color: '#334155' }, grid: { color: '#e2e8f0' } },
@@ -471,28 +606,50 @@
         })
     });
 
-    const exCanvas = document.getElementById('chartExScore');
-    if (exCanvas && data.ex_by_sub.labels.length) {
-        new Chart(exCanvas, {
-            type: 'bar',
-            plugins: [whiteBgPlugin],
-            data: {
-                labels: data.ex_by_sub.labels,
-                datasets: [{
-                    label: 'Média de Acerto (%)',
-                    data: data.ex_by_sub.scores,
-                    backgroundColor: '#16a34a',
-                    borderRadius: 6
-                }]
-            },
-            options: Object.assign({}, commonOpts, {
-                scales: {
-                    y: { beginAtZero: true, max: 100, ticks: { color: '#334155' }, grid: { color: '#e2e8f0' } },
-                    x: { ticks: { color: '#1e293b', font: { weight: '600' } }, grid: { display: false } }
-                }
-            })
-        });
-    }
+    new Chart(document.getElementById('chartWeekday'), {
+        type: 'bar',
+        plugins: [whiteBgPlugin, valueLabelsPlugin],
+        data: {
+            labels: data.weekday.labels,
+            datasets: [{
+                label: 'Simulações',
+                data: data.weekday.values,
+                backgroundColor: '#7c3aed',
+                borderRadius: 6
+            }]
+        },
+        options: Object.assign({}, commonOpts, {
+            layout: { padding: { top: 22, right: 12 } },
+            plugins: { legend: { display: false } },
+            scales: {
+                y: { beginAtZero: true, ticks: { precision: 0, color: '#334155' }, grid: { color: '#e2e8f0' } },
+                x: { ticks: { color: '#1e293b', font: { weight: '600' } }, grid: { display: false } }
+            }
+        })
+    });
+
+    new Chart(document.getElementById('chartExScore'), {
+        type: 'bar',
+        plugins: [whiteBgPlugin, valueLabelsPlugin],
+        data: {
+            labels: data.ex_by_sub.labels.length ? data.ex_by_sub.labels : ['Sem resoluções ainda'],
+            datasets: [{
+                label: 'Média de Acerto (%)',
+                data: data.ex_by_sub.scores.length ? data.ex_by_sub.scores : [0],
+                _suffix: '%',
+                backgroundColor: '#16a34a',
+                borderRadius: 6
+            }]
+        },
+        options: Object.assign({}, commonOpts, {
+            layout: { padding: { top: 22, right: 12 } },
+            plugins: { legend: { display: false } },
+            scales: {
+                y: { beginAtZero: true, max: 105, ticks: { color: '#334155' }, grid: { color: '#e2e8f0' } },
+                x: { ticks: { color: '#1e293b', font: { weight: '600' } }, grid: { display: false } }
+            }
+        })
+    });
 
     window.downloadChartPng = function (canvasId, filename) {
         const c = document.getElementById(canvasId);
@@ -501,6 +658,66 @@
         a.href = c.toDataURL('image/png', 1.0);
         a.download = filename;
         a.click();
+    };
+
+    window.downloadAllCharts = function () {
+        const list = [
+            ['chartBySub', 'fig1_termo_cp_substancias.png'],
+            ['chartByType', 'fig2_termo_cp_processos.png'],
+            ['chartByLang', 'fig3_termo_cp_idiomas.png'],
+            ['chartTimeline', 'fig4_termo_cp_evolucao.png'],
+            ['chartWeekday', 'fig5_termo_cp_dia_semana.png'],
+            ['chartExScore', 'fig6_termo_cp_exercicios.png']
+        ];
+        list.forEach((pair, idx) => {
+            setTimeout(() => window.downloadChartPng(pair[0], pair[1]), idx * 250);
+        });
+    };
+
+    function flashBtn(btn, label) {
+        if (!btn) return;
+        const old = btn.textContent;
+        btn.textContent = label || '✓ Copiado!';
+        setTimeout(() => { btn.textContent = old; }, 1600);
+    }
+
+    window.copyTextEl = function (elId, btn) {
+        const el = document.getElementById(elId);
+        if (!el || !navigator.clipboard) return;
+        navigator.clipboard.writeText(el.textContent.trim()).then(() => flashBtn(btn));
+    };
+
+    window.copyTableTSV = function (tblId, btn) {
+        const tbl = document.getElementById(tblId);
+        if (!tbl || !navigator.clipboard) return;
+        const rows = Array.from(tbl.querySelectorAll('tr')).map(tr =>
+            Array.from(tr.children).map(td => td.textContent.replace(/\s+/g, ' ').trim()).join('\t')
+        ).join('\n');
+        navigator.clipboard.writeText(rows).then(() => flashBtn(btn));
+    };
+
+    window.copyTableLatex = function (tblId, caption, btn) {
+        const tbl = document.getElementById(tblId);
+        if (!tbl || !navigator.clipboard) return;
+        const trs = Array.from(tbl.querySelectorAll('tr'));
+        const cols = trs[0] ? trs[0].children.length : 3;
+        const align = 'l' + 'r'.repeat(Math.max(1, cols - 1));
+        const lines = [
+            '\\begin{table}[htbp]',
+            '\\centering',
+            `\\caption{${caption} — TERMO-CP}`,
+            `\\begin{tabular}{${align}}`,
+            '\\hline'
+        ];
+        trs.forEach((tr, idx) => {
+            const cells = Array.from(tr.children).map(td =>
+                td.textContent.replace(/\s+/g, ' ').trim().replace(/%/g, '\\%').replace(/_/g, '\\_')
+            );
+            lines.push(cells.join(' & ') + ' \\\\');
+            if (idx === 0) lines.push('\\hline');
+        });
+        lines.push('\\hline', '\\end{tabular}', '\\end{table}');
+        navigator.clipboard.writeText(lines.join('\n')).then(() => flashBtn(btn, '✓ LaTeX!'));
     };
 })();
 </script>

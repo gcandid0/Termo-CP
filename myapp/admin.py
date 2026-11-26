@@ -1,5 +1,6 @@
 import csv
 import json
+import statistics
 from datetime import timedelta
 
 from django.contrib import admin
@@ -8,6 +9,7 @@ from django.db.models.functions import TruncDate
 from django.http import HttpResponse
 from django.urls import path
 from django.utils import timezone
+from django.utils.html import format_html
 
 from .models import MensagemContato, SimulacaoCompartilhada, TentativaExercicio, UsoSimulacao
 
@@ -18,10 +20,16 @@ admin.site.index_title = 'Dashboard de Uso e Pesquisa'
 
 @admin.register(MensagemContato)
 class MensagemContatoAdmin(admin.ModelAdmin):
-    list_display = ('nome', 'email', 'enviado_por_email', 'criado_em')
+    list_display = ('nome', 'email', 'status_email_badge', 'criado_em')
     list_filter = ('enviado_por_email', 'criado_em')
     search_fields = ('nome', 'email', 'mensagem')
     readonly_fields = ('criado_em',)
+
+    @admin.display(description='E-mail')
+    def status_email_badge(self, obj):
+        if obj.enviado_por_email:
+            return format_html('<span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:999px;font-weight:700;font-size:11px;">✓ Enviado</span>')
+        return format_html('<span style="background:#fef3c7;color:#92400e;padding:2px 8px;border-radius:999px;font-weight:700;font-size:11px;">Salvo no BD</span>')
 
 
 @admin.action(description='Exportar estatísticas selecionadas para CSV (Excel)')
@@ -38,20 +46,42 @@ def exportar_uso_csv(modeladmin, request, queryset):
 
 @admin.register(UsoSimulacao)
 class UsoSimulacaoAdmin(admin.ModelAdmin):
-    list_display = ('substancia', 'tipo', 'idioma', 'criado_em')
+    list_display = ('substancia', 'tipo', 'idioma_badge', 'criado_em')
     list_filter = ('substancia', 'tipo', 'idioma', 'criado_em')
     search_fields = ('substancia', 'tipo', 'idioma')
     readonly_fields = ('criado_em',)
     date_hierarchy = 'criado_em'
     actions = [exportar_uso_csv]
 
+    @admin.display(description='Idioma')
+    def idioma_badge(self, obj):
+        colors = {
+            'pt-br': ('#dcfce7', '#166534'),
+            'en': ('#dbeafe', '#1e40af'),
+            'es': ('#fef3c7', '#92400e'),
+            'fr': ('#ede9fe', '#5b21b6'),
+            'zh': ('#fee2e2', '#991b1b'),
+        }
+        bg, fg = colors.get(obj.idioma, ('#f1f5f9', '#334155'))
+        return format_html(
+            '<span style="background:{};color:{};padding:2px 8px;border-radius:999px;font-weight:700;font-size:11px;">{}</span>',
+            bg, fg, obj.idioma.upper(),
+        )
+
 
 @admin.register(SimulacaoCompartilhada)
 class SimulacaoCompartilhadaAdmin(admin.ModelAdmin):
-    list_display = ('codigo', 'titulo', 'substancia', 'tipo', 'criado_em')
+    list_display = ('codigo', 'titulo', 'substancia', 'tipo', 'link_publico', 'criado_em')
     list_filter = ('substancia', 'tipo', 'criado_em')
     search_fields = ('codigo', 'titulo', 'substancia')
     readonly_fields = ('codigo', 'criado_em')
+
+    @admin.display(description='Prévia')
+    def link_publico(self, obj):
+        return format_html(
+            '<a href="/s/{}/" target="_blank" style="background:#eff6ff;color:#1b3668;padding:2px 9px;border-radius:6px;font-weight:700;font-size:11px;text-decoration:none;border:1px solid #bfdbfe;">Abrir /s/{}/ ↗</a>',
+            obj.codigo, obj.codigo,
+        )
 
 
 @admin.action(description='Exportar resoluções do Modo Exercício para CSV (Excel)')
@@ -79,13 +109,26 @@ def exportar_exercicios_csv(modeladmin, request, queryset):
 class TentativaExercicioAdmin(admin.ModelAdmin):
     list_display = (
         'codigo', 'nome_aluno', 'substancia', 'tipo', 'nivel',
-        'pontuacao', 'poe_acertos', 'tentativas', 'tempo_segundos', 'usou_dica', 'criado_em',
+        'pontuacao_badge', 'tentativas', 'tempo_segundos', 'usou_dica', 'criado_em',
     )
     list_filter = ('substancia', 'tipo', 'nivel', 'usou_dica', 'idioma', 'criado_em')
     search_fields = ('codigo', 'nome_aluno', 'substancia', 'justificativa')
     readonly_fields = ('codigo', 'criado_em')
     date_hierarchy = 'criado_em'
     actions = [exportar_exercicios_csv]
+
+    @admin.display(description='Nota')
+    def pontuacao_badge(self, obj):
+        if obj.pontuacao >= 75:
+            bg, fg = '#dcfce7', '#166534'
+        elif obj.pontuacao >= 50:
+            bg, fg = '#fef3c7', '#92400e'
+        else:
+            bg, fg = '#fee2e2', '#991b1b'
+        return format_html(
+            '<span style="background:{};color:{};padding:2px 9px;border-radius:999px;font-weight:700;font-size:11px;">{}%</span>',
+            bg, fg, round(obj.pontuacao, 1),
+        )
 
 
 # ==============================================================================
@@ -99,6 +142,8 @@ _LANG_LABELS = {
     'fr': 'Français (FR)',
     'zh': '中文 (ZH)',
 }
+
+_WEEKDAY_LABELS = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom']
 
 
 def build_admin_analytics(periodo='all'):
@@ -123,11 +168,23 @@ def build_admin_analytics(periodo='all'):
     total_shares = qs_share.count()
     total_msgs = qs_msg.count()
 
-    ex_agg = qs_ex.aggregate(avg_score=Avg('pontuacao'), avg_time=Avg('tempo_segundos'))
-    avg_score = round(float(ex_agg['avg_score'] or 0.0), 1)
-    avg_time = int(round(float(ex_agg['avg_time'] or 0.0)))
+    # Estatística descritiva completa do Modo Exercício
+    scores = list(qs_ex.values_list('pontuacao', flat=True))
+    times = list(qs_ex.values_list('tempo_segundos', flat=True))
+    avg_score = round(statistics.mean(scores), 1) if scores else 0.0
+    median_score = round(statistics.median(scores), 1) if scores else 0.0
+    stdev_score = round(statistics.stdev(scores), 1) if len(scores) >= 2 else 0.0
+    min_score = round(min(scores), 1) if scores else 0.0
+    max_score = round(max(scores), 1) if scores else 0.0
+    pass_rate = round((sum(1 for s in scores if s >= 75.0) / len(scores)) * 100.0, 1) if scores else 0.0
+
+    avg_time = int(round(statistics.mean(times))) if times else 0
+    median_time = int(round(statistics.median(times))) if times else 0
+
     hint_count = qs_ex.filter(usou_dica=True).count()
     hint_pct = round((hint_count / total_ex) * 100.0, 1) if total_ex else 0.0
+    avg_with_hint = round(float(qs_ex.filter(usou_dica=True).aggregate(a=Avg('pontuacao'))['a'] or 0.0), 1)
+    avg_no_hint = round(float(qs_ex.filter(usou_dica=False).aggregate(a=Avg('pontuacao'))['a'] or 0.0), 1)
 
     def _with_pct(rows, key_field, total, label_map=None):
         out = []
@@ -152,7 +209,7 @@ def build_admin_analytics(periodo='all'):
         'idioma', total_sims, _LANG_LABELS,
     )
 
-    # Evolução diária (últimos 30 dias ou janela selecionada)
+    # Evolução diária
     timeline_days = days or 30
     tl_cutoff = now - timedelta(days=timeline_days)
     daily_qs = (
@@ -170,6 +227,27 @@ def build_admin_analytics(periodo='all'):
         timeline_labels.append(d.strftime('%d/%m'))
         timeline_values.append(daily_map.get(d, 0))
 
+    # Distribuição por dia da semana (0=Seg .. 6=Dom)
+    weekday_counts = [0] * 7
+    for dt in qs_uso.values_list('criado_em', flat=True):
+        if dt:
+            local_dt = timezone.localtime(dt)
+            weekday_counts[local_dt.weekday()] += 1
+
+    # Matriz Cruzada Substância x Tipo de Processo (Top 8 x Top 6)
+    top_subs = [x['raw'] for x in by_sub[:8]]
+    top_types = [x['raw'] for x in by_type[:6]]
+    cross_qs = (
+        qs_uso.filter(substancia__in=top_subs, tipo__in=top_types)
+        .values('substancia', 'tipo')
+        .annotate(total=Count('id'))
+    )
+    cross_map = {(r['substancia'], r['tipo']): r['total'] for r in cross_qs}
+    cross_matrix = []
+    for s in top_subs:
+        row_vals = [cross_map.get((s, t), 0) for t in top_types]
+        cross_matrix.append({'substancia': s, 'values': row_vals, 'total': sum(row_vals)})
+
     # Desempenho no Modo Exercício por substância
     ex_by_sub_qs = (
         qs_ex.values('substancia')
@@ -185,11 +263,40 @@ def build_admin_analytics(periodo='all'):
         for r in ex_by_sub_qs
     ]
 
+    # Atividade recente
+    recent_sims = list(qs_uso.order_by('-criado_em')[:8])
+    recent_ex = list(qs_ex.order_by('-criado_em')[:5])
+
+    # Texto descritivo automático pronto para seção de Resultados de artigo
+    periodo_txt = 'todo o período registrado' if periodo == 'all' else f'os últimos {periodo} dias'
+    if total_sims > 0:
+        top_sub_txt = f"{by_sub[0]['label']} ({by_sub[0]['count']} simulações; {by_sub[0]['pct']}%)" if by_sub else '—'
+        top_type_txt = f"{by_type[0]['label']} ({by_type[0]['count']}; {by_type[0]['pct']}%)" if by_type else '—'
+        langs_txt = ', '.join(f"{x['label']}: {x['pct']}%" for x in by_lang[:5])
+        article_summary = (
+            f"Durante {periodo_txt}, foram registradas {total_sims} simulações anônimas na plataforma TERMO-CP "
+            f"(além de {total_shares} simulações compartilhadas via link curto). "
+            f"A substância mais simulada foi {top_sub_txt}, e o tipo de análise mais frequente foi {top_type_txt}. "
+            f"Quanto à internacionalização, a distribuição de acessos por idioma foi: {langs_txt}."
+        )
+        if total_ex > 0:
+            article_summary += (
+                f" No Modo Exercício, foram concluídas {total_ex} resoluções avaliativas, "
+                f"com média de acerto de {avg_score}% (mediana = {median_score}%, desvio-padrão = {stdev_score}%, "
+                f"taxa de aproveitamento ≥ 75% de {pass_rate}%) e tempo médio de {avg_time} s por questão."
+            )
+    else:
+        article_summary = (
+            "Ainda não há simulações registradas neste período. Assim que os estudantes utilizarem a plataforma, "
+            "este bloco gerará automaticamente um parágrafo descritivo com as métricas consolidadas para o seu artigo."
+        )
+
     chart_payload = {
-        'by_sub': {'labels': [x['label'] for x in by_sub], 'values': [x['count'] for x in by_sub]},
-        'by_type': {'labels': [x['label'] for x in by_type], 'values': [x['count'] for x in by_type]},
-        'by_lang': {'labels': [x['label'] for x in by_lang], 'values': [x['count'] for x in by_lang]},
+        'by_sub': {'labels': [x['label'] for x in by_sub], 'values': [x['count'] for x in by_sub], 'pcts': [x['pct'] for x in by_sub]},
+        'by_type': {'labels': [x['label'] for x in by_type], 'values': [x['count'] for x in by_type], 'pcts': [x['pct'] for x in by_type]},
+        'by_lang': {'labels': [x['label'] for x in by_lang], 'values': [x['count'] for x in by_lang], 'pcts': [x['pct'] for x in by_lang]},
         'timeline': {'labels': timeline_labels, 'values': timeline_values},
+        'weekday': {'labels': _WEEKDAY_LABELS, 'values': weekday_counts},
         'ex_by_sub': {
             'labels': [x['label'] for x in ex_by_sub],
             'scores': [x['avg_score'] for x in ex_by_sub],
@@ -203,20 +310,33 @@ def build_admin_analytics(periodo='all'):
         'sims_7d': sims_7d,
         'total_ex': total_ex,
         'avg_score': avg_score,
+        'median_score': median_score,
+        'stdev_score': stdev_score,
+        'min_score': min_score,
+        'max_score': max_score,
+        'pass_rate': pass_rate,
         'avg_time': avg_time,
+        'median_time': median_time,
         'hint_pct': hint_pct,
+        'avg_with_hint': avg_with_hint,
+        'avg_no_hint': avg_no_hint,
         'total_shares': total_shares,
         'total_msgs': total_msgs,
         'by_sub': by_sub,
         'by_type': by_type,
         'by_lang': by_lang,
         'ex_by_sub': ex_by_sub,
+        'cross_types': top_types,
+        'cross_matrix': cross_matrix,
+        'recent_sims': recent_sims,
+        'recent_ex': recent_ex,
+        'article_summary': article_summary,
         'chart_json': json.dumps(chart_payload, ensure_ascii=False),
     }
 
 
 def exportar_relatorio_artigo_view(request):
-    """Exporta CSV consolidado (tabelas de frequência n e %) pronto para artigos científicos."""
+    """Exporta CSV consolidado (tabelas de frequência n e %, estatística descritiva e matriz cruzada)."""
     periodo = request.GET.get('periodo', 'all')
     data = build_admin_analytics(periodo)
 
@@ -234,8 +354,14 @@ def exportar_relatorio_artigo_view(request):
     w.writerow(['Total de Simulações', data['total_sims']])
     w.writerow(['Simulações (últimos 7 dias)', data['sims_7d']])
     w.writerow(['Exercícios Concluídos', data['total_ex']])
-    w.writerow(['Média de Acerto nos Exercícios (%)', data['avg_score']])
+    w.writerow(['Média de Acerto (%)', data['avg_score']])
+    w.writerow(['Mediana de Acerto (%)', data['median_score']])
+    w.writerow(['Desvio-Padrão (%)', data['stdev_score']])
+    w.writerow(['Taxa de Aprovação >= 75% (%)', data['pass_rate']])
+    w.writerow(['Média Com Dica (%)', data['avg_with_hint']])
+    w.writerow(['Média Sem Dica (%)', data['avg_no_hint']])
     w.writerow(['Tempo Médio por Exercício (s)', data['avg_time']])
+    w.writerow(['Tempo Mediano por Exercício (s)', data['median_time']])
     w.writerow(['Uso de Dica de Fórmula (%)', data['hint_pct']])
     w.writerow(['Links Compartilhados', data['total_shares']])
     w.writerow(['Mensagens de Contato', data['total_msgs']])
@@ -255,6 +381,12 @@ def exportar_relatorio_artigo_view(request):
     for r in data['by_lang']:
         w.writerow([r['label'], r['count'], f"{r['pct']:.1f}%"])
     w.writerow([])
+
+    if data['cross_matrix']:
+        w.writerow(['MATRIZ SUBSTÂNCIA x TIPO'] + data['cross_types'] + ['Total'])
+        for row in data['cross_matrix']:
+            w.writerow([row['substancia']] + row['values'] + [row['total']])
+        w.writerow([])
 
     if data['ex_by_sub']:
         w.writerow(['MODO EXERCÍCIO POR SUBSTÂNCIA', 'Resoluções (n)', 'Média de Acerto (%)'])
