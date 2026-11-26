@@ -4,11 +4,11 @@ from pathlib import Path
 from django.core.exceptions import ImproperlyConfigured
 from dotenv import load_dotenv
 
-# Carrega as variáveis do arquivo .env
-load_dotenv()
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Carrega explicitamente o .env da raiz do projeto (necessário no WSGI do PythonAnywhere)
+load_dotenv(BASE_DIR / '.env')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
