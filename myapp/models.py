@@ -67,6 +67,8 @@ class TentativaExercicio(models.Model):
     """Registro de resolução no Modo Exercício (POE) para auditoria docente e pesquisa educacional."""
     codigo = models.CharField('Código', max_length=16, unique=True, default=_generate_poe_code, db_index=True)
     nome_aluno = models.CharField('Estudante', max_length=120, blank=True, default='Anônimo')
+    codigo_turma = models.CharField('Código da Turma', max_length=40, blank=True, default='', db_index=True)
+    modo = models.CharField('Modo', max_length=20, default='avulso', db_index=True)
     substancia = models.CharField('Substância', max_length=60, db_index=True)
     tipo = models.CharField('Tipo', max_length=40, db_index=True)
     nivel = models.CharField('Nível', max_length=30, default='basic')
@@ -75,7 +77,8 @@ class TentativaExercicio(models.Model):
     tentativas = models.PositiveSmallIntegerField('Tentativas', default=1)
     tempo_segundos = models.PositiveIntegerField('Tempo (s)', default=0)
     usou_dica = models.BooleanField('Usou dica', default=False)
-    justificativa = models.TextField('Justificativa escrita', blank=True, default='')
+    justificativa = models.TextField('Justificativa / Hipótese (Prever)', blank=True, default='')
+    explicacao_poe = models.TextField('Explicação Pós-Observação (Explicar)', blank=True, default='')
     idioma = models.CharField('Idioma', max_length=10, default='pt-br')
     criado_em = models.DateTimeField('Concluído em', auto_now_add=True, db_index=True)
 

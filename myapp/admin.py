@@ -91,15 +91,15 @@ def exportar_exercicios_csv(modeladmin, request, queryset):
     response.write('\ufeff')
     writer = csv.writer(response, delimiter=';')
     writer.writerow([
-        'Código', 'Estudante', 'Substância', 'Tipo', 'Nível',
-        'Pontuação (%)', 'Acertos Análise', 'Tentativas', 'Tempo (s)',
-        'Usou Dica', 'Idioma', 'Justificativa', 'Data/Hora',
+        'Código', 'Estudante', 'Turma', 'Modo', 'Substância', 'Tipo', 'Nível',
+        'Pontuação (%)', 'Acertos POE', 'Tentativas', 'Tempo (s)',
+        'Usou Dica', 'Idioma', 'Hipótese (Prever)', 'Explicação (Explicar)', 'Data/Hora',
     ])
     for obj in queryset:
         writer.writerow([
-            obj.codigo, obj.nome_aluno, obj.substancia, obj.tipo, obj.nivel,
+            obj.codigo, obj.nome_aluno, obj.codigo_turma, obj.modo, obj.substancia, obj.tipo, obj.nivel,
             obj.pontuacao, obj.poe_acertos, obj.tentativas, obj.tempo_segundos,
-            'Sim' if obj.usou_dica else 'Não', obj.idioma, obj.justificativa,
+            'Sim' if obj.usou_dica else 'Não', obj.idioma, obj.justificativa, obj.explicacao_poe,
             obj.criado_em.strftime('%d/%m/%Y %H:%M:%S'),
         ])
     return response
@@ -108,11 +108,11 @@ def exportar_exercicios_csv(modeladmin, request, queryset):
 @admin.register(TentativaExercicio)
 class TentativaExercicioAdmin(admin.ModelAdmin):
     list_display = (
-        'codigo', 'nome_aluno', 'substancia', 'tipo', 'nivel',
+        'codigo', 'nome_aluno', 'codigo_turma', 'modo', 'substancia', 'tipo', 'nivel',
         'pontuacao_badge', 'tentativas', 'tempo_segundos', 'usou_dica', 'criado_em',
     )
-    list_filter = ('substancia', 'tipo', 'nivel', 'usou_dica', 'idioma', 'criado_em')
-    search_fields = ('codigo', 'nome_aluno', 'substancia', 'justificativa')
+    list_filter = ('codigo_turma', 'modo', 'substancia', 'tipo', 'nivel', 'usou_dica', 'idioma', 'criado_em')
+    search_fields = ('codigo', 'nome_aluno', 'codigo_turma', 'substancia', 'justificativa', 'explicacao_poe')
     readonly_fields = ('codigo', 'criado_em')
     date_hierarchy = 'criado_em'
     actions = [exportar_exercicios_csv]
@@ -146,12 +146,19 @@ _LANG_LABELS = {
 _WEEKDAY_LABELS = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom']
 
 
-def build_admin_analytics(periodo='all'):
+def build_admin_analytics(periodo='all', turma=''):
     now = timezone.now()
     qs_uso = UsoSimulacao.objects.all()
     qs_ex = TentativaExercicio.objects.all()
     qs_share = SimulacaoCompartilhada.objects.all()
     qs_msg = MensagemContato.objects.all()
+
+    turmas_disponiveis = sorted(
+        {t for t in TentativaExercicio.objects.exclude(codigo_turma='').values_list('codigo_turma', flat=True) if t}
+    )
+    turma = str(turma or '').strip().upper()[:40]
+    if turma:
+        qs_ex = qs_ex.filter(codigo_turma=turma)
 
     days_map = {'7': 7, '30': 30, '90': 90}
     days = days_map.get(str(periodo))
@@ -306,6 +313,8 @@ def build_admin_analytics(periodo='all'):
 
     return {
         'periodo': str(periodo),
+        'turma': turma,
+        'turmas_disponiveis': turmas_disponiveis,
         'total_sims': total_sims,
         'sims_7d': sims_7d,
         'total_ex': total_ex,
@@ -338,7 +347,8 @@ def build_admin_analytics(periodo='all'):
 def exportar_relatorio_artigo_view(request):
     """Exporta CSV consolidado (tabelas de frequência n e %, estatística descritiva e matriz cruzada)."""
     periodo = request.GET.get('periodo', 'all')
-    data = build_admin_analytics(periodo)
+    turma = request.GET.get('turma', '')
+    data = build_admin_analytics(periodo, turma=turma)
 
     response = HttpResponse(content_type='text/csv; charset=utf-8')
     response['Content-Disposition'] = f'attachment; filename="termo_cp_resumo_artigo_{periodo}.csv"'
@@ -348,6 +358,8 @@ def exportar_relatorio_artigo_view(request):
     w.writerow(['TERMO-CP — Relatório Estatístico Consolidado (Artigo Científico)'])
     w.writerow(['Gerado em', timezone.now().strftime('%d/%m/%Y %H:%M:%S')])
     w.writerow(['Filtro de período', 'Todos' if periodo == 'all' else f'Últimos {periodo} dias'])
+    if data['turma']:
+        w.writerow(['Filtro de Turma (Modo Exercício)', data['turma']])
     w.writerow([])
 
     w.writerow(['INDICADORES GERAIS', 'VALOR'])
@@ -406,7 +418,8 @@ def _custom_admin_index(request, extra_context=None):
     periodo = request.GET.get('periodo', 'all')
     if periodo not in ('all', '7', '30', '90'):
         periodo = 'all'
-    ctx['analytics'] = build_admin_analytics(periodo)
+    turma = request.GET.get('turma', '')
+    ctx['analytics'] = build_admin_analytics(periodo, turma=turma)
     return _orig_admin_index(request, extra_context=ctx)
 
 

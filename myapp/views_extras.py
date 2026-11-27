@@ -898,7 +898,13 @@ def api_exercicio_corrigir_view(request):
     ex['attempts'] = int(ex.get('attempts', 0)) + 1
     ex['last_answers'] = parsed
 
-    unlocked = (score_pct >= 75.0) or (ex['attempts'] >= 2)
+    mode = str(body.get('mode', 'avulso')).strip().lower()
+    if mode not in ('avulso', 'miniprova', 'poe_completo'):
+        mode = 'avulso'
+    class_code = str(body.get('class_code', '')).strip().upper()[:40]
+
+    # No Método POE Completo, a 1ª submissão válida (após a trava de 25s) libera a etapa Observar
+    unlocked = (score_pct >= 75.0) or (ex['attempts'] >= 2) or (mode == 'poe_completo')
     ex['unlocked'] = unlocked
 
     receipt_code = ex.get('receipt_code')
@@ -910,11 +916,13 @@ def api_exercicio_corrigir_view(request):
         poe_hits = sum(1 for v in (poe_feedback or {}).values() if v)
         UsoSimulacao.objects.create(
             substancia=ex['prompt']['substance'][:50],
-            tipo='Modo Exercício',
+            tipo='Método POE Completo' if mode == 'poe_completo' else 'Modo Exercício',
             idioma=idioma,
         )
         rec = TentativaExercicio.objects.create(
             nome_aluno=student_name,
+            codigo_turma=class_code,
+            modo=mode,
             substancia=ex['prompt']['substance'][:60],
             tipo=ex['prompt']['process'],
             nivel=ex.get('difficulty', 'basic'),
@@ -923,7 +931,7 @@ def api_exercicio_corrigir_view(request):
             tentativas=ex['attempts'],
             tempo_segundos=elapsed_sec,
             usou_dica=used_hint,
-            justificativa=justification[:1000],
+            justificativa=justification[:1500],
             idioma=idioma,
         )
         receipt_code = rec.codigo
@@ -941,10 +949,53 @@ def api_exercicio_corrigir_view(request):
         'poe_feedback': poe_feedback,
         'unlocked': unlocked,
         'receipt_code': receipt_code,
+        'class_code': class_code,
+        'mode': mode,
     }
     if unlocked:
         resp['solution'] = {
             'values': {f: sol[f] for f in ask_fields},
             'steps': sol['steps'],
+            'expected_vol': sol.get('expected_vol'),
+            'expected_heat': sol.get('expected_heat'),
+            'expected_law2': sol.get('expected_law2'),
         }
     return JsonResponse(resp)
+
+
+@require_POST
+def api_exercicio_explicar_view(request):
+    """Salva a Etapa 3 (Explicar / Reconciliação Conceitual) do Método POE Completo."""
+    if _is_rate_limited(request, 'ex_explicar', limit=30, window_seconds=60):
+        return JsonResponse({'ok': False, 'error': 'Muitas solicitações. Aguarde alguns segundos.'}, status=429)
+
+    ex = request.session.get('poe_exercise')
+    if not ex or not ex.get('unlocked') or not ex.get('receipt_code'):
+        return JsonResponse({'ok': False, 'error': 'Conclua primeiro as etapas Prever e Observar.'}, status=400)
+
+    try:
+        body = json.loads(request.body.decode('utf-8') or '{}')
+    except (ValueError, UnicodeDecodeError):
+        return JsonResponse({'ok': False, 'error': 'JSON inválido.'}, status=400)
+
+    explanation = str(body.get('explanation', '')).strip()
+    if len(explanation) < 25 or len(set(explanation.lower().replace(' ', ''))) < 7:
+        return JsonResponse({
+            'ok': False,
+            'message': 'Escreva uma explicação conceitual completa (mínimo 25 caracteres reais) comparando sua previsão inicial com o resultado observado.',
+        }, status=400)
+
+    receipt_code = ex['receipt_code']
+    TentativaExercicio.objects.filter(codigo=receipt_code).update(
+        explicacao_poe=explanation[:2000],
+        modo='poe_completo',
+    )
+    ex['poe_explained'] = True
+    request.session['poe_exercise'] = ex
+    request.session.modified = True
+
+    return JsonResponse({
+        'ok': True,
+        'receipt_code': receipt_code,
+        'explanation': explanation[:2000],
+    })

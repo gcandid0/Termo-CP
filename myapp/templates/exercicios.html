@@ -279,6 +279,58 @@
     .ex-cmp-table td { padding: 6px 10px; border-top: 1px solid #f1f5f9; }
 
     .ex-history-box { display: none; }
+
+    /* Barra de Etapas do Método POE Completo (Prever -> Observar -> Explicar) */
+    .poe-stepper {
+        display: none;
+        background: linear-gradient(135deg, #f8fbff 0%, #eff6ff 100%);
+        border: 1px solid #bfdbfe;
+        border-radius: 14px;
+        padding: 13px 18px;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+    .poe-stepper-title { font-weight: 800; color: #1b3668; font-size: 0.93em; display: inline-flex; align-items: center; gap: 8px; }
+    .poe-steps-pills { display: flex; gap: 8px; flex-wrap: wrap; }
+    .poe-step-pill {
+        padding: 5px 13px; border-radius: 999px; font-size: 0.82em; font-weight: 700;
+        background: #ffffff; border: 1.5px solid #cbd5e1; color: #64748b;
+        display: inline-flex; align-items: center; gap: 6px;
+    }
+    .poe-step-pill.active { border-color: #0d6ab0; color: #0d6ab0; background: #e0f2fe; }
+    .poe-step-pill.done { border-color: #16a34a; color: #166534; background: #dcfce7; }
+
+    .poe-explain-card {
+        display: none;
+        background: #ffffff;
+        border: 1.5px solid #93c5fd;
+        border-radius: 14px;
+        padding: 18px 22px;
+        box-shadow: 0 6px 18px rgba(13, 106, 176, 0.08);
+    }
+    .poe-explain-card h3 { margin: 0 0 8px 0; color: #1b3668; font-size: 1.05em; display: flex; align-items: center; gap: 8px; }
+    .poe-guide-qs {
+        background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px;
+        padding: 10px 14px; margin: 8px 0 12px; font-size: 0.86em; color: #334155;
+    }
+    .poe-guide-qs ul { margin: 5px 0 0 18px; padding: 0; }
+    .poe-guide-qs li { margin-bottom: 3px; }
+
+    .ex-class-bar {
+        display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+        background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px;
+        padding: 8px 14px; box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+    }
+    .ex-class-bar label { font-size: 0.82em; font-weight: 700; color: #1b3668; display: inline-flex; align-items: center; gap: 6px; }
+    .ex-class-bar input {
+        width: 170px; padding: 6px 10px; border-radius: 8px;
+        border: 1.5px solid #cbd5e1; background: #f8fafc; color: #0f172a;
+        font-family: Consolas, monospace; font-size: 0.86em; font-weight: 700; text-transform: uppercase;
+    }
+    .ex-class-bar input:focus { outline: none; border-color: #0d6ab0; background: #fff; }
+
     @media (max-width: 760px) {
         .ex-wrapper { padding: 12px 14px 28px; }
         .ex-inputs-grid[data-justif-row="1"] { grid-template-columns: 1fr !important; }
@@ -330,7 +382,7 @@
         </div>
     </div>
 
-    <!-- Alternador de Modo + Histórico -->
+    <!-- Alternador de Modo + Código da Turma + Histórico -->
     <div class="ex-top-controls">
         <div class="ex-mode-tabs">
             <button type="button" id="tabModeSingle" class="ex-mode-tab active">
@@ -341,12 +393,33 @@
                 <i class="fas fa-award"></i>
                 <span class="lang-text" data-pt-br="Mini-Prova (3 Questões)" data-en="Mini-Exam (3 Questions)" data-es="Mini-Examen (3 Preguntas)" data-fr="Mini-Examen (3 Questions)" data-zh="小测验 (3 题)">Mini-Prova (3 Questões)</span>
             </button>
+            <button type="button" id="tabModePoe" class="ex-mode-tab">
+                <i class="fas fa-microscope"></i>
+                <span class="lang-text" data-pt-br="Método POE Completo" data-en="Full POE Method" data-es="Método POE Completo" data-fr="Méthode POE Complète" data-zh="完整 POE 模式">Método POE Completo</span>
+            </button>
         </div>
-        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+        <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center;">
+            <div class="ex-class-bar">
+                <label for="exClassCode"><i class="fas fa-users"></i> Turma:</label>
+                <input type="text" id="exClassCode" maxlength="40" placeholder="Ex.: TERMO-2026A">
+                <button type="button" id="btnCopyClassLink" class="ex-btn ex-btn-outline" style="padding:5px 10px; font-size:0.78em;" title="Copiar link já com o código da turma preenchido para enviar aos alunos">
+                    <i class="fas fa-link"></i> Link da Turma
+                </button>
+            </div>
             <button type="button" id="btnToggleHistory" class="ex-btn ex-btn-outline" style="padding:7px 13px; font-size:0.84em;">
                 <i class="fas fa-history"></i>
-                <span class="lang-text" data-pt-br="Histórico da Sessão" data-en="Session History" data-es="Historial" data-fr="Historique" data-zh="练习记录">Histórico da Sessão</span>
+                <span class="lang-text" data-pt-br="Histórico" data-en="History" data-es="Historial" data-fr="Historique" data-zh="记录">Histórico</span>
             </button>
+        </div>
+    </div>
+
+    <!-- Barra de 3 Etapas do Método POE Completo (Prever -> Observar -> Explicar) -->
+    <div id="poeStepperBar" class="poe-stepper">
+        <span class="poe-stepper-title"><i class="fas fa-microscope"></i> Sequência Didática POE (Prever · Observar · Explicar)</span>
+        <div class="poe-steps-pills">
+            <span id="poeStep1" class="poe-step-pill active"><i class="fas fa-lightbulb"></i> 1. Prever (Hipótese + Cálculos)</span>
+            <span id="poeStep2" class="poe-step-pill"><i class="fas fa-eye"></i> 2. Observar (Resultados + Memorial)</span>
+            <span id="poeStep3" class="poe-step-pill"><i class="fas fa-comment-dots"></i> 3. Explicar (Reconciliação)</span>
         </div>
     </div>
 
@@ -559,6 +632,35 @@
             <div id="exFeedbackArea"></div>
             <div id="exMemorialUnlock"></div>
         </div>
+
+        <!-- ETAPA 3 DO MÉTODO POE COMPLETO: EXPLICAR (Reconciliação Conceitual) -->
+        <div id="poeExplainCard" class="poe-explain-card">
+            <h3><i class="fas fa-comment-dots" style="color:#0d6ab0;"></i> Etapa 3 — EXPLICAR (Reconciliação Conceitual POE)</h3>
+            <p style="margin:0 0 8px 0; font-size:0.9em; color:#475569;">
+                Compare sua <strong>previsão inicial (Etapa 1)</strong> com os <strong>resultados observados no TERMO-CP (Etapa 2)</strong> e explique fisicamente o que ocorreu.
+            </p>
+            <div class="poe-guide-qs">
+                <strong>Perguntas orientadoras para sua explicação:</strong>
+                <ul>
+                    <li>Sua previsão de volume, sentido do calor (<em>Q</em>) e viabilidade pela 2ª Lei (<em>Sger</em>) se confirmou?</li>
+                    <li>Se houve divergência entre o previsto e o observado, qual conceito ou convenção de sinais explica a diferença?</li>
+                    <li>Como a 1ª e a 2ª Leis da Termodinâmica justificam os valores finais encontrados?</li>
+                </ul>
+            </div>
+            <div class="ex-field" style="margin-bottom:12px;">
+                <label for="poeExplainText">Sua Explicação Pós-Observação (mín. 25 caracteres):</label>
+                <textarea id="poeExplainText" rows="3" placeholder="Ex.: Minha previsão de expansão se confirmou porque o aquecimento isobárico aumentou o volume específico (v2 > v1), resultando em W > 0 e Q > 0..."></textarea>
+            </div>
+            <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
+                <button type="button" id="btnSubmitPoeExplain" class="ex-btn ex-btn-primary">
+                    <i class="fas fa-check-double"></i> Concluir Sequência POE e Salvar
+                </button>
+                <button type="button" id="btnExportPoeFullPdf" class="ex-btn ex-btn-pdf" style="display:none;">
+                    <i class="fas fa-file-pdf"></i> Exportar Relatório POE Completo (PDF)
+                </button>
+            </div>
+            <div id="poeExplainAlert" class="ex-alert"></div>
+        </div>
     </div>
 
     <!-- Resumo Final da Mini-Prova (3 Questões) -->
@@ -576,8 +678,12 @@ document.addEventListener('DOMContentLoaded', function () {
     var scoredThisExercise = false;
     var usedHintThisExercise = false;
 
-    // Mini-Prova state
+    // Estado do modo: 'avulso' | 'miniprova' | 'poe_completo'
+    var currentMode = 'avulso';
     var examMode = false;
+    var poeFullMode = false;
+    var lastCheckData = null;
+    var savedPoeExplanation = '';
     var examIndex = 0;
     var examPlan = [
         { process: 'estado', difficulty: 'basic' },
@@ -769,22 +875,77 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('convM').addEventListener('input', updateVolConv);
     document.getElementById('convV').addEventListener('input', updateVolConv);
 
-    // Abas de modo
-    function setMode(isExam) {
-        examMode = isExam;
-        document.getElementById('tabModeSingle').classList.toggle('active', !isExam);
-        document.getElementById('tabModeExam').classList.toggle('active', isExam);
-        document.getElementById('fieldProcWrap').style.display = isExam ? 'none' : 'block';
-        document.getElementById('fieldDiffWrap').style.display = isExam ? 'none' : 'block';
-        document.getElementById('exExamProgress').style.display = isExam ? 'flex' : 'none';
+    // Abas de modo ('avulso' | 'miniprova' | 'poe_completo')
+    function updatePoeStepper(step) {
+        var s1 = document.getElementById('poeStep1');
+        var s2 = document.getElementById('poeStep2');
+        var s3 = document.getElementById('poeStep3');
+        [s1, s2, s3].forEach(function (el) { el.classList.remove('active', 'done'); });
+        if (step === 1) { s1.classList.add('active'); }
+        else if (step === 2) { s1.classList.add('done'); s2.classList.add('active'); }
+        else if (step === 3) { s1.classList.add('done'); s2.classList.add('done'); s3.classList.add('active'); }
+        else if (step === 4) { s1.classList.add('done'); s2.classList.add('done'); s3.classList.add('done'); }
+    }
+
+    function setMode(mode) {
+        currentMode = mode;
+        examMode = (mode === 'miniprova');
+        poeFullMode = (mode === 'poe_completo');
+        document.getElementById('tabModeSingle').classList.toggle('active', mode === 'avulso');
+        document.getElementById('tabModeExam').classList.toggle('active', examMode);
+        document.getElementById('tabModePoe').classList.toggle('active', poeFullMode);
+        document.getElementById('fieldProcWrap').style.display = examMode ? 'none' : 'block';
+        document.getElementById('fieldDiffWrap').style.display = examMode ? 'none' : 'block';
+        document.getElementById('exExamProgress').style.display = examMode ? 'flex' : 'none';
+        document.getElementById('poeStepperBar').style.display = poeFullMode ? 'flex' : 'none';
+        document.getElementById('poeExplainCard').style.display = 'none';
         document.getElementById('exExamSummary').style.display = 'none';
-        document.getElementById('btnGenLabel').textContent = isExam ? 'Iniciar Mini-Prova (3 Questões)' : 'Gerar Exercício';
-        if (isExam) {
+
+        if (examMode) {
+            document.getElementById('btnGenLabel').textContent = 'Iniciar Mini-Prova (3 Questões)';
             examIndex = 0;
             examResults = [];
             updateExamDots();
+        } else if (poeFullMode) {
+            document.getElementById('btnGenLabel').textContent = 'Iniciar Sequência POE';
+            // No Método POE Completo, processos (pcte/vcte/scte/tcte/poli) aproveitam melhor as 3 etapas
+            var procSel = document.getElementById('exProcess');
+            if (procSel.value === 'estado') procSel.value = 'pcte';
+            updatePoeStepper(1);
+        } else {
+            document.getElementById('btnGenLabel').textContent = 'Gerar Exercício';
         }
     }
+
+    // Código da Turma: lê ?turma= da URL ou localStorage + botão copiar link da turma
+    var classInput = document.getElementById('exClassCode');
+    try {
+        var urlTurma = new URLSearchParams(window.location.search).get('turma');
+        if (urlTurma) {
+            classInput.value = urlTurma.trim().toUpperCase().slice(0, 40);
+            localStorage.setItem('termoExClassCode', classInput.value);
+        } else {
+            var savedTurma = localStorage.getItem('termoExClassCode');
+            if (savedTurma) classInput.value = savedTurma;
+        }
+    } catch (e) {}
+    classInput.addEventListener('change', function () {
+        this.value = this.value.trim().toUpperCase().slice(0, 40);
+        try { localStorage.setItem('termoExClassCode', this.value); } catch (e) {}
+    });
+    document.getElementById('btnCopyClassLink').addEventListener('click', function () {
+        var code = classInput.value.trim().toUpperCase();
+        var base = window.location.origin + window.location.pathname;
+        var link = code ? (base + '?turma=' + encodeURIComponent(code)) : base;
+        var btn = this;
+        if (navigator.clipboard) {
+            navigator.clipboard.writeText(link).then(function () {
+                var old = btn.innerHTML;
+                btn.innerHTML = '<i class="fas fa-check"></i> Link Copiado!';
+                setTimeout(function () { btn.innerHTML = old; }, 1800);
+            });
+        }
+    });
 
     function updateExamDots() {
         for (var i = 0; i < 3; i++) {
@@ -795,8 +956,9 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    document.getElementById('tabModeSingle').addEventListener('click', function () { setMode(false); });
-    document.getElementById('tabModeExam').addEventListener('click', function () { setMode(true); });
+    document.getElementById('tabModeSingle').addEventListener('click', function () { setMode('avulso'); });
+    document.getElementById('tabModeExam').addEventListener('click', function () { setMode('miniprova'); });
+    document.getElementById('tabModePoe').addEventListener('click', function () { setMode('poe_completo'); });
 
     function startTimers(seconds) {
         if (timerId) clearInterval(timerId);
@@ -895,8 +1057,15 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('exAlert').style.display = 'none';
             document.getElementById('exFeedbackArea').innerHTML = '';
             document.getElementById('exMemorialUnlock').innerHTML = '';
+            document.getElementById('poeExplainCard').style.display = 'none';
+            document.getElementById('poeExplainText').value = '';
+            document.getElementById('poeExplainAlert').style.display = 'none';
+            document.getElementById('btnExportPoeFullPdf').style.display = 'none';
+            lastCheckData = null;
+            savedPoeExplanation = '';
 
             if (examMode) updateExamDots();
+            if (poeFullMode) updatePoeStepper(1);
             startTimers(data.min_seconds || 25);
         }).catch(function () { btn.disabled = false; });
     }
@@ -918,9 +1087,14 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    function exportExercisePdf(data) {
+    function exportExercisePdf(data, poeExplanation) {
         var student = escapeHtml(document.getElementById('exStudentName').value.trim() || 'Não informado');
+        var classCode = escapeHtml(document.getElementById('exClassCode').value.trim().toUpperCase() || '—');
         var justif = escapeHtml(document.getElementById('exJustification').value.trim());
+        var explainHtml = poeExplanation
+            ? '<div class="card"><h3>Etapa 3 — Explicação Pós-Observação (Reconciliação Conceitual POE)</h3><p>' + escapeHtml(poeExplanation) + '</p></div>'
+            : '';
+        var pdfTitle = poeExplanation ? 'TERMO-CP — Relatório POE Completo (Prever · Observar · Explicar)' : 'TERMO-CP — Comprovante do Modo Exercício';
         var win = window.open('', '_blank', 'width=940,height=780');
         if (!win) { window.print(); return; }
         var rowsHtml = Object.keys(data.field_feedback).map(function (f) {
@@ -930,7 +1104,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }).join('');
         var stepsHtml = data.solution.steps.map(function (s) { return '<p>' + s + '</p>'; }).join('');
         win.document.open();
-        win.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><title>TERMO-CP — Comprovante de Exercício</title>'
+        win.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><title>' + pdfTitle + '</title>'
             + '<style>@page{size:A4;margin:14mm;}body{font-family:"Segoe UI",Arial,sans-serif;color:#1e293b;font-size:11.5px;line-height:1.5;}'
             + '.hdr{background:linear-gradient(135deg,#1b3668,#0d6ab0);color:#fff;padding:15px 20px;border-radius:10px;margin-bottom:14px;display:flex;justify-content:space-between;}'
             + '.hdr h1{margin:0;font-size:15px;}.card{border:1px solid #cbd5e1;border-radius:10px;padding:13px 16px;margin-bottom:12px;}'
@@ -938,11 +1112,12 @@ document.addEventListener('DOMContentLoaded', function () {
             + 'th{background:#eff6ff;color:#1b3668;padding:6px 9px;text-align:left;border-bottom:1px solid #cbdcf0;}td{padding:6px 9px;border-bottom:1px solid #f1f5f9;}'
             + '.code{font-family:Consolas,monospace;font-weight:700;background:rgba(255,255,255,0.2);padding:2px 8px;border-radius:5px;display:inline-block;margin-top:4px;}'
             + '</style></head><body>'
-            + '<div class="hdr"><div><h1>TERMO-CP — Comprovante do Modo Exercício</h1><div>Estudante: ' + student + '</div><div class="code">Autenticidade: ' + escapeHtml(data.receipt_code || '—') + '</div></div>'
+            + '<div class="hdr"><div><h1>' + pdfTitle + '</h1><div>Estudante: ' + student + ' &nbsp;|&nbsp; Turma: <strong>' + classCode + '</strong></div><div class="code">Autenticidade: ' + escapeHtml(data.receipt_code || '—') + '</div></div>'
             + '<div style="text-align:right;">' + escapeHtml(new Date().toLocaleString()) + '<br><strong>Nota: ' + escapeHtml(data.score_pct) + '%</strong> (' + escapeHtml(data.attempts) + ' tentativa(s))<br>Tempo: ' + escapeHtml(fmtTime(data.elapsed_seconds || elapsedSec)) + ' · Dica: ' + (usedHintThisExercise ? 'Sim' : 'Não') + '</div></div>'
             + '<div class="card"><h3>Enunciado e Dados</h3><p>' + escapeHtml(currentPrompt.statement || '') + '</p><p><strong>' + currentPrompt.given.join(' &nbsp;|&nbsp; ') + '</strong></p></div>'
-            + '<div class="card"><h3>Justificativa do Estudante</h3><p>' + justif + '</p></div>'
-            + '<div class="card"><h3>Comparação: Sua Resposta × Gabarito</h3><table><thead><tr><th>Grandeza</th><th>Sua Resposta</th><th>Gabarito</th><th>Erro (%)</th><th>Status</th></tr></thead><tbody>' + rowsHtml + '</tbody></table></div>'
+            + '<div class="card"><h3>' + (poeExplanation ? 'Etapa 1 — Hipótese / Justificativa Prévia (Prever)' : 'Justificativa do Estudante') + '</h3><p>' + justif + '</p></div>'
+            + '<div class="card"><h3>' + (poeExplanation ? 'Etapa 2 — Comparação Observada (Sua Resposta × Gabarito)' : 'Comparação: Sua Resposta × Gabarito') + '</h3><table><thead><tr><th>Grandeza</th><th>Sua Resposta</th><th>Gabarito</th><th>Erro (%)</th><th>Status</th></tr></thead><tbody>' + rowsHtml + '</tbody></table></div>'
+            + explainHtml
             + '<div class="card"><h3>Memorial de Cálculo Passo a Passo</h3>' + stepsHtml + '</div>'
             + '<script>window.onload=function(){setTimeout(function(){window.focus();window.print();},300);};<\/script></body></html>');
         win.document.close();
@@ -950,6 +1125,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function exportExamSummaryPdf() {
         var student = escapeHtml(document.getElementById('exStudentName').value.trim() || 'Não informado');
+        var classCode = escapeHtml(document.getElementById('exClassCode').value.trim().toUpperCase() || '—');
         var avg = Math.round(examResults.reduce(function (a, b) { return a + b.score; }, 0) / examResults.length);
         var totalTime = examResults.reduce(function (a, b) { return a + b.time; }, 0);
         var win = window.open('', '_blank', 'width=940,height=780');
@@ -964,7 +1140,7 @@ document.addEventListener('DOMContentLoaded', function () {
             + '.hdr h1{margin:0;font-size:16px;}table{width:100%;border-collapse:collapse;margin-top:10px;}'
             + 'th{background:#eff6ff;color:#1b3668;padding:8px 10px;text-align:left;border-bottom:1px solid #cbdcf0;}td{padding:8px 10px;border-bottom:1px solid #f1f5f9;}'
             + '</style></head><body>'
-            + '<div class="hdr"><div><h1>TERMO-CP — Boletim da Mini-Prova (3 Questões)</h1><div>Estudante: ' + student + '</div></div>'
+            + '<div class="hdr"><div><h1>TERMO-CP — Boletim da Mini-Prova (3 Questões)</h1><div>Estudante: ' + student + ' &nbsp;|&nbsp; Turma: <strong>' + classCode + '</strong></div></div>'
             + '<div style="text-align:right;">' + new Date().toLocaleString() + '<br><strong>Média Final: ' + avg + '%</strong><br>Tempo Total: ' + fmtTime(totalTime) + '</div></div>'
             + '<table><thead><tr><th>Questão</th><th>Tema</th><th>Nota</th><th>Tempo</th><th>Código de Autenticidade</th></tr></thead><tbody>' + rows + '</tbody></table>'
             + '<script>window.onload=function(){setTimeout(function(){window.focus();window.print();},300);};<\/script></body></html>');
@@ -1000,6 +1176,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 pred_law2: document.getElementById('predLaw2').value,
                 justification: document.getElementById('exJustification').value,
                 student_name: document.getElementById('exStudentName').value.trim(),
+                class_code: document.getElementById('exClassCode').value.trim().toUpperCase(),
+                mode: currentMode,
                 used_hint: usedHintThisExercise,
                 answers: answers,
                 idioma: localStorage.getItem('preferredLang') || 'pt-br'
@@ -1034,8 +1212,14 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('exFeedbackArea').innerHTML = fbHtml;
 
             if (data.unlocked && data.solution) {
+                lastCheckData = data;
                 if (watchId) clearInterval(watchId);
                 recordStat(data.score_pct, data.elapsed_seconds || elapsedSec, data.receipt_code);
+
+                if (poeFullMode) {
+                    updatePoeStepper(3);
+                    document.getElementById('poeExplainCard').style.display = 'block';
+                }
 
                 if (examMode && examResults.length === examIndex) {
                     examResults.push({
@@ -1069,11 +1253,39 @@ document.addEventListener('DOMContentLoaded', function () {
                 });
                 stepsHtml += '</div>';
                 document.getElementById('exMemorialUnlock').innerHTML = stepsHtml;
-                document.getElementById('btnExportExPdf').addEventListener('click', function () { exportExercisePdf(data); });
+                document.getElementById('btnExportExPdf').addEventListener('click', function () { exportExercisePdf(data, savedPoeExplanation); });
                 var quickNew = document.getElementById('btnNewExQuick');
                 if (quickNew) quickNew.addEventListener('click', function () { generateExercise(); });
             }
         });
+    });
+
+    // Submissão da Etapa 3 (Explicar) do Método POE Completo
+    document.getElementById('btnSubmitPoeExplain').addEventListener('click', function () {
+        var expText = document.getElementById('poeExplainText').value.trim();
+        var expAlert = document.getElementById('poeExplainAlert');
+        fetch('/api/exercicios/explicar/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCsrfToken() },
+            body: JSON.stringify({ explanation: expText })
+        }).then(function (r) { return r.json(); }).then(function (d) {
+            if (!d.ok) {
+                expAlert.className = 'ex-alert err';
+                expAlert.style.display = 'block';
+                expAlert.innerHTML = '<i class="fas fa-exclamation-triangle"></i> ' + escapeHtml(d.message || d.error);
+                return;
+            }
+            savedPoeExplanation = d.explanation;
+            updatePoeStepper(4);
+            expAlert.className = 'ex-alert ok';
+            expAlert.style.display = 'block';
+            expAlert.innerHTML = '<i class="fas fa-check-circle"></i> <strong>Sequência POE concluída e registrada!</strong> Código: <code>' + escapeHtml(d.receipt_code) + '</code>. Agora você pode exportar o Relatório POE Completo em PDF.';
+            document.getElementById('btnExportPoeFullPdf').style.display = 'inline-flex';
+        });
+    });
+
+    document.getElementById('btnExportPoeFullPdf').addEventListener('click', function () {
+        if (lastCheckData) exportExercisePdf(lastCheckData, savedPoeExplanation);
     });
 });
 </script>

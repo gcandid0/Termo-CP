@@ -209,15 +209,23 @@
         </div>
         <div class="tdash-actions">
             <div class="tdash-filter-group">
-                <a href="?periodo=all" class="tdash-filter-btn {% if analytics.periodo == 'all' %}active{% endif %}">Todos</a>
-                <a href="?periodo=7" class="tdash-filter-btn {% if analytics.periodo == '7' %}active{% endif %}">7 dias</a>
-                <a href="?periodo=30" class="tdash-filter-btn {% if analytics.periodo == '30' %}active{% endif %}">30 dias</a>
-                <a href="?periodo=90" class="tdash-filter-btn {% if analytics.periodo == '90' %}active{% endif %}">90 dias</a>
+                <a href="?periodo=all{% if analytics.turma %}&turma={{ analytics.turma }}{% endif %}" class="tdash-filter-btn {% if analytics.periodo == 'all' %}active{% endif %}">Todos</a>
+                <a href="?periodo=7{% if analytics.turma %}&turma={{ analytics.turma }}{% endif %}" class="tdash-filter-btn {% if analytics.periodo == '7' %}active{% endif %}">7 dias</a>
+                <a href="?periodo=30{% if analytics.turma %}&turma={{ analytics.turma }}{% endif %}" class="tdash-filter-btn {% if analytics.periodo == '30' %}active{% endif %}">30 dias</a>
+                <a href="?periodo=90{% if analytics.turma %}&turma={{ analytics.turma }}{% endif %}" class="tdash-filter-btn {% if analytics.periodo == '90' %}active{% endif %}">90 dias</a>
             </div>
+            {% if analytics.turmas_disponiveis %}
+            <select onchange="window.location='?periodo={{ analytics.periodo }}' + (this.value ? '&turma=' + encodeURIComponent(this.value) : '')" style="padding:6px 10px;border-radius:8px;border:1px solid #cbd5e1;font-size:0.8rem;font-weight:700;color:#1b3668;background:#f8fafc;">
+                <option value="">Todas as Turmas</option>
+                {% for t in analytics.turmas_disponiveis %}
+                <option value="{{ t }}" {% if analytics.turma == t %}selected{% endif %}>Turma: {{ t }}</option>
+                {% endfor %}
+            </select>
+            {% endif %}
             <button type="button" onclick="downloadAllCharts()" class="tdash-btn tdash-btn-zip">
                 🖼 Baixar Todos PNGs
             </button>
-            <a href="{% url 'admin:termo_cp_export_article_csv' %}?periodo={{ analytics.periodo }}" class="tdash-btn tdash-btn-csv">
+            <a href="{% url 'admin:termo_cp_export_article_csv' %}?periodo={{ analytics.periodo }}{% if analytics.turma %}&turma={{ analytics.turma }}{% endif %}" class="tdash-btn tdash-btn-csv">
                 ⬇ Exportar CSV (Artigo)
             </a>
             <button type="button" onclick="window.print()" class="tdash-btn tdash-btn-pdf">
@@ -462,10 +470,10 @@
             <div class="tdash-tbl-head"><h3>Últimas Resoluções do Modo Exercício</h3></div>
             {% if analytics.recent_ex %}
             <table class="tdash-tbl">
-                <thead><tr><th>Estudante</th><th>Tema</th><th>Nota</th><th>Tempo</th></tr></thead>
+                <thead><tr><th>Estudante</th><th>Turma / Modo</th><th>Tema</th><th>Nota</th><th>Tempo</th></tr></thead>
                 <tbody>
                 {% for e in analytics.recent_ex %}
-                    <tr><td><strong>{{ e.nome_aluno }}</strong></td><td>{{ e.substancia }} · {{ e.tipo }}</td><td><strong>{{ e.pontuacao|floatformat:0 }}%</strong></td><td>{{ e.tempo_segundos }}s</td></tr>
+                    <tr><td><strong>{{ e.nome_aluno }}</strong></td><td>{% if e.codigo_turma %}<code>{{ e.codigo_turma }}</code> · {% endif %}{{ e.modo }}</td><td>{{ e.substancia }} · {{ e.tipo }}</td><td><strong>{{ e.pontuacao|floatformat:0 }}%</strong></td><td>{{ e.tempo_segundos }}s</td></tr>
                 {% endfor %}
                 </tbody>
             </table>

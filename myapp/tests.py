@@ -768,3 +768,72 @@ class ExtrasFeaturesTests(TestCase):
         self.assertEqual(csv_resp.status_code, 200)
         self.assertIn('text/csv', csv_resp['Content-Type'])
         self.assertIn('SIMULAÇÕES POR SUBSTÂNCIA', csv_resp.content.decode('utf-8'))
+
+    def test_full_poe_sequence_with_class_code_and_admin_filter(self):
+        # 1. Gera exercício para o Método POE Completo
+        gen = self.client.post(
+            '/api/exercicios/gerar/',
+            data=json.dumps({'substance': 'gas', 'process': 'pcte', 'difficulty': 'basic'}),
+            content_type='application/json',
+        )
+        self.assertEqual(gen.status_code, 200)
+
+        # Simula passagem da trava mínima de 25s
+        session = self.client.session
+        ex = session['poe_exercise']
+        ex['created_at'] -= 30
+        sol = ex['solution']
+        session['poe_exercise'] = ex
+        session.save()
+
+        # 2. Etapa 1 (Prever) -> libera Etapa 2 (Observar) e registra código da turma
+        chk = self.client.post(
+            '/api/exercicios/corrigir/',
+            data=json.dumps({
+                'mode': 'poe_completo',
+                'class_code': 'termo-2026a',
+                'student_name': 'Ana Souza',
+                'pred_vol': sol['expected_vol'],
+                'pred_heat': sol['expected_heat'],
+                'pred_law2': sol['expected_law2'],
+                'justification': 'Prevejo expansao isobarica com W > 0 e absorcao de calor Q > 0.',
+                'answers': {f: sol[f] for f in ex['prompt']['ask_fields']},
+            }),
+            content_type='application/json',
+        )
+        self.assertEqual(chk.status_code, 200)
+        cdata = chk.json()
+        self.assertTrue(cdata['unlocked'])
+        self.assertEqual(cdata['class_code'], 'TERMO-2026A')
+
+        # 3. Etapa 3 (Explicar) — explicação curta é rejeitada (400)
+        short_exp = self.client.post(
+            '/api/exercicios/explicar/',
+            data=json.dumps({'explanation': 'sim deu certo'}),
+            content_type='application/json',
+        )
+        self.assertEqual(short_exp.status_code, 400)
+
+        # Explicação conceitual válida é salva no banco
+        ok_exp = self.client.post(
+            '/api/exercicios/explicar/',
+            data=json.dumps({
+                'explanation': 'Minha previsao foi confirmada pelo memorial: no aquecimento isobarico v2 > v1, logo W > 0 e Q = m*Cp0*(T2-T1) > 0.'
+            }),
+            content_type='application/json',
+        )
+        self.assertEqual(ok_exp.status_code, 200)
+        from myapp.models import TentativaExercicio
+        rec = TentativaExercicio.objects.get(codigo=cdata['receipt_code'])
+        self.assertEqual(rec.codigo_turma, 'TERMO-2026A')
+        self.assertEqual(rec.modo, 'poe_completo')
+        self.assertIn('aquecimento isobarico', rec.explicacao_poe)
+
+        # 4. Filtro por turma no Dashboard do Admin funciona
+        from django.contrib.auth import get_user_model
+        User = get_user_model()
+        su = User.objects.create_superuser('prof_turma', 'prof@ufr.edu.br', 'StrongPass123!')
+        self.client.force_login(su)
+        dash = self.client.get('/admin/?periodo=all&turma=TERMO-2026A')
+        self.assertEqual(dash.status_code, 200)
+        self.assertContains(dash, 'TERMO-2026A')

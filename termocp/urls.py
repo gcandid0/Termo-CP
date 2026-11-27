@@ -8,6 +8,7 @@ from django.views.static import serve
 from myapp.views_extras import (
     api_compartilhar_view,
     api_exercicio_corrigir_view,
+    api_exercicio_explicar_view,
     api_exercicio_gerar_view,
     api_log_uso_view,
     exercicios_poe_view,
@@ -33,6 +34,7 @@ urlpatterns = [
     path('exercicios/', exercicios_poe_view, name='exercicios_poe'),
     path('api/exercicios/gerar/', api_exercicio_gerar_view, name='api_exercicio_gerar'),
     path('api/exercicios/corrigir/', api_exercicio_corrigir_view, name='api_exercicio_corrigir'),
+    path('api/exercicios/explicar/', api_exercicio_explicar_view, name='api_exercicio_explicar'),
     path('api/log-uso/', api_log_uso_view, name='api_log_uso'),
     path('api/compartilhar/', api_compartilhar_view, name='api_compartilhar'),
     path('s/<str:codigo>/', shared_simulation_view, name='shared_simulation'),
