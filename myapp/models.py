@@ -84,8 +84,8 @@ class TentativaExercicio(models.Model):
 
     class Meta:
         ordering = ['-criado_em']
-        verbose_name = 'Resolução de Exercício (POE)'
-        verbose_name_plural = 'Resoluções de Exercícios (POE)'
+        verbose_name = 'Resolução do Modo Exercício'
+        verbose_name_plural = 'Resoluções do Modo Exercício'
 
     def __str__(self):
         return f"[{self.codigo}] {self.nome_aluno} · {self.substancia} ({self.pontuacao:.0f}%)"

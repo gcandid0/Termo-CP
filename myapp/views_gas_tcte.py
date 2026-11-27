@@ -162,16 +162,28 @@ def process_values_view10(request):
         R   = map_const.get(13)
         K   = map_const.get(14)
 
-        # Ajustes entre constantes
+        # Ajustes cruzados completos entre constantes (Cp0, Cv0, R, K)
         if R is None and Cp0 is not None and Cv0 is not None:
             R = Cp0 - Cv0
-
         if Cv0 is None and Cp0 is not None and R is not None:
             Cv0 = Cp0 - R
-
         if Cp0 is None and Cv0 is not None and R is not None:
             Cp0 = Cv0 + R
-
+        if R is not None and K is not None and K != 1:
+            if Cv0 is None:
+                Cv0 = R / (K - 1)
+            if Cp0 is None:
+                Cp0 = K * Cv0
+        if Cp0 is not None and K is not None and K != 0:
+            if Cv0 is None:
+                Cv0 = Cp0 / K
+            if R is None:
+                R = Cp0 - Cv0
+        if Cv0 is not None and K is not None:
+            if Cp0 is None:
+                Cp0 = K * Cv0
+            if R is None:
+                R = Cp0 - Cv0
         if K is None and Cp0 is not None and Cv0 is not None and Cv0 != 0:
             K = Cp0 / Cv0
 

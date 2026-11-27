@@ -848,3 +848,18 @@ class ExtrasFeaturesTests(TestCase):
         val_miss = self.client.get('/exercicios/validar/?codigo=POE-000000')
         self.assertEqual(val_miss.status_code, 200)
         self.assertContains(val_miss, 'Nenhum comprovante encontrado')
+
+    def test_ideal_gas_isothermal_r_and_k_computes_cp_and_cv(self):
+        self.client.post('/gas/gasideal-tcte1/', {'property_choice': '13', 'value_input': '0.287'})
+        self.client.post('/gas/gasideal-tcte2/', {'property_choice': '14', 'value_input': '1.4'})
+        self.client.post('/gas/gasideal-tcte3/', {'property_choice': '0', 'value_input': '27', 'mass_input': '1.0'})
+        self.client.post('/gas/gasideal-tcte4/', {'property_choice': '1', 'value_input': '100'})
+        self.client.post('/gas/gasideal-tcte5/', {'property_choice': '1', 'value_input': '300'})
+        self.client.post('/gas/gasideal-tcte6/', {'Tviz_value_input': '25'})
+
+        resp = self.client.get('/gas/gasideal-tcte7/')
+        self.assertEqual(resp.status_code, 200)
+        self.assertIsNotNone(resp.context['Cp0'])
+        self.assertIsNotNone(resp.context['Cv0'])
+        self.assertAlmostEqual(resp.context['Cv0'], 0.7175, places=3)
+        self.assertAlmostEqual(resp.context['Cp0'], 1.0045, places=3)
