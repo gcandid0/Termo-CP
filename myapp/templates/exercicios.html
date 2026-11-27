@@ -6,92 +6,122 @@
 {% block extra_css %}
 <style>
     .ex-wrapper {
-        max-width: 1080px;
+        max-width: 1140px;
         width: 100%;
         margin: 0 auto;
-        padding: 16px 24px 36px;
+        padding: 18px 24px 38px;
         display: flex;
         flex-direction: column;
         gap: 14px;
     }
     .ex-hero {
-        background: linear-gradient(135deg, #1b3668 0%, #0d6ab0 100%);
+        position: relative;
+        overflow: hidden;
+        background: linear-gradient(125deg, #10244a 0%, #1b3668 50%, #0d6ab0 100%);
         color: #ffffff;
-        border-radius: 16px;
-        padding: 18px 24px;
-        box-shadow: 0 10px 26px rgba(27, 54, 104, 0.16);
+        border-radius: 18px;
+        padding: 20px 26px;
+        box-shadow: 0 12px 30px rgba(27, 54, 104, 0.22);
         display: flex;
         justify-content: space-between;
         align-items: center;
-        gap: 16px;
-        flex-wrap: wrap;
+        gap: 20px;
+        flex-wrap: nowrap;
     }
-    .ex-hero h2 { margin: 0 0 5px 0; font-size: 1.36em; display: flex; align-items: center; gap: 10px; }
-    .ex-hero p { margin: 0; font-size: 0.9em; opacity: 0.92; max-width: 720px; line-height: 1.45; }
+    .ex-hero::after {
+        content: '';
+        position: absolute;
+        right: -50px; top: -60px;
+        width: 240px; height: 240px;
+        background: radial-gradient(circle, rgba(255,255,255,0.14) 0%, rgba(255,255,255,0) 70%);
+        pointer-events: none;
+    }
+    .ex-hero-text { flex: 1; min-width: 0; position: relative; z-index: 1; }
+    .ex-hero-actions { display: flex; gap: 9px; flex-shrink: 0; position: relative; z-index: 1; }
+    .ex-hero h2 { margin: 0 0 5px 0; font-size: 1.42em; font-weight: 800; letter-spacing: -0.015em; display: flex; align-items: center; gap: 10px; }
+    .ex-hero p { margin: 0; font-size: 0.89em; opacity: 0.9; line-height: 1.48; }
+    .ex-hero-btn {
+        display: inline-flex; align-items: center; gap: 7px;
+        padding: 9px 15px; border-radius: 10px; font-weight: 700; font-size: 0.86em;
+        background: rgba(255,255,255,0.16); color: #ffffff !important;
+        border: 1px solid rgba(255,255,255,0.26); text-decoration: none;
+        backdrop-filter: blur(6px); transition: all 0.16s ease;
+    }
+    .ex-hero-btn:hover { background: rgba(255,255,255,0.26); transform: translateY(-1px); }
 
     .ex-stats-bar {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(175px, 1fr));
-        gap: 12px;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 14px;
     }
     .ex-stat-pill {
         background: #ffffff;
         border: 1px solid #e2e8f0;
-        border-radius: 12px;
-        padding: 11px 15px;
+        border-radius: 14px;
+        padding: 13px 18px;
         display: flex;
         align-items: center;
-        gap: 12px;
-        box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+        gap: 14px;
+        box-shadow: 0 4px 14px rgba(15, 23, 42, 0.045);
+        transition: transform 0.16s ease, box-shadow 0.16s ease;
     }
+    .ex-stat-pill:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(15, 23, 42, 0.075); }
     .ex-stat-icon {
-        width: 36px; height: 36px; border-radius: 10px;
+        width: 42px; height: 42px; border-radius: 12px;
         display: flex; align-items: center; justify-content: center;
-        font-size: 1em; flex-shrink: 0;
+        font-size: 1.12em; flex-shrink: 0;
     }
-    .ex-stat-pill .st-lbl { display: block; font-size: 0.74em; color: #64748b; font-weight: 700; text-transform: uppercase; }
-    .ex-stat-pill .st-val { font-size: 1.14em; font-weight: 800; color: #0f172a; }
+    .ex-stat-pill .st-lbl { display: block; font-size: 0.72em; letter-spacing: 0.04em; color: #64748b; font-weight: 700; text-transform: uppercase; }
+    .ex-stat-pill .st-val { font-size: 1.32em; font-weight: 800; color: #0f172a; line-height: 1.15; }
 
+    /* Barra única elegante: Abas de Modo à esquerda + Turma & Histórico à direita */
     .ex-top-controls {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 14px;
+        padding: 8px 12px;
         display: flex;
         justify-content: space-between;
         align-items: center;
         flex-wrap: wrap;
         gap: 10px;
+        box-shadow: 0 4px 14px rgba(15, 23, 42, 0.045);
     }
     .ex-mode-tabs {
         display: inline-flex;
-        background: #e2e8f0;
+        background: #f1f5f9;
         padding: 4px;
-        border-radius: 12px;
-        gap: 4px;
+        border-radius: 11px;
+        gap: 3px;
+        flex-wrap: wrap;
     }
     .ex-mode-tab {
-        padding: 8px 16px;
-        border-radius: 9px;
+        padding: 7px 14px;
+        border-radius: 8px;
         border: none;
         background: transparent;
-        color: #334155;
+        color: #475569;
         font-weight: 700;
-        font-size: 0.88em;
+        font-size: 0.85em;
         cursor: pointer;
         font-family: inherit;
         display: inline-flex;
         align-items: center;
-        gap: 7px;
-        transition: background 0.15s ease, color 0.15s ease;
+        gap: 6px;
+        transition: all 0.16s ease;
     }
+    .ex-mode-tab:hover { color: #1b3668; }
     .ex-mode-tab.active {
-        background: #ffffff;
-        color: #1b3668;
-        box-shadow: 0 2px 6px rgba(15, 23, 42, 0.08);
+        background: linear-gradient(135deg, #1b3668 0%, #0d6ab0 100%);
+        color: #ffffff;
+        box-shadow: 0 3px 10px rgba(27, 54, 104, 0.24);
     }
 
     .ex-exam-progress {
         display: none;
-        background: #eff6ff;
+        background: linear-gradient(135deg, #f8fbff 0%, #eff6ff 100%);
         border: 1px solid #bfdbfe;
-        border-radius: 12px;
+        border-radius: 14px;
         padding: 12px 18px;
         align-items: center;
         justify-content: space-between;
@@ -99,11 +129,11 @@
         flex-wrap: wrap;
         color: #1e3a8a;
         font-weight: 700;
-        font-size: 0.92em;
+        font-size: 0.9em;
     }
     .ex-exam-dots { display: flex; gap: 8px; flex-wrap: wrap; }
     .ex-exam-dot {
-        padding: 4px 12px; border-radius: 999px; font-size: 0.84em;
+        padding: 5px 13px; border-radius: 999px; font-size: 0.83em;
         background: #ffffff; border: 1.5px solid #cbd5e1; color: #64748b;
     }
     .ex-exam-dot.current { border-color: #0d6ab0; color: #0d6ab0; background: #e0f2fe; }
@@ -112,44 +142,51 @@
     .ex-card {
         background: #ffffff;
         border: 1px solid #e2e8f0;
-        border-radius: 14px;
-        padding: 18px 22px;
-        box-shadow: 0 4px 14px rgba(15, 23, 42, 0.05);
+        border-radius: 16px;
+        padding: 20px 24px;
+        box-shadow: 0 6px 20px rgba(15, 23, 42, 0.05);
+        animation: exFadeUp 0.25s ease;
+    }
+    @keyframes exFadeUp {
+        from { opacity: 0; transform: translateY(6px); }
+        to { opacity: 1; transform: translateY(0); }
     }
     .ex-card h3 {
-        margin: 0 0 12px 0; color: #1b3668; font-size: 1.05em;
+        margin: 0 0 14px 0; color: #1b3668; font-size: 1.04em; font-weight: 800;
         display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap;
     }
     .ex-config-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(185px, 1fr));
-        gap: 12px;
+        grid-template-columns: repeat(3, minmax(0, 1fr)) 220px;
+        gap: 14px;
         align-items: end;
     }
-    .ex-field label { display: block; font-size: 0.84em; font-weight: 700; color: #334155; margin-bottom: 5px; }
+    .ex-field label { display: block; font-size: 0.82em; font-weight: 700; color: #475569; margin-bottom: 6px; }
     .ex-field select, .ex-field input, .ex-field textarea {
-        width: 100%; padding: 8px 12px; border-radius: 9px;
+        width: 100%; padding: 9px 12px; border-radius: 10px;
         border: 1.5px solid #cbd5e1; background: #f8fafc; color: #0f172a;
-        font-family: inherit; font-size: 0.92em; box-sizing: border-box;
+        font-family: inherit; font-size: 0.91em; box-sizing: border-box;
+        transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
     }
+    .ex-field select, .ex-field input[type="text"] { height: 42px; }
     .ex-field select:focus, .ex-field input:focus, .ex-field textarea:focus {
         outline: none; border-color: #0d6ab0; background: #ffffff;
         box-shadow: 0 0 0 3px rgba(13, 106, 176, 0.14);
     }
     .ex-btn {
         display: inline-flex; align-items: center; justify-content: center; gap: 7px;
-        padding: 9px 15px; border-radius: 10px; border: none; font-weight: 700;
-        font-size: 0.9em; cursor: pointer; font-family: inherit;
-        transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+        padding: 10px 16px; border-radius: 10px; border: none; font-weight: 700;
+        font-size: 0.89em; cursor: pointer; font-family: inherit; height: 42px; box-sizing: border-box;
+        transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
     }
-    .ex-btn-primary { background: linear-gradient(135deg, #1b3668 0%, #0d6ab0 100%); color: #fff; box-shadow: 0 4px 12px rgba(27,54,104,0.22); }
-    .ex-btn-primary:hover { transform: translateY(-1px); }
-    .ex-btn-success { background: linear-gradient(135deg, #15803d 0%, #16a34a 100%); color: #fff; box-shadow: 0 4px 12px rgba(21,128,61,0.22); }
-    .ex-btn-success:hover { transform: translateY(-1px); }
-    .ex-btn-outline { background: #f8fafc; color: #1b3668; border: 1.5px solid #cbd5e1; }
+    .ex-btn-primary { background: linear-gradient(135deg, #1b3668 0%, #0d6ab0 100%); color: #fff; box-shadow: 0 5px 14px rgba(27,54,104,0.25); }
+    .ex-btn-primary:hover { transform: translateY(-1px); filter: brightness(1.05); }
+    .ex-btn-success { background: linear-gradient(135deg, #15803d 0%, #16a34a 100%); color: #fff; box-shadow: 0 5px 14px rgba(21,128,61,0.24); }
+    .ex-btn-success:hover { transform: translateY(-1px); filter: brightness(1.05); }
+    .ex-btn-outline { background: #f8fafc; color: #1b3668; border: 1.5px solid #cbd5e1; height: auto; }
     .ex-btn-outline:hover { background: #eff6ff; border-color: #93c5fd; }
-    .ex-btn-pdf { background: linear-gradient(135deg, #b91c1c 0%, #dc2626 100%); color: #fff; box-shadow: 0 4px 12px rgba(185,28,28,0.22); }
-    .ex-btn-pdf:hover { transform: translateY(-1px); }
+    .ex-btn-pdf { background: linear-gradient(135deg, #b91c1c 0%, #dc2626 100%); color: #fff; box-shadow: 0 5px 14px rgba(185,28,28,0.22); }
+    .ex-btn-pdf:hover { transform: translateY(-1px); filter: brightness(1.05); }
 
     .ex-ctx-tags {
         display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 10px;
@@ -280,35 +317,36 @@
 
     .ex-history-box { display: none; }
 
-    /* Barra de Etapas do Método POE Completo (Prever -> Observar -> Explicar) */
+    /* Barra de Etapas do Método POE Completo (Stepper horizontal moderno) */
     .poe-stepper {
         display: none;
-        background: linear-gradient(135deg, #f8fbff 0%, #eff6ff 100%);
-        border: 1px solid #bfdbfe;
+        background: #ffffff;
+        border: 1px solid #cbdcf0;
         border-radius: 14px;
-        padding: 13px 18px;
+        padding: 12px 20px;
         align-items: center;
         justify-content: space-between;
-        gap: 12px;
+        gap: 14px;
         flex-wrap: wrap;
+        box-shadow: 0 4px 14px rgba(13, 106, 176, 0.06);
     }
-    .poe-stepper-title { font-weight: 800; color: #1b3668; font-size: 0.93em; display: inline-flex; align-items: center; gap: 8px; }
-    .poe-steps-pills { display: flex; gap: 8px; flex-wrap: wrap; }
+    .poe-stepper-title { font-weight: 800; color: #1b3668; font-size: 0.9em; display: inline-flex; align-items: center; gap: 8px; }
+    .poe-steps-pills { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
     .poe-step-pill {
-        padding: 5px 13px; border-radius: 999px; font-size: 0.82em; font-weight: 700;
-        background: #ffffff; border: 1.5px solid #cbd5e1; color: #64748b;
+        padding: 6px 13px; border-radius: 999px; font-size: 0.81em; font-weight: 700;
+        background: #f8fafc; border: 1.5px solid #e2e8f0; color: #64748b;
         display: inline-flex; align-items: center; gap: 6px;
     }
-    .poe-step-pill.active { border-color: #0d6ab0; color: #0d6ab0; background: #e0f2fe; }
+    .poe-step-pill.active { border-color: #0d6ab0; color: #ffffff; background: linear-gradient(135deg, #1b3668, #0d6ab0); box-shadow: 0 3px 8px rgba(13,106,176,0.22); }
     .poe-step-pill.done { border-color: #16a34a; color: #166534; background: #dcfce7; }
 
     .poe-explain-card {
         display: none;
         background: #ffffff;
         border: 1.5px solid #93c5fd;
-        border-radius: 14px;
-        padding: 18px 22px;
-        box-shadow: 0 6px 18px rgba(13, 106, 176, 0.08);
+        border-radius: 16px;
+        padding: 20px 24px;
+        box-shadow: 0 6px 20px rgba(13, 106, 176, 0.08);
     }
     .poe-explain-card h3 { margin: 0 0 8px 0; color: #1b3668; font-size: 1.05em; display: flex; align-items: center; gap: 8px; }
     .poe-guide-qs {
@@ -319,17 +357,23 @@
     .poe-guide-qs li { margin-bottom: 3px; }
 
     .ex-class-bar {
-        display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
-        background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px;
-        padding: 8px 14px; box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+        display: flex; align-items: center; gap: 7px; flex-wrap: wrap;
+        background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px;
+        padding: 4px 8px;
     }
-    .ex-class-bar label { font-size: 0.82em; font-weight: 700; color: #1b3668; display: inline-flex; align-items: center; gap: 6px; }
+    .ex-class-bar label { font-size: 0.8em; font-weight: 700; color: #1b3668; display: inline-flex; align-items: center; gap: 5px; }
     .ex-class-bar input {
-        width: 170px; padding: 6px 10px; border-radius: 8px;
-        border: 1.5px solid #cbd5e1; background: #f8fafc; color: #0f172a;
-        font-family: Consolas, monospace; font-size: 0.86em; font-weight: 700; text-transform: uppercase;
+        width: 135px; padding: 5px 9px; border-radius: 7px; height: 30px;
+        border: 1.5px solid #cbd5e1; background: #ffffff; color: #0f172a;
+        font-family: Consolas, monospace; font-size: 0.82em; font-weight: 700; text-transform: uppercase;
     }
-    .ex-class-bar input:focus { outline: none; border-color: #0d6ab0; background: #fff; }
+    .ex-class-bar input:focus { outline: none; border-color: #0d6ab0; }
+
+    @media (max-width: 960px) {
+        .ex-hero { flex-wrap: wrap; }
+        .ex-stats-bar { grid-template-columns: 1fr; }
+        .ex-config-grid { grid-template-columns: 1fr; }
+    }
 
     /* Quadro Visual da Etapa 2 (OBSERVAR — Método POE) */
     .poe-observe-box {
@@ -377,7 +421,7 @@
 {% block content %}
 <div class="ex-wrapper">
     <div class="ex-hero">
-        <div>
+        <div class="ex-hero-text">
             <h2>
                 <i class="fas fa-graduation-cap"></i>
                 <span class="lang-text"
@@ -388,20 +432,20 @@
                       data-zh="练习模式">Modo Exercício</span>
             </h2>
             <p class="lang-text"
-               data-pt-br="Pratique com problemas aleatórios de Termodinâmica ou faça uma Mini-Prova de 3 questões com correção automática, memorial passo a passo, código de autenticidade e comprovante em PDF."
-               data-en="Practice with randomized Thermodynamics problems or take a 3-question Mini-Exam with instant grading, step-by-step calculation guide, authenticity code, and PDF receipt."
-               data-es="Practica con problemas aleatorios de Termodinámica o realiza un Mini-Examen de 3 preguntas con corrección automática, memorial paso a paso y comprobante en PDF."
-               data-fr="Entraînez-vous avec des exercices aléatoires de Thermodynamique ou passez un Mini-Examen de 3 questions avec correction automatique, guide détaillé et justificatif PDF."
-               data-zh="通过随机热力学题目或 3 题小测验进行练习，配备自动批改、分步解题过程、防伪验证码及 PDF 成绩单。">
-                Pratique com problemas aleatórios de Termodinâmica ou faça uma Mini-Prova de 3 questões com correção automática, memorial passo a passo, código de autenticidade e comprovante em PDF.
+               data-pt-br="Pratique com problemas aleatórios, Mini-Prova de 3 questões ou Método POE Completo (Prever · Observar · Explicar) com correção instantânea e comprovante PDF."
+               data-en="Practice with randomized problems, 3-question Mini-Exam, or Full POE Method (Predict · Observe · Explain) with instant grading and PDF receipt."
+               data-es="Practica con problemas aleatorios, Mini-Examen de 3 preguntas o Método POE Completo con corrección instantánea y comprobante en PDF."
+               data-fr="Entraînez-vous avec des exercices aléatoires, Mini-Examen ou Méthode POE Complète avec correction instantanée et justificatif PDF."
+               data-zh="支持随机练习、3 题小测验或完整 POE（预测-观察-解释）模式，配备自动批改与 PDF 成绩单。">
+                Pratique com problemas aleatórios, Mini-Prova de 3 questões ou Método POE Completo (Prever · Observar · Explicar) com correção instantânea e comprovante PDF.
             </p>
         </div>
-        <div style="display:flex; gap:8px; flex-wrap:wrap;">
-            <a href="{% url 'validar_comprovante' %}" class="ex-btn" style="background: rgba(255,255,255,0.18); color: #fff; text-decoration: none;">
+        <div class="ex-hero-actions">
+            <a href="{% url 'validar_comprovante' %}" class="ex-hero-btn">
                 <i class="fas fa-shield-alt"></i>
                 <span class="lang-text" data-pt-br="Validar Código" data-en="Verify Code" data-es="Validar Código" data-fr="Vérifier Code" data-zh="验证码查询">Validar Código</span>
             </a>
-            <a href="/" class="ex-btn" style="background: rgba(255,255,255,0.18); color: #fff; text-decoration: none;">
+            <a href="/" class="ex-hero-btn">
                 <i class="fas fa-home"></i>
                 <span class="lang-text" data-pt-br="Início" data-en="Home" data-es="Inicio" data-fr="Accueil" data-zh="首页">Início</span>
             </a>
