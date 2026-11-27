@@ -524,3 +524,112 @@
         font-size: 0.8em !important;
     }
 }
+/* ============================================================================
+   OTIMIZAÇÃO MOBILE COMPLETA — RESULTADOS & MODAIS (<= 900px / <= 768px)
+   ============================================================================ */
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+html, body {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+@media (max-width: 900px) {
+    html, body {
+        height: auto !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+    }
+    .top-row {
+        flex-direction: column !important;
+        height: auto !important;
+        min-height: 0 !important;
+        padding: 12px !important;
+        gap: 14px !important;
+    }
+    .state-card, .center-column, .left-panel, .right-panel {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+        flex: none !important;
+        height: auto !important;
+    }
+    .visualization-container, #canvas-wrapper {
+        width: 100% !important;
+        height: 360px !important;
+        min-height: 340px !important;
+        max-height: 420px !important;
+    }
+    .bottom-row {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        height: auto !important;
+        padding: 14px 12px !important;
+        margin: 0 12px 16px !important;
+        gap: 12px !important;
+        text-align: center !important;
+    }
+    .bottom-row .action-buttons,
+    .bottom-row .icons-container,
+    .bottom-row .right-icons {
+        justify-content: center !important;
+        flex-wrap: wrap !important;
+        gap: 10px !important;
+    }
+}
+
+@media (max-width: 768px) {
+    header {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        flex-direction: row !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        padding: 10px 14px !important;
+        gap: 8px !important;
+        position: static !important;
+        min-height: auto !important;
+        height: auto !important;
+    }
+    header h1 {
+        font-size: 1.2em !important;
+        margin: 0 !important;
+        order: 1;
+    }
+    .header-actions {
+        order: 2;
+        margin: 0 !important;
+        gap: 6px !important;
+    }
+    .lang-toggle {
+        transform: scale(0.76); margin-left: -24px;
+        transform-origin: right center;
+    }
+    header nav {
+        order: 3;
+        width: 100% !important;
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        flex-wrap: nowrap !important;
+        gap: 4px !important;
+        padding-top: 6px !important;
+        border-top: 1px solid rgba(255, 255, 255, 0.14);
+    }
+    header nav a {
+        flex: 1 1 auto !important;
+        text-align: center !important;
+        margin: 0 !important;
+        padding: 6px 6px !important;
+        font-size: 0.82em !important;
+        white-space: nowrap !important;
+    }
+    .modal-content {
+        width: 96vw !important;
+        max-width: 96vw !important;
+        max-height: 90vh !important;
+        padding: 14px !important;
+        margin: 4vh auto !important;
+    }
+}

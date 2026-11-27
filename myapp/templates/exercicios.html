@@ -412,7 +412,25 @@
     .ex-pred-locked { opacity: 0.72; pointer-events: none; }
 
     @media (max-width: 760px) {
-        .ex-wrapper { padding: 12px 14px 28px; }
+        .ex-wrapper { padding: 12px 12px 26px !important; gap: 12px !important; }
+        .ex-hero { flex-direction: column !important; align-items: stretch !important; padding: 16px !important; gap: 12px !important; }
+        .ex-hero h2 { font-size: 1.24em !important; }
+        .ex-hero-actions { width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        .ex-hero-btn { justify-content: center; padding: 8px 10px; font-size: 0.82em; }
+        .ex-stats-bar { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; gap: 8px !important; }
+        .ex-stat-pill { flex-direction: column; text-align: center; padding: 10px 6px !important; gap: 6px !important; }
+        .ex-stat-icon { width: 34px; height: 34px; font-size: 0.95em; }
+        .ex-stat-pill .st-lbl { font-size: 0.65em; }
+        .ex-stat-pill .st-val { font-size: 1.08em; }
+        .ex-top-controls { padding: 10px !important; gap: 8px !important; }
+        .ex-mode-tabs { width: 100%; display: grid; grid-template-columns: 1fr; gap: 4px; }
+        .ex-mode-tab { justify-content: center; width: 100%; padding: 8px 10px; }
+        .ex-class-bar { width: 100%; justify-content: space-between; }
+        .ex-class-bar input { flex: 1 1 110px; width: auto; }
+        .ex-card { padding: 15px 14px !important; }
+        .poe-stepper { padding: 12px 14px !important; }
+        .poe-steps-pills { width: 100%; flex-direction: column; align-items: stretch; }
+        .poe-step-pill { justify-content: center; }
         .ex-inputs-grid[data-justif-row="1"] { grid-template-columns: 1fr !important; }
     }
 </style>
