@@ -633,3 +633,118 @@ html, body {
         margin: 4vh auto !important;
     }
 }
+/* ============================================================================
+   OTIMIZAÇÃO MOBILE DO RELATÓRIO FINAL (#reportModal) — APP NATIVO FULLSCREEN
+   ============================================================================ */
+@media (max-width: 768px) {
+    #reportModal {
+        padding: 0 !important;
+    }
+    #reportModal .modal-content {
+        width: 100vw !important;
+        max-width: 100vw !important;
+        height: 100vh !important;
+        max-height: 100vh !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border-radius: 0 !important;
+        background: #f4f6f9 !important;
+    }
+    /* Cabeçalho fixo do relatório adaptado para mobile */
+    #reportModal .modal-content > div:first-child {
+        padding: 12px 14px !important;
+        border-radius: 0 !important;
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 10px !important;
+        position: sticky !important;
+        top: 0 !important;
+    }
+    #reportModal .modal-content > div:first-child h2 {
+        font-size: 1.02em !important;
+        line-height: 1.3 !important;
+        padding-right: 32px !important;
+    }
+    #reportModal .modal-content > div:first-child > div:last-child {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        gap: 8px !important;
+        justify-content: flex-start !important;
+        width: 100% !important;
+    }
+    #reportModal .modal-content > div:first-child button,
+    #reportModal .modal-content > div:first-child .btn {
+        flex: 1 1 auto !important;
+        justify-content: center !important;
+        padding: 8px 10px !important;
+        font-size: 0.84em !important;
+    }
+    #closeReportBtn {
+        position: absolute !important;
+        top: 10px !important;
+        right: 12px !important;
+        font-size: 28px !important;
+        padding: 2px 6px !important;
+    }
+
+    /* Corpo e seções do relatório */
+    #reportBody {
+        padding: 14px 12px 28px !important;
+    }
+    #reportModal .report-section {
+        padding: 14px 12px !important;
+        margin-bottom: 14px !important;
+        border-radius: 12px !important;
+    }
+    #reportModal .report-section-title {
+        font-size: 0.96em !important;
+        margin-bottom: 10px !important;
+    }
+
+    /* Métricas em 2 colunas limpas */
+    #reportMetrics {
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 8px !important;
+    }
+    #reportMetrics .report-metric-card,
+    #reportMetrics .cycle-balance-item {
+        padding: 10px 8px !important;
+        min-width: 0 !important;
+    }
+
+    /* Estados, Cilindros e Diagramas em 1 coluna larga e legível */
+    #reportStatesGrid,
+    #reportCylinderGrid,
+    #reportDiagramsGrid,
+    #reportModal .report-cylinder-grid,
+    #reportModal .report-diagrams-grid {
+        display: grid !important;
+        grid-template-columns: 1fr !important;
+        gap: 12px !important;
+    }
+    #reportCylinderGrid img,
+    #reportDiagramsGrid img,
+    #reportDiagramsGrid canvas {
+        width: 100% !important;
+        max-width: 100% !important;
+        height: auto !important;
+    }
+
+    /* Tabela de comparação com rolagem horizontal suave sem quebrar layout */
+    #reportComparison {
+        width: 100% !important;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch;
+    }
+    #reportComparison table {
+        min-width: 320px !important;
+        width: 100% !important;
+        font-size: 0.8em !important;
+    }
+    #reportComparison th,
+    #reportComparison td {
+        padding: 6px 7px !important;
+        white-space: nowrap;
+    }
+}
