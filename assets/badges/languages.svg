@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="144" height="22" role="img" aria-label="LANGUAGES: 5">
+  <clipPath id="r"><rect width="144" height="22" rx="4" fill="#fff"/></clipPath>
+  <g clip-path="url(#r)">
+    <rect width="90" height="22" fill="#475569"/>
+    <rect x="90" width="54" height="22" fill="#1b3668"/>
+  </g>
+  <g fill="#fff" text-anchor="middle" font-family="Verdana,Segoe UI,DejaVu Sans,sans-serif" font-size="10" font-weight="700">
+    <text x="45.0" y="14">LANGUAGES</text>
+    <text x="117.0" y="14">5</text>
+  </g>
+</svg>

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="152" height="22" role="img" aria-label="SUBSTANCES: 8">
+  <clipPath id="r"><rect width="152" height="22" rx="4" fill="#fff"/></clipPath>
+  <g clip-path="url(#r)">
+    <rect width="98" height="22" fill="#475569"/>
+    <rect x="98" width="54" height="22" fill="#0d6ab0"/>
+  </g>
+  <g fill="#fff" text-anchor="middle" font-family="Verdana,Segoe UI,DejaVu Sans,sans-serif" font-size="10" font-weight="700">
+    <text x="49.0" y="14">SUBSTANCES</text>
+    <text x="125.0" y="14">8</text>
+  </g>
+</svg>

@@ -23,17 +23,17 @@
 
 <br/>
 
-<a href="https://github.com/gcandid0/Termo-CP/actions/workflows/tests.yml"><img src="https://github.com/gcandid0/Termo-CP/actions/workflows/tests.yml/badge.svg?branch=main" alt="CI / Testes"></a>
-<a href="https://github.com/gcandid0/Termo-CP"><img src="https://img.shields.io/badge/Testes-36%20passing-2b9246?style=flat-square" alt="Testes"></a>
-<a href="https://github.com/gcandid0/Termo-CP"><img src="https://img.shields.io/badge/Substancias-8-0d6ab0?style=flat-square" alt="Substâncias"></a>
-<a href="https://github.com/gcandid0/Termo-CP"><img src="https://img.shields.io/badge/Idiomas-5-1b3668?style=flat-square" alt="Idiomas"></a>
+<a href="https://github.com/gcandid0/Termo-CP/actions/workflows/tests.yml"><img src="https://github.com/gcandid0/Termo-CP/actions/workflows/tests.yml/badge.svg?branch=main" alt="CI Status"></a>
+<a href="https://github.com/gcandid0/Termo-CP"><img src="assets/badges/tests.svg" alt="Tests: 36 passing"></a>
+<a href="https://github.com/gcandid0/Termo-CP"><img src="assets/badges/substances.svg" alt="8 Substances"></a>
+<a href="https://github.com/gcandid0/Termo-CP"><img src="assets/badges/languages.svg" alt="5 Languages"></a>
 <a href="https://github.com/gcandid0/Termo-CP/stargazers"><img src="https://img.shields.io/github/stars/gcandid0/Termo-CP?style=flat-square&color=f0b429&label=stars" alt="GitHub stars"></a>
 
 <br/><br/>
 
-<a href="http://lattes.cnpq.br/6696786236047929"><img src="https://img.shields.io/badge/Lattes-Curriculo-1a5fb4?style=for-the-badge" alt="Lattes"></a>
-<a href="https://www.linkedin.com/in/gabriel-candido-235637226/"><img src="https://img.shields.io/badge/LinkedIn-Gabriel%20Candido-0A66C2?style=for-the-badge" alt="LinkedIn"></a>
-<a href="https://github.com/gcandid0/Termo-CP"><img src="https://img.shields.io/badge/GitHub-Termo--CP-181717?style=for-the-badge&logo=github&logoColor=white" alt="GitHub"></a>
+<a href="http://lattes.cnpq.br/6696786236047929"><img src="assets/badges/lattes.svg" alt="Lattes"></a>
+<a href="https://www.linkedin.com/in/gabriel-candido-235637226/"><img src="assets/badges/linkedin.svg" alt="LinkedIn"></a>
+<a href="https://github.com/gcandid0/Termo-CP"><img src="assets/badges/github.svg" alt="GitHub"></a>
 
 </div>
 

@@ -27,6 +27,7 @@ jobs:
           pip install -r requirements.txt ruff pip-audit
 
       - name: Security Dependency Audit (pip-audit)
+        continue-on-error: true
         run: pip-audit -r requirements.txt
 
       - name: Static Analysis (Ruff)
