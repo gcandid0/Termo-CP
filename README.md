@@ -23,16 +23,16 @@
 
 <br/>
 
-<a href="https://github.com/gcandid0/Termo-CP/actions/workflows/tests.yml"><img src="https://img.shields.io/github/actions/workflow/status/gcandid0/Termo-CP/tests.yml?branch=main&style=flat-square&label=CI%20%2F%20Testes" alt="CI Status"></a>
+<a href="https://github.com/gcandid0/Termo-CP/actions/workflows/tests.yml"><img src="https://github.com/gcandid0/Termo-CP/actions/workflows/tests.yml/badge.svg?branch=main" alt="CI / Testes"></a>
+<a href="https://github.com/gcandid0/Termo-CP"><img src="https://img.shields.io/badge/Testes-36%20passing-2b9246?style=flat-square" alt="Testes"></a>
+<a href="https://github.com/gcandid0/Termo-CP"><img src="https://img.shields.io/badge/Substancias-8-0d6ab0?style=flat-square" alt="Substâncias"></a>
+<a href="https://github.com/gcandid0/Termo-CP"><img src="https://img.shields.io/badge/Idiomas-5-1b3668?style=flat-square" alt="Idiomas"></a>
 <a href="https://github.com/gcandid0/Termo-CP/stargazers"><img src="https://img.shields.io/github/stars/gcandid0/Termo-CP?style=flat-square&color=f0b429&label=stars" alt="GitHub stars"></a>
-<a href="https://github.com/gcandid0/Termo-CP/commits/main"><img src="https://img.shields.io/github/last-commit/gcandid0/Termo-CP?style=flat-square&color=2b9246&label=%C3%BAltimo%20commit" alt="Último commit"></a>
-<a href="https://github.com/gcandid0/Termo-CP"><img src="https://img.shields.io/github/repo-size/gcandid0/Termo-CP?style=flat-square&color=1a5fb4&label=tamanho" alt="Tamanho do repositório"></a>
-<a href="https://github.com/gcandid0/Termo-CP/issues"><img src="https://img.shields.io/github/issues/gcandid0/Termo-CP?style=flat-square&color=b91c1c&label=issues" alt="Issues"></a>
 
 <br/><br/>
 
-<a href="http://lattes.cnpq.br/6696786236047929"><img src="https://img.shields.io/badge/Lattes-Curr%C3%ADculo-1a5fb4?style=for-the-badge&logo=googlescholar&logoColor=white" alt="Lattes"></a>
-<a href="https://www.linkedin.com/in/gabriel-candido-235637226/"><img src="https://img.shields.io/badge/LinkedIn-Gabriel%20Candido-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn"></a>
+<a href="http://lattes.cnpq.br/6696786236047929"><img src="https://img.shields.io/badge/Lattes-Curriculo-1a5fb4?style=for-the-badge" alt="Lattes"></a>
+<a href="https://www.linkedin.com/in/gabriel-candido-235637226/"><img src="https://img.shields.io/badge/LinkedIn-Gabriel%20Candido-0A66C2?style=for-the-badge" alt="LinkedIn"></a>
 <a href="https://github.com/gcandid0/Termo-CP"><img src="https://img.shields.io/badge/GitHub-Termo--CP-181717?style=for-the-badge&logo=github&logoColor=white" alt="GitHub"></a>
 
 </div>
