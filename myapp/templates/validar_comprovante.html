@@ -1,0 +1,176 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}TERMO-CP — Validar Comprovante{% endblock %}
+
+{% block extra_css %}
+<style>
+    .val-wrap {
+        max-width: 780px;
+        width: 100%;
+        margin: 0 auto;
+        padding: 20px 24px 40px;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+    .val-hero {
+        background: linear-gradient(135deg, #1b3668 0%, #0d6ab0 100%);
+        color: #ffffff;
+        border-radius: 16px;
+        padding: 20px 26px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 14px;
+        flex-wrap: wrap;
+        box-shadow: 0 10px 26px rgba(27, 54, 104, 0.16);
+    }
+    .val-hero h2 { margin: 0 0 4px 0; font-size: 1.3em; display: flex; align-items: center; gap: 9px; }
+    .val-hero p { margin: 0; font-size: 0.88em; opacity: 0.92; }
+    .val-card {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 14px;
+        padding: 20px 24px;
+        box-shadow: 0 4px 14px rgba(15, 23, 42, 0.05);
+    }
+    .val-form {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+    .val-form input {
+        flex: 1 1 220px;
+        padding: 10px 14px;
+        border-radius: 10px;
+        border: 1.5px solid #cbd5e1;
+        font-family: Consolas, monospace;
+        font-size: 1em;
+        font-weight: 700;
+        text-transform: uppercase;
+        background: #f8fafc;
+        color: #0f172a;
+    }
+    .val-form input:focus {
+        outline: none;
+        border-color: #0d6ab0;
+        background: #ffffff;
+        box-shadow: 0 0 0 3px rgba(13, 106, 176, 0.14);
+    }
+    .val-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 10px 18px;
+        border-radius: 10px;
+        border: none;
+        background: linear-gradient(135deg, #1b3668 0%, #0d6ab0 100%);
+        color: #ffffff;
+        font-weight: 700;
+        font-size: 0.92em;
+        cursor: pointer;
+        text-decoration: none;
+        font-family: inherit;
+    }
+    .val-badge-ok {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: #dcfce7;
+        color: #166534;
+        border: 1px solid #86efac;
+        border-radius: 999px;
+        padding: 6px 14px;
+        font-weight: 800;
+        font-size: 0.88em;
+        margin-bottom: 14px;
+    }
+    .val-badge-err {
+        background: #fef2f2;
+        color: #991b1b;
+        border: 1px solid #fecaca;
+        border-radius: 10px;
+        padding: 12px 16px;
+        font-size: 0.92em;
+        font-weight: 600;
+    }
+    .val-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+        gap: 10px;
+        margin-bottom: 14px;
+    }
+    .val-kv {
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 10px;
+        padding: 10px 13px;
+    }
+    .val-kv span { display: block; font-size: 0.75em; color: #64748b; font-weight: 700; text-transform: uppercase; }
+    .val-kv strong { font-size: 0.98em; color: #0f172a; }
+    .val-text-box {
+        background: #f8fbff;
+        border: 1px solid #cbdcf0;
+        border-radius: 10px;
+        padding: 12px 15px;
+        margin-top: 10px;
+        font-size: 0.9em;
+        color: #1e293b;
+    }
+    .val-text-box h4 { margin: 0 0 6px 0; color: #1b3668; font-size: 0.94em; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="val-wrap">
+    <div class="val-hero">
+        <div>
+            <h2><i class="fas fa-shield-alt"></i> Validador de Comprovante — TERMO-CP</h2>
+            <p>Confirme a autenticidade de qualquer código <code>POE-XXXXXX</code> gerado pelo Modo Exercício.</p>
+        </div>
+        <a href="{% url 'exercicios_poe' %}" class="val-btn" style="background:rgba(255,255,255,0.18);">
+            <i class="fas fa-arrow-left"></i> Voltar ao Modo Exercício
+        </a>
+    </div>
+
+    <div class="val-card">
+        <form method="get" action="{% url 'validar_comprovante' %}" class="val-form">
+            <input type="text" name="codigo" value="{{ query_code }}" placeholder="Digite o código (ex.: POE-A1B2C3)" maxlength="20" required>
+            <button type="submit" class="val-btn"><i class="fas fa-search"></i> Verificar Autenticidade</button>
+        </form>
+    </div>
+
+    {% if rate_limited %}
+    <div class="val-badge-err"><i class="fas fa-clock"></i> Muitas consultas seguidas. Aguarde um minuto e tente novamente.</div>
+    {% elif not_found %}
+    <div class="val-badge-err"><i class="fas fa-times-circle"></i> Nenhum comprovante encontrado com o código <strong>{{ query_code }}</strong>. Verifique se foi digitado corretamente.</div>
+    {% elif record %}
+    <div class="val-card">
+        <div class="val-badge-ok"><i class="fas fa-check-circle"></i> Comprovante Autêntico — Registrado no Servidor TERMO-CP</div>
+        <div class="val-grid">
+            <div class="val-kv"><span>Código</span><strong>{{ record.codigo }}</strong></div>
+            <div class="val-kv"><span>Estudante</span><strong>{{ record.nome_aluno }}</strong></div>
+            <div class="val-kv"><span>Turma</span><strong>{{ record.codigo_turma|default:"—" }}</strong></div>
+            <div class="val-kv"><span>Modo</span><strong>{% if record.modo == 'poe_completo' %}Método POE Completo{% elif record.modo == 'miniprova' %}Mini-Prova{% else %}Exercício Avulso{% endif %}</strong></div>
+            <div class="val-kv"><span>Tema</span><strong>{{ record.substancia }} · {{ record.tipo }}</strong></div>
+            <div class="val-kv"><span>Desempenho</span><strong>{{ record.pontuacao|floatformat:1 }}% ({{ record.tentativas }} tent.)</strong></div>
+            <div class="val-kv"><span>Tempo / Dica</span><strong>{{ record.tempo_segundos }}s · Dica: {% if record.usou_dica %}Sim{% else %}Não{% endif %}</strong></div>
+            <div class="val-kv"><span>Concluído em</span><strong>{{ record.criado_em|date:"d/m/Y H:i" }}</strong></div>
+        </div>
+        {% if record.justificativa %}
+        <div class="val-text-box">
+            <h4><i class="fas fa-lightbulb"></i> Etapa 1 — Hipótese / Justificativa Escrita</h4>
+            <p style="margin:0;">{{ record.justificativa }}</p>
+        </div>
+        {% endif %}
+        {% if record.explicacao_poe %}
+        <div class="val-text-box">
+            <h4><i class="fas fa-comment-dots"></i> Etapa 3 — Explicação Pós-Observação (POE)</h4>
+            <p style="margin:0;">{{ record.explicacao_poe }}</p>
+        </div>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

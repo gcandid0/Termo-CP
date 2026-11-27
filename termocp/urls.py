@@ -14,6 +14,7 @@ from myapp.views_extras import (
     exercicios_poe_view,
     shared_simulation_open_view,
     shared_simulation_view,
+    validar_comprovante_view,
 )
 from myapp.views_unified import (
     api_calculate_state_view,
@@ -32,6 +33,8 @@ urlpatterns = [
 
     # Modo Exercício (POE), Link Compartilhável e Estatísticas Anônimas
     path('exercicios/', exercicios_poe_view, name='exercicios_poe'),
+    path('exercicios/validar/', validar_comprovante_view, name='validar_comprovante'),
+    path('exercicios/validar/<str:codigo>/', validar_comprovante_view, name='validar_comprovante_code'),
     path('api/exercicios/gerar/', api_exercicio_gerar_view, name='api_exercicio_gerar'),
     path('api/exercicios/corrigir/', api_exercicio_corrigir_view, name='api_exercicio_corrigir'),
     path('api/exercicios/explicar/', api_exercicio_explicar_view, name='api_exercicio_explicar'),

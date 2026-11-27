@@ -331,6 +331,42 @@
     }
     .ex-class-bar input:focus { outline: none; border-color: #0d6ab0; background: #fff; }
 
+    /* Quadro Visual da Etapa 2 (OBSERVAR — Método POE) */
+    .poe-observe-box {
+        display: none;
+        margin-top: 14px;
+        background: #ffffff;
+        border: 1.5px solid #cbdcf0;
+        border-radius: 13px;
+        padding: 16px 20px;
+    }
+    .poe-observe-box h4 { margin: 0 0 12px 0; color: #1b3668; font-size: 1em; display: flex; align-items: center; gap: 8px; }
+    .poe-obs-grid {
+        display: grid;
+        grid-template-columns: 220px 1fr;
+        gap: 18px;
+        align-items: center;
+    }
+    @media (max-width: 720px) { .poe-obs-grid { grid-template-columns: 1fr; } }
+    .poe-cyl-stage {
+        background: #0f172a;
+        border-radius: 12px;
+        padding: 12px;
+        text-align: center;
+        color: #e2e8f0;
+        font-size: 0.78em;
+    }
+    .poe-confront-table { width: 100%; border-collapse: collapse; font-size: 0.87em; }
+    .poe-confront-table th { background: #eff6ff; color: #1b3668; padding: 7px 10px; text-align: left; border-bottom: 1.5px solid #cbdcf0; }
+    .poe-confront-table td { padding: 7px 10px; border-bottom: 1px solid #f1f5f9; }
+    .poe-tag-ok { background: #dcfce7; color: #166534; padding: 2px 9px; border-radius: 999px; font-weight: 700; font-size: 0.85em; }
+    .poe-tag-diff { background: #fef3c7; color: #92400e; padding: 2px 9px; border-radius: 999px; font-weight: 700; font-size: 0.85em; }
+    .poe-locked-note {
+        display: none; background: #f1f5f9; border: 1px solid #cbd5e1; color: #334155;
+        border-radius: 8px; padding: 7px 12px; font-size: 0.83em; font-weight: 600; margin-bottom: 10px;
+    }
+    .ex-pred-locked { opacity: 0.72; pointer-events: none; }
+
     @media (max-width: 760px) {
         .ex-wrapper { padding: 12px 14px 28px; }
         .ex-inputs-grid[data-justif-row="1"] { grid-template-columns: 1fr !important; }
@@ -360,10 +396,16 @@
                 Pratique com problemas aleatórios de Termodinâmica ou faça uma Mini-Prova de 3 questões com correção automática, memorial passo a passo, código de autenticidade e comprovante em PDF.
             </p>
         </div>
-        <a href="/" class="ex-btn" style="background: rgba(255,255,255,0.18); color: #fff; text-decoration: none;">
-            <i class="fas fa-home"></i>
-            <span class="lang-text" data-pt-br="Início" data-en="Home" data-es="Inicio" data-fr="Accueil" data-zh="首页">Início</span>
-        </a>
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+            <a href="{% url 'validar_comprovante' %}" class="ex-btn" style="background: rgba(255,255,255,0.18); color: #fff; text-decoration: none;">
+                <i class="fas fa-shield-alt"></i>
+                <span class="lang-text" data-pt-br="Validar Código" data-en="Verify Code" data-es="Validar Código" data-fr="Vérifier Code" data-zh="验证码查询">Validar Código</span>
+            </a>
+            <a href="/" class="ex-btn" style="background: rgba(255,255,255,0.18); color: #fff; text-decoration: none;">
+                <i class="fas fa-home"></i>
+                <span class="lang-text" data-pt-br="Início" data-en="Home" data-es="Inicio" data-fr="Accueil" data-zh="首页">Início</span>
+            </a>
+        </div>
     </div>
 
     <!-- Placar da Sessão -->
@@ -502,6 +544,10 @@
                         <i class="fas fa-exchange-alt"></i>
                         <span class="lang-text" data-pt-br="Conversor" data-en="Converter" data-es="Conversor" data-fr="Convertisseur" data-zh="单位换算">Conversor</span>
                     </button>
+                    <button type="button" id="btnToggleInterp" class="ex-btn ex-btn-outline" style="padding: 5px 11px; font-size: 0.81em;">
+                        <i class="fas fa-calculator"></i>
+                        <span class="lang-text" data-pt-br="Interpolação" data-en="Interpolation" data-es="Interpolación" data-fr="Interpolation" data-zh="线性插值">Interpolação</span>
+                    </button>
                     <button type="button" id="btnToggleSigns" class="ex-btn ex-btn-outline" style="padding: 5px 11px; font-size: 0.81em;">
                         <i class="fas fa-compass"></i>
                         <span class="lang-text" data-pt-br="Convenção de Sinais" data-en="Sign Convention" data-es="Signos" data-fr="Signes" data-zh="符号约定">Convenção de Sinais</span>
@@ -517,6 +563,16 @@
             <div id="exGivenList" class="ex-given-list"></div>
 
             <div id="exFormulaHintBox" class="ex-tool-box"></div>
+
+            <div id="exInterpBox" class="ex-tool-box">
+                <strong><i class="fas fa-calculator"></i> Calculadora Didática de Interpolação Linear</strong>
+                <div class="ex-conv-grid" style="margin-top:8px;">
+                    <div class="ex-conv-item"><span>x₁:</span><input type="text" inputmode="decimal" id="intX1" placeholder="Ex.: 100"><span>y₁:</span><input type="text" inputmode="decimal" id="intY1" placeholder="Ex.: 1,694"></div>
+                    <div class="ex-conv-item"><span>x₂:</span><input type="text" inputmode="decimal" id="intX2" placeholder="Ex.: 200"><span>y₂:</span><input type="text" inputmode="decimal" id="intY2" placeholder="Ex.: 0,885"></div>
+                    <div class="ex-conv-item"><span>x:</span><input type="text" inputmode="decimal" id="intX" placeholder="Ex.: 150"><span>⇒</span><strong id="intYOut">y = —</strong></div>
+                </div>
+                <div id="intFormulaOut" style="margin-top:6px; font-family:Consolas,monospace; font-size:0.86em; color:#0c4a6e;"></div>
+            </div>
 
             <div id="exSignsBox" class="ex-tool-box">
                 <strong><i class="fas fa-compass"></i> Guia Rápido de Convenção de Sinais e Relações</strong>
@@ -563,6 +619,8 @@
                 </div>
                 <div class="ex-lock-bar"><div id="exLockFill" class="ex-lock-fill"></div></div>
             </div>
+
+            <div id="poeLockedNote" class="poe-locked-note"><i class="fas fa-lock"></i> Etapa 1 (Prever) registrada e travada para preservação da sua hipótese inicial.</div>
 
             <!-- Previsão Física por Chips Clicáveis -->
             <div id="exPredRow" class="ex-pred-grid">
@@ -630,6 +688,7 @@
 
             <div id="exAlert" class="ex-alert"></div>
             <div id="exFeedbackArea"></div>
+            <div id="poeObserveBox" class="poe-observe-box"></div>
             <div id="exMemorialUnlock"></div>
         </div>
 
@@ -846,10 +905,34 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('exSubstance').addEventListener('change', syncProcessOptionsBySubstance);
     syncProcessOptionsBySubstance();
 
-    // Ferramentas rápidas (Conversor + Convenção de Sinais)
+    // Ferramentas rápidas (Conversor + Interpolação Linear + Convenção de Sinais)
     document.getElementById('btnToggleConv').addEventListener('click', function () {
         var box = document.getElementById('exQuickConvBox');
         box.style.display = box.style.display === 'block' ? 'none' : 'block';
+    });
+    document.getElementById('btnToggleInterp').addEventListener('click', function () {
+        var box = document.getElementById('exInterpBox');
+        box.style.display = box.style.display === 'block' ? 'none' : 'block';
+    });
+    function updateInterp() {
+        var x1 = parseNum(document.getElementById('intX1').value);
+        var y1 = parseNum(document.getElementById('intY1').value);
+        var x2 = parseNum(document.getElementById('intX2').value);
+        var y2 = parseNum(document.getElementById('intY2').value);
+        var x = parseNum(document.getElementById('intX').value);
+        var out = document.getElementById('intYOut');
+        var fOut = document.getElementById('intFormulaOut');
+        if ([x1, y1, x2, y2, x].some(isNaN) || Math.abs(x2 - x1) < 1e-12) {
+            out.textContent = 'y = —';
+            fOut.textContent = '';
+            return;
+        }
+        var y = y1 + ((x - x1) * (y2 - y1)) / (x2 - x1);
+        out.textContent = 'y = ' + y.toFixed(5).replace('.', ',');
+        fOut.textContent = 'y = ' + y1 + ' + (' + x + ' - ' + x1 + ') * (' + y2 + ' - ' + y1 + ') / (' + x2 + ' - ' + x1 + ') = ' + y.toFixed(5);
+    }
+    ['intX1', 'intY1', 'intX2', 'intY2', 'intX'].forEach(function (id) {
+        document.getElementById(id).addEventListener('input', updateInterp);
     });
     document.getElementById('btnToggleSigns').addEventListener('click', function () {
         var box = document.getElementById('exSignsBox');
@@ -936,7 +1019,11 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('btnCopyClassLink').addEventListener('click', function () {
         var code = classInput.value.trim().toUpperCase();
         var base = window.location.origin + window.location.pathname;
-        var link = code ? (base + '?turma=' + encodeURIComponent(code)) : base;
+        var params = [];
+        if (code) params.push('turma=' + encodeURIComponent(code));
+        if (currentMode === 'poe_completo') params.push('modo=poe');
+        else if (currentMode === 'miniprova') params.push('modo=miniprova');
+        var link = params.length ? (base + '?' + params.join('&')) : base;
         var btn = this;
         if (navigator.clipboard) {
             navigator.clipboard.writeText(link).then(function () {
@@ -946,6 +1033,13 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         }
     });
+
+    // Abre automaticamente na aba especificada via ?modo=poe ou ?modo=miniprova
+    try {
+        var urlModo = (new URLSearchParams(window.location.search).get('modo') || '').toLowerCase();
+        if (urlModo === 'poe' || urlModo === 'poe_completo') setMode('poe_completo');
+        else if (urlModo === 'miniprova' || urlModo === 'exam') setMode('miniprova');
+    } catch (e) {}
 
     function updateExamDots() {
         for (var i = 0; i < 3; i++) {
@@ -1056,11 +1150,16 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('exJustification').value = '';
             document.getElementById('exAlert').style.display = 'none';
             document.getElementById('exFeedbackArea').innerHTML = '';
+            document.getElementById('poeObserveBox').style.display = 'none';
+            document.getElementById('poeObserveBox').innerHTML = '';
             document.getElementById('exMemorialUnlock').innerHTML = '';
             document.getElementById('poeExplainCard').style.display = 'none';
             document.getElementById('poeExplainText').value = '';
             document.getElementById('poeExplainAlert').style.display = 'none';
             document.getElementById('btnExportPoeFullPdf').style.display = 'none';
+            document.getElementById('poeLockedNote').style.display = 'none';
+            document.getElementById('exPredRow').classList.remove('ex-pred-locked');
+            document.getElementById('exJustification').readOnly = false;
             lastCheckData = null;
             savedPoeExplanation = '';
 
@@ -1218,6 +1317,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 if (poeFullMode) {
                     updatePoeStepper(3);
+                    // Trava a Etapa 1 (Prever) para preservar a hipótese original
+                    document.getElementById('poeLockedNote').style.display = 'block';
+                    document.getElementById('exPredRow').classList.add('ex-pred-locked');
+                    document.getElementById('exJustification').readOnly = true;
+                    renderPoeObservationVisual(data);
                     document.getElementById('poeExplainCard').style.display = 'block';
                 }
 
@@ -1259,6 +1363,61 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     });
+
+    function renderPoeObservationVisual(data) {
+        var box = document.getElementById('poeObserveBox');
+        if (!data || !data.solution) return;
+        var expVol = data.solution.expected_vol || 'const';
+        var expHeat = data.solution.expected_heat || 'zero';
+        var expLaw2 = data.solution.expected_law2 || 'possible';
+
+        var LABELS = {
+            expand: 'Expande (v₂ > v₁)', compress: 'Comprime (v₂ < v₁)', const: 'Constante (v₂ = v₁)',
+            in: 'Absorve calor (Q > 0)', out: 'Rejeita calor (Q < 0)', zero: 'Adiabático (Q = 0)',
+            possible: 'Possível (Sger ≥ 0)', impossible: 'Impossível (Sger < 0)'
+        };
+
+        var pVol = document.getElementById('predVol').value;
+        var pHeat = document.getElementById('predHeat').value;
+        var pLaw2 = document.getElementById('predLaw2').value;
+
+        var yStart = expVol === 'expand' ? 112 : (expVol === 'compress' ? 56 : 84);
+        var yEnd = expVol === 'expand' ? 52 : (expVol === 'compress' ? 116 : 84);
+        var fluidColor = expHeat === 'in' ? '#f97316' : (expHeat === 'out' ? '#38bdf8' : '#22c55e');
+        var heatLabel = expHeat === 'in' ? 'Q > 0 (Entra calor)' : (expHeat === 'out' ? 'Q < 0 (Sai calor)' : 'Q = 0 (Isolado)');
+        var volLabel = expVol === 'expand' ? 'Expansão (Pistão sobe)' : (expVol === 'compress' ? 'Compressão (Pistão desce)' : 'Volume Constante (Travado)');
+
+        var svg = '<svg viewBox="0 0 180 185" width="180" height="175" xmlns="http://www.w3.org/2000/svg">'
+            + '<rect x="38" y="24" width="104" height="136" rx="6" fill="none" stroke="#94a3b8" stroke-width="3"/>'
+            + '<rect x="41" y="' + yStart + '" width="98" height="' + (158 - yStart) + '" fill="' + fluidColor + '" opacity="0.32">'
+            + '<animate attributeName="y" values="' + yStart + ';' + yEnd + ';' + yStart + '" dur="3s" repeatCount="indefinite"/>'
+            + '<animate attributeName="height" values="' + (158 - yStart) + ';' + (158 - yEnd) + ';' + (158 - yStart) + '" dur="3s" repeatCount="indefinite"/>'
+            + '</rect>'
+            + '<rect x="40" y="' + (yStart - 12) + '" width="100" height="12" rx="2" fill="#cbd5e1">'
+            + '<animate attributeName="y" values="' + (yStart - 12) + ';' + (yEnd - 12) + ';' + (yStart - 12) + '" dur="3s" repeatCount="indefinite"/>'
+            + '</rect>'
+            + '<text x="90" y="176" fill="#e2e8f0" font-size="11" font-weight="bold" text-anchor="middle">' + heatLabel + '</text>'
+            + '</svg>';
+
+        function statusTag(ok) {
+            return ok ? '<span class="poe-tag-ok">✓ Confirmado</span>' : '<span class="poe-tag-diff">⚡ Conflito Cognitivo</span>';
+        }
+
+        var confrontRows = data.poe_feedback ? (
+            '<tr><td><strong>Volume</strong></td><td>' + (LABELS[pVol] || '—') + '</td><td><strong>' + (LABELS[expVol] || '—') + '</strong></td><td>' + statusTag(data.poe_feedback.vol) + '</td></tr>'
+            + '<tr><td><strong>Calor (Q)</strong></td><td>' + (LABELS[pHeat] || '—') + '</td><td><strong>' + (LABELS[expHeat] || '—') + '</strong></td><td>' + statusTag(data.poe_feedback.heat) + '</td></tr>'
+            + '<tr><td><strong>2ª Lei</strong></td><td>' + (LABELS[pLaw2] || '—') + '</td><td><strong>' + (LABELS[expLaw2] || '—') + '</strong></td><td>' + statusTag(data.poe_feedback.law2) + '</td></tr>'
+        ) : '';
+
+        box.innerHTML = '<h4><i class="fas fa-eye" style="color:#0d6ab0;"></i> Etapa 2 — OBSERVAR (Fenômeno Físico × Sua Previsão)</h4>'
+            + '<div class="poe-obs-grid">'
+            + '<div class="poe-cyl-stage">' + svg + '<div style="margin-top:4px;font-weight:700;color:#93c5fd;">' + volLabel + '</div></div>'
+            + (confrontRows
+                ? '<div><table class="poe-confront-table"><thead><tr><th>Grandeza</th><th>Sua Previsão (Etapa 1)</th><th>Observado (TERMO-CP)</th><th>Análise</th></tr></thead><tbody>' + confrontRows + '</tbody></table></div>'
+                : '<div style="font-size:0.9em;color:#334155;">Observe os valores calculados no Memorial abaixo e avance para a Etapa 3 (Explicar).</div>')
+            + '</div>';
+        box.style.display = 'block';
+    }
 
     // Submissão da Etapa 3 (Explicar) do Método POE Completo
     document.getElementById('btnSubmitPoeExplain').addEventListener('click', function () {

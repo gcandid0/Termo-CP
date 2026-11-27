@@ -999,3 +999,27 @@ def api_exercicio_explicar_view(request):
         'receipt_code': receipt_code,
         'explanation': explanation[:2000],
     })
+
+
+@require_GET
+def validar_comprovante_view(request, codigo=''):
+    """Página pública para docentes validarem a autenticidade de códigos POE-XXXXXX."""
+    query_code = (codigo or request.GET.get('codigo', '')).strip().upper()[:20]
+    record = None
+    not_found = False
+    rate_limited = False
+
+    if query_code:
+        if _is_rate_limited(request, 'validar_poe', limit=30, window_seconds=60):
+            rate_limited = True
+        else:
+            record = TentativaExercicio.objects.filter(codigo=query_code).first()
+            if record is None:
+                not_found = True
+
+    return render(request, 'validar_comprovante.html', {
+        'query_code': query_code,
+        'record': record,
+        'not_found': not_found,
+        'rate_limited': rate_limited,
+    })

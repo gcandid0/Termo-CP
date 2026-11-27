@@ -837,3 +837,14 @@ class ExtrasFeaturesTests(TestCase):
         dash = self.client.get('/admin/?periodo=all&turma=TERMO-2026A')
         self.assertEqual(dash.status_code, 200)
         self.assertContains(dash, 'TERMO-2026A')
+
+        # 5. Validador público de comprovantes (/exercicios/validar/)
+        val_ok = self.client.get(f"/exercicios/validar/{cdata['receipt_code']}/")
+        self.assertEqual(val_ok.status_code, 200)
+        self.assertContains(val_ok, 'Comprovante Autêntico')
+        self.assertContains(val_ok, 'Ana Souza')
+        self.assertContains(val_ok, 'TERMO-2026A')
+
+        val_miss = self.client.get('/exercicios/validar/?codigo=POE-000000')
+        self.assertEqual(val_miss.status_code, 200)
+        self.assertContains(val_miss, 'Nenhum comprovante encontrado')
