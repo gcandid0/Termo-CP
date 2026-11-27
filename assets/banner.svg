@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 260" width="1200" height="260" role="img" aria-label="TERMO-CP Banner">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f2347"/>
+      <stop offset="52%" stop-color="#1b3668"/>
+      <stop offset="100%" stop-color="#0d6ab0"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="82%" cy="22%" r="48%">
+      <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.28"/>
+      <stop offset="100%" stop-color="#38bdf8" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="dome" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#60a5fa" stop-opacity="0.22"/>
+      <stop offset="100%" stop-color="#93c5fd" stop-opacity="0.06"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="260" rx="18" fill="url(#bg)"/>
+  <rect width="1200" height="260" rx="18" fill="url(#glow)"/>
+
+  <!-- Curva estilizada de domo de saturação termodinâmica -->
+  <path d="M 760 230 C 835 220, 885 75, 965 72 C 1045 75, 1095 220, 1170 230 Z" fill="url(#dome)"/>
+  <path d="M 760 230 C 835 220, 885 75, 965 72 C 1045 75, 1095 220, 1170 230" fill="none" stroke="#93c5fd" stroke-opacity="0.45" stroke-width="2.5" stroke-dasharray="6 5"/>
+  <!-- Processo estilizado 1 -> 2 -->
+  <path d="M 855 170 L 1065 110" fill="none" stroke="#f97316" stroke-width="3.5" stroke-linecap="round"/>
+  <circle cx="965" cy="72" r="5" fill="#fbbf24"/>
+  <circle cx="855" cy="170" r="7" fill="#ffffff" stroke="#1b3668" stroke-width="2.5"/>
+  <circle cx="1065" cy="110" r="7" fill="#ffffff" stroke="#f97316" stroke-width="2.5"/>
+
+  <!-- Emblem CP -->
+  <rect x="52" y="54" width="74" height="74" rx="18" fill="rgba(255,255,255,0.14)" stroke="rgba(255,255,255,0.28)" stroke-width="1.5"/>
+  <text x="89" y="102" fill="#ffffff" font-family="Segoe UI, Arial, sans-serif" font-size="32" font-weight="800" text-anchor="middle">CP</text>
+
+  <!-- Título e Subtítulo -->
+  <text x="148" y="96" fill="#ffffff" font-family="Segoe UI, Arial, sans-serif" font-size="46" font-weight="800" letter-spacing="0.5">TERMO-CP</text>
+  <text x="148" y="130" fill="#dbeafe" font-family="Segoe UI, Arial, sans-serif" font-size="18.5" font-weight="500">Thermodynamic States &amp; Processes Simulator · Cylinder-Piston Web Platform</text>
+
+  <!-- Pills de destaque -->
+  <g font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="700">
+    <rect x="52" y="166" width="136" height="32" rx="16" fill="rgba(255,255,255,0.15)"/>
+    <text x="120" y="187" fill="#ffffff" text-anchor="middle">8 Substances</text>
+
+    <rect x="200" y="166" width="128" height="32" rx="16" fill="rgba(255,255,255,0.15)"/>
+    <text x="264" y="187" fill="#ffffff" text-anchor="middle">5 Languages</text>
+
+    <rect x="340" y="166" width="136" height="32" rx="16" fill="rgba(255,255,255,0.15)"/>
+    <text x="408" y="187" fill="#ffffff" text-anchor="middle">3D WebGL + Charts</text>
+
+    <rect x="488" y="166" width="168" height="32" rx="16" fill="rgba(255,255,255,0.15)"/>
+    <text x="572" y="187" fill="#ffffff" text-anchor="middle">Exercise &amp; POE Mode</text>
+
+    <rect x="668" y="166" width="160" height="32" rx="16" fill="rgba(255,255,255,0.15)"/>
+    <text x="748" y="187" fill="#ffffff" text-anchor="middle">Scientific Admin</text>
+  </g>
+
+  <text x="52" y="232" fill="#93c5fd" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="600">Universidade Federal de Rondonópolis (UFR) · Python 3 · Django 6.0.5 · P5.js · Chart.js</text>
+</svg>

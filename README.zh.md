@@ -1,7 +1,7 @@
 <a name="top"></a>
 <p align="center">
   <a href="https://gcandid0.pythonanywhere.com/">
-    <img src="./assets/logo.png" alt="TERMO-CP Logo" width="120">
+    <img src="assets/banner.svg" alt="TERMO-CP Banner" width="100%">
   </a>
 </p>
 
@@ -78,7 +78,7 @@
 
 <div align="center">
   <a href="https://gcandid0.pythonanywhere.com/">
-    <img src="./assets/screenshot-home-zh.png" alt="TERMO-CP 首页界面" width="900" style="border-radius: 12px;">
+    <img src="assets/screenshot-home-zh.png" alt="TERMO-CP 首页界面 (中文)" width="900">
   </a>
 </div>
 
@@ -195,7 +195,7 @@ python manage.py runserver
 本仓库包含自动化测试套件（Django `TestCase`）以及 **Ruff** 静态代码检查，并通过 GitHub Actions 自动运行：
 
 ```bash
-# 运行自动化测试（共 33 项测试：热力学计算、视图、表单与 UTF-8 编码完整性）
+# 运行自动化测试（共 36 项测试：热力学计算、视图、表单与 UTF-8 编码完整性）
 python manage.py test myapp
 
 # 运行 Django 系统检查
@@ -236,6 +236,10 @@ ruff check myapp termocp
 - [x] 练习模式（单题与 3 题小测验）、防作弊锁及 PDF 成绩单
 - [x] 可分享模拟链接（二维码、带刻度 3D 预览与一键恢复模拟）
 - [x] Django Admin 匿名使用统计与练习记录审计
+- [x] 练习模式支持 3 种路径（单题、3 题小测验与完整 POE 模式）、班级代码、线性插值计算器与公开防伪验证页（`/exercicios/validar/`）
+- [x] Django Admin 科研数据分析面板（6 张带数据标签的白色背景 PNG 图表、论文结果摘要、Word/LaTeX 表格与按班级筛选）
+- [x] 安全加固（API CSRF 防护、请求限流、蜜罐防垃圾、HTTPS/HSTS、可配置 `ADMIN_URL` 与 CI `pip-audit`）
+- [x] 全面移动端优化（双行紧凑顶栏、3D 结果页与全屏最终报告弹窗）
 
 <p align="right"><a href="#top">↑ 返回顶部</a></p>
 
@@ -355,7 +359,7 @@ ER  -
 <br>
 
 <div align="center">
-  <img src="./assets/logo.png" alt="TERMO-CP" width="48">
+  <img src="assets/logo.png" alt="TERMO-CP" width="48">
   <br>
   <sub>
     <strong>TERMO-CP</strong> · 开发于 <a href="https://www.ufr.edu.br/">龙多诺波利斯联邦大学 (UFR)</a><br>

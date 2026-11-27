@@ -1,7 +1,7 @@
 <a name="top"></a>
 <p align="center">
   <a href="https://gcandid0.pythonanywhere.com/">
-    <img src="./assets/logo.png" alt="TERMO-CP Logo" width="120">
+    <img src="assets/banner.svg" alt="TERMO-CP Banner" width="100%">
   </a>
 </p>
 
@@ -78,7 +78,7 @@ Designed with an educational focus, it helps students, professors, and engineers
 
 <div align="center">
   <a href="https://gcandid0.pythonanywhere.com/">
-    <img src="./assets/screenshot-home-en.png" alt="TERMO-CP Home Screen" width="900" style="border-radius: 12px;">
+    <img src="assets/screenshot-home-en.png" alt="TERMO-CP Home Screen (English)" width="900">
   </a>
 </div>
 
@@ -195,7 +195,7 @@ No installation required — use the live deployment directly:
 This repository includes an automated test suite (Django `TestCase`) and static analysis with **Ruff**, running automatically via GitHub Actions:
 
 ```bash
-# Run automated tests (33 tests: thermodynamics, views, forms, and UTF-8 integrity)
+# Run automated tests (36 tests: thermodynamics, views, forms, and UTF-8 integrity)
 python manage.py test myapp
 
 # Run Django system checks
@@ -236,6 +236,10 @@ ruff check myapp termocp
 - [x] Exercise Mode (single & 3-question Mini-Exam) with anti-cheating lock and PDF receipt
 - [x] Shareable simulation links (QR Code, scaled 3D preview, and live session restore)
 - [x] Anonymous usage analytics and exercise audit logs in Django Admin
+- [x] Exercise Mode with 3 tracks (Single, Mini-Exam, and Full POE Method), Class Code, Linear Interpolation Calculator, and Public Receipt Validator (`/exercicios/validar/`)
+- [x] Scientific Django Admin Dashboard (6 labeled PNG charts, auto-generated paper summary, Word/LaTeX tables, and class filter)
+- [x] Security hardening (API CSRF enforcement, rate limiting, honeypot, HTTPS/HSTS, configurable `ADMIN_URL`, and `pip-audit` in CI)
+- [x] Full Mobile responsiveness (compact 2-row header, 3D results, and fullscreen Final Report modal)
 
 <p align="right"><a href="#top">↑ back to top</a></p>
 
@@ -355,7 +359,7 @@ Contributions are welcome under the terms of the [license](#license) — please 
 <br>
 
 <div align="center">
-  <img src="./assets/logo.png" alt="TERMO-CP" width="48">
+  <img src="assets/logo.png" alt="TERMO-CP" width="48">
   <br>
   <sub>
     <strong>TERMO-CP</strong> · developed at <a href="https://www.ufr.edu.br/">Federal University of Rondonópolis (UFR)</a><br>

@@ -1,7 +1,7 @@
 <a name="topo"></a>
 <p align="center">
   <a href="https://gcandid0.pythonanywhere.com/">
-    <img src="./assets/logo.png" alt="TERMO-CP Logo" width="120">
+    <img src="assets/banner.svg" alt="TERMO-CP Banner" width="100%">
   </a>
 </p>
 
@@ -78,7 +78,7 @@ O projeto tem foco educacional, voltado a estudantes, professores e engenheiros 
 
 <div align="center">
   <a href="https://gcandid0.pythonanywhere.com/">
-    <img src="./assets/screenshot-home.png" alt="Tela inicial do TERMO-CP" width="900" style="border-radius: 12px;">
+    <img src="assets/screenshot-home.png" alt="Tela inicial do TERMO-CP (Português)" width="900">
   </a>
 </div>
 
@@ -195,7 +195,7 @@ Não é necessário instalar nada — acesse diretamente a versão publicada:
 O repositório conta com suíte automatizada de testes (Django `TestCase`) e verificação estática via **Ruff**, executados automaticamente no GitHub Actions:
 
 ```bash
-# Executar os testes automatizados (33 testes: cálculos, views, formulários e integridade UTF-8)
+# Executar os testes automatizados (36 testes: cálculos, views, formulários e integridade UTF-8)
 python manage.py test myapp
 
 # Verificação de integridade do projeto Django
@@ -236,6 +236,10 @@ ruff check myapp termocp
 - [x] Modo Exercício (avulso e Mini-Prova de 3 questões) com trava anti-burla e comprovante PDF
 - [x] Links compartilháveis de simulação (QR Code, prévia 3D com escala e reabertura direta)
 - [x] Estatísticas anônimas de uso e auditoria de exercícios no Django Admin
+- [x] Modo Exercício com 3 modalidades (Avulso, Mini-Prova e Método POE Completo), Código de Turma, Calculadora de Interpolação e Validador Público (`/exercicios/validar/`)
+- [x] Painel Científico no Django Admin (6 gráficos PNG com rótulos, texto automático para artigos, tabelas Word/LaTeX e filtro por turma)
+- [x] Endurecimento de segurança (CSRF nas APIs, rate limit, honeypot, HTTPS/HSTS, `ADMIN_URL` configurável e `pip-audit` no CI)
+- [x] Otimização Mobile completa (cabeçalho em 2 linhas, resultados 3D e Relatório Final fullscreen no celular)
 
 <p align="right"><a href="#topo">↑ voltar ao topo</a></p>
 
@@ -355,7 +359,7 @@ Contribuições são bem-vindas, respeitando os termos da [licença](#licença) 
 <br>
 
 <div align="center">
-  <img src="./assets/logo.png" alt="TERMO-CP" width="48">
+  <img src="assets/logo.png" alt="TERMO-CP" width="48">
   <br>
   <sub>
     <strong>TERMO-CP</strong> · desenvolvido na <a href="https://www.ufr.edu.br/">Universidade Federal de Rondonópolis (UFR)</a><br>

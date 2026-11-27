@@ -1,7 +1,7 @@
 <a name="haut"></a>
 <p align="center">
   <a href="https://gcandid0.pythonanywhere.com/">
-    <img src="./assets/logo.png" alt="Logo TERMO-CP" width="120">
+    <img src="assets/banner.svg" alt="TERMO-CP Banner" width="100%">
   </a>
 </p>
 
@@ -78,7 +78,7 @@ Orienté vers l'enseignement et la recherche, le projet aide les étudiants, ens
 
 <div align="center">
   <a href="https://gcandid0.pythonanywhere.com/">
-    <img src="./assets/screenshot-home-fr.png" alt="Écran d'accueil de TERMO-CP" width="900" style="border-radius: 12px;">
+    <img src="assets/screenshot-home-fr.png" alt="Écran d'accueil de TERMO-CP (Français)" width="900">
   </a>
 </div>
 
@@ -195,7 +195,7 @@ Aucune installation nécessaire — utilisez directement la version publiée :
 Le dépôt inclut une suite de tests automatisés (Django `TestCase`) ainsi qu'une analyse statique via **Ruff**, exécutées automatiquement sur GitHub Actions :
 
 ```bash
-# Lancer les tests automatisés (33 tests : calculs, vues, formulaires et intégrité UTF-8)
+# Lancer les tests automatisés (36 tests : calculs, vues, formulaires et intégrité UTF-8)
 python manage.py test myapp
 
 # Vérification du projet Django
@@ -236,6 +236,10 @@ ruff check myapp termocp
 - [x] Mode Exercice (libre et Mini-Examen de 3 questions) avec verrou anti-triche et justificatif PDF
 - [x] Liens partageables de simulation (QR Code, aperçu 3D avec échelle et réouverture directe)
 - [x] Statistiques anonymes d'utilisation et suivi des exercices dans Django Admin
+- [x] Mode Exercice à 3 parcours (Libre, Mini-Examen et Méthode POE Complète), Code de Classe, Interpolation Linéaire et Validateur Public (`/exercicios/validar/`)
+- [x] Tableau de bord scientifique Django Admin (6 graphiques PNG étiquetés, résumé automatique pour articles, tableaux Word/LaTeX et filtre par classe)
+- [x] Renforcement de la sécurité (CSRF sur les API, limitation de débit, honeypot, HTTPS/HSTS, `ADMIN_URL` configurable et `pip-audit` en CI)
+- [x] Optimisation mobile complète (en-tête compact sur 2 lignes, résultats 3D et Rapport Final plein écran)
 
 <p align="right"><a href="#haut">↑ retour en haut</a></p>
 
@@ -355,7 +359,7 @@ Les contributions sont les bienvenues dans le respect des termes de la [licence]
 <br>
 
 <div align="center">
-  <img src="./assets/logo.png" alt="TERMO-CP" width="48">
+  <img src="assets/logo.png" alt="TERMO-CP" width="48">
   <br>
   <sub>
     <strong>TERMO-CP</strong> · développé à l'<a href="https://www.ufr.edu.br/">Université Fédérale de Rondonópolis (UFR)</a><br>
